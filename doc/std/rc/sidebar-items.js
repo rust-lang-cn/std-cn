@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Rc","单线程引用计数指针。`Rc` 代表引用计数。"],["Weak","`Weak` 是 [`Rc`] 的一个版本，它持有对托管分配的非所有权引用。 通过在 `Weak` 指针上调用 `upgrade` 来访问分配，它返回一个 [Option]<[Rc]<T>>。"]]});

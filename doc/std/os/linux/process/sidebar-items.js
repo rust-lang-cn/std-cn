@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["PidFd","此类型表示引用进程的文件描述符。"]],"trait":[["ChildExt","特定于操作系统的 `Child` 的扩展"],["CommandExt","特定于操作系统的 `Command` 的扩展"]]});

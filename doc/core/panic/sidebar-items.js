@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["AssertUnwindSafe","一个简单的包装器，可以断言它是 unwind 安全的。"],["Location","包含有关 panic 位置信息的结构体。"],["PanicInfo","提供有关 panic 的信息的结构体。"]],"trait":[["RefUnwindSafe","一种标记 trait，表示共享引用被认为是 unwind 安全的类型。"],["UnwindSafe","表示 Rust 中 “panic safe” 类型的标记 trait。"]]});

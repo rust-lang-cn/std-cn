@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["trap","生成陷阱指令 `TRAP`"],["vec_xxpermdi","Vector permute。"]],"struct":[["vector_bool_long","特定于 PowerPC 的 2 个 `i64` 的 128 位宽 vector 掩码"],["vector_double","特定于 PowerPC 的 2 个包装的 `f64` 的 128 位宽 vector"],["vector_signed_long","特定于 PowerPC 的 2 个包装的 `i64` 的 128 位宽 vector"],["vector_unsigned_long","特定于 PowerPC 的 2 个包装的 `u64` 的 128 位宽 vector"]]});

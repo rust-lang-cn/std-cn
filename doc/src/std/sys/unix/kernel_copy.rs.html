@@ -1,0 +1,1366 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library&#x2F;std&#x2F;src&#x2F;sys&#x2F;unix&#x2F;kernel_copy.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>kernel_copy.rs - source</title><link rel="stylesheet" type="text/css" href="../../../../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../../../../storage1.58.0.js"></script><script src="../../../../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../../../../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow1.58.0.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../std/index.html'><div class='logo-container rust-logo'><img src='../../../../rust-logo1.58.0.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
+<span id="679">679</span>
+<span id="680">680</span>
+<span id="681">681</span>
+</pre><pre class="rust"><code><span class="doccomment">//! 该模块包含一些专门知识，可以将包含类型 (`File`，`TcpStream` 等) 的文件描述符上的 `io::copy()` 操作卸载到比 `read(2)` 和 `write(2)` 更有效的系统调用中。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 专业化仅适用于 std 完全拥有的类型，因此用户代码无法观察到未使用 `Read` 和 `Write` traits。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 由于复制操作涉及 reader 和 writer 端，其中每个端可以由不同类型组成，并且还涉及泛型包装器 (例如 `Take`，`BufReader`)，因此在所有可能的组合上专门使用单个方法是不切实际的。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 取而代之的是，由 `CopyRead` 和 `CopyWrite` 专业化 traits 分别处理 readers 和 writers，然后由 `Copier::copy` 方法进行专门化。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! `Copier` 使用专门化 traits 来解开包装的底层文件描述符，以及包装器类型强加的附加先决条件和约束。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 一旦获得了所有必需的片段并将所有包装器类型置于可以安全绕过它们的状态，它将尝试使用 `copy_file_range(2)`，`sendfile(2)` 或 `splice(2)` 系统调用在文件描述符之间直接移动数据。</span>
+<span class="doccomment">//! 由于这些系统调用具有无法事先进行全面检查的要求，并且收集有关文件描述符的其他信息将需要额外的系统调用，因此它只是简单地尝试一个接一个地使用它们 (以不正确的提示为指导)，以找出哪个起作用并且回退到如果它们都不做，则泛型读写复制循环。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 一旦找到了一对文件描述符的有效系统调用，它将在循环中被调用，直到复制操作完成为止。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 使用这些系统调用的优点：</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * 更少的上下文切换，因为将读和写合并为一个系统调用，并且每个系统调用传输更多的字节。至少对于足够大的传输以摊销初始探测，这意味着更高的吞吐量和更少的 CPU 周期。</span>
+<span class="doccomment">//! * `copy_file_range` 在 CoW 文件系统上创建 reflink 副本，从而移动更少的数据并消耗更少的磁盘空间</span>
+<span class="doccomment">//! * `sendfile` 和 `splice` 在某些情况下可以执行零拷贝输入输出，而简单的拷贝循环会通过 CPU 移动每个字节。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Drawbacks:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * 在某些情况下 (特别是在较早的内核上)，小于默认缓冲区大小的复制操作可能会比幼稚的方法引起更多的系统调用。如上所述，系统调用选择受提示的指导，以最大程度地减少这种可能性，但它们并不完美。</span>
+<span class="doccomment">//! * 优化仅适用于 std 类型。如果用户添加自定义包装器类型 (例如，以报告进度)，则他们可能会遇到性能问题。</span>
+<span class="doccomment">//! * complexity</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cmp::min</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::convert::TryInto</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::fs</span>::{<span class="ident">File</span>, <span class="ident">Metadata</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::io::copy::generic_copy</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::io</span>::{
+    <span class="ident">BufRead</span>, <span class="ident">BufReader</span>, <span class="ident">BufWriter</span>, <span class="ident">Error</span>, <span class="ident">Read</span>, <span class="prelude-ty">Result</span>, <span class="ident">StderrLock</span>, <span class="ident">StdinLock</span>, <span class="ident">StdoutLock</span>, <span class="ident">Take</span>,
+    <span class="ident">Write</span>,
+};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::mem::ManuallyDrop</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::net::TcpStream</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::os::unix::fs::FileTypeExt</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::os::unix::io</span>::{<span class="ident">AsRawFd</span>, <span class="ident">FromRawFd</span>, <span class="ident">RawFd</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::os::unix::net::UnixStream</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::process</span>::{<span class="ident">ChildStderr</span>, <span class="ident">ChildStdin</span>, <span class="ident">ChildStdout</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ptr</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sync::atomic</span>::{<span class="ident">AtomicBool</span>, <span class="ident">AtomicU8</span>, <span class="ident">Ordering</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sys::cvt</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sys::weak::syscall</span>;
+<span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">EBADF</span>, <span class="ident">EINVAL</span>, <span class="ident">ENOSYS</span>, <span class="ident">EOPNOTSUPP</span>, <span class="ident">EOVERFLOW</span>, <span class="ident">EPERM</span>, <span class="ident">EXDEV</span>};
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span>;
+
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">copy_spec</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Read</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>, <span class="ident">W</span>: <span class="ident">Write</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span>(
+    <span class="ident">read</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">R</span>,
+    <span class="ident">write</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>,
+) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">copier</span> <span class="op">=</span> <span class="ident">Copier</span> { <span class="ident">read</span>, <span class="ident">write</span> };
+    <span class="ident">SpecCopy::copy</span>(<span class="ident">copier</span>)
+}
+
+<span class="doccomment">/// 此类型表示根据提取来源的类型推断的 `RawFd` 的 `FileType` 或实际的元数据</span>
+<span class="doccomment">///</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// 此类型的方法仅提供提示，由于 `AsRawFd` 和 `FromRawFd` 推断的类型可能是错误的。</span>
+<span class="doccomment">///</span>
+<span class="kw">enum</span> <span class="ident">FdMeta</span> {
+    <span class="doccomment">/// 我们从可以包含任何 `FileType` 类型的类型获得 FD，并查询元数据，因为它比探测所有可能的系统调用 (reader 端) 方便</span>
+    <span class="doccomment">///</span>
+    <span class="ident">Metadata</span>(<span class="ident">Metadata</span>),
+    <span class="ident">Socket</span>,
+    <span class="ident">Pipe</span>,
+    <span class="doccomment">/// 我们没有任何元数据，例如</span>
+    <span class="doccomment">/// 因为原始类型是 `File`，它可以表示任何 `FileType`，并且我们也没有查询元数据，因为它似乎没有用 (writer 端)</span>
+    <span class="doccomment">///</span>
+    <span class="ident">NoneObtained</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">FdMeta</span> {
+    <span class="kw">fn</span> <span class="ident">maybe_fifo</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">FdMeta::Metadata</span>(<span class="ident">meta</span>) =&gt; <span class="ident">meta</span>.<span class="ident">file_type</span>().<span class="ident">is_fifo</span>(),
+            <span class="ident">FdMeta::Socket</span> =&gt; <span class="bool-val">false</span>,
+            <span class="ident">FdMeta::Pipe</span> =&gt; <span class="bool-val">true</span>,
+            <span class="ident">FdMeta::NoneObtained</span> =&gt; <span class="bool-val">true</span>,
+        }
+    }
+
+    <span class="kw">fn</span> <span class="ident">potential_sendfile_source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="comment">// procfs 错误地在非空可读文件上显示 0 长度。</span>
+            <span class="comment">// 如果文件确实为空，则 `read` syscall 将确定该文件并跳过写 syscall，因此尝试发送 sendfile 将有好处</span>
+            <span class="comment">//</span>
+            <span class="ident">FdMeta::Metadata</span>(<span class="ident">meta</span>)
+                <span class="kw">if</span> <span class="ident">meta</span>.<span class="ident">file_type</span>().<span class="ident">is_file</span>() <span class="op">&amp;&amp;</span> <span class="ident">meta</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="number">0</span>
+                    <span class="op">|</span><span class="op">|</span> <span class="ident">meta</span>.<span class="ident">file_type</span>().<span class="ident">is_block_device</span>() =&gt;
+            {
+                <span class="bool-val">true</span>
+            }
+            <span class="kw">_</span> =&gt; <span class="bool-val">false</span>,
+        }
+    }
+
+    <span class="kw">fn</span> <span class="ident">copy_file_range_candidate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="comment">// 对于空的 procfs 文件，copy_file_range 将失败。</span>
+            <span class="comment">// `read` 可以确定是否已经达到 EOF 而不需要额外的成本，并跳过写入，因此尝试 copy_file_range 没有任何好处</span>
+            <span class="ident">FdMeta::Metadata</span>(<span class="ident">meta</span>) <span class="kw">if</span> <span class="ident">meta</span>.<span class="ident">is_file</span>() <span class="op">&amp;&amp;</span> <span class="ident">meta</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="number">0</span> =&gt; <span class="bool-val">true</span>,
+            <span class="ident">FdMeta::NoneObtained</span> =&gt; <span class="bool-val">true</span>,
+            <span class="kw">_</span> =&gt; <span class="bool-val">false</span>,
+        }
+    }
+}
+
+<span class="kw">struct</span> <span class="ident">CopyParams</span>(<span class="ident">FdMeta</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RawFd</span><span class="op">&gt;</span>);
+
+<span class="kw">struct</span> <span class="ident">Copier</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span>, <span class="ident">R</span>: <span class="ident">Read</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>, <span class="ident">W</span>: <span class="ident">Write</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> {
+    <span class="ident">read</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">R</span>,
+    <span class="ident">write</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="kw-2">mut</span> <span class="ident">W</span>,
+}
+
+<span class="kw">trait</span> <span class="ident">SpecCopy</span> {
+    <span class="kw">fn</span> <span class="ident">copy</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>;
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Read</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>, <span class="ident">W</span>: <span class="ident">Write</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">SpecCopy</span> <span class="kw">for</span> <span class="ident">Copier</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="lifetime">&#39;_</span>, <span class="ident">R</span>, <span class="ident">W</span><span class="op">&gt;</span> {
+    <span class="ident">default</span> <span class="kw">fn</span> <span class="ident">copy</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+        <span class="ident">generic_copy</span>(<span class="self">self</span>.<span class="ident">read</span>, <span class="self">self</span>.<span class="ident">write</span>)
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">CopyRead</span>, <span class="ident">W</span>: <span class="ident">CopyWrite</span><span class="op">&gt;</span> <span class="ident">SpecCopy</span> <span class="kw">for</span> <span class="ident">Copier</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="lifetime">&#39;_</span>, <span class="ident">R</span>, <span class="ident">W</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">copy</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> (<span class="ident">reader</span>, <span class="ident">writer</span>) <span class="op">=</span> (<span class="self">self</span>.<span class="ident">read</span>, <span class="self">self</span>.<span class="ident">write</span>);
+        <span class="kw">let</span> <span class="ident">r_cfg</span> <span class="op">=</span> <span class="ident">reader</span>.<span class="ident">properties</span>();
+        <span class="kw">let</span> <span class="ident">w_cfg</span> <span class="op">=</span> <span class="ident">writer</span>.<span class="ident">properties</span>();
+
+        <span class="comment">// 在对文件描述符进行直接操作之前，请确保所有源缓冲区和 sink 缓冲区为空</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">flush</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> -&gt; <span class="ident"><span class="kw">crate</span>::io::Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">reader</span>.<span class="ident">drain_to</span>(<span class="ident">writer</span>, <span class="ident">u64::MAX</span>)<span class="question-mark">?</span>;
+            <span class="comment">// 在较早的 write() 调用中已经考虑了 BufWriter 缓冲的字节</span>
+            <span class="ident">writer</span>.<span class="ident">flush</span>()<span class="question-mark">?</span>;
+            <span class="prelude-val">Ok</span>(<span class="ident">bytes</span>)
+        };
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">written</span> <span class="op">=</span> <span class="number">0u64</span>;
+
+        <span class="kw">if</span> <span class="kw">let</span> (<span class="ident">CopyParams</span>(<span class="ident">input_meta</span>, <span class="prelude-val">Some</span>(<span class="ident">readfd</span>)), <span class="ident">CopyParams</span>(<span class="ident">output_meta</span>, <span class="prelude-val">Some</span>(<span class="ident">writefd</span>))) <span class="op">=</span>
+            (<span class="ident">r_cfg</span>, <span class="ident">w_cfg</span>)
+        {
+            <span class="ident">written</span> <span class="op">+</span><span class="op">=</span> <span class="ident">flush</span>()<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">max_write</span> <span class="op">=</span> <span class="ident">reader</span>.<span class="ident">min_limit</span>();
+
+            <span class="kw">if</span> <span class="ident">input_meta</span>.<span class="ident">copy_file_range_candidate</span>() <span class="op">&amp;&amp;</span> <span class="ident">output_meta</span>.<span class="ident">copy_file_range_candidate</span>() {
+                <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">copy_regular_files</span>(<span class="ident">readfd</span>, <span class="ident">writefd</span>, <span class="ident">max_write</span>);
+                <span class="ident">result</span>.<span class="ident">update_take</span>(<span class="ident">reader</span>);
+
+                <span class="kw">match</span> <span class="ident">result</span> {
+                    <span class="ident">CopyResult::Ended</span>(<span class="ident">bytes_copied</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">bytes_copied</span> <span class="op">+</span> <span class="ident">written</span>),
+                    <span class="ident">CopyResult::Error</span>(<span class="ident">e</span>, <span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+                    <span class="ident">CopyResult::Fallback</span>(<span class="ident">bytes</span>) =&gt; <span class="ident">written</span> <span class="op">+</span><span class="op">=</span> <span class="ident">bytes</span>,
+                }
+            }
+
+            <span class="comment">// 在现代内核上，sendfile 可以从任何可映射类型 (某些但不是全部常规文件和块设备) 复制到任何可写文件描述符。</span>
+            <span class="comment">// 在较早的内核上，writer 端只能是一个套接字。</span>
+            <span class="comment">// 因此，我们只是在需要时尝试回退。</span>
+            <span class="comment">// 如果当前文件偏移量 + 写入大小溢出，它也可能会失败，我们不会尝试解决此问题，而是会退回到泛型复制循环。</span>
+            <span class="comment">//</span>
+            <span class="kw">if</span> <span class="ident">input_meta</span>.<span class="ident">potential_sendfile_source</span>() {
+                <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">sendfile_splice</span>(<span class="ident">SpliceMode::Sendfile</span>, <span class="ident">readfd</span>, <span class="ident">writefd</span>, <span class="ident">max_write</span>);
+                <span class="ident">result</span>.<span class="ident">update_take</span>(<span class="ident">reader</span>);
+
+                <span class="kw">match</span> <span class="ident">result</span> {
+                    <span class="ident">CopyResult::Ended</span>(<span class="ident">bytes_copied</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">bytes_copied</span> <span class="op">+</span> <span class="ident">written</span>),
+                    <span class="ident">CopyResult::Error</span>(<span class="ident">e</span>, <span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+                    <span class="ident">CopyResult::Fallback</span>(<span class="ident">bytes</span>) =&gt; <span class="ident">written</span> <span class="op">+</span><span class="op">=</span> <span class="ident">bytes</span>,
+                }
+            }
+
+            <span class="kw">if</span> <span class="ident">input_meta</span>.<span class="ident">maybe_fifo</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">output_meta</span>.<span class="ident">maybe_fifo</span>() {
+                <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">sendfile_splice</span>(<span class="ident">SpliceMode::Splice</span>, <span class="ident">readfd</span>, <span class="ident">writefd</span>, <span class="ident">max_write</span>);
+                <span class="ident">result</span>.<span class="ident">update_take</span>(<span class="ident">reader</span>);
+
+                <span class="kw">match</span> <span class="ident">result</span> {
+                    <span class="ident">CopyResult::Ended</span>(<span class="ident">bytes_copied</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">bytes_copied</span> <span class="op">+</span> <span class="ident">written</span>),
+                    <span class="ident">CopyResult::Error</span>(<span class="ident">e</span>, <span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+                    <span class="ident">CopyResult::Fallback</span>(<span class="number">0</span>) =&gt; { <span class="comment">/* use the fallback below */</span> }
+                    <span class="ident">CopyResult::Fallback</span>(<span class="kw">_</span>) =&gt; {
+                        <span class="macro">unreachable!</span>(<span class="string">&quot;splice should not return &gt; 0 bytes on the fallback path&quot;</span>)
+                    }
+                }
+            }
+        }
+
+        <span class="comment">// 如果没有更专业的 syscall 想要使用这些文件描述符，则回退</span>
+        <span class="kw">match</span> <span class="ident">generic_copy</span>(<span class="ident">reader</span>, <span class="ident">writer</span>) {
+            <span class="prelude-val">Ok</span>(<span class="ident">bytes</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">bytes</span> <span class="op">+</span> <span class="ident">written</span>),
+            <span class="ident">err</span> =&gt; <span class="ident">err</span>,
+        }
+    }
+}
+
+<span class="attribute">#[<span class="ident">rustc_specialization_trait</span>]</span>
+<span class="kw">trait</span> <span class="ident">CopyRead</span>: <span class="ident">Read</span> {
+    <span class="doccomment">/// 包含缓冲区的实现 (即</span>
+    <span class="doccomment">/// `BufReader`) 必须将数据从其内部缓冲区传输到 `writer` 中，直到清空缓冲区或传输 `limit` 字节为止 (以较早发生者为准)。</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// 如果存在嵌套缓冲区，则必须先清空外部缓冲区。</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// 当直接对底层文件描述符进行操作时，在保留数据顺序的同时直接绕过包装器类型是必要的。</span>
+    <span class="doccomment">///</span>
+    <span class="kw">fn</span> <span class="ident">drain_to</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_writer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>, <span class="ident">_limit</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(<span class="number">0</span>)
+    }
+
+    <span class="doccomment">/// 更新 `Take` 包装器以删除复制的字节数。</span>
+    <span class="kw">fn</span> <span class="ident">taken</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_bytes</span>: <span class="ident">u64</span>) {}
+
+    <span class="doccomment">/// 所有 `Take&lt;_&gt;` 包装器的最小限制，否则为 `u64::MAX`。</span>
+    <span class="doccomment">/// 此方法不考虑数据 `BufReader` 缓冲区，并且会低估 `Take&lt;BufReader&lt;Take&lt;_&gt;&gt;&gt;` 类型的限制。</span>
+    <span class="doccomment">/// 因此，其结果仅在通过 `drain_to` 对缓冲区进行 draining 之后才有效。</span>
+    <span class="doccomment">///</span>
+    <span class="kw">fn</span> <span class="ident">min_limit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
+        <span class="ident">u64::MAX</span>
+    }
+
+    <span class="doccomment">/// 提取文件描述符和 hints/metadata，必要时通过包装委派。</span>
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span>;
+}
+
+<span class="attribute">#[<span class="ident">rustc_specialization_trait</span>]</span>
+<span class="kw">trait</span> <span class="ident">CopyWrite</span>: <span class="ident">Write</span> {
+    <span class="doccomment">/// 提取文件描述符和 hints/metadata，必要时通过包装委派。</span>
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span>;
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">CopyRead</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>
+<span class="kw">where</span>
+    <span class="ident">T</span>: <span class="ident">CopyRead</span>,
+{
+    <span class="kw">fn</span> <span class="ident">drain_to</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">writer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>, <span class="ident">limit</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+        (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">drain_to</span>(<span class="ident">writer</span>, <span class="ident">limit</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">taken</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">bytes</span>: <span class="ident">u64</span>) {
+        (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">taken</span>(<span class="ident">bytes</span>);
+    }
+
+    <span class="kw">fn</span> <span class="ident">min_limit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
+        (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">min_limit</span>()
+    }
+
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">properties</span>()
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">CopyWrite</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>
+<span class="kw">where</span>
+    <span class="ident">T</span>: <span class="ident">CopyWrite</span>,
+{
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">properties</span>()
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyRead</span> <span class="kw">for</span> <span class="ident">File</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="ident">CopyParams</span>(<span class="ident">fd_to_meta</span>(<span class="self">self</span>), <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyRead</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">File</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="ident">CopyParams</span>(<span class="ident">fd_to_meta</span>(<span class="kw-2">*</span><span class="self">self</span>), <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyWrite</span> <span class="kw">for</span> <span class="ident">File</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::NoneObtained</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyWrite</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">File</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::NoneObtained</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyRead</span> <span class="kw">for</span> <span class="ident">TcpStream</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="comment">// 避免 stat syscall，因为我们可以确定它是一个套接字</span>
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::Socket</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyRead</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">TcpStream</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="comment">// 避免 stat syscall，因为我们可以确定它是一个套接字</span>
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::Socket</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyWrite</span> <span class="kw">for</span> <span class="ident">TcpStream</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="comment">// 避免 stat syscall，因为我们可以确定它是一个套接字</span>
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::Socket</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyWrite</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">TcpStream</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="comment">// 避免 stat syscall，因为我们可以确定它是一个套接字</span>
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::Socket</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyRead</span> <span class="kw">for</span> <span class="ident">UnixStream</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="comment">// 避免 stat syscall，因为我们可以确定它是一个套接字</span>
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::Socket</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyRead</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">UnixStream</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="comment">// 避免 stat syscall，因为我们可以确定它是一个套接字</span>
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::Socket</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyWrite</span> <span class="kw">for</span> <span class="ident">UnixStream</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="comment">// 避免 stat syscall，因为我们可以确定它是一个套接字</span>
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::Socket</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyWrite</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">UnixStream</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="comment">// 避免 stat syscall，因为我们可以确定它是一个套接字</span>
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::Socket</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyWrite</span> <span class="kw">for</span> <span class="ident">ChildStdin</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::Pipe</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyRead</span> <span class="kw">for</span> <span class="ident">ChildStdout</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::Pipe</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyRead</span> <span class="kw">for</span> <span class="ident">ChildStderr</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::Pipe</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyRead</span> <span class="kw">for</span> <span class="ident">StdinLock</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">drain_to</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">writer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>, <span class="ident">outer_limit</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">buf_reader</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut_buf</span>();
+        <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">buf_reader</span>.<span class="ident">buffer</span>();
+        <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">buf</span>[<span class="number">0</span>..<span class="ident">min</span>(<span class="ident">buf</span>.<span class="ident">len</span>(), <span class="ident">outer_limit</span>.<span class="ident">try_into</span>().<span class="ident">unwrap_or</span>(<span class="ident">usize::MAX</span>))];
+        <span class="kw">let</span> <span class="ident">bytes_drained</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">len</span>();
+        <span class="ident">writer</span>.<span class="ident">write_all</span>(<span class="ident">buf</span>)<span class="question-mark">?</span>;
+        <span class="ident">buf_reader</span>.<span class="ident">consume</span>(<span class="ident">bytes_drained</span>);
+
+        <span class="prelude-val">Ok</span>(<span class="ident">bytes_drained</span> <span class="kw">as</span> <span class="ident">u64</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="ident">CopyParams</span>(<span class="ident">fd_to_meta</span>(<span class="self">self</span>), <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyWrite</span> <span class="kw">for</span> <span class="ident">StdoutLock</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::NoneObtained</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">CopyWrite</span> <span class="kw">for</span> <span class="ident">StderrLock</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="ident">CopyParams</span>(<span class="ident">FdMeta::NoneObtained</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>()))
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">CopyRead</span><span class="op">&gt;</span> <span class="ident">CopyRead</span> <span class="kw">for</span> <span class="ident">Take</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">drain_to</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">writer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>, <span class="ident">outer_limit</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">local_limit</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">limit</span>();
+        <span class="kw">let</span> <span class="ident">combined_limit</span> <span class="op">=</span> <span class="ident">min</span>(<span class="ident">outer_limit</span>, <span class="ident">local_limit</span>);
+        <span class="kw">let</span> <span class="ident">bytes_drained</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_mut</span>().<span class="ident">drain_to</span>(<span class="ident">writer</span>, <span class="ident">combined_limit</span>)<span class="question-mark">?</span>;
+        <span class="comment">// 由于 read() 被绕过而导致的更新限制</span>
+        <span class="self">self</span>.<span class="ident">set_limit</span>(<span class="ident">local_limit</span> <span class="op">-</span> <span class="ident">bytes_drained</span>);
+
+        <span class="prelude-val">Ok</span>(<span class="ident">bytes_drained</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">taken</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">bytes</span>: <span class="ident">u64</span>) {
+        <span class="self">self</span>.<span class="ident">set_limit</span>(<span class="self">self</span>.<span class="ident">limit</span>() <span class="op">-</span> <span class="ident">bytes</span>);
+        <span class="self">self</span>.<span class="ident">get_mut</span>().<span class="ident">taken</span>(<span class="ident">bytes</span>);
+    }
+
+    <span class="kw">fn</span> <span class="ident">min_limit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
+        <span class="ident">min</span>(<span class="ident">Take::limit</span>(<span class="self">self</span>), <span class="self">self</span>.<span class="ident">get_ref</span>().<span class="ident">min_limit</span>())
+    }
+
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="self">self</span>.<span class="ident">get_ref</span>().<span class="ident">properties</span>()
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">CopyRead</span><span class="op">&gt;</span> <span class="ident">CopyRead</span> <span class="kw">for</span> <span class="ident">BufReader</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">drain_to</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">writer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>, <span class="ident">outer_limit</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">buffer</span>();
+        <span class="kw">let</span> <span class="ident">buf</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">buf</span>[<span class="number">0</span>..<span class="ident">min</span>(<span class="ident">buf</span>.<span class="ident">len</span>(), <span class="ident">outer_limit</span>.<span class="ident">try_into</span>().<span class="ident">unwrap_or</span>(<span class="ident">usize::MAX</span>))];
+        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">len</span>();
+        <span class="ident">writer</span>.<span class="ident">write_all</span>(<span class="ident">buf</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">consume</span>(<span class="ident">bytes</span>);
+
+        <span class="kw">let</span> <span class="ident">remaining</span> <span class="op">=</span> <span class="ident">outer_limit</span> <span class="op">-</span> <span class="ident">bytes</span> <span class="kw">as</span> <span class="ident">u64</span>;
+
+        <span class="comment">// 如果是嵌套的 bufreader，我们还需要 drain 靠近源</span>
+        <span class="kw">let</span> <span class="ident">inner_bytes</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_mut</span>().<span class="ident">drain_to</span>(<span class="ident">writer</span>, <span class="ident">remaining</span>)<span class="question-mark">?</span>;
+
+        <span class="prelude-val">Ok</span>(<span class="ident">bytes</span> <span class="kw">as</span> <span class="ident">u64</span> <span class="op">+</span> <span class="ident">inner_bytes</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">taken</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">bytes</span>: <span class="ident">u64</span>) {
+        <span class="self">self</span>.<span class="ident">get_mut</span>().<span class="ident">taken</span>(<span class="ident">bytes</span>);
+    }
+
+    <span class="kw">fn</span> <span class="ident">min_limit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
+        <span class="self">self</span>.<span class="ident">get_ref</span>().<span class="ident">min_limit</span>()
+    }
+
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="self">self</span>.<span class="ident">get_ref</span>().<span class="ident">properties</span>()
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">CopyWrite</span><span class="op">&gt;</span> <span class="ident">CopyWrite</span> <span class="kw">for</span> <span class="ident">BufWriter</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">properties</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CopyParams</span> {
+        <span class="self">self</span>.<span class="ident">get_ref</span>().<span class="ident">properties</span>()
+    }
+}
+
+<span class="kw">fn</span> <span class="ident">fd_to_meta</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRawFd</span><span class="op">&gt;</span>(<span class="ident">fd</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">FdMeta</span> {
+    <span class="kw">let</span> <span class="ident">fd</span> <span class="op">=</span> <span class="ident">fd</span>.<span class="ident">as_raw_fd</span>();
+    <span class="kw">let</span> <span class="ident">file</span>: <span class="ident">ManuallyDrop</span><span class="op">&lt;</span><span class="ident">File</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">ManuallyDrop::new</span>(<span class="kw">unsafe</span> { <span class="ident">File::from_raw_fd</span>(<span class="ident">fd</span>) });
+    <span class="kw">match</span> <span class="ident">file</span>.<span class="ident">metadata</span>() {
+        <span class="prelude-val">Ok</span>(<span class="ident">meta</span>) =&gt; <span class="ident">FdMeta::Metadata</span>(<span class="ident">meta</span>),
+        <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">FdMeta::NoneObtained</span>,
+    }
+}
+
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">enum</span> <span class="ident">CopyResult</span> {
+    <span class="ident">Ended</span>(<span class="ident">u64</span>),
+    <span class="ident">Error</span>(<span class="ident">Error</span>, <span class="ident">u64</span>),
+    <span class="ident">Fallback</span>(<span class="ident">u64</span>),
+}
+
+<span class="kw">impl</span> <span class="ident">CopyResult</span> {
+    <span class="kw">fn</span> <span class="ident">update_take</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">reader</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">CopyRead</span>) {
+        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
+            <span class="ident">CopyResult::Fallback</span>(<span class="ident">bytes</span>)
+            <span class="op">|</span> <span class="ident">CopyResult::Ended</span>(<span class="ident">bytes</span>)
+            <span class="op">|</span> <span class="ident">CopyResult::Error</span>(<span class="kw">_</span>, <span class="ident">bytes</span>) =&gt; <span class="ident">reader</span>.<span class="ident">taken</span>(<span class="ident">bytes</span>),
+        }
+    }
+}
+
+<span class="doccomment">/// 无效的文件描述符。</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// 有效的文件描述符保证为正数 (请参见 `open()` 联机帮助页)，而负值用于指示错误。</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// 因此，-1 永远不会与有效的打开文件重叠。</span>
+<span class="kw">const</span> <span class="ident">INVALID_FD</span>: <span class="ident">RawFd</span> <span class="op">=</span> <span class="op">-</span><span class="number">1</span>;
+
+<span class="doccomment">/// 特定于 Linux 的实现，将尝试使用 copy_file_range 进行副本分载。</span>
+<span class="doccomment">/// 顾名思义，它仅适用于常规文件。</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// 调用者必须处理回退到泛型复制循环的操作。</span>
+<span class="doccomment">/// 如果文件的游标 +`max_len` 之一将超过 u64::MAX (`EOVERFLOW`)，则 `Fallback` 可能表示已写入的字节数为非零。</span>
+<span class="doccomment">///</span>
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">copy_regular_files</span>(<span class="ident">reader</span>: <span class="ident">RawFd</span>, <span class="ident">writer</span>: <span class="ident">RawFd</span>, <span class="ident">max_len</span>: <span class="ident">u64</span>) -&gt; <span class="ident">CopyResult</span> {
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cmp</span>;
+
+    <span class="kw">const</span> <span class="ident">NOT_PROBED</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">0</span>;
+    <span class="kw">const</span> <span class="ident">UNAVAILABLE</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">1</span>;
+    <span class="kw">const</span> <span class="ident">AVAILABLE</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">2</span>;
+
+    <span class="comment">// 4.5 之前的内核没有 copy_file_range 我们将可用性存储在一个以避免不必要的 syscalls</span>
+    <span class="comment">//</span>
+    <span class="kw">static</span> <span class="ident">HAS_COPY_FILE_RANGE</span>: <span class="ident">AtomicU8</span> <span class="op">=</span> <span class="ident">AtomicU8::new</span>(<span class="ident">NOT_PROBED</span>);
+
+    <span class="macro">syscall!</span> {
+        <span class="kw">fn</span> <span class="ident">copy_file_range</span>(
+            <span class="ident">fd_in</span>: <span class="ident">libc::c_int</span>,
+            <span class="ident">off_in</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">libc::loff_t</span>,
+            <span class="ident">fd_out</span>: <span class="ident">libc::c_int</span>,
+            <span class="ident">off_out</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">libc::loff_t</span>,
+            <span class="ident">len</span>: <span class="ident">libc::size_t</span>,
+            <span class="ident">flags</span>: <span class="ident">libc::c_uint</span>
+        ) -&gt; <span class="ident">libc::ssize_t</span>
+    }
+
+    <span class="kw">match</span> <span class="ident">HAS_COPY_FILE_RANGE</span>.<span class="ident">load</span>(<span class="ident">Ordering::Relaxed</span>) {
+        <span class="ident">NOT_PROBED</span> =&gt; {
+            <span class="comment">// EPERM 可以指示 seccomp 过滤器或不可变文件。</span>
+            <span class="comment">// 为了区分这些情况，我们使用无效的文件描述符进行探测，如果系统调用受支持，则文件描述符将导致 EBADF; 如果不可用，则将导致其他错误 (ENOSYS 或 EPERM)</span>
+            <span class="comment">//</span>
+            <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">unsafe</span> {
+                <span class="ident">cvt</span>(<span class="ident">copy_file_range</span>(<span class="ident">INVALID_FD</span>, <span class="ident">ptr::null_mut</span>(), <span class="ident">INVALID_FD</span>, <span class="ident">ptr::null_mut</span>(), <span class="number">1</span>, <span class="number">0</span>))
+            };
+
+            <span class="kw">if</span> <span class="macro">matches!</span>(<span class="ident">result</span>.<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">raw_os_error</span>()), <span class="prelude-val">Err</span>(<span class="prelude-val">Some</span>(<span class="ident">EBADF</span>))) {
+                <span class="ident">HAS_COPY_FILE_RANGE</span>.<span class="ident">store</span>(<span class="ident">AVAILABLE</span>, <span class="ident">Ordering::Relaxed</span>);
+            } <span class="kw">else</span> {
+                <span class="ident">HAS_COPY_FILE_RANGE</span>.<span class="ident">store</span>(<span class="ident">UNAVAILABLE</span>, <span class="ident">Ordering::Relaxed</span>);
+                <span class="kw">return</span> <span class="ident">CopyResult::Fallback</span>(<span class="number">0</span>);
+            }
+        }
+        <span class="ident">UNAVAILABLE</span> =&gt; <span class="kw">return</span> <span class="ident">CopyResult::Fallback</span>(<span class="number">0</span>),
+        <span class="kw">_</span> =&gt; {}
+    };
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">written</span> <span class="op">=</span> <span class="number">0u64</span>;
+    <span class="kw">while</span> <span class="ident">written</span> <span class="op">&lt;</span> <span class="ident">max_len</span> {
+        <span class="kw">let</span> <span class="ident">bytes_to_copy</span> <span class="op">=</span> <span class="ident">cmp::min</span>(<span class="ident">max_len</span> <span class="op">-</span> <span class="ident">written</span>, <span class="ident">usize::MAX</span> <span class="kw">as</span> <span class="ident">u64</span>);
+        <span class="comment">// 如果将 u64::MAX 作为 max_len 传递，并且文件具有非零查找位置，则上限为 1GB 块，这使我们能够复制大块而不会达到 EOVERFLOW，除非有人将文件偏移量设置为接近 u64::MAX-1GB，在这种情况下回退需要</span>
+        <span class="comment">//</span>
+        <span class="comment">//</span>
+        <span class="kw">let</span> <span class="ident">bytes_to_copy</span> <span class="op">=</span> <span class="ident">cmp::min</span>(<span class="ident">bytes_to_copy</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="number">0x4000_0000usize</span>);
+        <span class="kw">let</span> <span class="ident">copy_result</span> <span class="op">=</span> <span class="kw">unsafe</span> {
+            <span class="comment">// 实际上，我们不必调整偏移量，因为 copy_file_range 会自动调整文件偏移量</span>
+            <span class="comment">//</span>
+            <span class="ident">cvt</span>(<span class="ident">copy_file_range</span>(<span class="ident">reader</span>, <span class="ident">ptr::null_mut</span>(), <span class="ident">writer</span>, <span class="ident">ptr::null_mut</span>(), <span class="ident">bytes_to_copy</span>, <span class="number">0</span>))
+        };
+
+        <span class="kw">match</span> <span class="ident">copy_result</span> {
+            <span class="prelude-val">Ok</span>(<span class="number">0</span>) <span class="kw">if</span> <span class="ident">written</span> <span class="op">==</span> <span class="number">0</span> =&gt; {
+                <span class="comment">// 回退以解决几个内核错误，其中 copy_file_range 将无法复制任何字节并返回 0 而不是错误，如果</span>
+                <span class="comment">//</span>
+                <span class="comment">// - 从 proc 文件系统中读取虚拟文件，这些虚拟文件的大小似乎为 0，但不为空。</span>
+                <span class="comment">// 在 coreutils 中指出，至少会影响 5.6.19 的内核。</span>
+                <span class="comment">// - 从 docker 中的覆盖文件系统复制。据报道发生在 fedora 32 上。</span>
+                <span class="kw">return</span> <span class="ident">CopyResult::Fallback</span>(<span class="number">0</span>);
+            }
+            <span class="prelude-val">Ok</span>(<span class="number">0</span>) =&gt; <span class="kw">return</span> <span class="ident">CopyResult::Ended</span>(<span class="ident">written</span>), <span class="comment">// 达到了 EOF</span>
+            <span class="prelude-val">Ok</span>(<span class="ident">ret</span>) =&gt; <span class="ident">written</span> <span class="op">+</span><span class="op">=</span> <span class="ident">ret</span> <span class="kw">as</span> <span class="ident">u64</span>,
+            <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
+                <span class="kw">return</span> <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">raw_os_error</span>() {
+                    <span class="comment">// 当文件 `offset + max_length &gt; u64::MAX` 时</span>
+                    <span class="prelude-val">Some</span>(<span class="ident">EOVERFLOW</span>) =&gt; <span class="ident">CopyResult::Fallback</span>(<span class="ident">written</span>),
+                    <span class="prelude-val">Some</span>(<span class="ident">ENOSYS</span> <span class="op">|</span> <span class="ident">EXDEV</span> <span class="op">|</span> <span class="ident">EINVAL</span> <span class="op">|</span> <span class="ident">EPERM</span> <span class="op">|</span> <span class="ident">EOPNOTSUPP</span> <span class="op">|</span> <span class="ident">EBADF</span>) <span class="kw">if</span> <span class="ident">written</span> <span class="op">==</span> <span class="number">0</span> =&gt; {
+                        <span class="comment">// 如果出现以下情况，请尝试使用备用 io::copy：</span>
+                        <span class="comment">// - 内核版本 &lt; 4.5 (ENOSYS¹)</span>
+                        <span class="comment">// - 文件安装在不同的 fs (EXDEV) 上</span>
+                        <span class="comment">// - RHEL/CentOS 7 (EOPNOTSUPP) 上的 copy_file_range 被各种方式破坏</span>
+                        <span class="comment">// - seccomp¹ (EPERM) 的 copy_file_range 文件不可变或 syscall 被阻止</span>
+                        <span class="comment">// - copy_file_range 不能与管道或设备节点 (EINVAL) 一起使用</span>
+                        <span class="comment">// - writer fd 是用 O_APPEND (EBADF²) 打开的，但尚未成功写入任何字节。(如果已经写入了某些内容，则不应返回所有这些 errnos，但它们会在野外发生，请参见 #91152。)</span>
+                        <span class="comment">//</span>
+                        <span class="comment">// ¹ 这些情况应该由初始探针检测到，但是无论如何我们还是在这里处理它们，以防在运行时发生系统调用拦截变化 ² 实际上无效的文件描述符也会导致这种情况，但是在这种情况下，后备代码路径有望再次遇到相同的错误</span>
+                        <span class="comment">//</span>
+                        <span class="comment">//</span>
+                        <span class="comment">//</span>
+                        <span class="comment">//</span>
+                        <span class="comment">//</span>
+                        <span class="comment">//</span>
+                        <span class="ident">CopyResult::Fallback</span>(<span class="number">0</span>)
+                    }
+                    <span class="kw">_</span> =&gt; <span class="ident">CopyResult::Error</span>(<span class="ident">err</span>, <span class="ident">written</span>),
+                };
+            }
+        }
+    }
+    <span class="ident">CopyResult::Ended</span>(<span class="ident">written</span>)
+}
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>)]</span>
+<span class="kw">enum</span> <span class="ident">SpliceMode</span> {
+    <span class="ident">Sendfile</span>,
+    <span class="ident">Splice</span>,
+}
+
+<span class="doccomment">/// 在文件描述符之间执行拼接或 sendfile _not_ 是否回退到泛型复制循环。</span>
+<span class="doccomment">///</span>
+<span class="kw">fn</span> <span class="ident">sendfile_splice</span>(<span class="ident">mode</span>: <span class="ident">SpliceMode</span>, <span class="ident">reader</span>: <span class="ident">RawFd</span>, <span class="ident">writer</span>: <span class="ident">RawFd</span>, <span class="ident">len</span>: <span class="ident">u64</span>) -&gt; <span class="ident">CopyResult</span> {
+    <span class="kw">static</span> <span class="ident">HAS_SENDFILE</span>: <span class="ident">AtomicBool</span> <span class="op">=</span> <span class="ident">AtomicBool::new</span>(<span class="bool-val">true</span>);
+    <span class="kw">static</span> <span class="ident">HAS_SPLICE</span>: <span class="ident">AtomicBool</span> <span class="op">=</span> <span class="ident">AtomicBool::new</span>(<span class="bool-val">true</span>);
+
+    <span class="macro">syscall!</span> {
+        <span class="kw">fn</span> <span class="ident">splice</span>(
+            <span class="ident">srcfd</span>: <span class="ident">libc::c_int</span>,
+            <span class="ident">src_offset</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">i64</span>,
+            <span class="ident">dstfd</span>: <span class="ident">libc::c_int</span>,
+            <span class="ident">dst_offset</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">i64</span>,
+            <span class="ident">len</span>: <span class="ident">libc::size_t</span>,
+            <span class="ident">flags</span>: <span class="ident">libc::c_int</span>
+        ) -&gt; <span class="ident">libc::ssize_t</span>
+    }
+
+    <span class="kw">match</span> <span class="ident">mode</span> {
+        <span class="ident">SpliceMode::Sendfile</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">HAS_SENDFILE</span>.<span class="ident">load</span>(<span class="ident">Ordering::Relaxed</span>) =&gt; {
+            <span class="kw">return</span> <span class="ident">CopyResult::Fallback</span>(<span class="number">0</span>);
+        }
+        <span class="ident">SpliceMode::Splice</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">HAS_SPLICE</span>.<span class="ident">load</span>(<span class="ident">Ordering::Relaxed</span>) =&gt; {
+            <span class="kw">return</span> <span class="ident">CopyResult::Fallback</span>(<span class="number">0</span>);
+        }
+        <span class="kw">_</span> =&gt; (),
+    }
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">written</span> <span class="op">=</span> <span class="number">0u64</span>;
+    <span class="kw">while</span> <span class="ident">written</span> <span class="op">&lt;</span> <span class="ident">len</span> {
+        <span class="comment">// 根据其手册，这是每次调用 sendfile() 将复制的最大大小</span>
+        <span class="kw">let</span> <span class="ident">chunk_size</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::cmp::min</span>(<span class="ident">len</span> <span class="op">-</span> <span class="ident">written</span>, <span class="number">0x7ffff000_u64</span>) <span class="kw">as</span> <span class="ident">usize</span>;
+
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">mode</span> {
+            <span class="ident">SpliceMode::Sendfile</span> =&gt; {
+                <span class="ident">cvt</span>(<span class="kw">unsafe</span> { <span class="ident">libc::sendfile</span>(<span class="ident">writer</span>, <span class="ident">reader</span>, <span class="ident">ptr::null_mut</span>(), <span class="ident">chunk_size</span>) })
+            }
+            <span class="ident">SpliceMode::Splice</span> =&gt; <span class="ident">cvt</span>(<span class="kw">unsafe</span> {
+                <span class="ident">splice</span>(<span class="ident">reader</span>, <span class="ident">ptr::null_mut</span>(), <span class="ident">writer</span>, <span class="ident">ptr::null_mut</span>(), <span class="ident">chunk_size</span>, <span class="number">0</span>)
+            }),
+        };
+
+        <span class="kw">match</span> <span class="ident">result</span> {
+            <span class="prelude-val">Ok</span>(<span class="number">0</span>) =&gt; <span class="kw">break</span>, <span class="comment">// EOF</span>
+            <span class="prelude-val">Ok</span>(<span class="ident">ret</span>) =&gt; <span class="ident">written</span> <span class="op">+</span><span class="op">=</span> <span class="ident">ret</span> <span class="kw">as</span> <span class="ident">u64</span>,
+            <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
+                <span class="kw">return</span> <span class="kw">match</span> <span class="ident">err</span>.<span class="ident">raw_os_error</span>() {
+                    <span class="prelude-val">Some</span>(<span class="ident">ENOSYS</span> <span class="op">|</span> <span class="ident">EPERM</span>) =&gt; {
+                        <span class="comment">// 不支持 syscall (ENOSYS) 不允许进行 syscall，例如</span>
+                        <span class="comment">// 通过 seccomp (EPERM)</span>
+                        <span class="kw">match</span> <span class="ident">mode</span> {
+                            <span class="ident">SpliceMode::Sendfile</span> =&gt; <span class="ident">HAS_SENDFILE</span>.<span class="ident">store</span>(<span class="bool-val">false</span>, <span class="ident">Ordering::Relaxed</span>),
+                            <span class="ident">SpliceMode::Splice</span> =&gt; <span class="ident">HAS_SPLICE</span>.<span class="ident">store</span>(<span class="bool-val">false</span>, <span class="ident">Ordering::Relaxed</span>),
+                        }
+                        <span class="macro">assert_eq!</span>(<span class="ident">written</span>, <span class="number">0</span>);
+                        <span class="ident">CopyResult::Fallback</span>(<span class="number">0</span>)
+                    }
+                    <span class="prelude-val">Some</span>(<span class="ident">EINVAL</span>) =&gt; {
+                        <span class="comment">// splice/sendfile 不支持这个特定的文件描述符 (EINVAL)</span>
+                        <span class="macro">assert_eq!</span>(<span class="ident">written</span>, <span class="number">0</span>);
+                        <span class="ident">CopyResult::Fallback</span>(<span class="number">0</span>)
+                    }
+                    <span class="prelude-val">Some</span>(<span class="ident">os_err</span>) <span class="kw">if</span> <span class="ident">mode</span> <span class="op">==</span> <span class="ident">SpliceMode::Sendfile</span> <span class="op">&amp;&amp;</span> <span class="ident">os_err</span> <span class="op">==</span> <span class="ident">EOVERFLOW</span> =&gt; {
+                        <span class="ident">CopyResult::Fallback</span>(<span class="ident">written</span>)
+                    }
+                    <span class="kw">_</span> =&gt; <span class="ident">CopyResult::Error</span>(<span class="ident">err</span>, <span class="ident">written</span>),
+                };
+            }
+        }
+    }
+    <span class="ident">CopyResult::Ended</span>(<span class="ident">written</span>)
+}
+</code></pre></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="std" data-search-index-js="../../../../search-index1.58.0.js" data-search-js="../../../../search1.58.0.js"></div>
+    <script src="../../../../main1.58.0.js"></script><script src="../../../../source-script1.58.0.js"></script><script src="../../../../source-files1.58.0.js"></script>
+</body></html>

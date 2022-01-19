@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["black_box","一个标识函数，hints 编译器对 `black_box` 能做的事情保持最大限度的悲观。"],["spin_loop","发出一条机器指令，以向处理器发送信号，指示其正在忙于等待的自旋循环 (自旋锁) 中运行。"],["unreachable_unchecked","通知编译器代码中的这一点不可访问，从而可以进行进一步的优化。"]]});

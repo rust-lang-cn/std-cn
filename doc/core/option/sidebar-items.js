@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Option","`Option` 类型。有关更多信息，请参见 模块级文档。"]],"struct":[["IntoIter","对 [`Option`] 的 [`Some`] 变体中的值的迭代器。"],["Iter","对 [`Option`] 的 [`Some`] 变体的引用的迭代器。"],["IterMut","对 [`Option`] 的 [`Some`] 变体的可变引用的迭代器。"]]});

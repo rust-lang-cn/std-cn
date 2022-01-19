@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["ffi","特定于 WASI 的 `std::ffi` 模块中原语的扩展"],["fs","特定于 WASI 的 `std::fs` 模块中原语的扩展。"],["io","特定于 WASI 的对通用 I/O 原语的扩展。"],["net","特定于 WASI 的网络功能"],["prelude","prelude，用于方便地编写平台特定的代码。"]]});

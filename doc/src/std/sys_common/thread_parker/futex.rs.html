@@ -1,0 +1,190 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library&#x2F;std&#x2F;src&#x2F;sys_common&#x2F;thread_parker&#x2F;futex.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>futex.rs - source</title><link rel="stylesheet" type="text/css" href="../../../../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../../../../storage1.58.0.js"></script><script src="../../../../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../../../../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow1.58.0.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../std/index.html'><div class='logo-container rust-logo'><img src='../../../../rust-logo1.58.0.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1"> 1</span>
+<span id="2"> 2</span>
+<span id="3"> 3</span>
+<span id="4"> 4</span>
+<span id="5"> 5</span>
+<span id="6"> 6</span>
+<span id="7"> 7</span>
+<span id="8"> 8</span>
+<span id="9"> 9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sync::atomic::AtomicI32</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sync::atomic::Ordering</span>::{<span class="ident">Acquire</span>, <span class="ident">Release</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sys::futex</span>::{<span class="ident">futex_wait</span>, <span class="ident">futex_wake</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::time::Duration</span>;
+
+<span class="kw">const</span> <span class="ident">PARKED</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="op">-</span><span class="number">1</span>;
+<span class="kw">const</span> <span class="ident">EMPTY</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="number">0</span>;
+<span class="kw">const</span> <span class="ident">NOTIFIED</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="number">1</span>;
+
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Parker</span> {
+    <span class="ident">state</span>: <span class="ident">AtomicI32</span>,
+}
+
+<span class="comment">// 有关内存顺序的注意事项：</span>
+<span class="comment">//</span>
+<span class="comment">// 内存排序仅与不同变量之间操作的相对排序有关。</span>
+<span class="comment">// 仅查看单个原子变量时，甚至 Ordering::Relaxed 都可以保证单调/一致的顺序。</span>
+<span class="comment">//</span>
+<span class="comment">// 因此，由于该 Parker 只是单一的原子变量，因此我们只需要查看我们需要提供向外部世界的排序保证。</span>
+<span class="comment">//</span>
+<span class="comment">// 保留和取消保留的唯一内存排序保证是，在 unpark() 之后发生的线程上可以看到 unpark() 之前发生的事情。</span>
+<span class="comment">// 否则，在仍然消耗 &#39;token&#39; 的同时，在调用 unpark() 之前将其有效地停了下来。</span>
+<span class="comment">//</span>
+<span class="comment">// 换句话说，unpark() 需要与 park() 消耗 token 并返回的部分进行同步。</span>
+<span class="comment">//</span>
+<span class="comment">// 通过在 unpark() 中写入 NOTIFIED (&#39;token&#39;) 时使用 Ordering::Release，并在 park() 中检查此状态时使用 Ordering::Acquire，可以实现发布 - 获取同步。</span>
+<span class="comment">//</span>
+<span class="comment">//</span>
+<span class="comment">//</span>
+<span class="comment">//</span>
+<span class="comment">//</span>
+<span class="comment">//</span>
+<span class="comment">//</span>
+<span class="kw">impl</span> <span class="ident">Parker</span> {
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
+        <span class="ident">Parker</span> { <span class="ident">state</span>: <span class="ident">AtomicI32::new</span>(<span class="ident">EMPTY</span>) }
+    }
+
+    <span class="comment">// 假定仅由拥有 Parker 的线程 (称为 `self.state != PARKED`) 调用此方法。</span>
+    <span class="comment">//</span>
+    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">park</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="comment">// 更改 NOTIFIED =&gt; EMPTY 或 EMPTY =&gt; PARKED，并在第一种情况下直接返回。</span>
+        <span class="comment">//</span>
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">fetch_sub</span>(<span class="number">1</span>, <span class="ident">Acquire</span>) <span class="op">==</span> <span class="ident">NOTIFIED</span> {
+            <span class="kw">return</span>;
+        }
+        <span class="kw">loop</span> {
+            <span class="comment">// 假设它仍然设置为 PARKED，请等待发生的事情。</span>
+            <span class="ident">futex_wait</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>, <span class="ident">PARKED</span>, <span class="prelude-val">None</span>);
+            <span class="comment">// 更改 NOTIFIED =&gt; EMPTY 并在这种情况下返回。</span>
+            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">compare_exchange</span>(<span class="ident">NOTIFIED</span>, <span class="ident">EMPTY</span>, <span class="ident">Acquire</span>, <span class="ident">Acquire</span>).<span class="ident">is_ok</span>() {
+                <span class="kw">return</span>;
+            } <span class="kw">else</span> {
+                <span class="comment">// 虚假的醒来。我们循环播放以重试。</span>
+            }
+        }
+    }
+
+    <span class="comment">// 假定仅由拥有 Parker 的线程 (称为 `self.state != PARKED`) 调用此方法。</span>
+    <span class="comment">//</span>
+    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">park_timeout</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">timeout</span>: <span class="ident">Duration</span>) {
+        <span class="comment">// 更改 NOTIFIED =&gt; EMPTY 或 EMPTY =&gt; PARKED，并在第一种情况下直接返回。</span>
+        <span class="comment">//</span>
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">fetch_sub</span>(<span class="number">1</span>, <span class="ident">Acquire</span>) <span class="op">==</span> <span class="ident">NOTIFIED</span> {
+            <span class="kw">return</span>;
+        }
+        <span class="comment">// 假设它仍然设置为 PARKED，请等待发生的事情。</span>
+        <span class="ident">futex_wait</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>, <span class="ident">PARKED</span>, <span class="prelude-val">Some</span>(<span class="ident">timeout</span>));
+        <span class="comment">// 这不仅仅是一个存储，因为我们需要用 `unpark()` 建立一个 `释放 - 获取` 的顺序。</span>
+        <span class="comment">//</span>
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">swap</span>(<span class="ident">EMPTY</span>, <span class="ident">Acquire</span>) <span class="op">==</span> <span class="ident">NOTIFIED</span> {
+            <span class="comment">// 因为 `unpark()` 而醒来。</span>
+        } <span class="kw">else</span> {
+            <span class="comment">// 超时或虚假唤醒。</span>
+            <span class="comment">// 我们以任何一种方式返回，因为我们无法轻易分辨出是否超时。</span>
+            <span class="comment">//</span>
+        }
+    }
+
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unpark</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="comment">// 更改 PARKED =&gt; NOTIFIED，EMPTY =&gt; NOTIFIED 或 NOTIFIED =&gt; NOTIFIED，并在第一种情况下唤醒线程。</span>
+        <span class="comment">//</span>
+        <span class="comment">//</span>
+        <span class="comment">// 请注意，即使 NOTIFIED =&gt; NOTIFIED 也会导致写入。</span>
+        <span class="comment">// 这是有目的的，以确保每个 unpark() 都具有对 park() 的发布 - 获取命令。</span>
+        <span class="comment">//</span>
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">swap</span>(<span class="ident">NOTIFIED</span>, <span class="ident">Release</span>) <span class="op">==</span> <span class="ident">PARKED</span> {
+            <span class="ident">futex_wake</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>);
+        }
+    }
+}
+</code></pre></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="std" data-search-index-js="../../../../search-index1.58.0.js" data-search-js="../../../../search1.58.0.js"></div>
+    <script src="../../../../main1.58.0.js"></script><script src="../../../../source-script1.58.0.js"></script><script src="../../../../source-files1.58.0.js"></script>
+</body></html>

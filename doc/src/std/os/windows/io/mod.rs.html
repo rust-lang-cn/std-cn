@@ -1,0 +1,116 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library&#x2F;std&#x2F;src&#x2F;os&#x2F;windows&#x2F;io&#x2F;mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="stylesheet" type="text/css" href="../../../../../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../../../../../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../../../../../storage1.58.0.js"></script><script src="../../../../../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../../../../../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../../../../../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../../../../../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../../../../../down-arrow1.58.0.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../../std/index.html'><div class='logo-container rust-logo'><img src='../../../../../rust-logo1.58.0.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../../../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../../../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1"> 1</span>
+<span id="2"> 2</span>
+<span id="3"> 3</span>
+<span id="4"> 4</span>
+<span id="5"> 5</span>
+<span id="6"> 6</span>
+<span id="7"> 7</span>
+<span id="8"> 8</span>
+<span id="9"> 9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+</pre><pre class="rust"><code><span class="doccomment">//! 特定于 Windows 的通用 I/O 原语扩展。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 就像裸指针一样，原始的 Windows 句柄和套接字指向具有动态生命周期的资源，如果它们比它们的资源生命周期更长，它们可以悬垂，如果它们是由无效值创建的，则它们可以被伪造。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 该模块提供了三种类型来表示具有不同所有权属性的原始句柄和套接字：原始、借用和拥有，类似于用于表示指针的类型：</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! | Type                   | Analogous to |</span>
+<span class="doccomment">//! | ---------------------- | ------------ |</span>
+<span class="doccomment">//! | [`RawHandle`]          | `*const _`   |</span>
+<span class="doccomment">//! | [`RawSocket`]          | `*const _`   |</span>
+<span class="doccomment">//! |                        |              |</span>
+<span class="doccomment">//! | [`BorrowedHandle&lt;&#39;a&gt;`] | `&amp;&#39;a _`      |</span>
+<span class="doccomment">//! | [`BorrowedSocket&lt;&#39;a&gt;`] | `&amp;&#39;a _`      |</span>
+<span class="doccomment">//! |                        |              |</span>
+<span class="doccomment">//! | [`OwnedHandle`]        | `Box&lt;_&gt;`     |</span>
+<span class="doccomment">//! | [`OwnedSocket`]        | `Box&lt;_&gt;`     |</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 和裸指针一样，`RawHandle` 和 `RawSocket` 值都是原始值。</span>
+<span class="doccomment">//! 并且在新代码中，他们应该被认为是不安全的 (类似于解引用他们)。Rust 并不总是提供这种指导，因此 Rust 生态系统中的现有代码通常不会将 `RawHandle` 和 `RawSocket` 的使用标记为不安全。</span>
+<span class="doccomment">//! 一旦 `io_safety` 特性稳定，将鼓励库迁移，通过将 `unsafe` 添加到解引用 `RawHandle` 和 `RawSocket` 值的 API，或通过使用 `BorrowedHandle`、`BorrowedSocket`、`OwnedHandle` 或 `OwnedSocket`。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 与引用一样，`BorrowedHandle` 和 `BorrowedSocket` 值与生命周期相关联，以确保它们的生命周期不会超过它们指向的资源。</span>
+<span class="doccomment">//! 这些可以安全使用。</span>
+<span class="doccomment">//! `BorrowedHandle` 和 `BorrowedSocket` 值可用于提供对任何系统调用的安全访问的 API，但 `CloseHandle`、`closesocket` 或将结束资源的动态生命周期而不结束句柄或套接字的生命周期的任何其他调用。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 与 boxes 一样，`OwnedHandle` 和 `OwnedSocket` 值在概念上拥有它们指向的资源，并在它们被丢弃时释放 (close)。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! [`BorrowedHandle&lt;&#39;a&gt;`]: crate::os::windows::io::BorrowedHandle</span>
+<span class="doccomment">//! [`BorrowedSocket&lt;&#39;a&gt;`]: crate::os::windows::io::BorrowedSocket</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+
+<span class="attribute">#![<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
+
+<span class="kw">mod</span> <span class="ident">handle</span>;
+<span class="kw">mod</span> <span class="ident">raw</span>;
+<span class="kw">mod</span> <span class="ident">socket</span>;
+
+<span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;io_safety&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;87074&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">handle</span>::<span class="kw-2">*</span>;
+<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">raw</span>::<span class="kw-2">*</span>;
+<span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;io_safety&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;87074&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">socket</span>::<span class="kw-2">*</span>;
+</code></pre></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="std" data-search-index-js="../../../../../search-index1.58.0.js" data-search-js="../../../../../search1.58.0.js"></div>
+    <script src="../../../../../main1.58.0.js"></script><script src="../../../../../source-script1.58.0.js"></script><script src="../../../../../source-files1.58.0.js"></script>
+</body></html>

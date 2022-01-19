@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="产生一个新线程，为其返回 [`JoinHandle`]。"><meta name="keywords" content="rust, rustlang, rust-lang, spawn"><title>spawn in std::thread - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../../storage1.58.0.js"></script><script src="../../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow1.58.0.svg");}</style></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../std/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo1.58.0.png' alt='logo'></div></a><div class="sidebar-elems"><h2 class="location">Other items in<br><a href="../index.html">std</a>::<wbr><a href="index.html">thread</a></h2><div id="sidebar-vars" data-name="spawn" data-ty="fn" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Function <a href="../index.html">std</a>::<wbr><a href="index.html">thread</a>::<wbr><a class="fn" href="#">spawn</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard1.58.0.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span class="since" title="Stable since Rust version 1.0.0">1.0.0</span><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/std/thread/mod.rs.html#625-632" title="goto source code">[src]</a></span></h1><pre class="rust fn"><code>pub fn spawn&lt;F, T&gt;(f: F) -&gt; <a class="struct" href="struct.JoinHandle.html" title="struct std::thread::JoinHandle">JoinHandle</a>&lt;T&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="../ops/trait.FnOnce.html" title="trait std::ops::FnOnce">FnOnce</a>() -&gt; T,<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="../marker/trait.Send.html" title="trait std::marker::Send">Send</a> + 'static,<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="../marker/trait.Send.html" title="trait std::marker::Send">Send</a> + 'static,&nbsp;</span></code></pre><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>产生一个新线程，为其返回 <a href="struct.JoinHandle.html" title="JoinHandle"><code>JoinHandle</code></a>。</p>
+<p>连接句柄提供了一个 <a href="struct.JoinHandle.html#method.join"><code>join</code></a> 方法，可用于连接新建线程。如果新建线程 panics，<a href="struct.JoinHandle.html#method.join"><code>join</code></a> 将返回一个 <a href="../result/enum.Result.html#variant.Err"><code>Err</code></a>，其中包含给 <a href="../macro.panic.html" title="panic!"><code>panic!</code></a> 的参数。</p>
+<p>如果连接句柄是删除，则新建线程将隐式地<em>分离</em>。
+在这种情况下，可能不再加入新建线程。
+(最终加入它创建的线程或分离它们是程序的责任; 否则，将导致资源泄漏。)</p>
+<p>此调用将使用 <a href="struct.Builder.html" title="Builder"><code>Builder</code></a> 的默认参数创建线程，如果要指定栈大小或线程名称，请改用此 API。</p>
+<p>如您在 <code>spawn</code> 的签名中所见，给 <code>spawn</code> 的闭包及其返回值都有两个约束，让我们对其进行解释：</p>
+<ul>
+<li>
+<p><code>'static</code> 约束意味着闭包及其返回值必须具有整个程序执行的生命周期。这样做的原因是线程可以比创建它们的生命周期更长。</p>
+<p>确实，如果线程及其扩展值可以超过调用者的生命周期，我们需要确保它们之后才有效，并且由于我们 <em>无法</em> 知道何时返回，因此需要使它们有效尽可能直到程序结束，因此是 <code>'static</code> 生命周期。</p>
+</li>
+<li>
+<p><a href="../marker/trait.Send.html" title="Send"><code>Send</code></a> 约束是因为闭包将需要从产生它的线程中传递 <em>by value</em> 到新线程。它的返回值需要从新线程传递到 <code>join</code> 线程。
+提醒一下，<a href="../marker/trait.Send.html" title="Send"><code>Send</code></a> 标记 trait 表示从线程传递到线程是安全的。<a href="../marker/trait.Sync.html" title="Sync"><code>Sync</code></a> 表示在每个线程之间传递引用是安全的。</p>
+</li>
+</ul>
+<h2 id="panics" class="section-header"><a href="#panics">Panics</a></h2>
+<p>如果操作系统无法创建线程，就会出现 panics。使用 <a href="struct.Builder.html#method.spawn" title="Builder::spawn"><code>Builder::spawn</code></a> 从此类错误中恢复。</p>
+<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<p>创建一个线程。</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::thread</span>;
+
+<span class="kw">let</span> <span class="ident">handler</span> <span class="op">=</span> <span class="ident">thread::spawn</span>(<span class="op">|</span><span class="op">|</span> {
+    <span class="comment">// 线程代码</span>
+});
+
+<span class="ident">handler</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Ause%20std%3A%3Athread%3B%0A%0Alet%20handler%20%3D%20thread%3A%3Aspawn(%7C%7C%20%7B%0A%20%20%20%20%2F%2F%20%E7%BA%BF%E7%A8%8B%E4%BB%A3%E7%A0%81%0A%7D)%3B%0A%0Ahandler.join().unwrap()%3B%0A%7D&amp;edition=2018">Run</a></div>
+<p>如模块文档中所述，线程通常是使用 <a href="../sync/mpsc/index.html"><code>channels</code></a> 进行通信的，这是它通常的外观。</p>
+<p>此示例还显示了如何使用 <code>move</code>，以便将值的所有权授予线程。</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::thread</span>;
+<span class="kw">use</span> <span class="ident">std::sync::mpsc::channel</span>;
+
+<span class="kw">let</span> (<span class="ident">tx</span>, <span class="ident">rx</span>) <span class="op">=</span> <span class="ident">channel</span>();
+
+<span class="kw">let</span> <span class="ident">sender</span> <span class="op">=</span> <span class="ident">thread::spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+    <span class="ident">tx</span>.<span class="ident">send</span>(<span class="string">&quot;Hello, thread&quot;</span>.<span class="ident">to_owned</span>())
+        .<span class="ident">expect</span>(<span class="string">&quot;Unable to send on channel&quot;</span>);
+});
+
+<span class="kw">let</span> <span class="ident">receiver</span> <span class="op">=</span> <span class="ident">thread::spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+    <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">rx</span>.<span class="ident">recv</span>().<span class="ident">expect</span>(<span class="string">&quot;Unable to receive from channel&quot;</span>);
+    <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">value</span>);
+});
+
+<span class="ident">sender</span>.<span class="ident">join</span>().<span class="ident">expect</span>(<span class="string">&quot;The sender thread has panicked&quot;</span>);
+<span class="ident">receiver</span>.<span class="ident">join</span>().<span class="ident">expect</span>(<span class="string">&quot;The receiver thread has panicked&quot;</span>);</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Ause%20std%3A%3Athread%3B%0Ause%20std%3A%3Async%3A%3Ampsc%3A%3Achannel%3B%0A%0Alet%20(tx%2C%20rx)%20%3D%20channel()%3B%0A%0Alet%20sender%20%3D%20thread%3A%3Aspawn(move%20%7C%7C%20%7B%0A%20%20%20%20tx.send(%22Hello%2C%20thread%22.to_owned())%0A%20%20%20%20%20%20%20%20.expect(%22Unable%20to%20send%20on%20channel%22)%3B%0A%7D)%3B%0A%0Alet%20receiver%20%3D%20thread%3A%3Aspawn(move%20%7C%7C%20%7B%0A%20%20%20%20let%20value%20%3D%20rx.recv().expect(%22Unable%20to%20receive%20from%20channel%22)%3B%0A%20%20%20%20println!(%22%7B%7D%22%2C%20value)%3B%0A%7D)%3B%0A%0Asender.join().expect(%22The%20sender%20thread%20has%20panicked%22)%3B%0Areceiver.join().expect(%22The%20receiver%20thread%20has%20panicked%22)%3B%0A%7D&amp;edition=2018">Run</a></div>
+<p>线程也可以通过其 <a href="struct.JoinHandle.html" title="JoinHandle"><code>JoinHandle</code></a> 返回一个值，您可以使用它进行异步计算 (不过 futures 可能更合适)。</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::thread</span>;
+
+<span class="kw">let</span> <span class="ident">computation</span> <span class="op">=</span> <span class="ident">thread::spawn</span>(<span class="op">|</span><span class="op">|</span> {
+    <span class="comment">// 一些昂贵的计算。</span>
+    <span class="number">42</span>
+});
+
+<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">computation</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
+<span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">result</span>);</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Ause%20std%3A%3Athread%3B%0A%0Alet%20computation%20%3D%20thread%3A%3Aspawn(%7C%7C%20%7B%0A%20%20%20%20%2F%2F%20%E4%B8%80%E4%BA%9B%E6%98%82%E8%B4%B5%E7%9A%84%E8%AE%A1%E7%AE%97%E3%80%82%0A%20%20%20%2042%0A%7D)%3B%0A%0Alet%20result%20%3D%20computation.join().unwrap()%3B%0Aprintln!(%22%7B%7D%22%2C%20result)%3B%0A%7D&amp;edition=2018">Run</a></div>
+</div></details></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="std" data-search-index-js="../../search-index1.58.0.js" data-search-js="../../search1.58.0.js"></div>
+    <script src="../../main1.58.0.js"></script>
+</body></html>

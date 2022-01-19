@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["symlink_dir","创建一个指向文件系统目录的新符号链接。"],["symlink_file","创建指向文件系统上非目录文件的新符号链接。"]],"trait":[["FileExt","特定于 Windows 的 [`fs::File`] 扩展。"],["FileTypeExt","特定于 Windows 的 [`fs::FileType`] 扩展。"],["MetadataExt","特定于 Windows 的 [`fs::Metadata`] 扩展。"],["OpenOptionsExt","特定于 Windows 的 [`fs::OpenOptions`] 扩展。"]]});

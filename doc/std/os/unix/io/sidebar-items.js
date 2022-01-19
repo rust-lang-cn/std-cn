@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["BorrowedFd","借用的文件描述符。"],["OwnedFd","拥有所有权的文件描述符。"]],"trait":[["AsFd","一个 trait 来借用来自底层对象的文件描述符。"],["AsRawFd","一个从底层对象中提取原始文件描述符的 trait。"],["FromRawFd","一个表示从原始文件描述符构造对象的能力的 trait。"],["IntoRawFd","一个 trait，表示消费对象并获得其原始文件描述符所有权的能力。"]],"type":[["RawFd","原始文件描述符。"]]});
