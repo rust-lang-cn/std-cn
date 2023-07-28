@@ -1,0 +1,433 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Send and Sync - The Rustonomicon</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="The Dark Arts of Advanced and Unsafe Rust Programming">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/nomicon.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Introduction</a></li><li class="chapter-item expanded "><a href="meet-safe-and-unsafe.html"><strong aria-hidden="true">1.</strong> Meet Safe and Unsafe</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="safe-unsafe-meaning.html"><strong aria-hidden="true">1.1.</strong> How Safe and Unsafe Interact</a></li><li class="chapter-item expanded "><a href="what-unsafe-does.html"><strong aria-hidden="true">1.2.</strong> What Unsafe Can Do</a></li><li class="chapter-item expanded "><a href="working-with-unsafe.html"><strong aria-hidden="true">1.3.</strong> Working with Unsafe</a></li></ol></li><li class="chapter-item expanded "><a href="data.html"><strong aria-hidden="true">2.</strong> Data Layout</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="repr-rust.html"><strong aria-hidden="true">2.1.</strong> repr(Rust)</a></li><li class="chapter-item expanded "><a href="exotic-sizes.html"><strong aria-hidden="true">2.2.</strong> Exotically Sized Types</a></li><li class="chapter-item expanded "><a href="other-reprs.html"><strong aria-hidden="true">2.3.</strong> Other reprs</a></li></ol></li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">3.</strong> Ownership</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">3.1.</strong> References</a></li><li class="chapter-item expanded "><a href="aliasing.html"><strong aria-hidden="true">3.2.</strong> Aliasing</a></li><li class="chapter-item expanded "><a href="lifetimes.html"><strong aria-hidden="true">3.3.</strong> Lifetimes</a></li><li class="chapter-item expanded "><a href="lifetime-mismatch.html"><strong aria-hidden="true">3.4.</strong> Limits of Lifetimes</a></li><li class="chapter-item expanded "><a href="lifetime-elision.html"><strong aria-hidden="true">3.5.</strong> Lifetime Elision</a></li><li class="chapter-item expanded "><a href="unbounded-lifetimes.html"><strong aria-hidden="true">3.6.</strong> Unbounded Lifetimes</a></li><li class="chapter-item expanded "><a href="hrtb.html"><strong aria-hidden="true">3.7.</strong> Higher-Rank Trait Bounds</a></li><li class="chapter-item expanded "><a href="subtyping.html"><strong aria-hidden="true">3.8.</strong> Subtyping and Variance</a></li><li class="chapter-item expanded "><a href="dropck.html"><strong aria-hidden="true">3.9.</strong> Drop Check</a></li><li class="chapter-item expanded "><a href="phantom-data.html"><strong aria-hidden="true">3.10.</strong> PhantomData</a></li><li class="chapter-item expanded "><a href="borrow-splitting.html"><strong aria-hidden="true">3.11.</strong> Splitting Borrows</a></li></ol></li><li class="chapter-item expanded "><a href="conversions.html"><strong aria-hidden="true">4.</strong> Type Conversions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="coercions.html"><strong aria-hidden="true">4.1.</strong> Coercions</a></li><li class="chapter-item expanded "><a href="dot-operator.html"><strong aria-hidden="true">4.2.</strong> The Dot Operator</a></li><li class="chapter-item expanded "><a href="casts.html"><strong aria-hidden="true">4.3.</strong> Casts</a></li><li class="chapter-item expanded "><a href="transmutes.html"><strong aria-hidden="true">4.4.</strong> Transmutes</a></li></ol></li><li class="chapter-item expanded "><a href="uninitialized.html"><strong aria-hidden="true">5.</strong> Uninitialized Memory</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="checked-uninit.html"><strong aria-hidden="true">5.1.</strong> Checked</a></li><li class="chapter-item expanded "><a href="drop-flags.html"><strong aria-hidden="true">5.2.</strong> Drop Flags</a></li><li class="chapter-item expanded "><a href="unchecked-uninit.html"><strong aria-hidden="true">5.3.</strong> Unchecked</a></li></ol></li><li class="chapter-item expanded "><a href="obrm.html"><strong aria-hidden="true">6.</strong> Ownership Based Resource Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="constructors.html"><strong aria-hidden="true">6.1.</strong> Constructors</a></li><li class="chapter-item expanded "><a href="destructors.html"><strong aria-hidden="true">6.2.</strong> Destructors</a></li><li class="chapter-item expanded "><a href="leaking.html"><strong aria-hidden="true">6.3.</strong> Leaking</a></li></ol></li><li class="chapter-item expanded "><a href="unwinding.html"><strong aria-hidden="true">7.</strong> Unwinding</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="exception-safety.html"><strong aria-hidden="true">7.1.</strong> Exception Safety</a></li><li class="chapter-item expanded "><a href="poisoning.html"><strong aria-hidden="true">7.2.</strong> Poisoning</a></li></ol></li><li class="chapter-item expanded "><a href="concurrency.html"><strong aria-hidden="true">8.</strong> Concurrency</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="races.html"><strong aria-hidden="true">8.1.</strong> Races</a></li><li class="chapter-item expanded "><a href="send-and-sync.html" class="active"><strong aria-hidden="true">8.2.</strong> Send and Sync</a></li><li class="chapter-item expanded "><a href="atomics.html"><strong aria-hidden="true">8.3.</strong> Atomics</a></li></ol></li><li class="chapter-item expanded "><a href="vec/vec.html"><strong aria-hidden="true">9.</strong> Implementing Vec</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="vec/vec-layout.html"><strong aria-hidden="true">9.1.</strong> Layout</a></li><li class="chapter-item expanded "><a href="vec/vec-alloc.html"><strong aria-hidden="true">9.2.</strong> Allocating</a></li><li class="chapter-item expanded "><a href="vec/vec-push-pop.html"><strong aria-hidden="true">9.3.</strong> Push and Pop</a></li><li class="chapter-item expanded "><a href="vec/vec-dealloc.html"><strong aria-hidden="true">9.4.</strong> Deallocating</a></li><li class="chapter-item expanded "><a href="vec/vec-deref.html"><strong aria-hidden="true">9.5.</strong> Deref</a></li><li class="chapter-item expanded "><a href="vec/vec-insert-remove.html"><strong aria-hidden="true">9.6.</strong> Insert and Remove</a></li><li class="chapter-item expanded "><a href="vec/vec-into-iter.html"><strong aria-hidden="true">9.7.</strong> IntoIter</a></li><li class="chapter-item expanded "><a href="vec/vec-raw.html"><strong aria-hidden="true">9.8.</strong> RawVec</a></li><li class="chapter-item expanded "><a href="vec/vec-drain.html"><strong aria-hidden="true">9.9.</strong> Drain</a></li><li class="chapter-item expanded "><a href="vec/vec-zsts.html"><strong aria-hidden="true">9.10.</strong> Handling Zero-Sized Types</a></li><li class="chapter-item expanded "><a href="vec/vec-final.html"><strong aria-hidden="true">9.11.</strong> Final Code</a></li></ol></li><li class="chapter-item expanded "><a href="arc-mutex/arc-and-mutex.html"><strong aria-hidden="true">10.</strong> Implementing Arc and Mutex</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="arc-mutex/arc.html"><strong aria-hidden="true">10.1.</strong> Arc</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="arc-mutex/arc-layout.html"><strong aria-hidden="true">10.1.1.</strong> Layout</a></li><li class="chapter-item expanded "><a href="arc-mutex/arc-base.html"><strong aria-hidden="true">10.1.2.</strong> Base Code</a></li><li class="chapter-item expanded "><a href="arc-mutex/arc-clone.html"><strong aria-hidden="true">10.1.3.</strong> Cloning</a></li><li class="chapter-item expanded "><a href="arc-mutex/arc-drop.html"><strong aria-hidden="true">10.1.4.</strong> Dropping</a></li><li class="chapter-item expanded "><a href="arc-mutex/arc-final.html"><strong aria-hidden="true">10.1.5.</strong> Final Code</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="ffi.html"><strong aria-hidden="true">11.</strong> FFI</a></li><li class="chapter-item expanded "><a href="beneath-std.html"><strong aria-hidden="true">12.</strong> Beneath std</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="panic-handler.html"><strong aria-hidden="true">12.1.</strong> #[panic_handler]</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rustonomicon</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/nomicon" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="send-and-sync"><a class="header" href="#send-and-sync">Send and Sync</a></h1>
+<p>Not everything obeys inherited mutability, though. Some types allow you to
+have multiple aliases of a location in memory while mutating it. Unless these types use
+synchronization to manage this access, they are absolutely not thread-safe. Rust
+captures this through the <code>Send</code> and <code>Sync</code> traits.</p>
+<ul>
+<li>A type is Send if it is safe to send it to another thread.</li>
+<li>A type is Sync if it is safe to share between threads (T is Sync if and only if <code>&amp;T</code> is Send).</li>
+</ul>
+<p>Send and Sync are fundamental to Rust's concurrency story. As such, a
+substantial amount of special tooling exists to make them work right. First and
+foremost, they're <a href="safe-unsafe-meaning.html">unsafe traits</a>. This means that they are unsafe to
+implement, and other unsafe code can assume that they are correctly
+implemented. Since they're <em>marker traits</em> (they have no associated items like
+methods), correctly implemented simply means that they have the intrinsic
+properties an implementor should have. Incorrectly implementing Send or Sync can
+cause Undefined Behavior.</p>
+<p>Send and Sync are also automatically derived traits. This means that, unlike
+every other trait, if a type is composed entirely of Send or Sync types, then it
+is Send or Sync. Almost all primitives are Send and Sync, and as a consequence
+pretty much all types you'll ever interact with are Send and Sync.</p>
+<p>Major exceptions include:</p>
+<ul>
+<li>raw pointers are neither Send nor Sync (because they have no safety guards).</li>
+<li><code>UnsafeCell</code> isn't Sync (and therefore <code>Cell</code> and <code>RefCell</code> aren't).</li>
+<li><code>Rc</code> isn't Send or Sync (because the refcount is shared and unsynchronized).</li>
+</ul>
+<p><code>Rc</code> and <code>UnsafeCell</code> are very fundamentally not thread-safe: they enable
+unsynchronized shared mutable state. However raw pointers are, strictly
+speaking, marked as thread-unsafe as more of a <em>lint</em>. Doing anything useful
+with a raw pointer requires dereferencing it, which is already unsafe. In that
+sense, one could argue that it would be &quot;fine&quot; for them to be marked as thread
+safe.</p>
+<p>However it's important that they aren't thread-safe to prevent types that
+contain them from being automatically marked as thread-safe. These types have
+non-trivial untracked ownership, and it's unlikely that their author was
+necessarily thinking hard about thread safety. In the case of <code>Rc</code>, we have a nice
+example of a type that contains a <code>*mut</code> that is definitely not thread-safe.</p>
+<p>Types that aren't automatically derived can simply implement them if desired:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct MyBox(*mut u8);
+
+unsafe impl Send for MyBox {}
+unsafe impl Sync for MyBox {}
+<span class="boring">}</span></code></pre></pre>
+<p>In the <em>incredibly rare</em> case that a type is inappropriately automatically
+derived to be Send or Sync, then one can also unimplement Send and Sync:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span>#![feature(negative_impls)]
+
+<span class="boring">fn main() {
+</span>// I have some magic semantics for some synchronization primitive!
+struct SpecialThreadToken(u8);
+
+impl !Send for SpecialThreadToken {}
+impl !Sync for SpecialThreadToken {}
+<span class="boring">}</span></code></pre></pre>
+<p>Note that <em>in and of itself</em> it is impossible to incorrectly derive Send and
+Sync. Only types that are ascribed special meaning by other unsafe code can
+possibly cause trouble by being incorrectly Send or Sync.</p>
+<p>Most uses of raw pointers should be encapsulated behind a sufficient abstraction
+that Send and Sync can be derived. For instance all of Rust's standard
+collections are Send and Sync (when they contain Send and Sync types) in spite
+of their pervasive use of raw pointers to manage allocations and complex ownership.
+Similarly, most iterators into these collections are Send and Sync because they
+largely behave like an <code>&amp;</code> or <code>&amp;mut</code> into the collection.</p>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p><a href="https://doc.rust-lang.org/std/boxed/struct.Box.html"><code>Box</code></a> is implemented as its own special intrinsic type by the
+compiler for <a href="https://manishearth.github.io/blog/2017/01/10/rust-tidbits-box-is-special/">various reasons</a>, but we can implement something
+with similar-ish behavior ourselves to see an example of when it is sound to
+implement Send and Sync. Let's call it a <code>Carton</code>.</p>
+<p>We start by writing code to take a value allocated on the stack and transfer it
+to the heap.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">pub mod libc {
+</span><span class="boring">   pub use ::std::os::raw::{c_int, c_void};
+</span><span class="boring">   #[allow(non_camel_case_types)]
+</span><span class="boring">   pub type size_t = usize;
+</span><span class="boring">   extern &quot;C&quot; { pub fn posix_memalign(memptr: *mut *mut c_void, align: size_t, size: size_t) -&gt; c_int; }
+</span><span class="boring">}
+</span>use std::{
+    mem::{align_of, size_of},
+    ptr,
+    cmp::max,
+};
+
+struct Carton&lt;T&gt;(ptr::NonNull&lt;T&gt;);
+
+impl&lt;T&gt; Carton&lt;T&gt; {
+    pub fn new(value: T) -&gt; Self {
+        // Allocate enough memory on the heap to store one T.
+        assert_ne!(size_of::&lt;T&gt;(), 0, &quot;Zero-sized types are out of the scope of this example&quot;);
+        let mut memptr: *mut T = ptr::null_mut();
+        unsafe {
+            let ret = libc::posix_memalign(
+                (&amp;mut memptr as *mut *mut T).cast(),
+                max(align_of::&lt;T&gt;(), size_of::&lt;usize&gt;()),
+                size_of::&lt;T&gt;()
+            );
+            assert_eq!(ret, 0, &quot;Failed to allocate or invalid alignment&quot;);
+        };
+
+        // NonNull is just a wrapper that enforces that the pointer isn't null.
+        let ptr = {
+            // Safety: memptr is dereferenceable because we created it from a
+            // reference and have exclusive access.
+            ptr::NonNull::new(memptr)
+                .expect(&quot;Guaranteed non-null if posix_memalign returns 0&quot;)
+        };
+
+        // Move value from the stack to the location we allocated on the heap.
+        unsafe {
+            // Safety: If non-null, posix_memalign gives us a ptr that is valid
+            // for writes and properly aligned.
+            ptr.as_ptr().write(value);
+        }
+
+        Self(ptr)
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This isn't very useful, because once our users give us a value they have no way
+to access it. <a href="https://doc.rust-lang.org/std/boxed/struct.Box.html"><code>Box</code></a> implements <a href="https://doc.rust-lang.org/core/ops/trait.Deref.html"><code>Deref</code></a> and
+<a href="https://doc.rust-lang.org/core/ops/trait.DerefMut.html"><code>DerefMut</code></a> so that you can access the inner value. Let's do
+that.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::ops::{Deref, DerefMut};
+
+<span class="boring">struct Carton&lt;T&gt;(std::ptr::NonNull&lt;T&gt;);
+</span><span class="boring">
+</span>impl&lt;T&gt; Deref for Carton&lt;T&gt; {
+    type Target = T;
+
+    fn deref(&amp;self) -&gt; &amp;Self::Target {
+        unsafe {
+            // Safety: The pointer is aligned, initialized, and dereferenceable
+            //   by the logic in [`Self::new`]. We require readers to borrow the
+            //   Carton, and the lifetime of the return value is elided to the
+            //   lifetime of the input. This means the borrow checker will
+            //   enforce that no one can mutate the contents of the Carton until
+            //   the reference returned is dropped.
+            self.0.as_ref()
+        }
+    }
+}
+
+impl&lt;T&gt; DerefMut for Carton&lt;T&gt; {
+    fn deref_mut(&amp;mut self) -&gt; &amp;mut Self::Target {
+        unsafe {
+            // Safety: The pointer is aligned, initialized, and dereferenceable
+            //   by the logic in [`Self::new`]. We require writers to mutably
+            //   borrow the Carton, and the lifetime of the return value is
+            //   elided to the lifetime of the input. This means the borrow
+            //   checker will enforce that no one else can access the contents
+            //   of the Carton until the mutable reference returned is dropped.
+            self.0.as_mut()
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Finally, let's think about whether our <code>Carton</code> is Send and Sync. Something can
+safely be Send unless it shares mutable state with something else without
+enforcing exclusive access to it. Each <code>Carton</code> has a unique pointer, so
+we're good.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">struct Carton&lt;T&gt;(std::ptr::NonNull&lt;T&gt;);
+</span>// Safety: No one besides us has the raw pointer, so we can safely transfer the
+// Carton to another thread if T can be safely transferred.
+unsafe impl&lt;T&gt; Send for Carton&lt;T&gt; where T: Send {}
+<span class="boring">}</span></code></pre></pre>
+<p>What about Sync? For <code>Carton</code> to be Sync we have to enforce that you can't
+write to something stored in a <code>&amp;Carton</code> while that same something could be read
+or written to from another <code>&amp;Carton</code>. Since you need an <code>&amp;mut Carton</code> to
+write to the pointer, and the borrow checker enforces that mutable
+references must be exclusive, there are no soundness issues making <code>Carton</code>
+sync either.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">struct Carton&lt;T&gt;(std::ptr::NonNull&lt;T&gt;);
+</span>// Safety: Since there exists a public way to go from a `&amp;Carton&lt;T&gt;` to a `&amp;T`
+// in an unsynchronized fashion (such as `Deref`), then `Carton&lt;T&gt;` can't be
+// `Sync` if `T` isn't.
+// Conversely, `Carton` itself does not use any interior mutability whatsoever:
+// all the mutations are performed through an exclusive reference (`&amp;mut`). This
+// means it suffices that `T` be `Sync` for `Carton&lt;T&gt;` to be `Sync`:
+unsafe impl&lt;T&gt; Sync for Carton&lt;T&gt; where T: Sync  {}
+<span class="boring">}</span></code></pre></pre>
+<p>When we assert our type is Send and Sync we usually need to enforce that every
+contained type is Send and Sync. When writing custom types that behave like
+standard library types we can assert that we have the same requirements.
+For example, the following code asserts that a Carton is Send if the same
+sort of Box would be Send, which in this case is the same as saying T is Send.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">struct Carton&lt;T&gt;(std::ptr::NonNull&lt;T&gt;);
+</span>unsafe impl&lt;T&gt; Send for Carton&lt;T&gt; where Box&lt;T&gt;: Send {}
+<span class="boring">}</span></code></pre></pre>
+<p>Right now <code>Carton&lt;T&gt;</code> has a memory leak, as it never frees the memory it allocates.
+Once we fix that we have a new requirement we have to ensure we meet to be Send:
+we need to know <code>free</code> can be called on a pointer that was yielded by an
+allocation done on another thread. We can check this is true in the docs for
+<a href="https://linux.die.net/man/3/free"><code>libc::free</code></a>.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">struct Carton&lt;T&gt;(std::ptr::NonNull&lt;T&gt;);
+</span><span class="boring">mod libc {
+</span><span class="boring">    pub use ::std::os::raw::c_void;
+</span><span class="boring">    extern &quot;C&quot; { pub fn free(p: *mut c_void); }
+</span><span class="boring">}
+</span>impl&lt;T&gt; Drop for Carton&lt;T&gt; {
+    fn drop(&amp;mut self) {
+        unsafe {
+            libc::free(self.0.as_ptr().cast());
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>A nice example where this does not happen is with a MutexGuard: notice how
+<a href="https://doc.rust-lang.org/std/sync/struct.MutexGuard.html#impl-Send">it is not Send</a>. The implementation of MutexGuard
+<a href="https://github.com/rust-lang/rust/issues/23465#issuecomment-82730326">uses libraries</a> that require you to ensure you
+don't try to free a lock that you acquired in a different thread. If you were
+able to Send a MutexGuard to another thread the destructor would run in the
+thread you sent it to, violating the requirement. MutexGuard can still be Sync
+because all you can send to another thread is an <code>&amp;MutexGuard</code> and dropping a
+reference does nothing.</p>
+<p>TODO: better explain what can or can't be Send or Sync. Sufficient to appeal
+only to data races?</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="races.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="atomics.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="races.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="atomics.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

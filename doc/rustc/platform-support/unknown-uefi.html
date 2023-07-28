@@ -1,0 +1,398 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>*-unknown-uefi - The rustc book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what-is-rustc.html"><strong aria-hidden="true">1.</strong> What is rustc?</a></li><li class="chapter-item expanded "><a href="../command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line Arguments</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../codegen-options/index.html"><strong aria-hidden="true">2.1.</strong> Codegen Options</a></li></ol></li><li class="chapter-item expanded "><a href="../lints/index.html"><strong aria-hidden="true">3.</strong> Lints</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lints/levels.html"><strong aria-hidden="true">3.1.</strong> Lint Levels</a></li><li class="chapter-item expanded "><a href="../lints/groups.html"><strong aria-hidden="true">3.2.</strong> Lint Groups</a></li><li class="chapter-item expanded "><a href="../lints/listing/index.html"><strong aria-hidden="true">3.3.</strong> Lint Listing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lints/listing/allowed-by-default.html"><strong aria-hidden="true">3.3.1.</strong> Allowed-by-default Lints</a></li><li class="chapter-item expanded "><a href="../lints/listing/warn-by-default.html"><strong aria-hidden="true">3.3.2.</strong> Warn-by-default Lints</a></li><li class="chapter-item expanded "><a href="../lints/listing/deny-by-default.html"><strong aria-hidden="true">3.3.3.</strong> Deny-by-default Lints</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../json.html"><strong aria-hidden="true">4.</strong> JSON Output</a></li><li class="chapter-item expanded "><a href="../tests/index.html"><strong aria-hidden="true">5.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../platform-support.html"><strong aria-hidden="true">6.</strong> Platform Support</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../target-tier-policy.html"><strong aria-hidden="true">6.1.</strong> Target Tier Policy</a></li><li class="chapter-item expanded "><a href="../platform-support/TEMPLATE.html"><strong aria-hidden="true">6.2.</strong> Template for Target-specific Documentation</a></li><li class="chapter-item expanded "><a href="../platform-support/aarch64-apple-ios-sim.html"><strong aria-hidden="true">6.3.</strong> aarch64-apple-ios-sim</a></li><li class="chapter-item expanded "><a href="../platform-support/apple-watchos.html"><strong aria-hidden="true">6.4.</strong> *-apple-watchos*</a></li><li class="chapter-item expanded "><a href="../platform-support/aarch64-nintendo-switch-freestanding.html"><strong aria-hidden="true">6.5.</strong> aarch64-nintendo-switch-freestanding</a></li><li class="chapter-item expanded "><a href="../platform-support/armeb-unknown-linux-gnueabi.html"><strong aria-hidden="true">6.6.</strong> armeb-unknown-linux-gnueabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv4t-none-eabi.html"><strong aria-hidden="true">6.7.</strong> armv4t-none-eabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv5te-none-eabi.html"><strong aria-hidden="true">6.8.</strong> armv5te-none-eabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv6k-nintendo-3ds.html"><strong aria-hidden="true">6.9.</strong> armv6k-nintendo-3ds</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-sony-vita-newlibeabihf.html"><strong aria-hidden="true">6.10.</strong> armv7-sony-vita-newlibeabihf</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-unknown-linux-uclibceabi.html"><strong aria-hidden="true">6.11.</strong> armv7-unknown-linux-uclibceabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-unknown-linux-uclibceabihf.html"><strong aria-hidden="true">6.12.</strong> armv7-unknown-linux-uclibceabihf</a></li><li class="chapter-item expanded "><a href="../platform-support/android.html"><strong aria-hidden="true">6.13.</strong> *-android and *-androideabi</a></li><li class="chapter-item expanded "><a href="../platform-support/openharmony.html"><strong aria-hidden="true">6.14.</strong> *-linux-ohos</a></li><li class="chapter-item expanded "><a href="../platform-support/esp-idf.html"><strong aria-hidden="true">6.15.</strong> *-esp-espidf</a></li><li class="chapter-item expanded "><a href="../platform-support/fuchsia.html"><strong aria-hidden="true">6.16.</strong> *-unknown-fuchsia</a></li><li class="chapter-item expanded "><a href="../platform-support/kmc-solid.html"><strong aria-hidden="true">6.17.</strong> *-kmc-solid_*</a></li><li class="chapter-item expanded "><a href="../platform-support/loongarch-linux.html"><strong aria-hidden="true">6.18.</strong> loongarch*-unknown-linux-*</a></li><li class="chapter-item expanded "><a href="../platform-support/m68k-unknown-linux-gnu.html"><strong aria-hidden="true">6.19.</strong> m68k-unknown-linux-gnu</a></li><li class="chapter-item expanded "><a href="../platform-support/mips64-openwrt-linux-musl.html"><strong aria-hidden="true">6.20.</strong> mips64-openwrt-linux-musl</a></li><li class="chapter-item expanded "><a href="../platform-support/mipsel-sony-psx.html"><strong aria-hidden="true">6.21.</strong> mipsel-sony-psx</a></li><li class="chapter-item expanded "><a href="../platform-support/nvptx64-nvidia-cuda.html"><strong aria-hidden="true">6.22.</strong> nvptx64-nvidia-cuda</a></li><li class="chapter-item expanded "><a href="../platform-support/riscv32imac-unknown-xous-elf.html"><strong aria-hidden="true">6.23.</strong> riscv32imac-unknown-xous-elf</a></li><li class="chapter-item expanded "><a href="../platform-support/pc-windows-gnullvm.html"><strong aria-hidden="true">6.24.</strong> *-pc-windows-gnullvm</a></li><li class="chapter-item expanded "><a href="../platform-support/nto-qnx.html"><strong aria-hidden="true">6.25.</strong> *-nto-qnx-*</a></li><li class="chapter-item expanded "><a href="../platform-support/openbsd.html"><strong aria-hidden="true">6.26.</strong> *-unknown-openbsd</a></li><li class="chapter-item expanded "><a href="../platform-support/unknown-uefi.html" class="active"><strong aria-hidden="true">6.27.</strong> *-unknown-uefi</a></li><li class="chapter-item expanded "><a href="../platform-support/wasm64-unknown-unknown.html"><strong aria-hidden="true">6.28.</strong> wasm64-unknown-unknown</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64-fortanix-unknown-sgx.html"><strong aria-hidden="true">6.29.</strong> x86_64-fortanix-unknown-sgx</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64-unknown-none.html"><strong aria-hidden="true">6.30.</strong> x86_64-unknown-none</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64h-apple-darwin.html"><strong aria-hidden="true">6.31.</strong> x86_64h-apple-darwin</a></li></ol></li><li class="chapter-item expanded "><a href="../targets/index.html"><strong aria-hidden="true">7.</strong> Targets</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../targets/built-in.html"><strong aria-hidden="true">7.1.</strong> Built-in Targets</a></li><li class="chapter-item expanded "><a href="../targets/custom.html"><strong aria-hidden="true">7.2.</strong> Custom Targets</a></li><li class="chapter-item expanded "><a href="../targets/known-issues.html"><strong aria-hidden="true">7.3.</strong> Known Issues</a></li></ol></li><li class="chapter-item expanded "><a href="../profile-guided-optimization.html"><strong aria-hidden="true">8.</strong> Profile-guided Optimization</a></li><li class="chapter-item expanded "><a href="../instrument-coverage.html"><strong aria-hidden="true">9.</strong> Instrumentation-based Code Coverage</a></li><li class="chapter-item expanded "><a href="../linker-plugin-lto.html"><strong aria-hidden="true">10.</strong> Linker-plugin-based LTO</a></li><li class="chapter-item expanded "><a href="../exploit-mitigations.html"><strong aria-hidden="true">11.</strong> Exploit Mitigations</a></li><li class="chapter-item expanded "><a href="../contributing.html"><strong aria-hidden="true">12.</strong> Contributing to rustc</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The rustc book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/master/src/doc/rustc" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/edit/master/src/doc/rustc/src/platform-support/unknown-uefi.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="-unknown-uefi"><a class="header" href="#-unknown-uefi"><code>*-unknown-uefi</code></a></h1>
+<p><strong>Tier: 2</strong></p>
+<p>Unified Extensible Firmware Interface (UEFI) targets for application, driver,
+and core UEFI binaries.</p>
+<p>Available targets:</p>
+<ul>
+<li><code>aarch64-unknown-uefi</code></li>
+<li><code>i686-unknown-uefi</code></li>
+<li><code>x86_64-unknown-uefi</code></li>
+</ul>
+<h2 id="target-maintainers"><a class="header" href="#target-maintainers">Target maintainers</a></h2>
+<ul>
+<li>David Rheinsberg (<a href="https://github.com/dvdhrm">@dvdhrm</a>)</li>
+<li>Nicholas Bishop (<a href="https://github.com/nicholasbishop">@nicholasbishop</a>)</li>
+</ul>
+<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
+<p>All UEFI targets can be used as <code>no-std</code> environments via cross-compilation.
+Support for <code>std</code> is missing, but actively worked on. <code>alloc</code> is supported if
+an allocator is provided by the user. No host tools are supported.</p>
+<p>The UEFI environment resembles the environment for Microsoft Windows, with some
+minor differences. Therefore, cross-compiling for UEFI works with the same
+tools as cross-compiling for Windows. The target binaries are PE32+ encoded,
+the calling convention is different for each architecture, but matches what
+Windows uses (if the architecture is supported by Windows). The special
+<code>efiapi</code> Rust calling-convention chooses the right ABI for the target platform
+(<code>extern &quot;C&quot;</code> is incorrect on Intel targets at least). The specification has an
+elaborate section on the different supported calling-conventions, if more
+details are desired.</p>
+<p>MMX, SSE, and other FP-units are disabled by default, to allow for compilation
+of core UEFI code that runs before they are set up. This can be overridden for
+individual compilations via rustc command-line flags. Not all firmwares
+correctly configure those units, though, so careful inspection is required.</p>
+<p>As native to PE32+, binaries are position-dependent, but can be relocated at
+runtime if their desired location is unavailable. The code must be statically
+linked. Dynamic linking is not supported. Code is shared via UEFI interfaces,
+rather than dynamic linking. Additionally, UEFI forbids running code on
+anything but the boot CPU/thread, nor is interrupt-usage allowed (apart from
+the timer interrupt). Device drivers are required to use polling methods.</p>
+<p>UEFI uses a single address-space to run all code in. Multiple applications can
+be loaded simultaneously and are dispatched via cooperative multitasking on a
+single stack.</p>
+<p>By default, the UEFI targets use the <code>link</code>-flavor of the LLVM linker <code>lld</code> to
+link binaries into the final PE32+ file suffixed with <code>*.efi</code>. The PE subsystem
+is set to <code>EFI_APPLICATION</code>, but can be modified by passing <code>/subsystem:&lt;...&gt;</code>
+to the linker. Similarly, the entry-point is to to <code>efi_main</code> but can be
+changed via <code>/entry:&lt;...&gt;</code>. The panic-strategy is set to <code>abort</code>,</p>
+<p>The UEFI specification is available online for free:
+<a href="https://uefi.org/specifications">UEFI Specification Directory</a></p>
+<h2 id="building-rust-for-uefi-targets"><a class="header" href="#building-rust-for-uefi-targets">Building rust for UEFI targets</a></h2>
+<p>Rust can be built for the UEFI targets by enabling them in the <code>rustc</code> build
+configuration. Note that you can only build the standard libraries. The
+compiler and host tools currently cannot be compiled for UEFI targets. A sample
+configuration would be:</p>
+<pre><code class="language-toml">[build]
+build-stage = 1
+target = [&quot;x86_64-unknown-uefi&quot;]
+</code></pre>
+<h2 id="building-rust-programs"><a class="header" href="#building-rust-programs">Building Rust programs</a></h2>
+<p>Starting with Rust 1.67, precompiled artifacts are provided via
+<code>rustup</code>. For example, to use <code>x86_64-unknown-uefi</code>:</p>
+<pre><code class="language-sh"># install cross-compile toolchain
+rustup target add x86_64-unknown-uefi
+# target flag may be used with any cargo or rustc command
+cargo build --target x86_64-unknown-uefi
+</code></pre>
+<h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
+<p>UEFI applications can be copied into the ESP on any UEFI system and executed
+via the firmware boot menu. The qemu suite allows emulating UEFI systems and
+executing UEFI applications as well. See its documentation for details.</p>
+<p>The <a href="https://github.com/Richard-W/uefi-run">uefi-run</a> rust tool is a simple
+wrapper around <code>qemu</code> that can spawn UEFI applications in qemu. You can install
+it via <code>cargo install uefi-run</code> and execute qemu applications as
+<code>uefi-run ./application.efi</code>.</p>
+<h2 id="cross-compilation-toolchains-and-c-code"><a class="header" href="#cross-compilation-toolchains-and-c-code">Cross-compilation toolchains and C code</a></h2>
+<p>There are 3 common ways to compile native C code for UEFI targets:</p>
+<ul>
+<li>Use the official SDK by Intel:
+<a href="https://github.com/tianocore/edk2">Tianocore/EDK2</a>. This supports a
+multitude of platforms, comes with the full specification transposed into C,
+lots of examples and build-system integrations. This is also the only
+officially supported platform by Intel, and is used by many major firmware
+implementations. Any code compiled via the SDK is compatible to rust binaries
+compiled for the UEFI targets. You can link them directly into your rust
+binaries, or call into each other via UEFI protocols.</li>
+<li>Use the <strong>GNU-EFI</strong> suite. This approach is used by many UEFI applications
+in the Linux/OSS ecosystem. The GCC compiler is used to compile ELF binaries,
+and linked with a pre-loader that converts the ELF binary to PE32+
+<strong>at runtime</strong>. You can combine such binaries with the rust UEFI targets only
+via UEFI protocols. Linking both into the same executable will fail, since
+one is an ELF executable, and one a PE32+. If linking to <strong>GNU-EFI</strong>
+executables is desired, you must compile your rust code natively for the same
+GNU target as <strong>GNU-EFI</strong> and use their pre-loader. This requires careful
+consideration about which calling-convention to use when calling into native
+UEFI protocols, or calling into linked <strong>GNU-EFI</strong> code (similar to how these
+differences need to be accounted for when writing <strong>GNU-EFI</strong> C code).</li>
+<li>Use native Windows targets. This means compiling your C code for the Windows
+platform as if it was the UEFI platform. This works for static libraries, but
+needs adjustments when linking into an UEFI executable. You can, however,
+link such static libraries seamlessly into rust code compiled for UEFI
+targets. Be wary of any includes that are not specifically suitable for UEFI
+targets (especially the C standard library includes are not always
+compatible). Freestanding compilations are recommended to avoid
+incompatibilities.</li>
+</ul>
+<h2 id="ecosystem"><a class="header" href="#ecosystem">Ecosystem</a></h2>
+<p>The rust language has a long history of supporting UEFI targets. Many crates
+have been developed to provide access to UEFI protocols and make UEFI
+programming more ergonomic in rust. The following list is a short overview (in
+alphabetical ordering):</p>
+<ul>
+<li><strong>efi</strong>: <em>Ergonomic Rust bindings for writing UEFI applications</em>. Provides
+<em>rustified</em> access to UEFI protocols, implements allocators and a safe
+environment to write UEFI applications.</li>
+<li><strong>r-efi</strong>: <em>UEFI Reference Specification Protocol Constants and Definitions</em>.
+A pure transpose of the UEFI specification into rust. This provides the raw
+definitions from the specification, without any extended helpers or
+<em>rustification</em>. It serves as baseline to implement any more elaborate rust
+UEFI layers.</li>
+<li><strong>uefi-rs</strong>: <em>Safe and easy-to-use wrapper for building UEFI apps</em>. An
+elaborate library providing safe abstractions for UEFI protocols and
+features. It implements allocators and provides an execution environment to
+UEFI applications written in rust.</li>
+<li><strong>uefi-run</strong>: <em>Run UEFI applications</em>. A small wrapper around <em>qemu</em> to spawn
+UEFI applications in an emulated <code>x86_64</code> machine.</li>
+</ul>
+<h2 id="example-freestanding"><a class="header" href="#example-freestanding">Example: Freestanding</a></h2>
+<p>The following code is a valid UEFI application returning immediately upon
+execution with an exit code of 0. A panic handler is provided. This is executed
+by rust on panic. For simplicity, we simply end up in an infinite loop.</p>
+<p>This example can be compiled as binary crate via <code>cargo</code>:</p>
+<pre><code class="language-sh">cargo build --target x86_64-unknown-uefi
+</code></pre>
+<pre><code class="language-rust ignore (platform-specific eh-personality-is-unstable)">#![no_main]
+#![no_std]
+
+#[panic_handler]
+fn panic_handler(_info: &amp;core::panic::PanicInfo) -&gt; ! {
+    loop {}
+}
+
+#[export_name = &quot;efi_main&quot;]
+pub extern &quot;C&quot; fn main(_h: *mut core::ffi::c_void, _st: *mut core::ffi::c_void) -&gt; usize {
+    0
+}</code></pre>
+<h2 id="example-hello-world"><a class="header" href="#example-hello-world">Example: Hello World</a></h2>
+<p>This is an example UEFI application that prints &quot;Hello World!&quot;, then waits for
+key input before it exits. It serves as base example how to write UEFI
+applications without any helper modules other than the standalone UEFI protocol
+definitions provided by the <code>r-efi</code> crate.</p>
+<p>This extends the &quot;Freestanding&quot; example and builds upon its setup. See there
+for instruction how to compile this as binary crate.</p>
+<p>Note that UEFI uses UTF-16 strings. Since rust literals are UTF-8, we have to
+use an open-coded, zero-terminated, UTF-16 array as argument to
+<code>output_string()</code>. Similarly to the panic handler, real applications should
+rather use UTF-16 modules.</p>
+<pre><code class="language-rust ignore (platform-specific eh-personality-is-unstable)">#![no_main]
+#![no_std]
+
+use r_efi::efi;
+
+#[panic_handler]
+fn panic_handler(_info: &amp;core::panic::PanicInfo) -&gt; ! {
+    loop {}
+}
+
+#[export_name = &quot;efi_main&quot;]
+pub extern &quot;C&quot; fn main(_h: efi::Handle, st: *mut efi::SystemTable) -&gt; efi::Status {
+    let s = [
+        0x0048u16, 0x0065u16, 0x006cu16, 0x006cu16, 0x006fu16, // &quot;Hello&quot;
+        0x0020u16, //                                             &quot; &quot;
+        0x0057u16, 0x006fu16, 0x0072u16, 0x006cu16, 0x0064u16, // &quot;World&quot;
+        0x0021u16, //                                             &quot;!&quot;
+        0x000au16, //                                             &quot;\n&quot;
+        0x0000u16, //                                             NUL
+    ];
+
+    // Print &quot;Hello World!&quot;.
+    let r =
+        unsafe { ((*(*st).con_out).output_string)((*st).con_out, s.as_ptr() as *mut efi::Char16) };
+    if r.is_error() {
+        return r;
+    }
+
+    // Wait for key input, by waiting on the `wait_for_key` event hook.
+    let r = unsafe {
+        let mut x: usize = 0;
+        ((*(*st).boot_services).wait_for_event)(1, &amp;mut (*(*st).con_in).wait_for_key, &amp;mut x)
+    };
+    if r.is_error() {
+        return r;
+    }
+
+    efi::Status::SUCCESS
+}</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../platform-support/openbsd.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../platform-support/wasm64-unknown-unknown.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../platform-support/openbsd.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../platform-support/wasm64-unknown-unknown.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

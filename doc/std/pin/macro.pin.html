@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="通过在本地固定 `value: T` 来构建 Pin&lt;&amp;mut T&gt;。"><title>pin in std::pin - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="sidebar-items1.71.0.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../std/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../std/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><div class="sidebar-elems"><h2><a href="index.html">In std::pin</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="../index.html">std</a>::<wbr><a href="index.html">pin</a>::<wbr><a class="macro" href="#">pin</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><span class="since" title="Stable since Rust version 1.68.0">1.68.0</span> · <a class="srclink" href="../../src/core/pin.rs.html#1175">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><span class="kw">pub macro </span>pin(<span class="macro-nonterminal">$value</span>:expr $(,)<span class="question-mark">?</span>) {
+    ...
+}</pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>通过在本地固定 <code>value: T</code> 来构建 <code><a href="struct.Pin.html" title="struct std::pin::Pin">Pin</a>&lt;<a href="../primitive.reference.html" title="primitive reference">&amp;mut</a> T&gt;</code>。</p>
+<p>与 <a href="../../std/boxed/struct.Box.html#method.pin"><code>Box::pin</code></a> 不同，这不会创建新的堆分配。如下所述，该元素可能仍会在堆上结束。</p>
+<p>宏执行的本地固定通常称为 <code>栈</code> 固定。
+在 <code>async</code> 上下文之外，局部变量确实存储在栈中。然而，在 <code>async</code> 函数或块中，任何穿过 <code>.await</code> 点的局部变量都是 <code>Future</code> 捕获的状态的一部分，并将使用它们的存储。
+该存储可以在堆上或栈上。
+因此，本地固定是一个更准确的术语。</p>
+<p>如果给定值的类型未实现 <a href="../marker/trait.Unpin.html" title="trait std::marker::Unpin"><code>Unpin</code></a>，则此宏以防止移动的方式将值固定在内存中。
+另一方面，如果该类型确实实现了 <a href="../marker/trait.Unpin.html" title="trait std::marker::Unpin"><code>Unpin</code></a>，则 <code><a href="struct.Pin.html" title="struct std::pin::Pin">Pin</a>&lt;<a href="../primitive.reference.html" title="primitive reference">&amp;mut</a> T&gt;</code> 的行为类似于 <code><a href="../primitive.reference.html" title="primitive reference">&amp;mut</a> T</code>，并且 <a href="../mem/fn.replace.html" title="fn std::mem::replace"><code>mem::replace()</code></a> 或 <a href="../mem/fn.take.html" title="fn std::mem::take"><code>mem::take()</code></a> 等操作将允许移动值。</p>
+<p>有关详细信息，请参见 <a href="index.html#unpin" title="mod std::pin">the <code>Unpin</code> section of the <code>pin</code> module</a>。</p>
+<h3 id="examples"><a href="#examples">Examples</a></h3><h4 id="基本用法"><a href="#基本用法">基本用法</a></h4>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>core::pin::{pin, Pin};
+
+<span class="kw">fn </span>stuff(foo: Pin&lt;<span class="kw-2">&amp;mut </span>Foo&gt;) {
+    <span class="comment">// …
+</span>}
+
+<span class="kw">let </span>pinned_foo = <span class="macro">pin!</span>(Foo { <span class="comment">/* … */ </span>});
+stuff(pinned_foo);
+<span class="comment">// 或者，直接:
+</span>stuff(<span class="macro">pin!</span>(Foo { <span class="comment">/* … */ </span>}));</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Ause+core::marker::PhantomPinned+as+Foo;%0Ause+core::pin::%7Bpin,+Pin%7D;%0A%0Afn+stuff(foo:+Pin%3C%26mut+Foo%3E)+%7B%0A++++//+%E2%80%A6%0Alet+_+=+foo;%0A%7D%0A%0Alet+pinned_foo+=+pin!(Foo+%7B+/*+%E2%80%A6+*/+%7D);%0Astuff(pinned_foo);%0A//+%E6%88%96%E8%80%85%EF%BC%8C%E7%9B%B4%E6%8E%A5:%0Astuff(pin!(Foo+%7B+/*+%E2%80%A6+*/+%7D));%0A%7D&amp;edition=2021">Run</a></div>
+<h4 id="手动轮询-future-没有-unpin-边界"><a href="#手动轮询-future-没有-unpin-边界">手动轮询 <code>Future</code> (没有 <code>Unpin</code> 边界)</a></h4>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::{
+    future::Future,
+    pin::pin,
+    task::{Context, Poll},
+    thread,
+};
+
+<span class="doccomment">/// 运行一个 future 直到完成。
+</span><span class="kw">fn </span>block_on&lt;Fut: Future&gt;(fut: Fut) -&gt; Fut::Output {
+    <span class="kw">let </span>waker_that_unparks_thread = <span class="comment">// …
+    </span><span class="kw">let </span><span class="kw-2">mut </span>cx = Context::from_waker(<span class="kw-2">&amp;</span>waker_that_unparks_thread);
+    <span class="comment">// 固定 future，以便可以对其进行轮询。
+    </span><span class="kw">let </span><span class="kw-2">mut </span>pinned_fut = <span class="macro">pin!</span>(fut);
+    <span class="kw">loop </span>{
+        <span class="kw">match </span>pinned_fut.as_mut().poll(<span class="kw-2">&amp;mut </span>cx) {
+            Poll::Pending =&gt; thread::park(),
+            Poll::Ready(res) =&gt; <span class="kw">return </span>res,
+        }
+    }
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Ause+std::%7B%0A++++future::Future,%0A++++pin::pin,%0A++++task::%7BContext,+Poll%7D,%0A++++thread,%0A%7D;%0Ause+std::%7Bsync::Arc,+task::Wake,+thread::Thread%7D;%0A%0A///+%E4%B8%80%E4%B8%AA%E5%9C%A8%E8%B0%83%E7%94%A8%E6%97%B6%E5%94%A4%E9%86%92%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%94%A4%E9%86%92%E5%99%A8%E3%80%82%0Astruct+ThreadWaker(Thread);%0A%0Aimpl+Wake+for+ThreadWaker+%7B%0A++++fn+wake(self:+Arc%3CSelf%3E)+%7B%0A++++++++self.0.unpark();%0A++++%7D%0A%7D%0A%0A///+%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA+future+%E7%9B%B4%E5%88%B0%E5%AE%8C%E6%88%90%E3%80%82%0Afn+block_on%3CFut:+Future%3E(fut:+Fut)+-%3E+Fut::Output+%7B%0A++++let+waker_that_unparks_thread+=+//+%E2%80%A6%0AArc::new(ThreadWaker(thread::current())).into();%0A++++let+mut+cx+=+Context::from_waker(%26waker_that_unparks_thread);%0A++++//+%E5%9B%BA%E5%AE%9A+future%EF%BC%8C%E4%BB%A5%E4%BE%BF%E5%8F%AF%E4%BB%A5%E5%AF%B9%E5%85%B6%E8%BF%9B%E8%A1%8C%E8%BD%AE%E8%AF%A2%E3%80%82%0A++++let+mut+pinned_fut+=+pin!(fut);%0A++++loop+%7B%0A++++++++match+pinned_fut.as_mut().poll(%26mut+cx)+%7B%0A++++++++++++Poll::Pending+=%3E+thread::park(),%0A++++++++++++Poll::Ready(res)+=%3E+return+res,%0A++++++++%7D%0A++++%7D%0A%7D%0A%0Aassert_eq!(42,+block_on(async+%7B+42+%7D));%0A%7D&amp;edition=2021">Run</a></div>
+<h4 id="使用-generators"><a href="#使用-generators">使用 <code>Generator</code>s</a></h4>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#![feature(generators, generator_trait)]
+</span><span class="kw">use </span>core::{
+    ops::{Generator, GeneratorState},
+    pin::pin,
+};
+
+<span class="kw">fn </span>generator_fn() -&gt; <span class="kw">impl </span>Generator&lt;Yield = usize, Return = ()&gt; <span class="comment">/* not Unpin */ </span>{
+ <span class="comment">// 允许生成器是自引用的 (不是 `Unpin`) vvvvvv 以便本地人可以跨越屈服点。
+    </span><span class="kw">static </span>|| {
+        <span class="kw">let </span>foo = String::from(<span class="string">&quot;foo&quot;</span>);
+        <span class="kw">let </span>foo_ref = <span class="kw-2">&amp;</span>foo; <span class="comment">// ------+
+        </span><span class="kw">yield </span><span class="number">0</span>;                  <span class="comment">// | &lt;- crosses yield point!
+        </span><span class="macro">println!</span>(<span class="string">&quot;{foo_ref}&quot;</span>); <span class="comment">// &lt;--+
+        </span><span class="kw">yield </span>foo.len();
+    }
+}
+
+<span class="kw">fn </span>main() {
+    <span class="kw">let </span><span class="kw-2">mut </span>generator = <span class="macro">pin!</span>(generator_fn());
+    <span class="kw">match </span>generator.as_mut().resume(()) {
+        GeneratorState::Yielded(<span class="number">0</span>) =&gt; {},
+        <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+    }
+    <span class="kw">match </span>generator.as_mut().resume(()) {
+        GeneratorState::Yielded(<span class="number">3</span>) =&gt; {},
+        <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+    }
+    <span class="kw">match </span>generator.resume(()) {
+        GeneratorState::Yielded(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
+        GeneratorState::Complete(()) =&gt; {},
+    }
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Bfeature(generators,+generator_trait)%5D%0Ause+core::%7B%0A++++ops::%7BGenerator,+GeneratorState%7D,%0A++++pin::pin,%0A%7D;%0A%0Afn+generator_fn()+-%3E+impl+Generator%3CYield+=+usize,+Return+=+()%3E+/*+not+Unpin+*/+%7B%0A+//+%E5%85%81%E8%AE%B8%E7%94%9F%E6%88%90%E5%99%A8%E6%98%AF%E8%87%AA%E5%BC%95%E7%94%A8%E7%9A%84+(%E4%B8%8D%E6%98%AF+%60Unpin%60)+vvvvvv+%E4%BB%A5%E4%BE%BF%E6%9C%AC%E5%9C%B0%E4%BA%BA%E5%8F%AF%E4%BB%A5%E8%B7%A8%E8%B6%8A%E5%B1%88%E6%9C%8D%E7%82%B9%E3%80%82%0A++++static+%7C%7C+%7B%0A++++++++let+foo+=+String::from(%22foo%22);%0A++++++++let+foo_ref+=+%26foo;+//+------%2B%0A++++++++yield+0;++++++++++++++++++//+%7C+%3C-+crosses+yield+point!%0A++++++++println!(%22%7Bfoo_ref%7D%22);+//+%3C--%2B%0A++++++++yield+foo.len();%0A++++%7D%0A%7D%0A%0Afn+main()+%7B%0A++++let+mut+generator+=+pin!(generator_fn());%0A++++match+generator.as_mut().resume(())+%7B%0A++++++++GeneratorState::Yielded(0)+=%3E+%7B%7D,%0A++++++++_+=%3E+unreachable!(),%0A++++%7D%0A++++match+generator.as_mut().resume(())+%7B%0A++++++++GeneratorState::Yielded(3)+=%3E+%7B%7D,%0A++++++++_+=%3E+unreachable!(),%0A++++%7D%0A++++match+generator.resume(())+%7B%0A++++++++GeneratorState::Yielded(_)+=%3E+unreachable!(),%0A++++++++GeneratorState::Complete(())+=%3E+%7B%7D,%0A++++%7D%0A%7D&amp;version=nightly&amp;edition=2021">Run</a></div>
+<h3 id="remarks"><a href="#remarks">Remarks</a></h3>
+<p>正是因为一个值被固定到本地存储，最终的 <code><a href="struct.Pin.html" title="struct std::pin::Pin">Pin</a>&lt;<a href="../primitive.reference.html" title="primitive reference">&amp;mut</a> T&gt;</code> 引用最终借用了一个绑定到该块的本地：它无法逃脱它。</p>
+<p>例如，以下内容无法编译:</p>
+
+<div class="example-wrap compile_fail"><a href="#" class="tooltip" title="This example deliberately fails to compile">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>core::pin::{pin, Pin};
+
+<span class="kw">let </span>x: Pin&lt;<span class="kw-2">&amp;mut </span>Foo&gt; = {
+    <span class="kw">let </span>x: Pin&lt;<span class="kw-2">&amp;mut </span>Foo&gt; = <span class="macro">pin!</span>(Foo { <span class="comment">/* … */ </span>});
+    x
+}; <span class="comment">// &lt;- Foo 已被丢弃
+</span>stuff(x); <span class="comment">// 错误：使用了已经丢弃的值</span></code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Ause+core::pin::%7Bpin,+Pin%7D;%0Ause+core::%7Bmarker::PhantomPinned+as+Foo,+mem::drop+as+stuff%7D;%0A%0Alet+x:+Pin%3C%26mut+Foo%3E+=+%7B%0A++++let+x:+Pin%3C%26mut+Foo%3E+=+pin!(Foo+%7B+/*+%E2%80%A6+*/+%7D);%0A++++x%0A%7D;+//+%3C-+Foo+%E5%B7%B2%E8%A2%AB%E4%B8%A2%E5%BC%83%0Astuff(x);+//+%E9%94%99%E8%AF%AF%EF%BC%9A%E4%BD%BF%E7%94%A8%E4%BA%86%E5%B7%B2%E7%BB%8F%E4%B8%A2%E5%BC%83%E7%9A%84%E5%80%BC%0A%7D&amp;edition=2021">Run</a></div>
+<details><summary>Error message </summary>
+<div class="example-wrap"><pre class="language-console"><code>error[E0716]: temporary value dropped while borrowed
+  --&gt; src/main.rs:9:28
+   |
+8  | let x: Pin&lt;&amp;mut Foo&gt; = {
+   |     - borrow later stored here
+9  |     let x: Pin&lt;&amp;mut Foo&gt; = pin!(Foo { /* … */ });
+   |                            ^^^^^^^^^^^^^^^^^^^^^ creates a temporary value which is freed while still in use
+10 |     x
+11 | }; // &lt;- Foo 已被丢弃
+   | - temporary value is freed at the end of this statement
+   |
+   = note: consider using a `let` binding to create a longer lived value
+</code></pre></div></details>
+<p>这使得 <a href="macro.pin.html" title="macro std::pin::pin"><code>pin!</code></a> 在打算返回它们时不适合固定值。
+取而代之的是，该值预计将在 unpinned 周围传递，直到它被使用的点，然后使用 <a href="macro.pin.html" title="macro std::pin::pin"><code>pin!</code></a> 在本地固定该值是有用的，甚至是明智的。</p>
+<p>如果您确实需要返回固定值，请考虑改用 <a href="../../std/boxed/struct.Box.html#method.pin"><code>Box::pin</code></a>。</p>
+<p>另一方面，使用 <a href="macro.pin.html" title="macro std::pin::pin"><code>pin!</code></a> 的本地固定可能比使用 <a href="../../std/boxed/struct.Box.html#method.pin"><code>Box::pin</code></a> 固定到新的堆分配中更便宜。
+此外，由于不需要分配器，<a href="macro.pin.html" title="macro std::pin::pin"><code>pin!</code></a> 是主要的非 <code>unsafe</code> <code>#![no_std]</code> 兼容的 <a href="struct.Pin.html" title="struct std::pin::Pin"><code>Pin</code></a> 构造函数。</p>
+</div></details></section></div></main></body></html>

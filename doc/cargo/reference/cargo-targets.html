@@ -1,0 +1,491 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Cargo Targets - The Cargo Book</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+            dd {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/first-steps.html"><strong aria-hidden="true">1.2.</strong> First Steps with Cargo</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Cargo Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-cargo-exists.html"><strong aria-hidden="true">2.1.</strong> Why Cargo Exists</a></li><li class="chapter-item expanded "><a href="../guide/creating-a-new-project.html"><strong aria-hidden="true">2.2.</strong> Creating a New Package</a></li><li class="chapter-item expanded "><a href="../guide/working-on-an-existing-project.html"><strong aria-hidden="true">2.3.</strong> Working on an Existing Package</a></li><li class="chapter-item expanded "><a href="../guide/dependencies.html"><strong aria-hidden="true">2.4.</strong> Dependencies</a></li><li class="chapter-item expanded "><a href="../guide/project-layout.html"><strong aria-hidden="true">2.5.</strong> Package Layout</a></li><li class="chapter-item expanded "><a href="../guide/cargo-toml-vs-cargo-lock.html"><strong aria-hidden="true">2.6.</strong> Cargo.toml vs Cargo.lock</a></li><li class="chapter-item expanded "><a href="../guide/tests.html"><strong aria-hidden="true">2.7.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../guide/continuous-integration.html"><strong aria-hidden="true">2.8.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../guide/cargo-home.html"><strong aria-hidden="true">2.9.</strong> Cargo Home</a></li><li class="chapter-item expanded "><a href="../guide/build-cache.html"><strong aria-hidden="true">2.10.</strong> Build Cache</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">3.</strong> Cargo Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/specifying-dependencies.html"><strong aria-hidden="true">3.1.</strong> Specifying Dependencies</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/overriding-dependencies.html"><strong aria-hidden="true">3.1.1.</strong> Overriding Dependencies</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/manifest.html"><strong aria-hidden="true">3.2.</strong> The Manifest Format</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/cargo-targets.html" class="active"><strong aria-hidden="true">3.2.1.</strong> Cargo Targets</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/workspaces.html"><strong aria-hidden="true">3.3.</strong> Workspaces</a></li><li class="chapter-item expanded "><a href="../reference/features.html"><strong aria-hidden="true">3.4.</strong> Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/features-examples.html"><strong aria-hidden="true">3.4.1.</strong> Features Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/profiles.html"><strong aria-hidden="true">3.5.</strong> Profiles</a></li><li class="chapter-item expanded "><a href="../reference/config.html"><strong aria-hidden="true">3.6.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../reference/environment-variables.html"><strong aria-hidden="true">3.7.</strong> Environment Variables</a></li><li class="chapter-item expanded "><a href="../reference/build-scripts.html"><strong aria-hidden="true">3.8.</strong> Build Scripts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/build-script-examples.html"><strong aria-hidden="true">3.8.1.</strong> Build Script Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/publishing.html"><strong aria-hidden="true">3.9.</strong> Publishing on crates.io</a></li><li class="chapter-item expanded "><a href="../reference/pkgid-spec.html"><strong aria-hidden="true">3.10.</strong> Package ID Specifications</a></li><li class="chapter-item expanded "><a href="../reference/source-replacement.html"><strong aria-hidden="true">3.11.</strong> Source Replacement</a></li><li class="chapter-item expanded "><a href="../reference/external-tools.html"><strong aria-hidden="true">3.12.</strong> External Tools</a></li><li class="chapter-item expanded "><a href="../reference/registries.html"><strong aria-hidden="true">3.13.</strong> Registries</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/running-a-registry.html"><strong aria-hidden="true">3.13.1.</strong> Running a Registry</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/registry-index.html"><strong aria-hidden="true">3.13.1.1.</strong> Registry Index</a></li><li class="chapter-item expanded "><a href="../reference/registry-web-api.html"><strong aria-hidden="true">3.13.1.2.</strong> Registry Web API</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../reference/resolver.html"><strong aria-hidden="true">3.14.</strong> Dependency Resolution</a></li><li class="chapter-item expanded "><a href="../reference/semver.html"><strong aria-hidden="true">3.15.</strong> SemVer Compatibility</a></li><li class="chapter-item expanded "><a href="../reference/future-incompat-report.html"><strong aria-hidden="true">3.16.</strong> Future incompat report</a></li><li class="chapter-item expanded "><a href="../reference/timings.html"><strong aria-hidden="true">3.17.</strong> Reporting build timings</a></li><li class="chapter-item expanded "><a href="../reference/unstable.html"><strong aria-hidden="true">3.18.</strong> Unstable Features</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/index.html"><strong aria-hidden="true">4.</strong> Cargo Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/general-commands.html"><strong aria-hidden="true">4.1.</strong> General Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo.html"><strong aria-hidden="true">4.1.1.</strong> cargo</a></li><li class="chapter-item expanded "><a href="../commands/cargo-help.html"><strong aria-hidden="true">4.1.2.</strong> cargo help</a></li><li class="chapter-item expanded "><a href="../commands/cargo-version.html"><strong aria-hidden="true">4.1.3.</strong> cargo version</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/build-commands.html"><strong aria-hidden="true">4.2.</strong> Build Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-bench.html"><strong aria-hidden="true">4.2.1.</strong> cargo bench</a></li><li class="chapter-item expanded "><a href="../commands/cargo-build.html"><strong aria-hidden="true">4.2.2.</strong> cargo build</a></li><li class="chapter-item expanded "><a href="../commands/cargo-check.html"><strong aria-hidden="true">4.2.3.</strong> cargo check</a></li><li class="chapter-item expanded "><a href="../commands/cargo-clean.html"><strong aria-hidden="true">4.2.4.</strong> cargo clean</a></li><li class="chapter-item expanded "><a href="../commands/cargo-doc.html"><strong aria-hidden="true">4.2.5.</strong> cargo doc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fetch.html"><strong aria-hidden="true">4.2.6.</strong> cargo fetch</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fix.html"><strong aria-hidden="true">4.2.7.</strong> cargo fix</a></li><li class="chapter-item expanded "><a href="../commands/cargo-run.html"><strong aria-hidden="true">4.2.8.</strong> cargo run</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustc.html"><strong aria-hidden="true">4.2.9.</strong> cargo rustc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustdoc.html"><strong aria-hidden="true">4.2.10.</strong> cargo rustdoc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-test.html"><strong aria-hidden="true">4.2.11.</strong> cargo test</a></li><li class="chapter-item expanded "><a href="../commands/cargo-report.html"><strong aria-hidden="true">4.2.12.</strong> cargo report</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/manifest-commands.html"><strong aria-hidden="true">4.3.</strong> Manifest Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-add.html"><strong aria-hidden="true">4.3.1.</strong> cargo add</a></li><li class="chapter-item expanded "><a href="../commands/cargo-generate-lockfile.html"><strong aria-hidden="true">4.3.2.</strong> cargo generate-lockfile</a></li><li class="chapter-item expanded "><a href="../commands/cargo-locate-project.html"><strong aria-hidden="true">4.3.3.</strong> cargo locate-project</a></li><li class="chapter-item expanded "><a href="../commands/cargo-metadata.html"><strong aria-hidden="true">4.3.4.</strong> cargo metadata</a></li><li class="chapter-item expanded "><a href="../commands/cargo-pkgid.html"><strong aria-hidden="true">4.3.5.</strong> cargo pkgid</a></li><li class="chapter-item expanded "><a href="../commands/cargo-remove.html"><strong aria-hidden="true">4.3.6.</strong> cargo remove</a></li><li class="chapter-item expanded "><a href="../commands/cargo-tree.html"><strong aria-hidden="true">4.3.7.</strong> cargo tree</a></li><li class="chapter-item expanded "><a href="../commands/cargo-update.html"><strong aria-hidden="true">4.3.8.</strong> cargo update</a></li><li class="chapter-item expanded "><a href="../commands/cargo-vendor.html"><strong aria-hidden="true">4.3.9.</strong> cargo vendor</a></li><li class="chapter-item expanded "><a href="../commands/cargo-verify-project.html"><strong aria-hidden="true">4.3.10.</strong> cargo verify-project</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/package-commands.html"><strong aria-hidden="true">4.4.</strong> Package Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-init.html"><strong aria-hidden="true">4.4.1.</strong> cargo init</a></li><li class="chapter-item expanded "><a href="../commands/cargo-install.html"><strong aria-hidden="true">4.4.2.</strong> cargo install</a></li><li class="chapter-item expanded "><a href="../commands/cargo-new.html"><strong aria-hidden="true">4.4.3.</strong> cargo new</a></li><li class="chapter-item expanded "><a href="../commands/cargo-search.html"><strong aria-hidden="true">4.4.4.</strong> cargo search</a></li><li class="chapter-item expanded "><a href="../commands/cargo-uninstall.html"><strong aria-hidden="true">4.4.5.</strong> cargo uninstall</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/publishing-commands.html"><strong aria-hidden="true">4.5.</strong> Publishing Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-login.html"><strong aria-hidden="true">4.5.1.</strong> cargo login</a></li><li class="chapter-item expanded "><a href="../commands/cargo-logout.html"><strong aria-hidden="true">4.5.2.</strong> cargo logout</a></li><li class="chapter-item expanded "><a href="../commands/cargo-owner.html"><strong aria-hidden="true">4.5.3.</strong> cargo owner</a></li><li class="chapter-item expanded "><a href="../commands/cargo-package.html"><strong aria-hidden="true">4.5.4.</strong> cargo package</a></li><li class="chapter-item expanded "><a href="../commands/cargo-publish.html"><strong aria-hidden="true">4.5.5.</strong> cargo publish</a></li><li class="chapter-item expanded "><a href="../commands/cargo-yank.html"><strong aria-hidden="true">4.5.6.</strong> cargo yank</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">5.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">6.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/git-authentication.html"><strong aria-hidden="true">7.</strong> Appendix: Git Authentication</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Cargo Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/tree/master/src/doc/src" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/edit/master/src/doc/src/reference/cargo-targets.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="cargo-targets"><a class="header" href="#cargo-targets">Cargo Targets</a></h2>
+<p>Cargo packages consist of <em>targets</em> which correspond to source files which can
+be compiled into a crate. Packages can have <a href="#library">library</a>,
+<a href="#binaries">binary</a>, <a href="#examples">example</a>, <a href="#tests">test</a>, and
+<a href="#benchmarks">benchmark</a> targets. The list of targets can be configured in the
+<code>Cargo.toml</code> manifest, often <a href="#target-auto-discovery">inferred automatically</a>
+by the <a href="../guide/project-layout.html">directory layout</a> of the source files.</p>
+<p>See <a href="#configuring-a-target">Configuring a target</a> below for details on
+configuring the settings for a target.</p>
+<h3 id="library"><a class="header" href="#library">Library</a></h3>
+<p>The library target defines a “library” that can be used and linked by other
+libraries and executables. The filename defaults to <code>src/lib.rs</code>, and the name
+of the library defaults to the name of the package. A package can have only
+one library. The settings for the library can be <a href="#configuring-a-target">customized</a> in the <code>[lib]</code>
+table in <code>Cargo.toml</code>.</p>
+<pre><code class="language-toml"># Example of customizing the library in Cargo.toml.
+[lib]
+crate-type = [&quot;cdylib&quot;]
+bench = false
+</code></pre>
+<h3 id="binaries"><a class="header" href="#binaries">Binaries</a></h3>
+<p>Binary targets are executable programs that can be run after being compiled.
+The default binary filename is <code>src/main.rs</code>, which defaults to the name of
+the package. Additional binaries are stored in the <a href="../guide/project-layout.html"><code>src/bin/</code>
+directory</a>. The settings for each binary can be <a href="#configuring-a-target">customized</a>
+in the <code>[[bin]]</code> tables in <code>Cargo.toml</code>.</p>
+<p>Binaries can use the public API of the package’s library. They are also linked
+with the <a href="specifying-dependencies.html"><code>[dependencies]</code></a> defined in <code>Cargo.toml</code>.</p>
+<p>You can run individual binaries with the <a href="../commands/cargo-run.html"><code>cargo run</code></a> command with the <code>--bin &lt;bin-name&gt;</code> option. <a href="../commands/cargo-install.html"><code>cargo install</code></a> can be used to copy the executable to a
+common location.</p>
+<pre><code class="language-toml"># Example of customizing binaries in Cargo.toml.
+[[bin]]
+name = &quot;cool-tool&quot;
+test = false
+bench = false
+
+[[bin]]
+name = &quot;frobnicator&quot;
+required-features = [&quot;frobnicate&quot;]
+</code></pre>
+<h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
+<p>Files located under the <a href="../guide/project-layout.html"><code>examples</code> directory</a> are example
+uses of the functionality provided by the library. When compiled, they are
+placed in the <a href="../guide/build-cache.html"><code>target/debug/examples</code> directory</a>.</p>
+<p>Examples can use the public API of the package’s library. They are also linked
+with the <a href="specifying-dependencies.html"><code>[dependencies]</code></a> and
+<a href="specifying-dependencies.html#development-dependencies"><code>[dev-dependencies]</code></a> defined in <code>Cargo.toml</code>.</p>
+<p>By default, examples are executable binaries (with a <code>main()</code> function). You
+can specify the <a href="#the-crate-type-field"><code>crate-type</code> field</a> to make an example
+be compiled as a library:</p>
+<pre><code class="language-toml">[[example]]
+name = &quot;foo&quot;
+crate-type = [&quot;staticlib&quot;]
+</code></pre>
+<p>You can run individual executable examples with the <a href="../commands/cargo-run.html"><code>cargo run</code></a> command with
+the <code>--example &lt;example-name&gt;</code> option. Library examples can be built with
+<a href="../commands/cargo-build.html"><code>cargo build</code></a> with the <code>--example &lt;example-name&gt;</code> option. <a href="../commands/cargo-install.html"><code>cargo install</code></a>
+with the <code>--example &lt;example-name&gt;</code> option can be used to copy executable
+binaries to a common location. Examples are compiled by <a href="../commands/cargo-test.html"><code>cargo test</code></a> by
+default to protect them from bit-rotting. Set <a href="#the-test-field">the <code>test</code>
+field</a> to <code>true</code> if you have <code>#[test]</code> functions in the
+example that you want to run with <a href="../commands/cargo-test.html"><code>cargo test</code></a>.</p>
+<h3 id="tests"><a class="header" href="#tests">Tests</a></h3>
+<p>There are two styles of tests within a Cargo project:</p>
+<ul>
+<li><em>Unit tests</em> which are functions marked with the <a href="../../reference/attributes/testing.html#the-test-attribute"><code>#[test]</code>
+attribute</a> located within your library or binaries (or any
+target enabled with <a href="#the-test-field">the <code>test</code> field</a>). These tests have
+access to private APIs located within the target they are defined in.</li>
+<li><em>Integration tests</em> which is a separate executable binary, also containing
+<code>#[test]</code> functions, which is linked with the project’s library and has
+access to its <em>public</em> API.</li>
+</ul>
+<p>Tests are run with the <a href="../commands/cargo-test.html"><code>cargo test</code></a> command. By default, Cargo and <code>rustc</code>
+use the <a href="../../rustc/tests/index.html">libtest harness</a> which is responsible for collecting functions
+annotated with the <a href="../../reference/attributes/testing.html#the-test-attribute"><code>#[test]</code> attribute</a> and executing them in
+parallel, reporting the success and failure of each test. See <a href="#the-harness-field">the <code>harness</code>
+field</a> if you want to use a different harness or test
+strategy.</p>
+<blockquote>
+<p><strong>Note</strong>: There is another special style of test in Cargo:
+<a href="../../rustdoc/documentation-tests.html">documentation tests</a>.
+They are handled by <code>rustdoc</code> and have a slightly different execution model.
+For more information, please see <a href="../commands/cargo-test.html#documentation-tests"><code>cargo test</code></a>.</p>
+</blockquote>
+<h4 id="integration-tests"><a class="header" href="#integration-tests">Integration tests</a></h4>
+<p>Files located under the <a href="../guide/project-layout.html"><code>tests</code> directory</a> are integration
+tests. When you run <a href="../commands/cargo-test.html"><code>cargo test</code></a>, Cargo will compile each of these files as
+a separate crate, and execute them.</p>
+<p>Integration tests can use the public API of the package’s library. They are
+also linked with the <a href="specifying-dependencies.html"><code>[dependencies]</code></a> and
+<a href="specifying-dependencies.html#development-dependencies"><code>[dev-dependencies]</code></a> defined in <code>Cargo.toml</code>.</p>
+<p>If you want to share code among multiple integration tests, you can place it
+in a separate module such as <code>tests/common/mod.rs</code> and then put <code>mod common;</code>
+in each test to import it.</p>
+<p>Each integration test results in a separate executable binary, and <a href="../commands/cargo-test.html"><code>cargo test</code></a> will run them serially. In some cases this can be inefficient, as it
+can take longer to compile, and may not make full use of multiple CPUs when
+running the tests. If you have a lot of integration tests, you may want to
+consider creating a single integration test, and split the tests into multiple
+modules. The libtest harness will automatically find all of the <code>#[test]</code>
+annotated functions and run them in parallel. You can pass module names to
+<a href="../commands/cargo-test.html"><code>cargo test</code></a> to only run the tests within that module.</p>
+<p>Binary targets are automatically built if there is an integration test. This
+allows an integration test to execute the binary to exercise and test its
+behavior. The <code>CARGO_BIN_EXE_&lt;name&gt;</code> <a href="environment-variables.html#environment-variables-cargo-sets-for-crates">environment variable</a> is set when the
+integration test is built so that it can use the <a href="../../std/macro.env.html"><code>env</code> macro</a> to locate the
+executable.</p>
+<h3 id="benchmarks"><a class="header" href="#benchmarks">Benchmarks</a></h3>
+<p>Benchmarks provide a way to test the performance of your code using the
+<a href="../commands/cargo-bench.html"><code>cargo bench</code></a> command. They follow the same structure as <a href="#tests">tests</a>,
+with each benchmark function annotated with the <code>#[bench]</code> attribute.
+Similarly to tests:</p>
+<ul>
+<li>Benchmarks are placed in the <a href="../guide/project-layout.html"><code>benches</code> directory</a>.</li>
+<li>Benchmark functions defined in libraries and binaries have access to the
+<em>private</em> API within the target they are defined in. Benchmarks in the
+<code>benches</code> directory may use the <em>public</em> API.</li>
+<li><a href="#the-bench-field">The <code>bench</code> field</a> can be used to define which targets
+are benchmarked by default.</li>
+<li><a href="#the-harness-field">The <code>harness</code> field</a> can be used to disable the
+built-in harness.</li>
+</ul>
+<blockquote>
+<p><strong>Note</strong>: The <a href="../../unstable-book/library-features/test.html"><code>#[bench]</code>
+attribute</a> is currently
+unstable and only available on the <a href="../../book/appendix-07-nightly-rust.html">nightly channel</a>. There are some
+packages available on <a href="https://crates.io/keywords/benchmark">crates.io</a> that
+may help with running benchmarks on the stable channel, such as
+<a href="https://crates.io/crates/criterion">Criterion</a>.</p>
+</blockquote>
+<h3 id="configuring-a-target"><a class="header" href="#configuring-a-target">Configuring a target</a></h3>
+<p>All of the  <code>[lib]</code>, <code>[[bin]]</code>, <code>[[example]]</code>, <code>[[test]]</code>, and <code>[[bench]]</code>
+sections in <code>Cargo.toml</code> support similar configuration for specifying how a
+target should be built. The double-bracket sections like <code>[[bin]]</code> are
+<a href="https://toml.io/en/v1.0.0-rc.3#array-of-tables">array-of-table of TOML</a>,
+which means you can write more than one <code>[[bin]]</code> section to make several
+executables in your crate. You can only specify one library, so <code>[lib]</code> is a
+normal TOML table.</p>
+<p>The following is an overview of the TOML settings for each target, with each
+field described in detail below.</p>
+<pre><code class="language-toml">[lib]
+name = &quot;foo&quot;           # The name of the target.
+path = &quot;src/lib.rs&quot;    # The source file of the target.
+test = true            # Is tested by default.
+doctest = true         # Documentation examples are tested by default.
+bench = true           # Is benchmarked by default.
+doc = true             # Is documented by default.
+plugin = false         # Used as a compiler plugin (deprecated).
+proc-macro = false     # Set to `true` for a proc-macro library.
+harness = true         # Use libtest harness.
+edition = &quot;2015&quot;       # The edition of the target.
+crate-type = [&quot;lib&quot;]   # The crate types to generate.
+required-features = [] # Features required to build this target (N/A for lib).
+</code></pre>
+<h4 id="the-name-field"><a class="header" href="#the-name-field">The <code>name</code> field</a></h4>
+<p>The <code>name</code> field specifies the name of the target, which corresponds to the
+filename of the artifact that will be generated. For a library, this is the
+crate name that dependencies will use to reference it.</p>
+<p>For the <code>[lib]</code> and the default binary (<code>src/main.rs</code>), this defaults to the
+name of the package, with any dashes replaced with underscores. For other
+<a href="#target-auto-discovery">auto discovered</a> targets, it defaults to the
+directory or file name.</p>
+<p>This is required for all targets except <code>[lib]</code>.</p>
+<h4 id="the-path-field"><a class="header" href="#the-path-field">The <code>path</code> field</a></h4>
+<p>The <code>path</code> field specifies where the source for the crate is located, relative
+to the <code>Cargo.toml</code> file.</p>
+<p>If not specified, the <a href="#target-auto-discovery">inferred path</a> is used based on
+the target name.</p>
+<h4 id="the-test-field"><a class="header" href="#the-test-field">The <code>test</code> field</a></h4>
+<p>The <code>test</code> field indicates whether or not the target is tested by default by
+<a href="../commands/cargo-test.html"><code>cargo test</code></a>. The default is <code>true</code> for lib, bins, and tests.</p>
+<blockquote>
+<p><strong>Note</strong>: Examples are built by <a href="../commands/cargo-test.html"><code>cargo test</code></a> by default to ensure they
+continue to compile, but they are not <em>tested</em> by default. Setting <code>test = true</code> for an example will also build it as a test and run any
+<a href="../../reference/attributes/testing.html#the-test-attribute"><code>#[test]</code></a> functions defined in the example.</p>
+</blockquote>
+<h4 id="the-doctest-field"><a class="header" href="#the-doctest-field">The <code>doctest</code> field</a></h4>
+<p>The <code>doctest</code> field indicates whether or not <a href="../../rustdoc/documentation-tests.html">documentation examples</a> are
+tested by default by <a href="../commands/cargo-test.html"><code>cargo test</code></a>. This is only relevant for libraries, it
+has no effect on other sections. The default is <code>true</code> for the library.</p>
+<h4 id="the-bench-field"><a class="header" href="#the-bench-field">The <code>bench</code> field</a></h4>
+<p>The <code>bench</code> field indicates whether or not the target is benchmarked by
+default by <a href="../commands/cargo-bench.html"><code>cargo bench</code></a>. The default is <code>true</code> for lib, bins, and
+benchmarks.</p>
+<h4 id="the-doc-field"><a class="header" href="#the-doc-field">The <code>doc</code> field</a></h4>
+<p>The <code>doc</code> field indicates whether or not the target is included in the
+documentation generated by <a href="../commands/cargo-doc.html"><code>cargo doc</code></a> by default. The default is <code>true</code> for
+libraries and binaries.</p>
+<blockquote>
+<p><strong>Note</strong>: The binary will be skipped if its name is the same as the lib
+target.</p>
+</blockquote>
+<h4 id="the-plugin-field"><a class="header" href="#the-plugin-field">The <code>plugin</code> field</a></h4>
+<p>This field is used for <code>rustc</code> plugins, which are being deprecated.</p>
+<h4 id="the-proc-macro-field"><a class="header" href="#the-proc-macro-field">The <code>proc-macro</code> field</a></h4>
+<p>The <code>proc-macro</code> field indicates that the library is a <a href="../../book/ch19-06-macros.html">procedural macro</a>
+(<a href="../../reference/procedural-macros.html">reference</a>). This is only valid for the <code>[lib]</code>
+target.</p>
+<h4 id="the-harness-field"><a class="header" href="#the-harness-field">The <code>harness</code> field</a></h4>
+<p>The <code>harness</code> field indicates that the <a href="../../rustc/command-line-arguments.html#option-test"><code>--test</code> flag</a> will be passed to
+<code>rustc</code> which will automatically include the libtest library which is the
+driver for collecting and running tests marked with the <a href="../../reference/attributes/testing.html#the-test-attribute"><code>#[test]</code>
+attribute</a> or benchmarks with the <code>#[bench]</code> attribute. The
+default is <code>true</code> for all targets.</p>
+<p>If set to <code>false</code>, then you are responsible for defining a <code>main()</code> function
+to run tests and benchmarks.</p>
+<p>Tests have the <a href="../../reference/conditional-compilation.html#test"><code>cfg(test)</code> conditional expression</a> enabled whether
+or not the harness is enabled.</p>
+<h4 id="the-edition-field"><a class="header" href="#the-edition-field">The <code>edition</code> field</a></h4>
+<p>The <code>edition</code> field defines the <a href="../../edition-guide/index.html">Rust edition</a> the target will use. If not
+specified, it defaults to the <a href="manifest.html#the-edition-field"><code>edition</code> field</a> for the
+<code>[package]</code>. This field should usually not be set, and is only intended for
+advanced scenarios such as incrementally transitioning a large package to a
+new edition.</p>
+<h4 id="the-crate-type-field"><a class="header" href="#the-crate-type-field">The <code>crate-type</code> field</a></h4>
+<p>The <code>crate-type</code> field defines the <a href="../../reference/linkage.html">crate types</a> that will be generated by the
+target. It is an array of strings, allowing you to specify multiple crate
+types for a single target. This can only be specified for libraries and
+examples. Binaries, tests, and benchmarks are always the “bin” crate type. The
+defaults are:</p>
+<div class="table-wrapper"><table><thead><tr><th>Target</th><th>Crate Type</th></tr></thead><tbody>
+<tr><td>Normal library</td><td><code>&quot;lib&quot;</code></td></tr>
+<tr><td>Proc-macro library</td><td><code>&quot;proc-macro&quot;</code></td></tr>
+<tr><td>Example</td><td><code>&quot;bin&quot;</code></td></tr>
+</tbody></table>
+</div>
+<p>The available options are <code>bin</code>, <code>lib</code>, <code>rlib</code>, <code>dylib</code>, <code>cdylib</code>,
+<code>staticlib</code>, and <code>proc-macro</code>. You can read more about the different crate
+types in the <a href="../../reference/linkage.html">Rust Reference Manual</a>.</p>
+<h4 id="the-required-features-field"><a class="header" href="#the-required-features-field">The <code>required-features</code> field</a></h4>
+<p>The <code>required-features</code> field specifies which <a href="features.html">features</a> the target needs in
+order to be built. If any of the required features are not enabled, the
+target will be skipped. This is only relevant for the <code>[[bin]]</code>, <code>[[bench]]</code>,
+<code>[[test]]</code>, and <code>[[example]]</code> sections, it has no effect on <code>[lib]</code>.</p>
+<pre><code class="language-toml">[features]
+# ...
+postgres = []
+sqlite = []
+tools = []
+
+[[bin]]
+name = &quot;my-pg-tool&quot;
+required-features = [&quot;postgres&quot;, &quot;tools&quot;]
+</code></pre>
+<h3 id="target-auto-discovery"><a class="header" href="#target-auto-discovery">Target auto-discovery</a></h3>
+<p>By default, Cargo automatically determines the targets to build based on the
+<a href="../guide/project-layout.html">layout of the files</a> on the filesystem. The target
+configuration tables, such as <code>[lib]</code>, <code>[[bin]]</code>, <code>[[test]]</code>, <code>[[bench]]</code>, or
+<code>[[example]]</code>, can be used to add additional targets that don’t follow the
+standard directory layout.</p>
+<p>The automatic target discovery can be disabled so that only manually
+configured targets will be built. Setting the keys <code>autobins</code>, <code>autoexamples</code>,
+<code>autotests</code>, or <code>autobenches</code> to <code>false</code> in the <code>[package]</code> section will
+disable auto-discovery of the corresponding target type.</p>
+<pre><code class="language-toml">[package]
+# ...
+autobins = false
+autoexamples = false
+autotests = false
+autobenches = false
+</code></pre>
+<p>Disabling automatic discovery should only be needed for specialized
+situations. For example, if you have a library where you want a <em>module</em> named
+<code>bin</code>, this would present a problem because Cargo would usually attempt to
+compile anything in the <code>bin</code> directory as an executable. Here is a sample
+layout of this scenario:</p>
+<pre><code class="language-text">├── Cargo.toml
+└── src
+    ├── lib.rs
+    └── bin
+        └── mod.rs
+</code></pre>
+<p>To prevent Cargo from inferring <code>src/bin/mod.rs</code> as an executable, set
+<code>autobins = false</code> in <code>Cargo.toml</code> to disable auto-discovery:</p>
+<pre><code class="language-toml">[package]
+# …
+autobins = false
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: For packages with the 2015 edition, the default for auto-discovery
+is <code>false</code> if at least one target is manually defined in <code>Cargo.toml</code>.
+Beginning with the 2018 edition, the default is always <code>true</code>.</p>
+</blockquote>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/manifest.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../reference/workspaces.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/manifest.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../reference/workspaces.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

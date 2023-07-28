@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <title>Casting between types</title>
+
+    <link rel="stylesheet" href="../rust.css">
+    <meta name="robots" content="noindex,follow">
+<link rel="icon" href="https://www.rust-lang.org/favicon.ico">
+
+
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    <div id="versioninfo">
+  <img src="https://www.rust-lang.org/logos/rust-logo-32x32-blk.png" width="32" height="32" alt="Rust logo"><br>
+  <span class="white-sticker"><a href="https://www.rust-lang.org">Rust</a> 1.71.0-dev</span><br>
+  <a href="https://github.com/rust-lang/rust/commit/"
+    class="hash white-sticker"></a>
+</div>
+
+
+    <h1 class="title">Casting between types</h1>
+    <p><small>There is a new edition of the book and this is an old link.</small></p>
+<blockquote>
+<p>A type cast expression is denoted with the binary operator <code>as</code>.
+Executing an <code>as</code> expression casts the value on the left-hand side to the type on the right-hand side.</p>
+</blockquote>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>
+<span class="kw">fn </span>average(values: <span class="kw-2">&amp;</span>[f64]) -&gt; f64 {
+    <span class="kw">let </span>sum: f64 = sum(values);
+    <span class="kw">let </span>size: f64 = len(values) <span class="kw">as </span>f64;
+    sum / size
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Afn+sum(values:+%26%5Bf64%5D)+-%3E+f64+%7B+0.0+%7D%0Afn+len(values:+%26%5Bf64%5D)+-%3E+i32+%7B+0+%7D%0A%0Afn+average(values:+%26%5Bf64%5D)+-%3E+f64+%7B%0A++++let+sum:+f64+=+sum(values);%0A++++let+size:+f64+=+len(values)+as+f64;%0A++++sum+/+size%0A%7D%0A%7D&amp;edition=2015">Run</a></div>
+<hr />
+<p>Here are the relevant sections in the new and old books:</p>
+<ul>
+<li><strong><a href="appendix-01-keywords.html">in the current edition: Appendix A — Keywords</a></strong></li>
+<li><a href="../reference/expressions/operator-expr.html#type-cast-expressions">In the Rust Reference: Type Cast Expressions</a></li>
+<li><a href="../std/mem/fn.transmute.html">In the Rust documentation: <code>mem::transmute</code></a></li>
+<li><small><a href="https://doc.rust-lang.org/1.30.0/book/first-edition/casting-between-types.html">In the first edition: Ch 3.29 — Casting between types</a></small></li>
+</ul>
+
+    <!-- REUSE-IgnoreStart -->
+<footer><p>
+Copyright &copy; 2011 The Rust Project Developers. Licensed under the
+<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>
+or the <a href="https://opensource.org/licenses/MIT">MIT license</a>, at your option.
+</p><p>
+This file may not be copied, modified, or distributed except according to those terms.
+</p></footer>
+<!-- REUSE-IgnoreEnd -->
+
+
+</body>
+</html>

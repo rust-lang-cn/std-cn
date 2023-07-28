@@ -1,0 +1,1014 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Syntax Tree Patterns - Clippy Documentation</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../../installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../../usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="../../configuration.html"><strong aria-hidden="true">3.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lint_configuration.html"><strong aria-hidden="true">3.1.</strong> Lint Configuration</a></li></ol></li><li class="chapter-item expanded "><a href="../../lints.html"><strong aria-hidden="true">4.</strong> Clippy's Lints</a></li><li class="chapter-item expanded "><a href="../../continuous_integration/index.html"><strong aria-hidden="true">5.</strong> Continuous Integration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../continuous_integration/github_actions.html"><strong aria-hidden="true">5.1.</strong> GitHub Actions</a></li><li class="chapter-item expanded "><a href="../../continuous_integration/travis.html"><strong aria-hidden="true">5.2.</strong> Travis CI</a></li></ol></li><li class="chapter-item expanded "><a href="../../development/index.html"><strong aria-hidden="true">6.</strong> Development</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../development/basics.html"><strong aria-hidden="true">6.1.</strong> Basics</a></li><li class="chapter-item expanded "><a href="../../development/adding_lints.html"><strong aria-hidden="true">6.2.</strong> Adding Lints</a></li><li class="chapter-item expanded "><a href="../../development/lint_passes.html"><strong aria-hidden="true">6.3.</strong> Lint Passes</a></li><li class="chapter-item expanded "><a href="../../development/type_checking.html"><strong aria-hidden="true">6.4.</strong> Type Checking</a></li><li class="chapter-item expanded "><a href="../../development/macro_expansions.html"><strong aria-hidden="true">6.5.</strong> Macro Expansions</a></li><li class="chapter-item expanded "><a href="../../development/common_tools_writing_lints.html"><strong aria-hidden="true">6.6.</strong> Common Tools</a></li><li class="chapter-item expanded "><a href="../../development/infrastructure/index.html"><strong aria-hidden="true">6.7.</strong> Infrastructure</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../development/infrastructure/sync.html"><strong aria-hidden="true">6.7.1.</strong> Syncing changes between Clippy and rust-lang/rust</a></li><li class="chapter-item expanded "><a href="../../development/infrastructure/backport.html"><strong aria-hidden="true">6.7.2.</strong> Backporting Changes</a></li><li class="chapter-item expanded "><a href="../../development/infrastructure/changelog_update.html"><strong aria-hidden="true">6.7.3.</strong> Updating the Changelog</a></li><li class="chapter-item expanded "><a href="../../development/infrastructure/release.html"><strong aria-hidden="true">6.7.4.</strong> Release a New Version</a></li><li class="chapter-item expanded "><a href="../../development/infrastructure/book.html"><strong aria-hidden="true">6.7.5.</strong> The Clippy Book</a></li></ol></li><li class="chapter-item expanded "><a href="../../development/proposals/index.html"><strong aria-hidden="true">6.8.</strong> Proposals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../development/proposals/roadmap-2021.html"><strong aria-hidden="true">6.8.1.</strong> Roadmap 2021</a></li><li class="chapter-item expanded "><a href="../../development/proposals/syntax-tree-patterns.html" class="active"><strong aria-hidden="true">6.8.2.</strong> Syntax Tree Patterns</a></li></ol></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Clippy Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust-clippy/tree/master/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust-clippy/edit/master/book/src/development/proposals/syntax-tree-patterns.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <ul>
+<li>Feature Name: syntax-tree-patterns</li>
+<li>Start Date: 2019-03-12</li>
+<li>RFC PR: <a href="https://github.com/rust-lang/rust-clippy/pull/3875">#3875</a></li>
+</ul>
+<h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
+<p>Introduce a domain-specific language (similar to regular expressions) that
+allows to describe lints using <em>syntax tree patterns</em>.</p>
+<h1 id="motivation"><a class="header" href="#motivation">Motivation</a></h1>
+<p>Finding parts of a syntax tree (AST, HIR, ...) that have certain properties
+(e.g. &quot;<em>an if that has a block as its condition</em>&quot;) is a major task when writing
+lints. For non-trivial lints, it often requires nested pattern matching of AST /
+HIR nodes. For example, testing that an expression is a boolean literal requires
+the following checks:</p>
+<pre><code class="language-rust ignore">if let ast::ExprKind::Lit(lit) = &amp;expr.node {
+    if let ast::LitKind::Bool(_) = &amp;lit.node {
+        ...
+    }
+}</code></pre>
+<p>Writing this kind of matching code quickly becomes a complex task and the
+resulting code is often hard to comprehend. The code below shows a simplified
+version of the pattern matching required by the <code>collapsible_if</code> lint:</p>
+<pre><code class="language-rust ignore">// simplified version of the collapsible_if lint
+if let ast::ExprKind::If(check, then, None) = &amp;expr.node {
+    if then.stmts.len() == 1 {
+        if let ast::StmtKind::Expr(inner) | ast::StmtKind::Semi(inner) = &amp;then.stmts[0].node {
+            if let ast::ExprKind::If(check_inner, content, None) = &amp;inner.node {
+                ...
+            }
+        }
+    }
+}</code></pre>
+<p>The <code>if_chain</code> macro can improve readability by flattening the nested if
+statements, but the resulting code is still quite hard to read:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// simplified version of the collapsible_if lint
+if_chain! {
+    if let ast::ExprKind::If(check, then, None) = &amp;expr.node;
+    if then.stmts.len() == 1;
+    if let ast::StmtKind::Expr(inner) | ast::StmtKind::Semi(inner) = &amp;then.stmts[0].node;
+    if let ast::ExprKind::If(check_inner, content, None) = &amp;inner.node;
+    then {
+        ...
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The code above matches if expressions that contain only another if expression
+(where both ifs don't have an else branch). While it's easy to explain what the
+lint does, it's hard to see that from looking at the code samples above.</p>
+<p>Following the motivation above, the first goal this RFC is to <strong>simplify writing
+and reading lints</strong>.</p>
+<p>The second part of the motivation is clippy's dependence on unstable
+compiler-internal data structures. Clippy lints are currently written against
+the compiler's AST / HIR which means that even small changes in these data
+structures might break a lot of lints. The second goal of this RFC is to <strong>make
+lints independent of the compiler's AST / HIR data structures</strong>.</p>
+<h1 id="approach"><a class="header" href="#approach">Approach</a></h1>
+<p>A lot of complexity in writing lints currently seems to come from having to
+manually implement the matching logic (see code samples above). It's an
+imperative style that describes <em>how</em> to match a syntax tree node instead of
+specifying <em>what</em> should be matched against declaratively. In other areas, it's
+common to use declarative patterns to describe desired information and let the
+implementation do the actual matching. A well-known example of this approach are
+<a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>. Instead
+of writing code that detects certain character sequences, one can describe a
+search pattern using a domain-specific language and search for matches using
+that pattern. The advantage of using a declarative domain-specific language is
+that its limited domain (e.g. matching character sequences in the case of
+regular expressions) allows to express entities in that domain in a very natural
+and expressive way.</p>
+<p>While regular expressions are very useful when searching for patterns in flat
+character sequences, they cannot easily be applied to hierarchical data
+structures like syntax trees. This RFC therefore proposes a pattern matching
+system that is inspired by regular expressions and designed for hierarchical
+syntax trees.</p>
+<h1 id="guide-level-explanation"><a class="header" href="#guide-level-explanation">Guide-level explanation</a></h1>
+<p>This proposal adds a <code>pattern!</code> macro that can be used to specify a syntax tree
+pattern to search for. A simple pattern is shown below:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    my_pattern: Expr =
+        Lit(Bool(false))
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This macro call defines a pattern named <code>my_pattern</code> that can be matched against
+an <code>Expr</code> syntax tree node. The actual pattern (<code>Lit(Bool(false))</code> in this case)
+defines which syntax trees should match the pattern. This pattern matches
+expressions that are boolean literals with value <code>false</code>.</p>
+<p>The pattern can then be used to implement lints in the following way:</p>
+<pre><code class="language-rust ignore">...
+
+impl EarlyLintPass for MyAwesomeLint {
+    fn check_expr(&amp;mut self, cx: &amp;EarlyContext, expr: &amp;syntax::ast::Expr) {
+
+        if my_pattern(expr).is_some() {
+            cx.span_lint(
+                MY_AWESOME_LINT,
+                expr.span,
+                &quot;This is a match for a simple pattern. Well done!&quot;,
+            );
+        }
+
+    }
+}</code></pre>
+<p>The <code>pattern!</code> macro call expands to a function <code>my_pattern</code> that expects a
+syntax tree expression as its argument and returns an <code>Option</code> that indicates
+whether the pattern matched.</p>
+<blockquote>
+<p>Note: The result type is explained in more detail in <a href="#the-result-type">a later
+section</a>. For now, it's enough to know that the result is
+<code>Some</code> if the pattern matched and <code>None</code> otherwise.</p>
+</blockquote>
+<h2 id="pattern-syntax"><a class="header" href="#pattern-syntax">Pattern syntax</a></h2>
+<p>The following examples demonstrate the pattern syntax:</p>
+<h4 id="any-_"><a class="header" href="#any-_">Any (<code>_</code>)</a></h4>
+<p>The simplest pattern is the any pattern. It matches anything and is therefore
+similar to regex's <code>*</code>.</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    // matches any expression
+    my_pattern: Expr =
+        _
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="node-node-nameargs"><a class="header" href="#node-node-nameargs">Node (<code>&lt;node-name&gt;(&lt;args&gt;)</code>)</a></h4>
+<p>Nodes are used to match a specific variant of an AST node. A node has a name and
+a number of arguments that depends on the node type. For example, the <code>Lit</code> node
+has a single argument that describes the type of the literal. As another
+example, the <code>If</code> node has three arguments describing the if's condition, then
+block and else block.</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    // matches any expression that is a literal
+    my_pattern: Expr =
+        Lit(_)
+}
+
+pattern!{
+    // matches any expression that is a boolean literal
+    my_pattern: Expr =
+        Lit(Bool(_))
+}
+
+pattern!{
+    // matches if expressions that have a boolean literal in their condition
+    // Note: The `_?` syntax here means that the else branch is optional and can be anything.
+    //       This is discussed in more detail in the section `Repetition`.
+    my_pattern: Expr =
+        If( Lit(Bool(_)) , _, _?)
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="literal-lit"><a class="header" href="#literal-lit">Literal (<code>&lt;lit&gt;</code>)</a></h4>
+<p>A pattern can also contain Rust literals. These literals match themselves.</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    // matches the boolean literal false
+    my_pattern: Expr =
+        Lit(Bool(false))
+}
+
+pattern!{
+    // matches the character literal 'x'
+    my_pattern: Expr =
+        Lit(Char('x'))
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="alternations-a--b"><a class="header" href="#alternations-a--b">Alternations (<code>a | b</code>)</a></h4>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    // matches if the literal is a boolean or integer literal
+    my_pattern: Lit =
+        Bool(_) | Int(_)
+}
+
+pattern!{
+    // matches if the expression is a char literal with value 'x' or 'y'
+    my_pattern: Expr =
+        Lit( Char('x' | 'y') )
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="empty-"><a class="header" href="#empty-">Empty (<code>()</code>)</a></h4>
+<p>The empty pattern represents an empty sequence or the <code>None</code> variant of an
+optional.</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    // matches if the expression is an empty array
+    my_pattern: Expr =
+        Array( () )
+}
+
+pattern!{
+    // matches if expressions that don't have an else clause
+    my_pattern: Expr =
+        If(_, _, ())
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="sequence-a-b"><a class="header" href="#sequence-a-b">Sequence (<code>&lt;a&gt; &lt;b&gt;</code>)</a></h4>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    // matches the array [true, false]
+    my_pattern: Expr =
+        Array( Lit(Bool(true)) Lit(Bool(false)) )
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="repetition-a-a-a-an-anm-an"><a class="header" href="#repetition-a-a-a-an-anm-an">Repetition (<code>&lt;a&gt;*</code>, <code>&lt;a&gt;+</code>, <code>&lt;a&gt;?</code>, <code>&lt;a&gt;{n}</code>, <code>&lt;a&gt;{n,m}</code>, <code>&lt;a&gt;{n,}</code>)</a></h4>
+<p>Elements may be repeated. The syntax for specifying repetitions is identical to
+<a href="https://docs.rs/regex/1.1.2/regex/#repetitions">regex's syntax</a>.</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    // matches arrays that contain 2 'x's as their last or second-last elements
+    // Examples:
+    //     ['x', 'x']                         match
+    //     ['x', 'x', 'y']                    match
+    //     ['a', 'b', 'c', 'x', 'x', 'y']     match
+    //     ['x', 'x', 'y', 'z']               no match
+    my_pattern: Expr =
+        Array( _* Lit(Char('x')){2} _? )
+}
+
+pattern!{
+    // matches if expressions that **may or may not** have an else block
+    // Attn: `If(_, _, _)` matches only ifs that **have** an else block
+    //
+    //              | if with else block | if without else block
+    // If(_, _, _)  |       match        |       no match
+    // If(_, _, _?) |       match        |        match
+    // If(_, _, ()) |      no match      |        match
+    my_pattern: Expr =
+        If(_, _, _?)
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="named-submatch-aname"><a class="header" href="#named-submatch-aname">Named submatch (<code>&lt;a&gt;#&lt;name&gt;</code>)</a></h4>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    // matches character literals and gives the literal the name foo
+    my_pattern: Expr =
+        Lit(Char(_)#foo)
+}
+
+pattern!{
+    // matches character literals and gives the char the name bar
+    my_pattern: Expr =
+        Lit(Char(_#bar))
+}
+
+pattern!{
+    // matches character literals and gives the expression the name baz
+    my_pattern: Expr =
+        Lit(Char(_))#baz
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The reason for using named submatches is described in the section <a href="#the-result-type">The result
+type</a>.</p>
+<h3 id="summary-1"><a class="header" href="#summary-1">Summary</a></h3>
+<p>The following table gives an summary of the pattern syntax:</p>
+<div class="table-wrapper"><table><thead><tr><th>Syntax</th><th>Concept</th><th>Examples</th></tr></thead><tbody>
+<tr><td><code>_</code></td><td>Any</td><td><code>_</code></td></tr>
+<tr><td><code>&lt;node-name&gt;(&lt;args&gt;)</code></td><td>Node</td><td><code>Lit(Bool(true))</code>, <code>If(_, _, _)</code></td></tr>
+<tr><td><code>&lt;lit&gt;</code></td><td>Literal</td><td><code>'x'</code>, <code>false</code>, <code>101</code></td></tr>
+<tr><td><code>&lt;a&gt; \| &lt;b&gt;</code></td><td>Alternation</td><td><code>Char(_) \| Bool(_)</code></td></tr>
+<tr><td><code>()</code></td><td>Empty</td><td><code>Array( () )</code></td></tr>
+<tr><td><code>&lt;a&gt; &lt;b&gt;</code></td><td>Sequence</td><td><code>Tuple( Lit(Bool(_)) Lit(Int(_)) Lit(_) )</code></td></tr>
+<tr><td><code>&lt;a&gt;*</code> <br> <code>&lt;a&gt;+</code> <br> <code>&lt;a&gt;?</code> <br> <code>&lt;a&gt;{n}</code> <br> <code>&lt;a&gt;{n,m}</code> <br> <code>&lt;a&gt;{n,}</code></td><td>Repetition <br> <br> <br> <br> <br><br></td><td><code>Array( _* )</code>, <br> <code>Block( Semi(_)+ )</code>, <br> <code>If(_, _, Block(_)?)</code>, <br> <code>Array( Lit(_){10} )</code>, <br> <code>Lit(_){5,10}</code>, <br> <code>Lit(Bool(_)){10,}</code></td></tr>
+<tr><td><code>&lt;a&gt;#&lt;name&gt;</code></td><td>Named submatch</td><td><code>Lit(Int(_))#foo</code> <code>Lit(Int(_#bar))</code></td></tr>
+</tbody></table>
+</div>
+<h2 id="the-result-type"><a class="header" href="#the-result-type">The result type</a></h2>
+<p>A lot of lints require checks that go beyond what the pattern syntax described
+above can express. For example, a lint might want to check whether a node was
+created as part of a macro expansion or whether there's no comment above a node.
+Another example would be a lint that wants to match two nodes that have the same
+value (as needed by lints like <code>almost_swapped</code>). Instead of allowing users to
+write these checks into the pattern directly (which might make patterns hard to
+read), the proposed solution allows users to assign names to parts of a pattern
+expression. When matching a pattern against a syntax tree node, the return value
+will contain references to all nodes that were matched by these named
+subpatterns. This is similar to capture groups in regular expressions.</p>
+<p>For example, given the following pattern</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    // matches character literals
+    my_pattern: Expr =
+        Lit(Char(_#val_inner)#val)#val_outer
+}
+<span class="boring">}</span></code></pre></pre>
+<p>one could get references to the nodes that matched the subpatterns in the
+following way:</p>
+<pre><code class="language-rust ignore">...
+fn check_expr(expr: &amp;syntax::ast::Expr) {
+    if let Some(result) = my_pattern(expr) {
+        result.val_inner  // type: &amp;char
+        result.val        // type: &amp;syntax::ast::Lit
+        result.val_outer  // type: &amp;syntax::ast::Expr
+    }
+}</code></pre>
+<p>The types in the <code>result</code> struct depend on the pattern. For example, the
+following pattern</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    // matches arrays of character literals
+    my_pattern_seq: Expr =
+        Array( Lit(_)*#foo )
+}
+<span class="boring">}</span></code></pre></pre>
+<p>matches arrays that consist of any number of literal expressions. Because those
+expressions are named <code>foo</code>, the result struct contains a <code>foo</code> attribute which
+is a vector of expressions:</p>
+<pre><code class="language-rust ignore">...
+if let Some(result) = my_pattern_seq(expr) {
+    result.foo        // type: Vec&lt;&amp;syntax::ast::Expr&gt;
+}</code></pre>
+<p>Another result type occurs when a name is only defined in one branch of an
+alternation:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    // matches if expression is a boolean or integer literal
+    my_pattern_alt: Expr =
+        Lit( Bool(_#bar) | Int(_) )
+}
+<span class="boring">}</span></code></pre></pre>
+<p>In the pattern above, the <code>bar</code> name is only defined if the pattern matches a
+boolean literal. If it matches an integer literal, the name isn't set. To
+account for this, the result struct's <code>bar</code> attribute is an option type:</p>
+<pre><code class="language-rust ignore">...
+if let Some(result) = my_pattern_alt(expr) {
+    result.bar        // type: Option&lt;&amp;bool&gt;
+}</code></pre>
+<p>It's also possible to use a name in multiple alternation branches if they have
+compatible types:</p>
+<pre><code class="language-rust ignore">pattern!{
+    // matches if expression is a boolean or integer literal
+    my_pattern_mult: Expr =
+        Lit(_#baz) | Array( Lit(_#baz) )
+}
+...
+if let Some(result) = my_pattern_mult(expr) {
+    result.baz        // type: &amp;syntax::ast::Lit
+}</code></pre>
+<p>Named submatches are a <strong>flat</strong> namespace and this is intended. In the example
+above, two different sub-structures are assigned to a flat name. I expect that
+for most lints, a flat namespace is sufficient and easier to work with than a
+hierarchical one.</p>
+<h4 id="two-stages"><a class="header" href="#two-stages">Two stages</a></h4>
+<p>Using named subpatterns, users can write lints in two stages. First, a coarse
+selection of possible matches is produced by the pattern syntax. In the second
+stage, the named subpattern references can be used to do additional tests like
+asserting that a node hasn't been created as part of a macro expansion.</p>
+<h2 id="implementing-clippy-lints-using-patterns"><a class="header" href="#implementing-clippy-lints-using-patterns">Implementing clippy lints using patterns</a></h2>
+<p>As a &quot;real-world&quot; example, I re-implemented the <code>collapsible_if</code> lint using
+patterns. The code can be found
+<a href="https://github.com/fkohlgrueber/rust-clippy-pattern/blob/039b07ecccaf96d6aa7504f5126720d2c9cceddd/clippy_lints/src/collapsible_if.rs#L88-L163">here</a>.
+The pattern-based version passes all test cases that were written for
+<code>collapsible_if</code>.</p>
+<h1 id="reference-level-explanation"><a class="header" href="#reference-level-explanation">Reference-level explanation</a></h1>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>The following diagram shows the dependencies between the main parts of the
+proposed solution:</p>
+<pre><code>                          Pattern syntax
+                                |
+                                |  parsing / lowering
+                                v
+                           PatternTree
+                                ^
+                                |
+                                |
+                          IsMatch trait
+                                |
+                                |
+             +---------------+-----------+---------+
+             |               |           |         |
+             v               v           v         v
+        syntax::ast     rustc::hir      syn       ...
+</code></pre>
+<p>The pattern syntax described in the previous section is parsed / lowered into
+the so-called <em>PatternTree</em> data structure that represents a valid syntax tree
+pattern. Matching a <em>PatternTree</em> against an actual syntax tree (e.g. rust ast /
+hir or the syn ast, ...) is done using the <em>IsMatch</em> trait.</p>
+<p>The <em>PatternTree</em> and the <em>IsMatch</em> trait are introduced in more detail in the
+following sections.</p>
+<h2 id="patterntree"><a class="header" href="#patterntree">PatternTree</a></h2>
+<p>The core data structure of this RFC is the <strong>PatternTree</strong>.</p>
+<p>It's a data structure similar to rust's AST / HIR, but with the following
+differences:</p>
+<ul>
+<li>The PatternTree doesn't contain parsing information like <code>Span</code>s</li>
+<li>The PatternTree can represent alternatives, sequences and optionals</li>
+</ul>
+<p>The code below shows a simplified version of the current PatternTree:</p>
+<blockquote>
+<p>Note: The current implementation can be found
+<a href="https://github.com/fkohlgrueber/pattern-matching/blob/dfb3bc9fbab69cec7c91e72564a63ebaa2ede638/pattern-match/src/pattern_tree.rs#L50-L96">here</a>.</p>
+</blockquote>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum Expr {
+    Lit(Alt&lt;Lit&gt;),
+    Array(Seq&lt;Expr&gt;),
+    Block_(Alt&lt;BlockType&gt;),
+    If(Alt&lt;Expr&gt;, Alt&lt;BlockType&gt;, Opt&lt;Expr&gt;),
+    IfLet(
+        Alt&lt;BlockType&gt;,
+        Opt&lt;Expr&gt;,
+    ),
+}
+
+pub enum Lit {
+    Char(Alt&lt;char&gt;),
+    Bool(Alt&lt;bool&gt;),
+    Int(Alt&lt;u128&gt;),
+}
+
+pub enum Stmt {
+    Expr(Alt&lt;Expr&gt;),
+    Semi(Alt&lt;Expr&gt;),
+}
+
+pub enum BlockType {
+    Block(Seq&lt;Stmt&gt;),
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The <code>Alt</code>, <code>Seq</code> and <code>Opt</code> structs look like these:</p>
+<blockquote>
+<p>Note: The current implementation can be found
+<a href="https://github.com/fkohlgrueber/pattern-matching/blob/dfb3bc9fbab69cec7c91e72564a63ebaa2ede638/pattern-match/src/matchers.rs#L35-L60">here</a>.</p>
+</blockquote>
+<pre><code class="language-rust ignore">pub enum Alt&lt;T&gt; {
+    Any,
+    Elmt(Box&lt;T&gt;),
+    Alt(Box&lt;Self&gt;, Box&lt;Self&gt;),
+    Named(Box&lt;Self&gt;, ...)
+}
+
+pub enum Opt&lt;T&gt; {
+    Any,  // anything, but not None
+    Elmt(Box&lt;T&gt;),
+    None,
+    Alt(Box&lt;Self&gt;, Box&lt;Self&gt;),
+    Named(Box&lt;Self&gt;, ...)
+}
+
+pub enum Seq&lt;T&gt; {
+    Any,
+    Empty,
+    Elmt(Box&lt;T&gt;),
+    Repeat(Box&lt;Self&gt;, RepeatRange),
+    Seq(Box&lt;Self&gt;, Box&lt;Self&gt;),
+    Alt(Box&lt;Self&gt;, Box&lt;Self&gt;),
+    Named(Box&lt;Self&gt;, ...)
+}
+
+pub struct RepeatRange {
+    pub start: usize,
+    pub end: Option&lt;usize&gt;  // exclusive
+}</code></pre>
+<h2 id="parsing--lowering"><a class="header" href="#parsing--lowering">Parsing / Lowering</a></h2>
+<p>The input of a <code>pattern!</code> macro call is parsed into a <code>ParseTree</code> first and then
+lowered to a <code>PatternTree</code>.</p>
+<p>Valid patterns depend on the <em>PatternTree</em> definitions. For example, the pattern
+<code>Lit(Bool(_)*)</code> isn't valid because the parameter type of the <code>Lit</code> variant of
+the <code>Expr</code> enum is <code>Any&lt;Lit&gt;</code> and therefore doesn't support repetition (<code>*</code>). As
+another example, <code>Array( Lit(_)* )</code> is a valid pattern because the parameter of
+<code>Array</code> is of type <code>Seq&lt;Expr&gt;</code> which allows sequences and repetitions.</p>
+<blockquote>
+<p>Note: names in the pattern syntax correspond to <em>PatternTree</em> enum
+<strong>variants</strong>. For example, the <code>Lit</code> in the pattern above refers to the <code>Lit</code>
+variant of the <code>Expr</code> enum (<code>Expr::Lit</code>), not the <code>Lit</code> enum.</p>
+</blockquote>
+<h2 id="the-ismatch-trait"><a class="header" href="#the-ismatch-trait">The IsMatch Trait</a></h2>
+<p>The pattern syntax and the <em>PatternTree</em> are independent of specific syntax tree
+implementations (rust ast / hir, syn, ...). When looking at the different
+pattern examples in the previous sections, it can be seen that the patterns
+don't contain any information specific to a certain syntax tree implementation.
+In contrast, clippy lints currently match against ast / hir syntax tree nodes
+and therefore directly depend on their implementation.</p>
+<p>The connection between the <em>PatternTree</em> and specific syntax tree
+implementations is the <code>IsMatch</code> trait. It defines how to match <em>PatternTree</em>
+nodes against specific syntax tree nodes. A simplified implementation of the
+<code>IsMatch</code> trait is shown below:</p>
+<pre><code class="language-rust ignore">pub trait IsMatch&lt;O&gt; {
+    fn is_match(&amp;self, other: &amp;'o O) -&gt; bool;
+}</code></pre>
+<p>This trait needs to be implemented on each enum of the <em>PatternTree</em> (for the
+corresponding syntax tree types). For example, the <code>IsMatch</code> implementation for
+matching <code>ast::LitKind</code> against the <em>PatternTree's</em> <code>Lit</code> enum might look like
+this:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl IsMatch&lt;ast::LitKind&gt; for Lit {
+    fn is_match(&amp;self, other: &amp;ast::LitKind) -&gt; bool {
+        match (self, other) {
+            (Lit::Char(i), ast::LitKind::Char(j)) =&gt; i.is_match(j),
+            (Lit::Bool(i), ast::LitKind::Bool(j)) =&gt; i.is_match(j),
+            (Lit::Int(i), ast::LitKind::Int(j, _)) =&gt; i.is_match(j),
+            _ =&gt; false,
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>All <code>IsMatch</code> implementations for matching the current <em>PatternTree</em> against
+<code>syntax::ast</code> can be found
+<a href="https://github.com/fkohlgrueber/pattern-matching/blob/dfb3bc9fbab69cec7c91e72564a63ebaa2ede638/pattern-match/src/ast_match.rs">here</a>.</p>
+<h1 id="drawbacks"><a class="header" href="#drawbacks">Drawbacks</a></h1>
+<h4 id="performance"><a class="header" href="#performance">Performance</a></h4>
+<p>The pattern matching code is currently not optimized for performance, so it
+might be slower than hand-written matching code. Additionally, the two-stage
+approach (matching against the coarse pattern first and checking for additional
+properties later) might be slower than the current practice of checking for
+structure and additional properties in one pass. For example, the following lint</p>
+<pre><code class="language-rust ignore">pattern!{
+    pat_if_without_else: Expr =
+        If(
+            _,
+            Block(
+                Expr( If(_, _, ())#inner )
+                | Semi( If(_, _, ())#inner )
+            )#then,
+            ()
+        )
+}
+...
+fn check_expr(&amp;mut self, cx: &amp;EarlyContext&lt;'_&gt;, expr: &amp;ast::Expr) {
+    if let Some(result) = pat_if_without_else(expr) {
+        if !block_starts_with_comment(cx, result.then) {
+            ...
+        }
+}</code></pre>
+<p>first matches against the pattern and then checks that the <code>then</code> block doesn't
+start with a comment. Using clippy's current approach, it's possible to check
+for these conditions earlier:</p>
+<pre><code class="language-rust ignore">fn check_expr(&amp;mut self, cx: &amp;EarlyContext&lt;'_&gt;, expr: &amp;ast::Expr) {
+    if_chain! {
+        if let ast::ExprKind::If(ref check, ref then, None) = expr.node;
+        if !block_starts_with_comment(cx, then);
+        if let Some(inner) = expr_block(then);
+        if let ast::ExprKind::If(ref check_inner, ref content, None) = inner.node;
+        then {
+            ...
+        }
+    }
+}</code></pre>
+<p>Whether or not this causes performance regressions depends on actual patterns.
+If it turns out to be a problem, the pattern matching algorithms could be
+extended to allow &quot;early filtering&quot; (see the <a href="#early-filtering">Early Filtering</a>
+section in Future Possibilities).</p>
+<p>That being said, I don't see any conceptual limitations regarding pattern
+matching performance.</p>
+<h4 id="applicability"><a class="header" href="#applicability">Applicability</a></h4>
+<p>Even though I'd expect that a lot of lints can be written using the proposed
+pattern syntax, it's unlikely that all lints can be expressed using patterns. I
+suspect that there will still be lints that need to be implemented by writing
+custom pattern matching code. This would lead to mix within clippy's codebase
+where some lints are implemented using patterns and others aren't. This
+inconsistency might be considered a drawback.</p>
+<h1 id="rationale-and-alternatives"><a class="header" href="#rationale-and-alternatives">Rationale and alternatives</a></h1>
+<p>Specifying lints using syntax tree patterns has a couple of advantages compared
+to the current approach of manually writing matching code. First, syntax tree
+patterns allow users to describe patterns in a simple and expressive way. This
+makes it easier to write new lints for both novices and experts and also makes
+reading / modifying existing lints simpler.</p>
+<p>Another advantage is that lints are independent of specific syntax tree
+implementations (e.g. AST / HIR, ...). When these syntax tree implementations
+change, only the <code>IsMatch</code> trait implementations need to be adapted and existing
+lints can remain unchanged. This also means that if the <code>IsMatch</code> trait
+implementations were integrated into the compiler, updating the <code>IsMatch</code>
+implementations would be required for the compiler to compile successfully. This
+could reduce the number of times clippy breaks because of changes in the
+compiler. Another advantage of the pattern's independence is that converting an
+<code>EarlyLintPass</code> lint into a <code>LatePassLint</code> wouldn't require rewriting the whole
+pattern matching code. In fact, the pattern might work just fine without any
+adaptions.</p>
+<h2 id="alternatives"><a class="header" href="#alternatives">Alternatives</a></h2>
+<h3 id="rust-like-pattern-syntax"><a class="header" href="#rust-like-pattern-syntax">Rust-like pattern syntax</a></h3>
+<p>The proposed pattern syntax requires users to know the structure of the
+<code>PatternTree</code> (which is very similar to the AST's / HIR's structure) and also
+the pattern syntax. An alternative would be to introduce a pattern syntax that
+is similar to actual Rust syntax (probably like the <code>quote!</code> macro). For
+example, a pattern that matches <code>if</code> expressions that have <code>false</code> in their
+condition could look like this:</p>
+<pre><code class="language-rust ignore">if false {
+    #[*]
+}</code></pre>
+<h4 id="problems"><a class="header" href="#problems">Problems</a></h4>
+<p>Extending Rust syntax (which is quite complex by itself) with additional syntax
+needed for specifying patterns (alternations, sequences, repetitions, named
+submatches, ...) might become difficult to read and really hard to parse
+properly.</p>
+<p>For example, a pattern that matches a binary operation that has <code>0</code> on both
+sides might look like this:</p>
+<pre><code>0 #[*:BinOpKind] 0
+</code></pre>
+<p>Now consider this slightly more complex example:</p>
+<pre><code>1 + 0 #[*:BinOpKind] 0
+</code></pre>
+<p>The parser would need to know the precedence of <code>#[*:BinOpKind]</code> because it
+affects the structure of the resulting AST. <code>1 + 0 + 0</code> is parsed as <code>(1 + 0) + 0</code> while <code>1 + 0 * 0</code> is parsed as <code>1 + (0 * 0)</code>. Since the pattern could be any
+<code>BinOpKind</code>, the precedence cannot be known in advance.</p>
+<p>Another example of a problem would be named submatches. Take a look at this
+pattern:</p>
+<pre><code class="language-rust ignore">fn test() {
+    1 #foo
+}</code></pre>
+<p>Which node is <code>#foo</code> referring to? <code>int</code>, <code>ast::Lit</code>, <code>ast::Expr</code>, <code>ast::Stmt</code>?
+Naming subpatterns in a rust-like syntax is difficult because a lot of AST nodes
+don't have a syntactic element that can be used to put the name tag on. In these
+situations, the only sensible option would be to assign the name tag to the
+outermost node (<code>ast::Stmt</code> in the example above), because the information of
+all child nodes can be retrieved through the outermost node. The problem with
+this then would be that accessing inner nodes (like <code>ast::Lit</code>) would again
+require manual pattern matching.</p>
+<p>In general, Rust syntax contains a lot of code structure implicitly. This
+structure is reconstructed during parsing (e.g. binary operations are
+reconstructed using operator precedence and left-to-right) and is one of the
+reasons why parsing is a complex task. The advantage of this approach is that
+writing code is simpler for users.</p>
+<p>When writing <em>syntax tree patterns</em>, each element of the hierarchy might have
+alternatives, repetitions, etc.. Respecting that while still allowing
+human-friendly syntax that contains structure implicitly seems to be really
+complex, if not impossible.</p>
+<p>Developing such a syntax would also require to maintain a custom parser that is
+at least as complex as the Rust parser itself. Additionally, future changes in
+the Rust syntax might be incompatible with such a syntax.</p>
+<p>In summary, I think that developing such a syntax would introduce a lot of
+complexity to solve a relatively minor problem.</p>
+<p>The issue of users not knowing about the <em>PatternTree</em> structure could be solved
+by a tool that, given a rust program, generates a pattern that matches only this
+program (similar to the clippy author lint).</p>
+<p>For some simple cases (like the first example above), it might be possible to
+successfully mix Rust and pattern syntax. This space could be further explored
+in a future extension.</p>
+<h1 id="prior-art"><a class="header" href="#prior-art">Prior art</a></h1>
+<p>The pattern syntax is heavily inspired by regular expressions (repetitions,
+alternatives, sequences, ...).</p>
+<p>From what I've seen until now, other linters also implement lints that directly
+work on syntax tree data structures, just like clippy does currently. I would
+therefore consider the pattern syntax to be <em>new</em>, but please correct me if I'm
+wrong.</p>
+<h1 id="unresolved-questions"><a class="header" href="#unresolved-questions">Unresolved questions</a></h1>
+<h4 id="how-to-handle-multiple-matches"><a class="header" href="#how-to-handle-multiple-matches">How to handle multiple matches?</a></h4>
+<p>When matching a syntax tree node against a pattern, there are possibly multiple
+ways in which the pattern can be matched. A simple example of this would be the
+following pattern:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    my_pattern: Expr =
+        Array( _* Lit(_)+#literals)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This pattern matches arrays that end with at least one literal. Now given the
+array <code>[x, 1, 2]</code>, should <code>1</code> be matched as part of the <code>_*</code> or the <code>Lit(_)+</code>
+part of the pattern? The difference is important because the named submatch
+<code>#literals</code> would contain 1 or 2 elements depending how the pattern is matched.
+In regular expressions, this problem is solved by matching &quot;greedy&quot; by default
+and &quot;non-greedy&quot; optionally.</p>
+<p>I haven't looked much into this yet because I don't know how relevant it is for
+most lints. The current implementation simply returns the first match it finds.</p>
+<h1 id="future-possibilities"><a class="header" href="#future-possibilities">Future possibilities</a></h1>
+<h4 id="implement-rest-of-rust-syntax"><a class="header" href="#implement-rest-of-rust-syntax">Implement rest of Rust Syntax</a></h4>
+<p>The current project only implements a small part of the Rust syntax. In the
+future, this should incrementally be extended to more syntax to allow
+implementing more lints. Implementing more of the Rust syntax requires extending
+the <code>PatternTree</code> and <code>IsMatch</code> implementations, but should be relatively
+straight-forward.</p>
+<h4 id="early-filtering"><a class="header" href="#early-filtering">Early filtering</a></h4>
+<p>As described in the <em>Drawbacks/Performance</em> section, allowing additional checks
+during the pattern matching might be beneficial.</p>
+<p>The pattern below shows how this could look like:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    pat_if_without_else: Expr =
+        If(
+            _,
+            Block(
+                Expr( If(_, _, ())#inner )
+                | Semi( If(_, _, ())#inner )
+            )#then,
+            ()
+        )
+    where
+        !in_macro(#then.span);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The difference compared to the currently proposed two-stage filtering is that
+using early filtering, the condition (<code>!in_macro(#then.span)</code> in this case)
+would be evaluated as soon as the <code>Block(_)#then</code> was matched.</p>
+<p>Another idea in this area would be to introduce a syntax for backreferences.
+They could be used to require that multiple parts of a pattern should match the
+same value. For example, the <code>assign_op_pattern</code> lint that searches for <code>a = a op b</code> and recommends changing it to <code>a op= b</code> requires that both occurrences of
+<code>a</code> are the same. Using <code>=#...</code> as syntax for backreferences, the lint could be
+implemented like this:</p>
+<pre><code class="language-rust ignore">pattern!{
+    assign_op_pattern: Expr =
+        Assign(_#target, Binary(_, =#target, _)
+}</code></pre>
+<h4 id="match-descendant"><a class="header" href="#match-descendant">Match descendant</a></h4>
+<p>A lot of lints currently implement custom visitors that check whether any
+subtree (which might not be a direct descendant) of the current node matches
+some properties. This cannot be expressed with the proposed pattern syntax.
+Extending the pattern syntax to allow patterns like &quot;a function that contains at
+least two return statements&quot; could be a practical addition.</p>
+<h4 id="negation-operator-for-alternatives"><a class="header" href="#negation-operator-for-alternatives">Negation operator for alternatives</a></h4>
+<p>For patterns like &quot;a literal that is not a boolean literal&quot; one currently needs
+to list all alternatives except the boolean case. Introducing a negation
+operator that allows to write <code>Lit(!Bool(_))</code> might be a good idea. This pattern
+would be equivalent to <code>Lit( Char(_) | Int(_) )</code> (given that currently only three
+literal types are implemented).</p>
+<h4 id="functional-composition"><a class="header" href="#functional-composition">Functional composition</a></h4>
+<p>Patterns currently don't have any concept of composition. This leads to
+repetitions within patterns. For example, one of the collapsible-if patterns
+currently has to be written like this:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    pat_if_else: Expr =
+        If(
+            _,
+            _,
+            Block_(
+                Block(
+                    Expr((If(_, _, _?) | IfLet(_, _?))#else_) |
+                    Semi((If(_, _, _?) | IfLet(_, _?))#else_)
+                )#block_inner
+            )#block
+        ) |
+        IfLet(
+            _,
+            Block_(
+                Block(
+                    Expr((If(_, _, _?) | IfLet(_, _?))#else_) |
+                    Semi((If(_, _, _?) | IfLet(_, _?))#else_)
+                )#block_inner
+            )#block
+        )
+}
+<span class="boring">}</span></code></pre></pre>
+<p>If patterns supported defining functions of subpatterns, the code could be
+simplified as follows:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    fn expr_or_semi(expr: Expr) -&gt; Stmt {
+        Expr(expr) | Semi(expr)
+    }
+    fn if_or_if_let(then: Block, else: Opt&lt;Expr&gt;) -&gt; Expr {
+        If(_, then, else) | IfLet(then, else)
+    }
+    pat_if_else: Expr =
+        if_or_if_let(
+            _,
+            Block_(
+                Block(
+                    expr_or_semi( if_or_if_let(_, _?)#else_ )
+                )#block_inner
+            )#block
+        )
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Additionally, common patterns like <code>expr_or_semi</code> could be shared between
+different lints.</p>
+<h4 id="clippy-pattern-author"><a class="header" href="#clippy-pattern-author">Clippy Pattern Author</a></h4>
+<p>Another improvement could be to create a tool that, given some valid Rust
+syntax, generates a pattern that matches this syntax exactly. This would make
+starting to write a pattern easier. A user could take a look at the patterns
+generated for a couple of Rust code examples and use that information to write a
+pattern that matches all of them.</p>
+<p>This is similar to clippy's author lint.</p>
+<h4 id="supporting-other-syntaxes"><a class="header" href="#supporting-other-syntaxes">Supporting other syntaxes</a></h4>
+<p>Most of the proposed system is language-agnostic. For example, the pattern
+syntax could also be used to describe patterns for other programming languages.</p>
+<p>In order to support other languages' syntaxes, one would need to implement
+another <code>PatternTree</code> that sufficiently describes the languages' AST and
+implement <code>IsMatch</code> for this <code>PatternTree</code> and the languages' AST.</p>
+<p>One aspect of this is that it would even be possible to write lints that work on
+the pattern syntax itself. For example, when writing the following pattern</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    my_pattern: Expr =
+        Array( Lit(Bool(false)) Lit(Bool(false)) )
+}
+<span class="boring">}</span></code></pre></pre>
+<p>a lint that works on the pattern syntax's AST could suggest using this pattern
+instead:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pattern!{
+    my_pattern: Expr =
+        Array( Lit(Bool(false)){2} )
+}
+<span class="boring">}</span></code></pre></pre>
+<p>In the future, clippy could use this system to also provide lints for custom
+syntaxes like those found in macros.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../development/proposals/roadmap-2021.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../development/proposals/roadmap-2021.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../../ace.js"></script>
+        <script src="../../editor.js"></script>
+        <script src="../../mode-rust.js"></script>
+        <script src="../../theme-dawn.js"></script>
+        <script src="../../theme-tomorrow_night.js"></script>
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

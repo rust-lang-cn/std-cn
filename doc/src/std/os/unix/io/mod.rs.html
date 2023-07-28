@@ -1,118 +1,171 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library&#x2F;std&#x2F;src&#x2F;os&#x2F;unix&#x2F;io&#x2F;mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="stylesheet" type="text/css" href="../../../../../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../../../../../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../../../../../storage1.58.0.js"></script><script src="../../../../../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../../../../../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../../../../../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../../../../../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../../../../../down-arrow1.58.0.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../../std/index.html'><div class='logo-container rust-logo'><img src='../../../../../rust-logo1.58.0.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../../../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../../../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1"> 1</span>
-<span id="2"> 2</span>
-<span id="3"> 3</span>
-<span id="4"> 4</span>
-<span id="5"> 5</span>
-<span id="6"> 6</span>
-<span id="7"> 7</span>
-<span id="8"> 8</span>
-<span id="9"> 9</span>
-<span id="10">10</span>
-<span id="11">11</span>
-<span id="12">12</span>
-<span id="13">13</span>
-<span id="14">14</span>
-<span id="15">15</span>
-<span id="16">16</span>
-<span id="17">17</span>
-<span id="18">18</span>
-<span id="19">19</span>
-<span id="20">20</span>
-<span id="21">21</span>
-<span id="22">22</span>
-<span id="23">23</span>
-<span id="24">24</span>
-<span id="25">25</span>
-<span id="26">26</span>
-<span id="27">27</span>
-<span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
-<span id="33">33</span>
-<span id="34">34</span>
-<span id="35">35</span>
-<span id="36">36</span>
-<span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
-<span id="42">42</span>
-<span id="43">43</span>
-<span id="44">44</span>
-<span id="45">45</span>
-<span id="46">46</span>
-<span id="47">47</span>
-<span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
-<span id="52">52</span>
-<span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
-<span id="57">57</span>
-</pre><pre class="rust"><code><span class="doccomment">//! 特定于 Unix 的通用 I/O 原语扩展。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 就像裸指针一样，原始文件描述符指向具有动态生命周期的资源，如果它们比它们的资源生命周期更长，它们可以悬垂，如果它们是由无效值创建的，则它们可以被伪造。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 该模块提供了三种用于表示文件描述符的类型，具有不同的所有权属性：原始、借用和拥有，类似于用于表示指针的类型：</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! | Type               | Analogous to |</span>
-<span class="doccomment">//! | ------------------ | ------------ |</span>
-<span class="doccomment">//! | [`RawFd`]          | `*const _`   |</span>
-<span class="doccomment">//! | [`BorrowedFd&lt;&#39;a&gt;`] | `&amp;&#39;a _`      |</span>
-<span class="doccomment">//! | [`OwnedFd`]        | `Box&lt;_&gt;`     |</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 和裸指针一样，`RawFd` 值是原始值。</span>
-<span class="doccomment">//! 并且在新代码中，他们应该被认为是不安全的 (类似于解引用他们)。Rust 并不总是提供此指导，因此 Rust 生态系统中的现有代码通常不会将 `RawFd` 的使用标记为不安全。</span>
-<span class="doccomment">//! 一旦 `io_safety` 特性稳定，将鼓励库迁移，通过将 `unsafe` 添加到解引用 `RawFd` 值的 API，或者使用 `BorrowedFd` 或 `OwnedFd` 代替。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 与引用一样，`BorrowedFd` 值与生命周期相关联，以确保它们的生命周期不会超过它们指向的资源。这些可以安全使用。`BorrowedFd` 值可用于提供对任何系统调用的安全访问的 API 中，除了：</span>
-<span class="doccomment">//!  - `close`，因为这将结束资源的动态生命周期，而不结束文件描述符的生命周期。</span>
-<span class="doccomment">//!  - `dup2`/`dup3`，在第二个参数中，因为这个参数被关闭并分配了一个新的资源，这可能会破坏其他代码使用该文件描述符的假设。</span>
-<span class="doccomment">//! 此列表不包括 `mmap`，因为 `mmap` 确实对其文件描述符参数进行了适当的借用。也就是说，`mmap` 是不安全的还有其他原因：它在裸体疗法上运行，如果底层存储发生可变，它可能会有未定义的行为。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 可变的可能来自其他进程，或者来自同一进程，如果 API 提供 `BorrowedFd` 访问，因为如前所述，`BorrowedFd` 值可能用于提供对任何系统调用的安全访问的 API。</span>
-<span class="doccomment">//! 因此，使用 `mmap` 并提供安全 API 的代码必须全权负责确保安全的 Rust 代码不会通过它引起未定义的行为。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 与 box 一样，`OwnedFd` 在概念上拥有它们指向的资源，并在它们被丢弃时释放 X1X。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [`BorrowedFd&lt;&#39;a&gt;`]: crate::os::unix::io::BorrowedFd</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/std/src/os/unix/io/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../../../" data-static-root-path="../../../../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../../../source-files1.71.0.js"></script><script defer src="../../../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../../../std/index.html"><img class="rust-logo" src="../../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<a href="#2" id="2">2</a>
+<a href="#3" id="3">3</a>
+<a href="#4" id="4">4</a>
+<a href="#5" id="5">5</a>
+<a href="#6" id="6">6</a>
+<a href="#7" id="7">7</a>
+<a href="#8" id="8">8</a>
+<a href="#9" id="9">9</a>
+<a href="#10" id="10">10</a>
+<a href="#11" id="11">11</a>
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
+<a href="#48" id="48">48</a>
+<a href="#49" id="49">49</a>
+<a href="#50" id="50">50</a>
+<a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 特定于 Unix 的通用 I/O 原语扩展。
+//!
+//! 就像裸指针一样，原始文件描述符指向具有动态生命周期的资源，如果它们比它们的资源生命周期更长，它们可以悬垂，如果它们是由无效值创建的，则它们可以被伪造。
+//!
+//! 该模块提供了三种用于表示文件描述符的类型，具有不同的所有权属性：原始、借用和拥有，类似于用于表示指针的类型：
+//!
+//! | Type               | Analogous to |
+//! | ------------------ | ------------ |
+//! | [`RawFd`]          | `*const _`   |
+//! | [`BorrowedFd&lt;&#39;a&gt;`] | `&amp;&#39;a _`      |
+//! | [`OwnedFd`]        | `Box&lt;_&gt;`     |
+//!
+//! 和裸指针一样，`RawFd` 值是原始值。
+//! 并且在新代码中，他们应该被认为是不安全的 (类似于解引用他们)。Rust 并不总是提供此指导，因此 Rust 生态系统中的现有代码通常不会将 `RawFd` 的使用标记为不安全。
+//! 一旦 `io_safety` 特性稳定，将鼓励库迁移，通过将 `unsafe` 添加到解引用 `RawFd` 值的 API，或者使用 `BorrowedFd` 或 `OwnedFd` 代替。
+//!
+//! 与引用一样，`BorrowedFd` 值与生命周期相关联，以确保它们的生命周期不会超过它们指向的资源。这些可以安全使用。
+//! `BorrowedFd` 值可用于提供对任何系统调用的安全访问的 API 中，除了：
+//!
+//!  - `close`，因为这将结束资源的动态生命周期，而不结束文件描述符的生命周期。
+//!
+//!  - `dup2`/`dup3`，在第二个参数中，因为这个参数被关闭并分配了一个新的资源，这可能会破坏其他代码使用该文件描述符的假设。
+//!
+//! `BorrowedFd` 值可用于提供对 `dup` 系统调用的安全访问的 API，因此实现 `AsFd` 或 `From&lt;OwnedFd&gt;` 的类型不应假定它们始终具有对底层文件描述的独占访问权。
+//!
+//! `BorrowedFd` 值也可以与 `mmap` 一起使用，因为 `mmap` 以类似于 `dup` 的方式使用提供的文件描述符，并且不需要传递给它的 `BorrowedFd` 在生成的映射的生命周期中存在。
+//!
+//! 也就是说，`mmap` 是不安全的还有其他原因：它在裸体疗法上运行，如果底层存储发生可变，它可能会有未定义的行为。
+//! 可变的可能来自其他进程，或者来自同一进程，如果 API 提供 `BorrowedFd` 访问，因为如前所述，`BorrowedFd` 值可能用于提供对任何系统调用的安全访问的 API。
+//! 因此，使用 `mmap` 并提供安全 API 的代码必须全权负责确保安全的 Rust 代码不会通过它引起未定义的行为。
+//!
+//! 与 box 一样，`OwnedFd` 在概念上拥有它们指向的资源，并在它们被丢弃时释放 X1X。
+//!
+//! ## `/proc/self/mem` 和类似的操作系统特性
+//!
+//! 某些平台具有特殊文件，例如 `/proc/self/mem`，它们提供对进程内存的读写访问。
+//! 此类读取和写入发生在 Rust 编译器的控制之外，因此它们不支持 Rust 的内存安全保证。
+//!
+//! 这并不意味着所有可能允许打开和读取或写入 `/proc/self/mem` 的 API 都必须是 `unsafe`。
+//! Rust 的安全保证只涵盖程序本身可以做的事情，而不包括程序外的实体可以对它做的事情。
+//! `/proc/self/mem` 被认为是这样一个外部实体，连同调试接口，以及对硬件有物理访问权限的人。
+//! 即使在程序控制外部实体的情况下也是如此。
+//!
+//! 如果您希望全面防止程序伸出并导致外部实体再次进入并违反内存安全，则有必要使用 *sandboxing*，它不在 `std` 的作用域范围内。
+//!
+//! [`BorrowedFd&lt;&#39;a&gt;`]: crate::os::unix::io::BorrowedFd
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
 
-<span class="attribute">#![<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
+</span><span class="attr">#![stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
 
-<span class="kw">mod</span> <span class="ident">fd</span>;
-<span class="kw">mod</span> <span class="ident">raw</span>;
+#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">pub use </span><span class="kw">crate</span>::os::fd::<span class="kw-2">*</span>;
 
-<span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;io_safety&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;87074&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">fd</span>::<span class="kw-2">*</span>;
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">raw</span>::<span class="kw-2">*</span>;
-</code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="std" data-search-index-js="../../../../../search-index1.58.0.js" data-search-js="../../../../../search1.58.0.js"></div>
-    <script src="../../../../../main1.58.0.js"></script><script src="../../../../../source-script1.58.0.js"></script><script src="../../../../../source-files1.58.0.js"></script>
-</body></html>
+<span class="comment">// 测试此模块
+</span><span class="attr">#[cfg(test)]
+</span><span class="kw">mod </span>tests;
+</code></pre></div></section></main></body></html>

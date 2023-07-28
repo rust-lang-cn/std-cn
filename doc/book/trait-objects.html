@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <title>Trait Objects</title>
+
+    <link rel="stylesheet" href="../rust.css">
+    <meta name="robots" content="noindex,follow">
+<link rel="icon" href="https://www.rust-lang.org/favicon.ico">
+
+
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    <div id="versioninfo">
+  <img src="https://www.rust-lang.org/logos/rust-logo-32x32-blk.png" width="32" height="32" alt="Rust logo"><br>
+  <span class="white-sticker"><a href="https://www.rust-lang.org">Rust</a> 1.71.0-dev</span><br>
+  <a href="https://github.com/rust-lang/rust/commit/"
+    class="hash white-sticker"></a>
+</div>
+
+
+    <h1 class="title">Trait Objects</h1>
+    <p><small>There is a new edition of the book and this is an old link.</small></p>
+<blockquote>
+<p>Trait objects combine the data made up of the pointer to a concrete object with the behavior of the methods defined in the trait.
+A trait defines behavior that we need in a given situation.
+We can then use a trait as a trait object in places where we would use a concrete type or a generic type.</p>
+</blockquote>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">pub struct </span>InputBox {
+    <span class="kw">pub </span>label: String,
+}
+
+<span class="kw">impl </span>Draw <span class="kw">for </span>InputBox {
+    <span class="kw">fn </span>draw(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="comment">// Code to actually draw an input box
+    </span>}
+}
+
+<span class="kw">pub struct </span>Button {
+    <span class="kw">pub </span>label: String,
+}
+
+<span class="kw">impl </span>Draw <span class="kw">for </span>Button {
+    <span class="kw">fn </span>draw(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="comment">// Code to actually draw a button
+    </span>}
+}
+
+<span class="kw">pub struct </span>Screen&lt;T: Draw&gt; {
+    <span class="kw">pub </span>components: Vec&lt;T&gt;,
+}
+
+<span class="kw">impl</span>&lt;T&gt; Screen&lt;T&gt;
+    <span class="kw">where </span>T: Draw {
+    <span class="kw">pub fn </span>run(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="kw">for </span>component <span class="kw">in </span><span class="self">self</span>.components.iter() {
+            component.draw();
+        }
+    }
+}
+
+<span class="kw">fn </span>main() {
+    <span class="kw">let </span>screen = Screen {
+        components: <span class="macro">vec!</span>[
+            Box::new(InputBox {
+                label: String::from(<span class="string">&quot;OK&quot;</span>),
+            }),
+            Box::new(Button {
+                label: String::from(<span class="string">&quot;OK&quot;</span>),
+            }),
+        ],
+    };
+
+    screen.run();
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Apub+struct+InputBox+%7B%0A++++pub+label:+String,%0A%7D%0A%0Aimpl+Draw+for+InputBox+%7B%0A++++fn+draw(%26self)+%7B%0A++++++++//+Code+to+actually+draw+an+input+box%0A++++%7D%0A%7D%0A%0Apub+struct+Button+%7B%0A++++pub+label:+String,%0A%7D%0A%0Aimpl+Draw+for+Button+%7B%0A++++fn+draw(%26self)+%7B%0A++++++++//+Code+to+actually+draw+a+button%0A++++%7D%0A%7D%0A%0Apub+struct+Screen%3CT:+Draw%3E+%7B%0A++++pub+components:+Vec%3CT%3E,%0A%7D%0A%0Aimpl%3CT%3E+Screen%3CT%3E%0A++++where+T:+Draw+%7B%0A++++pub+fn+run(%26self)+%7B%0A++++++++for+component+in+self.components.iter()+%7B%0A++++++++++++component.draw();%0A++++++++%7D%0A++++%7D%0A%7D%0A%0Afn+main()+%7B%0A++++let+screen+=+Screen+%7B%0A++++++++components:+vec!%5B%0A++++++++++++Box::new(InputBox+%7B%0A++++++++++++++++label:+String::from(%22OK%22),%0A++++++++++++%7D),%0A++++++++++++Box::new(Button+%7B%0A++++++++++++++++label:+String::from(%22OK%22),%0A++++++++++++%7D),%0A++++++++%5D,%0A++++%7D;%0A%0A++++screen.run();%0A%7D&amp;edition=2015">Run</a></div>
+<hr />
+<p>Here are the relevant sections in the new and old books:</p>
+<ul>
+<li><strong><a href="ch17-02-trait-objects.html">in the current edition: Ch 17.02 — Trait Objects</a></strong></li>
+<li><small><a href="https://doc.rust-lang.org/1.30.0/book/first-edition/trait-objects.html">In the first edition: Ch 3.22 — Trait Objects</a></small></li>
+</ul>
+
+    <!-- REUSE-IgnoreStart -->
+<footer><p>
+Copyright &copy; 2011 The Rust Project Developers. Licensed under the
+<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>
+or the <a href="https://opensource.org/licenses/MIT">MIT license</a>, at your option.
+</p><p>
+This file may not be copied, modified, or distributed except according to those terms.
+</p></footer>
+<!-- REUSE-IgnoreEnd -->
+
+
+</body>
+</html>

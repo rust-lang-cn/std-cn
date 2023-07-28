@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="从指针范围形成一个切片。"><title>from_ptr_range in std::slice - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="sidebar-items1.71.0.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../std/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../std/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><div class="sidebar-elems"><h2><a href="index.html">In std::slice</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Function <a href="../index.html">std</a>::<wbr><a href="index.html">slice</a>::<wbr><a class="fn" href="#">from_ptr_range</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><span class="since" title="const unstable">const: <a href="https://github.com/rust-lang/rust/issues/89792" title="Tracking issue for const_slice_from_ptr_range">unstable</a></span> · <a class="srclink" href="../../src/core/slice/raw.rs.html#225">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub unsafe fn from_ptr_range&lt;'a, T&gt;(range: <a class="struct" href="../ops/struct.Range.html" title="struct std::ops::Range">Range</a>&lt;<a class="primitive" href="../primitive.pointer.html">*const T</a>&gt;) -&gt; &amp;'a <a class="primitive" href="../primitive.slice.html">[T]</a></code></pre><span class="item-info"><div class="stab unstable"><span class="emoji">🔬</span><span>This is a nightly-only experimental API. (<code>slice_from_ptr_range</code>&nbsp;<a href="https://github.com/rust-lang/rust/issues/89792">#89792</a>)</span></div></span><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>从指针范围形成一个切片。</p>
+<p>此函数对于与外部接口进行交互很有用，该外部接口使用两个指针来引用内存中的一系列元素，这在 C++ 中很常见。</p>
+<h2 id="safety"><a href="#safety">Safety</a></h2>
+<p>如果违反以下任一条件，则行为是未定义的：</p>
+<ul>
+<li>
+<p>范围的 <code>start</code> 指针必须是 <a href="../ptr/index.html#safety" title="mod std::ptr">valid</a> 并正确对齐指向切片的第一个元素的指针。</p>
+</li>
+<li>
+<p><code>end</code> 指针必须是 <a href="../ptr/index.html#safety" title="mod std::ptr">valid</a> 且正确对齐的指针，指向<em>一个过去</em>最后一个元素，这样从末尾到起始指针的偏移量就是切片的长度。</p>
+</li>
+<li>
+<p>范围必须包含 <code>N</code> 类型 <code>T</code> 的连续正确初始化值:</p>
+<ul>
+<li>该切片的整个存储范围必须包含在一个分配的对象中！
+切片永远不能跨越多个分配的对象。</li>
+</ul>
+</li>
+<li>
+<p>返回的切片引用的内存在生命周期 <code>'a</code> 期间不得更改，除非在 <code>UnsafeCell</code> 内部。</p>
+</li>
+<li>
+<p>范围的总长度不得大于 <code>isize::MAX</code>。
+请参见 <a href="../primitive.pointer.html#method.offset" title="method pointer::offset"><code>pointer::offset</code></a> 的安全文档。</p>
+</li>
+</ul>
+<p>请注意，从 <a href="../primitive.slice.html#method.as_ptr_range" title="method slice::as_ptr_range"><code>slice::as_ptr_range</code></a> 创建的范围满足这些要求。</p>
+<h2 id="panics"><a href="#panics">Panics</a></h2>
+<p>如果 <code>T</code> 是一个零大小的类型 (“ZST”)，这个函数就会出现 panic。</p>
+<h2 id="caveat"><a href="#caveat">Caveat</a></h2>
+<p>从使用中可以推断出返回切片的生命周期。
+为防止意外滥用，建议将生命周期与生命周期中任何安全的来源联系起来，例如通过提供一个辅助函数，获取切片的宿主值的生命周期，或通过明确的注解法。</p>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#![feature(slice_from_ptr_range)]
+
+</span><span class="kw">use </span>core::slice;
+
+<span class="kw">let </span>x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+<span class="kw">let </span>range = x.as_ptr_range();
+
+<span class="kw">unsafe </span>{
+    <span class="macro">assert_eq!</span>(slice::from_ptr_range(range), <span class="kw-2">&amp;</span>x);
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Bfeature(slice_from_ptr_range)%5D%0A%0Afn+main()+%7B%0Ause+core::slice;%0A%0Alet+x+=+%5B1,+2,+3%5D;%0Alet+range+=+x.as_ptr_range();%0A%0Aunsafe+%7B%0A++++assert_eq!(slice::from_ptr_range(range),+%26x);%0A%7D%0A%7D&amp;version=nightly&amp;edition=2021">Run</a></div>
+</div></details></section></div></main></body></html>

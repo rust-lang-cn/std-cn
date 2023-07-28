@@ -1,364 +1,393 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library&#x2F;std&#x2F;src&#x2F;sync&#x2F;mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../../../storage1.58.0.js"></script><script src="../../../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../../../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../../../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../../../down-arrow1.58.0.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../std/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo1.58.0.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
-<span id="100">100</span>
-<span id="101">101</span>
-<span id="102">102</span>
-<span id="103">103</span>
-<span id="104">104</span>
-<span id="105">105</span>
-<span id="106">106</span>
-<span id="107">107</span>
-<span id="108">108</span>
-<span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
-<span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
-<span id="124">124</span>
-<span id="125">125</span>
-<span id="126">126</span>
-<span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
-<span id="130">130</span>
-<span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
-</pre><pre class="rust"><code><span class="doccomment">//! 有用的同步原语。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## 需要同步</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 从概念上讲，Rust 程序是将在计算机上执行的一系列操作。程序中发生的事件的时间线与代码中操作的顺序一致。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 考虑下面的代码，对某些静态变量进行操作：</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
-<span class="doccomment">//! static mut A: u32 = 0;</span>
-<span class="doccomment">//! static mut B: u32 = 0;</span>
-<span class="doccomment">//! static mut C: u32 = 0;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn main() {</span>
-<span class="doccomment">//!     unsafe {</span>
-<span class="doccomment">//!         A = 3;</span>
-<span class="doccomment">//!         B = 4;</span>
-<span class="doccomment">//!         A = A + B;</span>
-<span class="doccomment">//!         C = B;</span>
-<span class="doccomment">//!         println!(&quot;{} {} {}&quot;, A, B, C);</span>
-<span class="doccomment">//!         C = A;</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 似乎存储在存储器中的某些变量已更改，执行了加法运算，结果存储在 `A` 中，并且变量 `C` 被修改了两次。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 当仅涉及单个线程时，结果如预期的那样：</span>
-<span class="doccomment">//! `7 4 4` 行被打印。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 至于幕后发生的情况，启用优化后，最终生成的机器代码可能看起来与代码有很大不同：</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - `C` 的第一个存储区可能在存储区移至 `A` 或 `B` 之前已被移至 _as if_。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - 可以删除 `A + B` 到 `A` 的分配，因为总和可以存储在一个临时位置，直到打印出来为止，并且变量永远不会更新。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - 最终结果可以仅通过在编译时查看代码来确定，因此 [常量合并][constant folding] 可能会将整个块变成一个简单的 `println!(&quot;7 4 4&quot;)`。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 只要最终的优化代码在执行时产生的结果与没有优化的结果相同，编译器就可以执行这些优化的任何组合。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 由于现代计算机中使用了 [并发][concurrency]，因此有关程序执行顺序的假设通常是错误的。</span>
-<span class="doccomment">//! 访问全局变量会导致不确定的结果，即使编译器优化被禁用，仍然可能引入同步错误。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 请注意，由于 Rust 的安全保证，假设我们在此模块中未使用任何同步原语，则访问 (static) 变量需要 `unsafe` 代码。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [constant folding]: https://en.wikipedia.org/wiki/Constant_folding</span>
-<span class="doccomment">//! [concurrency]: https://en.wikipedia.org/wiki/Concurrency_(computer_science)</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## 乱序执行</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 由于多种原因，指令的执行顺序与我们定义的顺序可以不同：</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - **编译器** 重新排序指令：如果编译器可以在较早的时候发出指令，它将尝试这样做。</span>
-<span class="doccomment">//! 例如，它可能会在代码块的顶部提升内存负载，以便 CPU 可以从内存中启动 [预取][prefetching] 值。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!   在单线程方案中，这可能会在编写信号处理程序或某些类型的代码时引起问题。</span>
-<span class="doccomment">//!   使用 [编译器栅栏][compiler fences] 来防止这种重新排序。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - 一个单处理器执行指令 [乱序][out-of-order]：</span>
-<span class="doccomment">//!   现代的 CPU 能够执行 [超标量][superscalar]，也就是说，多个指令可能同时执行，即使机器代码描述的是一个顺序过程。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!   这种重新排序由 CPU 透明地处理。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - 同时执行多个硬件线程的 **多处理器** 系统：在多线程方案中，可以使用两种原语来处理同步：</span>
-<span class="doccomment">//!   - [内存栅栏][memory fences] 以确保以正确的顺序对其他 CPU 进行内存访问。</span>
-<span class="doccomment">//!   - [原子操作][atomic operations] 以确保同时访问同一内存位置不会导致未定义的行为。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [prefetching]: https://en.wikipedia.org/wiki/Cache_prefetching</span>
-<span class="doccomment">//! [compiler fences]: crate::sync::atomic::compiler_fence</span>
-<span class="doccomment">//! [out-of-order]: https://en.wikipedia.org/wiki/Out-of-order_execution</span>
-<span class="doccomment">//! [superscalar]: https://en.wikipedia.org/wiki/Superscalar_processor</span>
-<span class="doccomment">//! [memory fences]: crate::sync::atomic::fence</span>
-<span class="doccomment">//! [atomic operations]: crate::sync::atomic</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## 更高级别的同步对象</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 大多数同步原语都非常容易出错，使用起来也不方便，这就是为什么标准库还公开了一些更高级别的同步对象的原因。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 这些抽象可以在较低级别的原语基础上构建。</span>
-<span class="doccomment">//! 为了提高效率，标准库中的同步对象通常是在操作系统内核的帮助下实现的，该内核可以在线程被锁定而被阻塞时重新安排线程的时间。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 以下是可用的同步对象的概述：</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - [`Arc`]: 原子引用计数指针，可以在多线程环境中使用，延长某些数据的生命周期，直到所有线程都执行完为止。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - [`Barrier`]: 确保多个线程将等待彼此到达程序中的某个点，然后再一起继续执行。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - [`Condvar`]: 条件变量，提供在等待事件发生时阻塞线程的能力。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - [`mpsc`]: 多生产者、单消费者队列，用于基于消息的通信。可以提供轻量级的线程间同步机制，但要花一些额外的内存。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - [`Mutex`]: 互斥机制，保证一次最多有一个线程可以访问一些数据。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - [`Once`]: 用于线程安全的一次性初始化全局变量。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - [`RwLock`]: 提供一种互斥机制，允许同时有多个 readers，但一次只允许一个 writer。在某些情况下，这可能比互斥锁更有效。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [`Arc`]: crate::sync::Arc</span>
-<span class="doccomment">//! [`Barrier`]: crate::sync::Barrier</span>
-<span class="doccomment">//! [`Condvar`]: crate::sync::Condvar</span>
-<span class="doccomment">//! [`mpsc`]: crate::sync::mpsc</span>
-<span class="doccomment">//! [`Mutex`]: crate::sync::Mutex</span>
-<span class="doccomment">//! [`Once`]: crate::sync::Once</span>
-<span class="doccomment">//! [`RwLock`]: crate::sync::RwLock</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/std/src/sync/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../source-files1.71.0.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../std/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<a href="#2" id="2">2</a>
+<a href="#3" id="3">3</a>
+<a href="#4" id="4">4</a>
+<a href="#5" id="5">5</a>
+<a href="#6" id="6">6</a>
+<a href="#7" id="7">7</a>
+<a href="#8" id="8">8</a>
+<a href="#9" id="9">9</a>
+<a href="#10" id="10">10</a>
+<a href="#11" id="11">11</a>
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
+<a href="#48" id="48">48</a>
+<a href="#49" id="49">49</a>
+<a href="#50" id="50">50</a>
+<a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 有用的同步原语。
+//!
+//! ## 需要同步
+//!
+//! 从概念上讲，Rust 程序是将在计算机上执行的一系列操作。程序中发生的事件的时间线与代码中操作的顺序一致。
+//!
+//! 考虑下面的代码，对某些静态变量进行操作：
+//!
+//! ```rust
+//! static mut A: u32 = 0;
+//! static mut B: u32 = 0;
+//! static mut C: u32 = 0;
+//!
+//! fn main() {
+//!     unsafe {
+//!         A = 3;
+//!         B = 4;
+//!         A = A + B;
+//!         C = B;
+//!         println!(&quot;{A} {B} {C}&quot;);
+//!         C = A;
+//!     }
+//! }
+//! ```
+//!
+//! 似乎存储在存储器中的某些变量已更改，执行了加法运算，结果存储在 `A` 中，并且变量 `C` 被修改了两次。
+//!
+//! 当仅涉及单个线程时，结果如预期的那样：
+//! `7 4 4` 行被打印。
+//!
+//! 至于幕后发生的情况，启用优化后，最终生成的机器代码可能看起来与代码有很大不同：
+//!
+//! - `C` 的第一个存储区可能在存储区移至 `A` 或 `B` 之前已被移至 _as if_。
+//!
+//! - 可以删除 `A + B` 到 `A` 的分配，因为总和可以存储在一个临时位置，直到打印出来为止，并且变量永远不会更新。
+//!
+//! - 最终结果可以仅通过在编译时查看代码来确定，因此 [常量合并][constant folding] 可能会将整个块变成一个简单的 `println!(&quot;7 4 4&quot;)`。
+//!
+//! 只要最终的优化代码在执行时产生的结果与没有优化的结果相同，编译器就可以执行这些优化的任何组合。
+//!
+//! 由于现代计算机中使用了 [并发][concurrency]，因此有关程序执行顺序的假设通常是错误的。
+//! 访问全局变量会导致不确定的结果，即使编译器优化被禁用，仍然可能引入同步错误。
+//!
+//! 请注意，由于 Rust 的安全保证，假设我们在此模块中未使用任何同步原语，则访问 (static) 变量需要 `unsafe` 代码。
+//!
+//! [constant folding]: https://en.wikipedia.org/wiki/Constant_folding
+//! [concurrency]: https://en.wikipedia.org/wiki/Concurrency_(computer_science)
+//!
+//! ## 乱序执行
+//!
+//! 由于多种原因，指令的执行顺序与我们定义的顺序可以不同：
+//!
+//! - **编译器** 重新排序指令：如果编译器可以在较早的时候发出指令，它将尝试这样做。
+//! 例如，它可能会在代码块的顶部提升内存负载，以便 CPU 可以从内存中启动 [预取][prefetching] 值。
+//!
+//!   在单线程方案中，这可能会在编写信号处理程序或某些类型的代码时引起问题。
+//!   使用 [编译器栅栏][compiler fences] 来防止这种重新排序。
+//!
+//! - 一个单处理器执行指令 [乱序][out-of-order]：
+//!   现代的 CPU 能够执行 [超标量][superscalar]，也就是说，多个指令可能同时执行，即使机器代码描述的是一个顺序过程。
+//!
+//!   这种重新排序由 CPU 透明地处理。
+//!
+//! - 同时执行多个硬件线程的 **多处理器** 系统：在多线程方案中，可以使用两种原语来处理同步：
+//!   - [内存栅栏][memory fences] 以确保以正确的顺序对其他 CPU 进行内存访问。
+//!   - [原子操作][atomic operations] 以确保同时访问同一内存位置不会导致未定义的行为。
+//!
+//! [prefetching]: https://en.wikipedia.org/wiki/Cache_prefetching
+//! [compiler fences]: crate::sync::atomic::compiler_fence
+//! [out-of-order]: https://en.wikipedia.org/wiki/Out-of-order_execution
+//! [superscalar]: https://en.wikipedia.org/wiki/Superscalar_processor
+//! [memory fences]: crate::sync::atomic::fence
+//! [atomic operations]: crate::sync::atomic
+//!
+//! ## 更高级别的同步对象
+//!
+//! 大多数同步原语都非常容易出错，使用起来也不方便，这就是为什么标准库还公开了一些更高级别的同步对象的原因。
+//!
+//! 这些抽象可以在较低级别的原语基础上构建。
+//! 为了提高效率，标准库中的同步对象通常是在操作系统内核的帮助下实现的，该内核可以在线程被锁定而被阻塞时重新安排线程的时间。
+//!
+//!
+//! 以下是可用的同步对象的概述：
+//!
+//! - [`Arc`]: 原子引用计数指针，可以在多线程环境中使用，延长某些数据的生命周期，直到所有线程都执行完为止。
+//!
+//! - [`Barrier`]: 确保多个线程将等待彼此到达程序中的某个点，然后再一起继续执行。
+//!
+//! - [`Condvar`]: 条件变量，提供在等待事件发生时阻塞线程的能力。
+//!
+//! - [`mpsc`]: 多生产者、单消费者队列，用于基于消息的通信。可以提供轻量级的线程间同步机制，但要花一些额外的内存。
+//!
+//! - [`Mutex`]: 互斥机制，保证一次最多有一个线程可以访问一些数据。
+//!
+//! - [`Once`]: 用于线程安全的一次性全局初始化例程
+//!
+//! - [`OnceLock`]: 用于全局变量的线程安全的一次性初始化。
+//!
+//! - [`RwLock`]: 提供一种互斥机制，允许同时有多个 readers，但一次只允许一个 writer。在某些情况下，这可能比互斥锁更有效。
+//!
+//! [`Arc`]: crate::sync::Arc
+//! [`Barrier`]: crate::sync::Barrier
+//! [`Condvar`]: crate::sync::Condvar
+//! [`mpsc`]: crate::sync::mpsc
+//! [`Mutex`]: crate::sync::Mutex
+//! [`Once`]: crate::sync::Once
+//! [`OnceLock`]: crate::sync::OnceLock
+//! [`RwLock`]: crate::sync::RwLock
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
 
-<span class="attribute">#![<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
+</span><span class="attr">#![stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
 
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">alloc_crate::sync</span>::{<span class="ident">Arc</span>, <span class="ident">Weak</span>};
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">core::sync::atomic</span>;
+#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">pub use </span>alloc_crate::sync::{Arc, Weak};
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">pub use </span>core::sync::atomic;
+<span class="attr">#[unstable(feature = <span class="string">&quot;exclusive_wrapper&quot;</span>, issue = <span class="string">&quot;98407&quot;</span>)]
+</span><span class="kw">pub use </span>core::sync::Exclusive;
 
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::barrier</span>::{<span class="ident">Barrier</span>, <span class="ident">BarrierWaitResult</span>};
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::condvar</span>::{<span class="ident">Condvar</span>, <span class="ident">WaitTimeoutResult</span>};
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::mutex</span>::{<span class="ident">Mutex</span>, <span class="ident">MutexGuard</span>};
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::once</span>::{<span class="ident">Once</span>, <span class="ident">OnceState</span>, <span class="ident">ONCE_INIT</span>};
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::poison</span>::{<span class="ident">LockResult</span>, <span class="ident">PoisonError</span>, <span class="ident">TryLockError</span>, <span class="ident">TryLockResult</span>};
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::rwlock</span>::{<span class="ident">RwLock</span>, <span class="ident">RwLockReadGuard</span>, <span class="ident">RwLockWriteGuard</span>};
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">pub use </span><span class="self">self</span>::barrier::{Barrier, BarrierWaitResult};
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">pub use </span><span class="self">self</span>::condvar::{Condvar, WaitTimeoutResult};
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">pub use </span><span class="self">self</span>::mutex::{Mutex, MutexGuard};
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+#[allow(deprecated)]
+</span><span class="kw">pub use </span><span class="self">self</span>::once::{Once, OnceState, ONCE_INIT};
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">pub use </span><span class="self">self</span>::poison::{LockResult, PoisonError, TryLockError, TryLockResult};
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">pub use </span><span class="self">self</span>::rwlock::{RwLock, RwLockReadGuard, RwLockWriteGuard};
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">mpsc</span>;
+<span class="attr">#[unstable(feature = <span class="string">&quot;lazy_cell&quot;</span>, issue = <span class="string">&quot;109736&quot;</span>)]
+</span><span class="kw">pub use </span><span class="self">self</span>::lazy_lock::LazyLock;
+<span class="attr">#[stable(feature = <span class="string">&quot;once_cell&quot;</span>, since = <span class="string">&quot;1.70.0&quot;</span>)]
+</span><span class="kw">pub use </span><span class="self">self</span>::once_lock::OnceLock;
 
-<span class="kw">mod</span> <span class="ident">barrier</span>;
-<span class="kw">mod</span> <span class="ident">condvar</span>;
-<span class="kw">mod</span> <span class="ident">mutex</span>;
-<span class="kw">mod</span> <span class="ident">once</span>;
-<span class="kw">mod</span> <span class="ident">poison</span>;
-<span class="kw">mod</span> <span class="ident">rwlock</span>;
-</code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="std" data-search-index-js="../../../search-index1.58.0.js" data-search-js="../../../search1.58.0.js"></div>
-    <script src="../../../main1.58.0.js"></script><script src="../../../source-script1.58.0.js"></script><script src="../../../source-files1.58.0.js"></script>
-</body></html>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span><span class="self">self</span>::remutex::{ReentrantMutex, ReentrantMutexGuard};
+
+<span class="kw">pub mod </span>mpsc;
+
+<span class="kw">mod </span>barrier;
+<span class="kw">mod </span>condvar;
+<span class="kw">mod </span>lazy_lock;
+<span class="kw">mod </span>mpmc;
+<span class="kw">mod </span>mutex;
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>once;
+<span class="kw">mod </span>once_lock;
+<span class="kw">mod </span>poison;
+<span class="kw">mod </span>remutex;
+<span class="kw">mod </span>rwlock;
+</code></pre></div></section></main></body></html>

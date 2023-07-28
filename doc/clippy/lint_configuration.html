@@ -1,0 +1,684 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Lint Configuration - Clippy Documentation</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="configuration.html"><strong aria-hidden="true">3.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lint_configuration.html" class="active"><strong aria-hidden="true">3.1.</strong> Lint Configuration</a></li></ol></li><li class="chapter-item expanded "><a href="lints.html"><strong aria-hidden="true">4.</strong> Clippy's Lints</a></li><li class="chapter-item expanded "><a href="continuous_integration/index.html"><strong aria-hidden="true">5.</strong> Continuous Integration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="continuous_integration/github_actions.html"><strong aria-hidden="true">5.1.</strong> GitHub Actions</a></li><li class="chapter-item expanded "><a href="continuous_integration/travis.html"><strong aria-hidden="true">5.2.</strong> Travis CI</a></li></ol></li><li class="chapter-item expanded "><a href="development/index.html"><strong aria-hidden="true">6.</strong> Development</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="development/basics.html"><strong aria-hidden="true">6.1.</strong> Basics</a></li><li class="chapter-item expanded "><a href="development/adding_lints.html"><strong aria-hidden="true">6.2.</strong> Adding Lints</a></li><li class="chapter-item expanded "><a href="development/lint_passes.html"><strong aria-hidden="true">6.3.</strong> Lint Passes</a></li><li class="chapter-item expanded "><a href="development/type_checking.html"><strong aria-hidden="true">6.4.</strong> Type Checking</a></li><li class="chapter-item expanded "><a href="development/macro_expansions.html"><strong aria-hidden="true">6.5.</strong> Macro Expansions</a></li><li class="chapter-item expanded "><a href="development/common_tools_writing_lints.html"><strong aria-hidden="true">6.6.</strong> Common Tools</a></li><li class="chapter-item expanded "><a href="development/infrastructure/index.html"><strong aria-hidden="true">6.7.</strong> Infrastructure</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="development/infrastructure/sync.html"><strong aria-hidden="true">6.7.1.</strong> Syncing changes between Clippy and rust-lang/rust</a></li><li class="chapter-item expanded "><a href="development/infrastructure/backport.html"><strong aria-hidden="true">6.7.2.</strong> Backporting Changes</a></li><li class="chapter-item expanded "><a href="development/infrastructure/changelog_update.html"><strong aria-hidden="true">6.7.3.</strong> Updating the Changelog</a></li><li class="chapter-item expanded "><a href="development/infrastructure/release.html"><strong aria-hidden="true">6.7.4.</strong> Release a New Version</a></li><li class="chapter-item expanded "><a href="development/infrastructure/book.html"><strong aria-hidden="true">6.7.5.</strong> The Clippy Book</a></li></ol></li><li class="chapter-item expanded "><a href="development/proposals/index.html"><strong aria-hidden="true">6.8.</strong> Proposals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="development/proposals/roadmap-2021.html"><strong aria-hidden="true">6.8.1.</strong> Roadmap 2021</a></li><li class="chapter-item expanded "><a href="development/proposals/syntax-tree-patterns.html"><strong aria-hidden="true">6.8.2.</strong> Syntax Tree Patterns</a></li></ol></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Clippy Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust-clippy/tree/master/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust-clippy/edit/master/book/src/lint_configuration.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!--
+This file is generated by `cargo collect-metadata`.
+Please use that command to update the file and do not edit it by hand.
+-->
+<h2 id="lint-configuration-options"><a class="header" href="#lint-configuration-options">Lint Configuration Options</a></h2>
+<div class="table-wrapper"><table><thead><tr><th><div style="width:290px">Option</div></th><th>Default Value</th></tr></thead><tbody>
+<tr><td><a href="#arithmetic-side-effects-allowed">arithmetic-side-effects-allowed</a></td><td><code>{}</code></td></tr>
+<tr><td><a href="#arithmetic-side-effects-allowed-binary">arithmetic-side-effects-allowed-binary</a></td><td><code>[]</code></td></tr>
+<tr><td><a href="#arithmetic-side-effects-allowed-unary">arithmetic-side-effects-allowed-unary</a></td><td><code>{}</code></td></tr>
+<tr><td><a href="#avoid-breaking-exported-api">avoid-breaking-exported-api</a></td><td><code>true</code></td></tr>
+<tr><td><a href="#msrv">msrv</a></td><td><code>None</code></td></tr>
+<tr><td><a href="#cognitive-complexity-threshold">cognitive-complexity-threshold</a></td><td><code>25</code></td></tr>
+<tr><td><a href="#disallowed-names">disallowed-names</a></td><td><code>[&quot;foo&quot;, &quot;baz&quot;, &quot;quux&quot;]</code></td></tr>
+<tr><td><a href="#semicolon-inside-block-ignore-singleline">semicolon-inside-block-ignore-singleline</a></td><td><code>false</code></td></tr>
+<tr><td><a href="#semicolon-outside-block-ignore-multiline">semicolon-outside-block-ignore-multiline</a></td><td><code>false</code></td></tr>
+<tr><td><a href="#doc-valid-idents">doc-valid-idents</a></td><td><code>[&quot;KiB&quot;, &quot;MiB&quot;, &quot;GiB&quot;, &quot;TiB&quot;, &quot;PiB&quot;, &quot;EiB&quot;, &quot;DirectX&quot;, &quot;ECMAScript&quot;, &quot;GPLv2&quot;, &quot;GPLv3&quot;, &quot;GitHub&quot;, &quot;GitLab&quot;, &quot;IPv4&quot;, &quot;IPv6&quot;, &quot;ClojureScript&quot;, &quot;CoffeeScript&quot;, &quot;JavaScript&quot;, &quot;PureScript&quot;, &quot;TypeScript&quot;, &quot;NaN&quot;, &quot;NaNs&quot;, &quot;OAuth&quot;, &quot;GraphQL&quot;, &quot;OCaml&quot;, &quot;OpenGL&quot;, &quot;OpenMP&quot;, &quot;OpenSSH&quot;, &quot;OpenSSL&quot;, &quot;OpenStreetMap&quot;, &quot;OpenDNS&quot;, &quot;WebGL&quot;, &quot;TensorFlow&quot;, &quot;TrueType&quot;, &quot;iOS&quot;, &quot;macOS&quot;, &quot;FreeBSD&quot;, &quot;TeX&quot;, &quot;LaTeX&quot;, &quot;BibTeX&quot;, &quot;BibLaTeX&quot;, &quot;MinGW&quot;, &quot;CamelCase&quot;]</code></td></tr>
+<tr><td><a href="#too-many-arguments-threshold">too-many-arguments-threshold</a></td><td><code>7</code></td></tr>
+<tr><td><a href="#type-complexity-threshold">type-complexity-threshold</a></td><td><code>250</code></td></tr>
+<tr><td><a href="#single-char-binding-names-threshold">single-char-binding-names-threshold</a></td><td><code>4</code></td></tr>
+<tr><td><a href="#too-large-for-stack">too-large-for-stack</a></td><td><code>200</code></td></tr>
+<tr><td><a href="#enum-variant-name-threshold">enum-variant-name-threshold</a></td><td><code>3</code></td></tr>
+<tr><td><a href="#enum-variant-size-threshold">enum-variant-size-threshold</a></td><td><code>200</code></td></tr>
+<tr><td><a href="#verbose-bit-mask-threshold">verbose-bit-mask-threshold</a></td><td><code>1</code></td></tr>
+<tr><td><a href="#literal-representation-threshold">literal-representation-threshold</a></td><td><code>16384</code></td></tr>
+<tr><td><a href="#trivial-copy-size-limit">trivial-copy-size-limit</a></td><td><code>None</code></td></tr>
+<tr><td><a href="#pass-by-value-size-limit">pass-by-value-size-limit</a></td><td><code>256</code></td></tr>
+<tr><td><a href="#too-many-lines-threshold">too-many-lines-threshold</a></td><td><code>100</code></td></tr>
+<tr><td><a href="#array-size-threshold">array-size-threshold</a></td><td><code>512000</code></td></tr>
+<tr><td><a href="#vec-box-size-threshold">vec-box-size-threshold</a></td><td><code>4096</code></td></tr>
+<tr><td><a href="#max-trait-bounds">max-trait-bounds</a></td><td><code>3</code></td></tr>
+<tr><td><a href="#max-struct-bools">max-struct-bools</a></td><td><code>3</code></td></tr>
+<tr><td><a href="#max-fn-params-bools">max-fn-params-bools</a></td><td><code>3</code></td></tr>
+<tr><td><a href="#warn-on-all-wildcard-imports">warn-on-all-wildcard-imports</a></td><td><code>false</code></td></tr>
+<tr><td><a href="#disallowed-macros">disallowed-macros</a></td><td><code>[]</code></td></tr>
+<tr><td><a href="#disallowed-methods">disallowed-methods</a></td><td><code>[]</code></td></tr>
+<tr><td><a href="#disallowed-types">disallowed-types</a></td><td><code>[]</code></td></tr>
+<tr><td><a href="#unreadable-literal-lint-fractions">unreadable-literal-lint-fractions</a></td><td><code>true</code></td></tr>
+<tr><td><a href="#upper-case-acronyms-aggressive">upper-case-acronyms-aggressive</a></td><td><code>false</code></td></tr>
+<tr><td><a href="#matches-for-let-else">matches-for-let-else</a></td><td><code>WellKnownTypes</code></td></tr>
+<tr><td><a href="#cargo-ignore-publish">cargo-ignore-publish</a></td><td><code>false</code></td></tr>
+<tr><td><a href="#standard-macro-braces">standard-macro-braces</a></td><td><code>[]</code></td></tr>
+<tr><td><a href="#enforced-import-renames">enforced-import-renames</a></td><td><code>[]</code></td></tr>
+<tr><td><a href="#allowed-scripts">allowed-scripts</a></td><td><code>[&quot;Latin&quot;]</code></td></tr>
+<tr><td><a href="#enable-raw-pointer-heuristic-for-send">enable-raw-pointer-heuristic-for-send</a></td><td><code>true</code></td></tr>
+<tr><td><a href="#max-suggested-slice-pattern-length">max-suggested-slice-pattern-length</a></td><td><code>3</code></td></tr>
+<tr><td><a href="#await-holding-invalid-types">await-holding-invalid-types</a></td><td><code>[]</code></td></tr>
+<tr><td><a href="#max-include-file-size">max-include-file-size</a></td><td><code>1000000</code></td></tr>
+<tr><td><a href="#allow-expect-in-tests">allow-expect-in-tests</a></td><td><code>false</code></td></tr>
+<tr><td><a href="#allow-unwrap-in-tests">allow-unwrap-in-tests</a></td><td><code>false</code></td></tr>
+<tr><td><a href="#allow-dbg-in-tests">allow-dbg-in-tests</a></td><td><code>false</code></td></tr>
+<tr><td><a href="#allow-print-in-tests">allow-print-in-tests</a></td><td><code>false</code></td></tr>
+<tr><td><a href="#large-error-threshold">large-error-threshold</a></td><td><code>128</code></td></tr>
+<tr><td><a href="#ignore-interior-mutability">ignore-interior-mutability</a></td><td><code>[&quot;bytes::Bytes&quot;]</code></td></tr>
+<tr><td><a href="#allow-mixed-uninlined-format-args">allow-mixed-uninlined-format-args</a></td><td><code>true</code></td></tr>
+<tr><td><a href="#suppress-restriction-lint-in-const">suppress-restriction-lint-in-const</a></td><td><code>false</code></td></tr>
+<tr><td><a href="#missing-docs-in-crate-items">missing-docs-in-crate-items</a></td><td><code>false</code></td></tr>
+<tr><td><a href="#future-size-threshold">future-size-threshold</a></td><td><code>16384</code></td></tr>
+<tr><td><a href="#unnecessary-box-size">unnecessary-box-size</a></td><td><code>128</code></td></tr>
+</tbody></table>
+</div>
+<h3 id="arithmetic-side-effects-allowed"><a class="header" href="#arithmetic-side-effects-allowed">arithmetic-side-effects-allowed</a></h3>
+<p>Suppress checking of the passed type names in all types of operations.</p>
+<p>If a specific operation is desired, consider using <code>arithmetic_side_effects_allowed_binary</code> or <code>arithmetic_side_effects_allowed_unary</code> instead.</p>
+<h4 id="example"><a class="header" href="#example">Example</a></h4>
+<pre><code class="language-toml">arithmetic-side-effects-allowed = [&quot;SomeType&quot;, &quot;AnotherType&quot;]
+</code></pre>
+<h4 id="noteworthy"><a class="header" href="#noteworthy">Noteworthy</a></h4>
+<p>A type, say <code>SomeType</code>, listed in this configuration has the same behavior of
+<code>[&quot;SomeType&quot; , &quot;*&quot;], [&quot;*&quot;, &quot;SomeType&quot;]</code> in <code>arithmetic_side_effects_allowed_binary</code>.</p>
+<p><strong>Default Value:</strong> <code>{}</code> (<code>rustc_data_structures::fx::FxHashSet&lt;String&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#arithmetic_side_effects">arithmetic_side_effects</a></li>
+</ul>
+<h3 id="arithmetic-side-effects-allowed-binary"><a class="header" href="#arithmetic-side-effects-allowed-binary">arithmetic-side-effects-allowed-binary</a></h3>
+<p>Suppress checking of the passed type pair names in binary operations like addition or
+multiplication.</p>
+<p>Supports the &quot;*&quot; wildcard to indicate that a certain type won't trigger the lint regardless
+of the involved counterpart. For example, <code>[&quot;SomeType&quot;, &quot;*&quot;]</code> or <code>[&quot;*&quot;, &quot;AnotherType&quot;]</code>.</p>
+<p>Pairs are asymmetric, which means that <code>[&quot;SomeType&quot;, &quot;AnotherType&quot;]</code> is not the same as
+<code>[&quot;AnotherType&quot;, &quot;SomeType&quot;]</code>.</p>
+<h4 id="example-1"><a class="header" href="#example-1">Example</a></h4>
+<pre><code class="language-toml">arithmetic-side-effects-allowed-binary = [[&quot;SomeType&quot; , &quot;f32&quot;], [&quot;AnotherType&quot;, &quot;*&quot;]]
+</code></pre>
+<p><strong>Default Value:</strong> <code>[]</code> (<code>Vec&lt;[String; 2]&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#arithmetic_side_effects">arithmetic_side_effects</a></li>
+</ul>
+<h3 id="arithmetic-side-effects-allowed-unary"><a class="header" href="#arithmetic-side-effects-allowed-unary">arithmetic-side-effects-allowed-unary</a></h3>
+<p>Suppress checking of the passed type names in unary operations like &quot;negation&quot; (<code>-</code>).</p>
+<h4 id="example-2"><a class="header" href="#example-2">Example</a></h4>
+<pre><code class="language-toml">arithmetic-side-effects-allowed-unary = [&quot;SomeType&quot;, &quot;AnotherType&quot;]
+</code></pre>
+<p><strong>Default Value:</strong> <code>{}</code> (<code>rustc_data_structures::fx::FxHashSet&lt;String&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#arithmetic_side_effects">arithmetic_side_effects</a></li>
+</ul>
+<h3 id="avoid-breaking-exported-api"><a class="header" href="#avoid-breaking-exported-api">avoid-breaking-exported-api</a></h3>
+<p>Suppress lints whenever the suggested change would cause breakage for other crates.</p>
+<p><strong>Default Value:</strong> <code>true</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#enum_variant_names">enum_variant_names</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#large_types_passed_by_value">large_types_passed_by_value</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#trivially_copy_pass_by_ref">trivially_copy_pass_by_ref</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#unnecessary_wraps">unnecessary_wraps</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#unused_self">unused_self</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#upper_case_acronyms">upper_case_acronyms</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#wrong_self_convention">wrong_self_convention</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#box_collection">box_collection</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#redundant_allocation">redundant_allocation</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#rc_buffer">rc_buffer</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#vec_box">vec_box</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#option_option">option_option</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#linkedlist">linkedlist</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#rc_mutex">rc_mutex</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#unnecessary_box_returns">unnecessary_box_returns</a></li>
+</ul>
+<h3 id="msrv"><a class="header" href="#msrv">msrv</a></h3>
+<p>The minimum rust version that the project supports</p>
+<p><strong>Default Value:</strong> <code>None</code> (<code>Option&lt;String&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_split_once">manual_split_once</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_str_repeat">manual_str_repeat</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#cloned_instead_of_copied">cloned_instead_of_copied</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#redundant_field_names">redundant_field_names</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#redundant_static_lifetimes">redundant_static_lifetimes</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#filter_map_next">filter_map_next</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#checked_conversions">checked_conversions</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_range_contains">manual_range_contains</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#use_self">use_self</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#mem_replace_with_default">mem_replace_with_default</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_non_exhaustive">manual_non_exhaustive</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#option_as_ref_deref">option_as_ref_deref</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#map_unwrap_or">map_unwrap_or</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#match_like_matches_macro">match_like_matches_macro</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_strip">manual_strip</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#missing_const_for_fn">missing_const_for_fn</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#unnested_or_patterns">unnested_or_patterns</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#from_over_into">from_over_into</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#ptr_as_ptr">ptr_as_ptr</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#if_then_some_else_none">if_then_some_else_none</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#approx_constant">approx_constant</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#deprecated_cfg_attr">deprecated_cfg_attr</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#index_refutable_slice">index_refutable_slice</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#map_clone">map_clone</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#borrow_as_ptr">borrow_as_ptr</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_bits">manual_bits</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#err_expect">err_expect</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#cast_abs_to_unsigned">cast_abs_to_unsigned</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args">uninlined_format_args</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_clamp">manual_clamp</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_let_else">manual_let_else</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#unchecked_duration_subtraction">unchecked_duration_subtraction</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#collapsible_str_replace">collapsible_str_replace</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#seek_from_current">seek_from_current</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#seek_rewind">seek_rewind</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#unnecessary_lazy_evaluations">unnecessary_lazy_evaluations</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#transmute_ptr_to_ref">transmute_ptr_to_ref</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#almost_complete_range">almost_complete_range</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#needless_borrow">needless_borrow</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#derivable_impls">derivable_impls</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_is_ascii_check">manual_is_ascii_check</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_rem_euclid">manual_rem_euclid</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_retain">manual_retain</a></li>
+</ul>
+<h3 id="cognitive-complexity-threshold"><a class="header" href="#cognitive-complexity-threshold">cognitive-complexity-threshold</a></h3>
+<p>The maximum cognitive complexity a function can have</p>
+<p><strong>Default Value:</strong> <code>25</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#cognitive_complexity">cognitive_complexity</a></li>
+</ul>
+<h3 id="disallowed-names"><a class="header" href="#disallowed-names">disallowed-names</a></h3>
+<p>The list of disallowed names to lint about. NB: <code>bar</code> is not here since it has legitimate uses. The value
+<code>&quot;..&quot;</code> can be used as part of the list to indicate, that the configured values should be appended to the
+default configuration of Clippy. By default, any configuration will replace the default value.</p>
+<p><strong>Default Value:</strong> <code>[&quot;foo&quot;, &quot;baz&quot;, &quot;quux&quot;]</code> (<code>Vec&lt;String&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#disallowed_names">disallowed_names</a></li>
+</ul>
+<h3 id="semicolon-inside-block-ignore-singleline"><a class="header" href="#semicolon-inside-block-ignore-singleline">semicolon-inside-block-ignore-singleline</a></h3>
+<p>Whether to lint only if it's multiline.</p>
+<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#semicolon_inside_block">semicolon_inside_block</a></li>
+</ul>
+<h3 id="semicolon-outside-block-ignore-multiline"><a class="header" href="#semicolon-outside-block-ignore-multiline">semicolon-outside-block-ignore-multiline</a></h3>
+<p>Whether to lint only if it's singleline.</p>
+<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#semicolon_outside_block">semicolon_outside_block</a></li>
+</ul>
+<h3 id="doc-valid-idents"><a class="header" href="#doc-valid-idents">doc-valid-idents</a></h3>
+<p>The list of words this lint should not consider as identifiers needing ticks. The value
+<code>&quot;..&quot;</code> can be used as part of the list to indicate, that the configured values should be appended to the
+default configuration of Clippy. By default, any configuration will replace the default value. For example:</p>
+<ul>
+<li><code>doc-valid-idents = [&quot;ClipPy&quot;]</code> would replace the default list with <code>[&quot;ClipPy&quot;]</code>.</li>
+<li><code>doc-valid-idents = [&quot;ClipPy&quot;, &quot;..&quot;]</code> would append <code>ClipPy</code> to the default list.</li>
+</ul>
+<p>Default list:</p>
+<p><strong>Default Value:</strong> <code>[&quot;KiB&quot;, &quot;MiB&quot;, &quot;GiB&quot;, &quot;TiB&quot;, &quot;PiB&quot;, &quot;EiB&quot;, &quot;DirectX&quot;, &quot;ECMAScript&quot;, &quot;GPLv2&quot;, &quot;GPLv3&quot;, &quot;GitHub&quot;, &quot;GitLab&quot;, &quot;IPv4&quot;, &quot;IPv6&quot;, &quot;ClojureScript&quot;, &quot;CoffeeScript&quot;, &quot;JavaScript&quot;, &quot;PureScript&quot;, &quot;TypeScript&quot;, &quot;NaN&quot;, &quot;NaNs&quot;, &quot;OAuth&quot;, &quot;GraphQL&quot;, &quot;OCaml&quot;, &quot;OpenGL&quot;, &quot;OpenMP&quot;, &quot;OpenSSH&quot;, &quot;OpenSSL&quot;, &quot;OpenStreetMap&quot;, &quot;OpenDNS&quot;, &quot;WebGL&quot;, &quot;TensorFlow&quot;, &quot;TrueType&quot;, &quot;iOS&quot;, &quot;macOS&quot;, &quot;FreeBSD&quot;, &quot;TeX&quot;, &quot;LaTeX&quot;, &quot;BibTeX&quot;, &quot;BibLaTeX&quot;, &quot;MinGW&quot;, &quot;CamelCase&quot;]</code> (<code>Vec&lt;String&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#doc_markdown">doc_markdown</a></li>
+</ul>
+<h3 id="too-many-arguments-threshold"><a class="header" href="#too-many-arguments-threshold">too-many-arguments-threshold</a></h3>
+<p>The maximum number of argument a function or method can have</p>
+<p><strong>Default Value:</strong> <code>7</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#too_many_arguments">too_many_arguments</a></li>
+</ul>
+<h3 id="type-complexity-threshold"><a class="header" href="#type-complexity-threshold">type-complexity-threshold</a></h3>
+<p>The maximum complexity a type can have</p>
+<p><strong>Default Value:</strong> <code>250</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity">type_complexity</a></li>
+</ul>
+<h3 id="single-char-binding-names-threshold"><a class="header" href="#single-char-binding-names-threshold">single-char-binding-names-threshold</a></h3>
+<p>The maximum number of single char bindings a scope may have</p>
+<p><strong>Default Value:</strong> <code>4</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#many_single_char_names">many_single_char_names</a></li>
+</ul>
+<h3 id="too-large-for-stack"><a class="header" href="#too-large-for-stack">too-large-for-stack</a></h3>
+<p>The maximum size of objects (in bytes) that will be linted. Larger objects are ok on the heap</p>
+<p><strong>Default Value:</strong> <code>200</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#boxed_local">boxed_local</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#useless_vec">useless_vec</a></li>
+</ul>
+<h3 id="enum-variant-name-threshold"><a class="header" href="#enum-variant-name-threshold">enum-variant-name-threshold</a></h3>
+<p>The minimum number of enum variants for the lints about variant names to trigger</p>
+<p><strong>Default Value:</strong> <code>3</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#enum_variant_names">enum_variant_names</a></li>
+</ul>
+<h3 id="enum-variant-size-threshold"><a class="header" href="#enum-variant-size-threshold">enum-variant-size-threshold</a></h3>
+<p>The maximum size of an enum's variant to avoid box suggestion</p>
+<p><strong>Default Value:</strong> <code>200</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#large_enum_variant">large_enum_variant</a></li>
+</ul>
+<h3 id="verbose-bit-mask-threshold"><a class="header" href="#verbose-bit-mask-threshold">verbose-bit-mask-threshold</a></h3>
+<p>The maximum allowed size of a bit mask before suggesting to use 'trailing_zeros'</p>
+<p><strong>Default Value:</strong> <code>1</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#verbose_bit_mask">verbose_bit_mask</a></li>
+</ul>
+<h3 id="literal-representation-threshold"><a class="header" href="#literal-representation-threshold">literal-representation-threshold</a></h3>
+<p>The lower bound for linting decimal literals</p>
+<p><strong>Default Value:</strong> <code>16384</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#decimal_literal_representation">decimal_literal_representation</a></li>
+</ul>
+<h3 id="trivial-copy-size-limit"><a class="header" href="#trivial-copy-size-limit">trivial-copy-size-limit</a></h3>
+<p>The maximum size (in bytes) to consider a <code>Copy</code> type for passing by value instead of by reference.</p>
+<p><strong>Default Value:</strong> <code>None</code> (<code>Option&lt;u64&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#trivially_copy_pass_by_ref">trivially_copy_pass_by_ref</a></li>
+</ul>
+<h3 id="pass-by-value-size-limit"><a class="header" href="#pass-by-value-size-limit">pass-by-value-size-limit</a></h3>
+<p>The minimum size (in bytes) to consider a type for passing by reference instead of by value.</p>
+<p><strong>Default Value:</strong> <code>256</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#large_types_passed_by_value">large_types_passed_by_value</a></li>
+</ul>
+<h3 id="too-many-lines-threshold"><a class="header" href="#too-many-lines-threshold">too-many-lines-threshold</a></h3>
+<p>The maximum number of lines a function or method can have</p>
+<p><strong>Default Value:</strong> <code>100</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#too_many_lines">too_many_lines</a></li>
+</ul>
+<h3 id="array-size-threshold"><a class="header" href="#array-size-threshold">array-size-threshold</a></h3>
+<p>The maximum allowed size for arrays on the stack</p>
+<p><strong>Default Value:</strong> <code>512000</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#large_stack_arrays">large_stack_arrays</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#large_const_arrays">large_const_arrays</a></li>
+</ul>
+<h3 id="vec-box-size-threshold"><a class="header" href="#vec-box-size-threshold">vec-box-size-threshold</a></h3>
+<p>The size of the boxed type in bytes, where boxing in a <code>Vec</code> is allowed</p>
+<p><strong>Default Value:</strong> <code>4096</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#vec_box">vec_box</a></li>
+</ul>
+<h3 id="max-trait-bounds"><a class="header" href="#max-trait-bounds">max-trait-bounds</a></h3>
+<p>The maximum number of bounds a trait can have to be linted</p>
+<p><strong>Default Value:</strong> <code>3</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#type_repetition_in_bounds">type_repetition_in_bounds</a></li>
+</ul>
+<h3 id="max-struct-bools"><a class="header" href="#max-struct-bools">max-struct-bools</a></h3>
+<p>The maximum number of bool fields a struct can have</p>
+<p><strong>Default Value:</strong> <code>3</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#struct_excessive_bools">struct_excessive_bools</a></li>
+</ul>
+<h3 id="max-fn-params-bools"><a class="header" href="#max-fn-params-bools">max-fn-params-bools</a></h3>
+<p>The maximum number of bool parameters a function can have</p>
+<p><strong>Default Value:</strong> <code>3</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#fn_params_excessive_bools">fn_params_excessive_bools</a></li>
+</ul>
+<h3 id="warn-on-all-wildcard-imports"><a class="header" href="#warn-on-all-wildcard-imports">warn-on-all-wildcard-imports</a></h3>
+<p>Whether to allow certain wildcard imports (prelude, super in tests).</p>
+<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#wildcard_imports">wildcard_imports</a></li>
+</ul>
+<h3 id="disallowed-macros"><a class="header" href="#disallowed-macros">disallowed-macros</a></h3>
+<p>The list of disallowed macros, written as fully qualified paths.</p>
+<p><strong>Default Value:</strong> <code>[]</code> (<code>Vec&lt;crate::utils::conf::DisallowedPath&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#disallowed_macros">disallowed_macros</a></li>
+</ul>
+<h3 id="disallowed-methods"><a class="header" href="#disallowed-methods">disallowed-methods</a></h3>
+<p>The list of disallowed methods, written as fully qualified paths.</p>
+<p><strong>Default Value:</strong> <code>[]</code> (<code>Vec&lt;crate::utils::conf::DisallowedPath&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#disallowed_methods">disallowed_methods</a></li>
+</ul>
+<h3 id="disallowed-types"><a class="header" href="#disallowed-types">disallowed-types</a></h3>
+<p>The list of disallowed types, written as fully qualified paths.</p>
+<p><strong>Default Value:</strong> <code>[]</code> (<code>Vec&lt;crate::utils::conf::DisallowedPath&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#disallowed_types">disallowed_types</a></li>
+</ul>
+<h3 id="unreadable-literal-lint-fractions"><a class="header" href="#unreadable-literal-lint-fractions">unreadable-literal-lint-fractions</a></h3>
+<p>Should the fraction of a decimal be linted to include separators.</p>
+<p><strong>Default Value:</strong> <code>true</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#unreadable_literal">unreadable_literal</a></li>
+</ul>
+<h3 id="upper-case-acronyms-aggressive"><a class="header" href="#upper-case-acronyms-aggressive">upper-case-acronyms-aggressive</a></h3>
+<p>Enables verbose mode. Triggers if there is more than one uppercase char next to each other</p>
+<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#upper_case_acronyms">upper_case_acronyms</a></li>
+</ul>
+<h3 id="matches-for-let-else"><a class="header" href="#matches-for-let-else">matches-for-let-else</a></h3>
+<p>Whether the matches should be considered by the lint, and whether there should
+be filtering for common types.</p>
+<p><strong>Default Value:</strong> <code>WellKnownTypes</code> (<code>crate::manual_let_else::MatchLintBehaviour</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#manual_let_else">manual_let_else</a></li>
+</ul>
+<h3 id="cargo-ignore-publish"><a class="header" href="#cargo-ignore-publish">cargo-ignore-publish</a></h3>
+<p>For internal testing only, ignores the current <code>publish</code> settings in the Cargo manifest.</p>
+<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#_cargo_common_metadata">_cargo_common_metadata</a></li>
+</ul>
+<h3 id="standard-macro-braces"><a class="header" href="#standard-macro-braces">standard-macro-braces</a></h3>
+<p>Enforce the named macros always use the braces specified.</p>
+<p>A <code>MacroMatcher</code> can be added like so <code>{ name = &quot;macro_name&quot;, brace = &quot;(&quot; }</code>. If the macro
+could be used with a full path two <code>MacroMatcher</code>s have to be added one with the full path
+<code>crate_name::macro_name</code> and one with just the macro name.</p>
+<p><strong>Default Value:</strong> <code>[]</code> (<code>Vec&lt;crate::nonstandard_macro_braces::MacroMatcher&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#nonstandard_macro_braces">nonstandard_macro_braces</a></li>
+</ul>
+<h3 id="enforced-import-renames"><a class="header" href="#enforced-import-renames">enforced-import-renames</a></h3>
+<p>The list of imports to always rename, a fully qualified path followed by the rename.</p>
+<p><strong>Default Value:</strong> <code>[]</code> (<code>Vec&lt;crate::utils::conf::Rename&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#missing_enforced_import_renames">missing_enforced_import_renames</a></li>
+</ul>
+<h3 id="allowed-scripts"><a class="header" href="#allowed-scripts">allowed-scripts</a></h3>
+<p>The list of unicode scripts allowed to be used in the scope.</p>
+<p><strong>Default Value:</strong> <code>[&quot;Latin&quot;]</code> (<code>Vec&lt;String&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#disallowed_script_idents">disallowed_script_idents</a></li>
+</ul>
+<h3 id="enable-raw-pointer-heuristic-for-send"><a class="header" href="#enable-raw-pointer-heuristic-for-send">enable-raw-pointer-heuristic-for-send</a></h3>
+<p>Whether to apply the raw pointer heuristic to determine if a type is <code>Send</code>.</p>
+<p><strong>Default Value:</strong> <code>true</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#non_send_fields_in_send_ty">non_send_fields_in_send_ty</a></li>
+</ul>
+<h3 id="max-suggested-slice-pattern-length"><a class="header" href="#max-suggested-slice-pattern-length">max-suggested-slice-pattern-length</a></h3>
+<p>When Clippy suggests using a slice pattern, this is the maximum number of elements allowed in
+the slice pattern that is suggested. If more elements are necessary, the lint is suppressed.
+For example, <code>[_, _, _, e, ..]</code> is a slice pattern with 4 elements.</p>
+<p><strong>Default Value:</strong> <code>3</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#index_refutable_slice">index_refutable_slice</a></li>
+</ul>
+<h3 id="await-holding-invalid-types"><a class="header" href="#await-holding-invalid-types">await-holding-invalid-types</a></h3>
+<p><strong>Default Value:</strong> <code>[]</code> (<code>Vec&lt;crate::utils::conf::DisallowedPath&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#await_holding_invalid_type">await_holding_invalid_type</a></li>
+</ul>
+<h3 id="max-include-file-size"><a class="header" href="#max-include-file-size">max-include-file-size</a></h3>
+<p>The maximum size of a file included via <code>include_bytes!()</code> or <code>include_str!()</code>, in bytes</p>
+<p><strong>Default Value:</strong> <code>1000000</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#large_include_file">large_include_file</a></li>
+</ul>
+<h3 id="allow-expect-in-tests"><a class="header" href="#allow-expect-in-tests">allow-expect-in-tests</a></h3>
+<p>Whether <code>expect</code> should be allowed in test functions or <code>#[cfg(test)]</code></p>
+<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#expect_used">expect_used</a></li>
+</ul>
+<h3 id="allow-unwrap-in-tests"><a class="header" href="#allow-unwrap-in-tests">allow-unwrap-in-tests</a></h3>
+<p>Whether <code>unwrap</code> should be allowed in test functions or <code>#[cfg(test)]</code></p>
+<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#unwrap_used">unwrap_used</a></li>
+</ul>
+<h3 id="allow-dbg-in-tests"><a class="header" href="#allow-dbg-in-tests">allow-dbg-in-tests</a></h3>
+<p>Whether <code>dbg!</code> should be allowed in test functions or <code>#[cfg(test)]</code></p>
+<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#dbg_macro">dbg_macro</a></li>
+</ul>
+<h3 id="allow-print-in-tests"><a class="header" href="#allow-print-in-tests">allow-print-in-tests</a></h3>
+<p>Whether print macros (ex. <code>println!</code>) should be allowed in test functions or <code>#[cfg(test)]</code></p>
+<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#print_stdout">print_stdout</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#print_stderr">print_stderr</a></li>
+</ul>
+<h3 id="large-error-threshold"><a class="header" href="#large-error-threshold">large-error-threshold</a></h3>
+<p>The maximum size of the <code>Err</code>-variant in a <code>Result</code> returned from a function</p>
+<p><strong>Default Value:</strong> <code>128</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#result_large_err">result_large_err</a></li>
+</ul>
+<h3 id="ignore-interior-mutability"><a class="header" href="#ignore-interior-mutability">ignore-interior-mutability</a></h3>
+<p>A list of paths to types that should be treated like <code>Arc</code>, i.e. ignored but
+for the generic parameters for determining interior mutability</p>
+<p><strong>Default Value:</strong> <code>[&quot;bytes::Bytes&quot;]</code> (<code>Vec&lt;String&gt;</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#mutable_key_type">mutable_key_type</a></li>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#ifs_same_cond">ifs_same_cond</a></li>
+</ul>
+<h3 id="allow-mixed-uninlined-format-args"><a class="header" href="#allow-mixed-uninlined-format-args">allow-mixed-uninlined-format-args</a></h3>
+<p>Whether to allow mixed uninlined format args, e.g. <code>format!(&quot;{} {}&quot;, a, foo.bar)</code></p>
+<p><strong>Default Value:</strong> <code>true</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args">uninlined_format_args</a></li>
+</ul>
+<h3 id="suppress-restriction-lint-in-const"><a class="header" href="#suppress-restriction-lint-in-const">suppress-restriction-lint-in-const</a></h3>
+<p>Whether to suppress a restriction lint in constant code. In same
+cases the restructured operation might not be unavoidable, as the
+suggested counterparts are unavailable in constant code. This
+configuration will cause restriction lints to trigger even
+if no suggestion can be made.</p>
+<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#indexing_slicing">indexing_slicing</a></li>
+</ul>
+<h3 id="missing-docs-in-crate-items"><a class="header" href="#missing-docs-in-crate-items">missing-docs-in-crate-items</a></h3>
+<p>Whether to <strong>only</strong> check for missing documentation in items visible within the current
+crate. For example, <code>pub(crate)</code> items.</p>
+<p><strong>Default Value:</strong> <code>false</code> (<code>bool</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#missing_docs_in_private_items">missing_docs_in_private_items</a></li>
+</ul>
+<h3 id="future-size-threshold"><a class="header" href="#future-size-threshold">future-size-threshold</a></h3>
+<p>The maximum byte size a <code>Future</code> can have, before it triggers the <code>clippy::large_futures</code> lint</p>
+<p><strong>Default Value:</strong> <code>16384</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#large_futures">large_futures</a></li>
+</ul>
+<h3 id="unnecessary-box-size"><a class="header" href="#unnecessary-box-size">unnecessary-box-size</a></h3>
+<p>The byte size a <code>T</code> in <code>Box&lt;T&gt;</code> can have, below which it triggers the <code>clippy::unnecessary_box</code> lint</p>
+<p><strong>Default Value:</strong> <code>128</code> (<code>u64</code>)</p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#unnecessary_box_returns">unnecessary_box_returns</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="configuration.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="lints.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="configuration.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="lints.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="editor.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

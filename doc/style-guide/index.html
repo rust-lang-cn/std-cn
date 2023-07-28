@@ -1,0 +1,344 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Introduction - The Rust Style Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html" class="active">Introduction</a></li><li class="chapter-item expanded "><a href="items.html"><strong aria-hidden="true">1.</strong> Module-level items</a></li><li class="chapter-item expanded "><a href="statements.html"><strong aria-hidden="true">2.</strong> Statements</a></li><li class="chapter-item expanded "><a href="expressions.html"><strong aria-hidden="true">3.</strong> Expressions</a></li><li class="chapter-item expanded "><a href="types.html"><strong aria-hidden="true">4.</strong> Types</a></li><li class="chapter-item expanded "><a href="advice.html"><strong aria-hidden="true">5.</strong> Non-formatting conventions</a></li><li class="chapter-item expanded "><a href="cargo.html"><strong aria-hidden="true">6.</strong> Cargo.toml conventions</a></li><li class="chapter-item expanded "><a href="principles.html"><strong aria-hidden="true">7.</strong> Principles used for deciding these guidelines</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Style Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/HEAD/src/doc/style-guide/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="rust-style-guide"><a class="header" href="#rust-style-guide">Rust Style Guide</a></h1>
+<h2 id="motivation---why-use-a-formatting-tool"><a class="header" href="#motivation---why-use-a-formatting-tool">Motivation - why use a formatting tool?</a></h2>
+<p>Formatting code is a mostly mechanical task which takes both time and mental
+effort. By using an automatic formatting tool, a programmer is relieved of
+this task and can concentrate on more important things.</p>
+<p>Furthermore, by sticking to an established style guide (such as this one),
+programmers don't need to formulate ad hoc style rules, nor do they need to
+debate with other programmers what style rules should be used, saving time,
+communication overhead, and mental energy.</p>
+<p>Humans comprehend information through pattern matching. By ensuring that all
+Rust code has similar formatting, less mental effort is required to comprehend a
+new project, lowering the barrier to entry for new developers.</p>
+<p>Thus, there are productivity benefits to using a formatting tool (such as
+rustfmt), and even larger benefits by using a community-consistent formatting,
+typically by using a formatting tool's default settings.</p>
+<h2 id="formatting-conventions"><a class="header" href="#formatting-conventions">Formatting conventions</a></h2>
+<h3 id="indentation-and-line-width"><a class="header" href="#indentation-and-line-width">Indentation and line width</a></h3>
+<ul>
+<li>Use spaces, not tabs.</li>
+<li>Each level of indentation must be four spaces (that is, all indentation
+outside of string literals and comments must be a multiple of four).</li>
+<li>The maximum width for a line is 100 characters.</li>
+<li>A tool should be configurable for all three of these variables.</li>
+</ul>
+<h3 id="blank-lines"><a class="header" href="#blank-lines">Blank lines</a></h3>
+<p>Separate items and statements by either zero or one blank lines (i.e., one or
+two newlines). E.g,</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo() {
+    let x = ...;
+
+    let y = ...;
+    let z = ...;
+}
+
+fn bar() {}
+fn baz() {}
+<span class="boring">}</span></code></pre></pre>
+<p>Formatting tools should make the bounds on blank lines configurable: there
+should be separate minimum and maximum numbers of newlines between both
+statements and (top-level) items (i.e., four options). As described above, the
+defaults for both statements and items should be minimum: 1, maximum: 2.</p>
+<h3 id="module-level-items"><a class="header" href="#module-level-items"><a href="items.html">Module-level items</a></a></h3>
+<h3 id="statements"><a class="header" href="#statements"><a href="statements.html">Statements</a></a></h3>
+<h3 id="expressions"><a class="header" href="#expressions"><a href="expressions.html">Expressions</a></a></h3>
+<h3 id="types"><a class="header" href="#types"><a href="types.html">Types</a></a></h3>
+<h3 id="comments"><a class="header" href="#comments">Comments</a></h3>
+<p>The following guidelines for comments are recommendations only, a mechanical
+formatter might skip formatting of comments.</p>
+<p>Prefer line comments (<code>//</code>) to block comments (<code>/* ... */</code>).</p>
+<p>When using line comments there should be a single space after the opening sigil.</p>
+<p>When using single-line block comments there should be a single space after the
+opening sigil and before the closing sigil. Multi-line block comments should
+have a newline after the opening sigil and before the closing sigil.</p>
+<p>Prefer to put a comment on its own line. Where a comment follows code, there
+should be a single space before it. Where a block comment is inline, there
+should be surrounding whitespace as if it were an identifier or keyword. There
+should be no trailing whitespace after a comment or at the end of any line in a
+multi-line comment. Examples:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// A comment on an item.
+struct Foo { ... }
+
+fn foo() {} // A comment after an item.
+
+pub fn foo(/* a comment before an argument */ x: T) {...}
+<span class="boring">}</span></code></pre></pre>
+<p>Comments should usually be complete sentences. Start with a capital letter, end
+with a period (<code>.</code>). An inline block comment may be treated as a note without
+punctuation.</p>
+<p>Source lines which are entirely a comment should be limited to 80 characters
+in length (including comment sigils, but excluding indentation) or the maximum
+width of the line (including comment sigils and indentation), whichever is
+smaller:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This comment goes up to the ................................. 80 char margin.
+
+{
+    // This comment is .............................................. 80 chars wide.
+}
+
+{
+    {
+        {
+            {
+                {
+                    {
+                        // This comment is limited by the ......................... 100 char margin.
+                    }
+                }
+            }
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="doc-comments"><a class="header" href="#doc-comments">Doc comments</a></h4>
+<p>Prefer line comments (<code>///</code>) to block comments (<code>/** ... */</code>).</p>
+<p>Prefer outer doc comments (<code>///</code> or <code>/** ... */</code>), only use inner doc comments
+(<code>//!</code> and <code>/*! ... */</code>) to write module-level or crate-level documentation.</p>
+<p>Doc comments should come before attributes.</p>
+<h3 id="attributes"><a class="header" href="#attributes">Attributes</a></h3>
+<p>Put each attribute on its own line, indented to the level of the item.
+In the case of inner attributes (<code>#!</code>), indent it to the level of the inside of
+the item. Prefer outer attributes, where possible.</p>
+<p>For attributes with argument lists, format like functions.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[repr(C)]
+#[foo(foo, bar)]
+struct CRepr {
+    #![repr(C)]
+    x: f32,
+    y: f32,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>For attributes with an equal sign, there should be a single space before and
+after the <code>=</code>, e.g., <code>#[foo = 42]</code>.</p>
+<p>There must only be a single <code>derive</code> attribute. Note for tool authors: if
+combining multiple <code>derive</code> attributes into a single attribute, the ordering of
+the derived names should be preserved. E.g., <code>#[derive(bar)] #[derive(foo)] struct Baz;</code> should be formatted to <code>#[derive(bar, foo)] struct Baz;</code>.</p>
+<h3 id="small-items"><a class="header" href="#small-items"><em>small</em> items</a></h3>
+<p>In many places in this guide we specify that a formatter may format an item
+differently if it is <em>small</em>, for example struct literals:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Normal formatting
+Foo {
+    f1: an_expression,
+    f2: another_expression(),
+}
+
+// *small* formatting
+Foo { f1, f2 }
+<span class="boring">}</span></code></pre></pre>
+<p>We leave it to individual tools to decide on exactly what <em>small</em> means. In
+particular, tools are free to use different definitions in different
+circumstances.</p>
+<p>Some suitable heuristics are the size of the item (in characters) or the
+complexity of an item (for example, that all components must be simple names,
+not more complex sub-expressions). For more discussion on suitable heuristics,
+see <a href="https://github.com/rust-lang-nursery/fmt-rfcs/issues/47">this issue</a>.</p>
+<p>Tools should give the user an option to ignore such heuristics and always use
+the normal formatting.</p>
+<h2 id="non-formatting-conventions"><a class="header" href="#non-formatting-conventions"><a href="advice.html">Non-formatting conventions</a></a></h2>
+<h2 id="cargotoml-conventions"><a class="header" href="#cargotoml-conventions"><a href="cargo.html">Cargo.toml conventions</a></a></h2>
+<h2 id="principles-used-for-deciding-these-guidelines"><a class="header" href="#principles-used-for-deciding-these-guidelines"><a href="principles.html">Principles used for deciding these guidelines</a></a></h2>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next" href="items.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next" href="items.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

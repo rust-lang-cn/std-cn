@@ -1,0 +1,559 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Subtyping and Variance - The Rustonomicon</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="The Dark Arts of Advanced and Unsafe Rust Programming">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/nomicon.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Introduction</a></li><li class="chapter-item expanded "><a href="meet-safe-and-unsafe.html"><strong aria-hidden="true">1.</strong> Meet Safe and Unsafe</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="safe-unsafe-meaning.html"><strong aria-hidden="true">1.1.</strong> How Safe and Unsafe Interact</a></li><li class="chapter-item expanded "><a href="what-unsafe-does.html"><strong aria-hidden="true">1.2.</strong> What Unsafe Can Do</a></li><li class="chapter-item expanded "><a href="working-with-unsafe.html"><strong aria-hidden="true">1.3.</strong> Working with Unsafe</a></li></ol></li><li class="chapter-item expanded "><a href="data.html"><strong aria-hidden="true">2.</strong> Data Layout</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="repr-rust.html"><strong aria-hidden="true">2.1.</strong> repr(Rust)</a></li><li class="chapter-item expanded "><a href="exotic-sizes.html"><strong aria-hidden="true">2.2.</strong> Exotically Sized Types</a></li><li class="chapter-item expanded "><a href="other-reprs.html"><strong aria-hidden="true">2.3.</strong> Other reprs</a></li></ol></li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">3.</strong> Ownership</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">3.1.</strong> References</a></li><li class="chapter-item expanded "><a href="aliasing.html"><strong aria-hidden="true">3.2.</strong> Aliasing</a></li><li class="chapter-item expanded "><a href="lifetimes.html"><strong aria-hidden="true">3.3.</strong> Lifetimes</a></li><li class="chapter-item expanded "><a href="lifetime-mismatch.html"><strong aria-hidden="true">3.4.</strong> Limits of Lifetimes</a></li><li class="chapter-item expanded "><a href="lifetime-elision.html"><strong aria-hidden="true">3.5.</strong> Lifetime Elision</a></li><li class="chapter-item expanded "><a href="unbounded-lifetimes.html"><strong aria-hidden="true">3.6.</strong> Unbounded Lifetimes</a></li><li class="chapter-item expanded "><a href="hrtb.html"><strong aria-hidden="true">3.7.</strong> Higher-Rank Trait Bounds</a></li><li class="chapter-item expanded "><a href="subtyping.html" class="active"><strong aria-hidden="true">3.8.</strong> Subtyping and Variance</a></li><li class="chapter-item expanded "><a href="dropck.html"><strong aria-hidden="true">3.9.</strong> Drop Check</a></li><li class="chapter-item expanded "><a href="phantom-data.html"><strong aria-hidden="true">3.10.</strong> PhantomData</a></li><li class="chapter-item expanded "><a href="borrow-splitting.html"><strong aria-hidden="true">3.11.</strong> Splitting Borrows</a></li></ol></li><li class="chapter-item expanded "><a href="conversions.html"><strong aria-hidden="true">4.</strong> Type Conversions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="coercions.html"><strong aria-hidden="true">4.1.</strong> Coercions</a></li><li class="chapter-item expanded "><a href="dot-operator.html"><strong aria-hidden="true">4.2.</strong> The Dot Operator</a></li><li class="chapter-item expanded "><a href="casts.html"><strong aria-hidden="true">4.3.</strong> Casts</a></li><li class="chapter-item expanded "><a href="transmutes.html"><strong aria-hidden="true">4.4.</strong> Transmutes</a></li></ol></li><li class="chapter-item expanded "><a href="uninitialized.html"><strong aria-hidden="true">5.</strong> Uninitialized Memory</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="checked-uninit.html"><strong aria-hidden="true">5.1.</strong> Checked</a></li><li class="chapter-item expanded "><a href="drop-flags.html"><strong aria-hidden="true">5.2.</strong> Drop Flags</a></li><li class="chapter-item expanded "><a href="unchecked-uninit.html"><strong aria-hidden="true">5.3.</strong> Unchecked</a></li></ol></li><li class="chapter-item expanded "><a href="obrm.html"><strong aria-hidden="true">6.</strong> Ownership Based Resource Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="constructors.html"><strong aria-hidden="true">6.1.</strong> Constructors</a></li><li class="chapter-item expanded "><a href="destructors.html"><strong aria-hidden="true">6.2.</strong> Destructors</a></li><li class="chapter-item expanded "><a href="leaking.html"><strong aria-hidden="true">6.3.</strong> Leaking</a></li></ol></li><li class="chapter-item expanded "><a href="unwinding.html"><strong aria-hidden="true">7.</strong> Unwinding</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="exception-safety.html"><strong aria-hidden="true">7.1.</strong> Exception Safety</a></li><li class="chapter-item expanded "><a href="poisoning.html"><strong aria-hidden="true">7.2.</strong> Poisoning</a></li></ol></li><li class="chapter-item expanded "><a href="concurrency.html"><strong aria-hidden="true">8.</strong> Concurrency</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="races.html"><strong aria-hidden="true">8.1.</strong> Races</a></li><li class="chapter-item expanded "><a href="send-and-sync.html"><strong aria-hidden="true">8.2.</strong> Send and Sync</a></li><li class="chapter-item expanded "><a href="atomics.html"><strong aria-hidden="true">8.3.</strong> Atomics</a></li></ol></li><li class="chapter-item expanded "><a href="vec/vec.html"><strong aria-hidden="true">9.</strong> Implementing Vec</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="vec/vec-layout.html"><strong aria-hidden="true">9.1.</strong> Layout</a></li><li class="chapter-item expanded "><a href="vec/vec-alloc.html"><strong aria-hidden="true">9.2.</strong> Allocating</a></li><li class="chapter-item expanded "><a href="vec/vec-push-pop.html"><strong aria-hidden="true">9.3.</strong> Push and Pop</a></li><li class="chapter-item expanded "><a href="vec/vec-dealloc.html"><strong aria-hidden="true">9.4.</strong> Deallocating</a></li><li class="chapter-item expanded "><a href="vec/vec-deref.html"><strong aria-hidden="true">9.5.</strong> Deref</a></li><li class="chapter-item expanded "><a href="vec/vec-insert-remove.html"><strong aria-hidden="true">9.6.</strong> Insert and Remove</a></li><li class="chapter-item expanded "><a href="vec/vec-into-iter.html"><strong aria-hidden="true">9.7.</strong> IntoIter</a></li><li class="chapter-item expanded "><a href="vec/vec-raw.html"><strong aria-hidden="true">9.8.</strong> RawVec</a></li><li class="chapter-item expanded "><a href="vec/vec-drain.html"><strong aria-hidden="true">9.9.</strong> Drain</a></li><li class="chapter-item expanded "><a href="vec/vec-zsts.html"><strong aria-hidden="true">9.10.</strong> Handling Zero-Sized Types</a></li><li class="chapter-item expanded "><a href="vec/vec-final.html"><strong aria-hidden="true">9.11.</strong> Final Code</a></li></ol></li><li class="chapter-item expanded "><a href="arc-mutex/arc-and-mutex.html"><strong aria-hidden="true">10.</strong> Implementing Arc and Mutex</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="arc-mutex/arc.html"><strong aria-hidden="true">10.1.</strong> Arc</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="arc-mutex/arc-layout.html"><strong aria-hidden="true">10.1.1.</strong> Layout</a></li><li class="chapter-item expanded "><a href="arc-mutex/arc-base.html"><strong aria-hidden="true">10.1.2.</strong> Base Code</a></li><li class="chapter-item expanded "><a href="arc-mutex/arc-clone.html"><strong aria-hidden="true">10.1.3.</strong> Cloning</a></li><li class="chapter-item expanded "><a href="arc-mutex/arc-drop.html"><strong aria-hidden="true">10.1.4.</strong> Dropping</a></li><li class="chapter-item expanded "><a href="arc-mutex/arc-final.html"><strong aria-hidden="true">10.1.5.</strong> Final Code</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="ffi.html"><strong aria-hidden="true">11.</strong> FFI</a></li><li class="chapter-item expanded "><a href="beneath-std.html"><strong aria-hidden="true">12.</strong> Beneath std</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="panic-handler.html"><strong aria-hidden="true">12.1.</strong> #[panic_handler]</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rustonomicon</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/nomicon" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="subtyping-and-variance"><a class="header" href="#subtyping-and-variance">Subtyping and Variance</a></h1>
+<p>Subtyping is a relationship between types that allows statically typed
+languages to be a bit more flexible and permissive.</p>
+<p>Subtyping in Rust is a bit different from subtyping in other languages. This
+makes it harder to give simple examples, which is a problem since subtyping,
+and especially variance, is already hard to understand properly. As in,
+even compiler writers mess it up all the time.</p>
+<p>To keep things simple, this section will consider a small extension to the
+Rust language that adds a new and simpler subtyping relationship. After
+establishing concepts and issues under this simpler system,
+we will then relate it back to how subtyping actually occurs in Rust.</p>
+<p>So here's our simple extension, <em>Objective Rust</em>, featuring three new types:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait Animal {
+    fn snuggle(&amp;self);
+    fn eat(&amp;mut self);
+}
+
+trait Cat: Animal {
+    fn meow(&amp;self);
+}
+
+trait Dog: Animal {
+    fn bark(&amp;self);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>But unlike normal traits, we can use them as concrete and sized types, just like structs.</p>
+<p>Now, say we have a very simple function that takes an Animal, like this:</p>
+<!-- ignore: simplified code -->
+<pre><code class="language-rust ignore">fn love(pet: Animal) {
+    pet.snuggle();
+}</code></pre>
+<p>By default, static types must match <em>exactly</em> for a program to compile. As such,
+this code won't compile:</p>
+<!-- ignore: simplified code -->
+<pre><code class="language-rust ignore">let mr_snuggles: Cat = ...;
+love(mr_snuggles);         // ERROR: expected Animal, found Cat</code></pre>
+<p>Mr. Snuggles is a Cat, and Cats aren't <em>exactly</em> Animals, so we can't love him! 😿</p>
+<p>This is annoying because Cats <em>are</em> Animals. They support every operation
+an Animal supports, so intuitively <code>love</code> shouldn't care if we pass it a <code>Cat</code>.
+We should be able to just <strong>forget</strong> the non-animal parts of our <code>Cat</code>, as they
+aren't necessary to love it.</p>
+<p>This is exactly the problem that <em>subtyping</em> is intended to fix. Because Cats are just
+Animals <strong>and more</strong>, we say Cat is a <em>subtype</em> of Animal (because Cats are a <em>subset</em>
+of all the Animals). Equivalently, we say that Animal is a <em>supertype</em> of Cat.
+With subtypes, we can tweak our overly strict static type system
+with a simple rule: anywhere a value of type <code>T</code> is expected, we will also
+accept values that are subtypes of <code>T</code>.</p>
+<p>Or more concretely: anywhere an Animal is expected, a Cat or Dog will also work.</p>
+<p>As we will see throughout the rest of this section, subtyping is a lot more complicated
+and subtle than this, but this simple rule is a very good 99% intuition. And unless you
+write unsafe code, the compiler will automatically handle all the corner cases for you.</p>
+<p>But this is the Rustonomicon. We're writing unsafe code, so we need to understand how
+this stuff really works, and how we can mess it up.</p>
+<p>The core problem is that this rule, naively applied, will lead to <em>meowing Dogs</em>. That is,
+we can convince someone that a Dog is actually a Cat. This completely destroys the fabric
+of our static type system, making it worse than useless (and leading to Undefined Behavior).</p>
+<p>Here's a simple example of this happening when we apply subtyping in a completely naive
+&quot;find and replace&quot; way.</p>
+<!-- ignore: simplified code -->
+<pre><code class="language-rust ignore">fn evil_feeder(pet: &amp;mut Animal) {
+    let spike: Dog = ...;
+
+    // `pet` is an Animal, and Dog is a subtype of Animal,
+    // so this should be fine, right..?
+    *pet = spike;
+}
+
+fn main() {
+    let mut mr_snuggles: Cat = ...;
+    evil_feeder(&amp;mut mr_snuggles);  // Replaces mr_snuggles with a Dog
+    mr_snuggles.meow();             // OH NO, MEOWING DOG!
+}</code></pre>
+<p>Clearly, we need a more robust system than &quot;find and replace&quot;. That system is <em>variance</em>,
+which is a set of rules governing how subtyping should compose. Most importantly, variance
+defines situations where subtyping should be disabled.</p>
+<p>But before we get into variance, let's take a quick peek at where subtyping actually occurs in
+Rust: <em>lifetimes</em>!</p>
+<blockquote>
+<p>NOTE: The typed-ness of lifetimes is a fairly arbitrary construct that some
+disagree with. However it simplifies our analysis to treat lifetimes
+and types uniformly.</p>
+</blockquote>
+<p>Lifetimes are just regions of code, and regions can be partially ordered with the <em>contains</em>
+(outlives) relationship. Subtyping on lifetimes is in terms of that relationship:
+if <code>'big: 'small</code> (&quot;big contains small&quot; or &quot;big outlives small&quot;), then <code>'big</code> is a subtype
+of <code>'small</code>. This is a large source of confusion, because it seems backwards
+to many: the bigger region is a <em>subtype</em> of the smaller region. But it makes
+sense if you consider our Animal example: Cat is an Animal <em>and more</em>,
+just as <code>'big</code> is <code>'small</code> <em>and more</em>.</p>
+<p>Put another way, if someone wants a reference that lives for <code>'small</code>,
+usually what they actually mean is that they want a reference that lives
+for <em>at least</em> <code>'small</code>. They don't actually care if the lifetimes match
+exactly. So it should be ok for us to <strong>forget</strong> that something lives for
+<code>'big</code> and only remember that it lives for <code>'small</code>.</p>
+<p>The meowing dog problem for lifetimes will result in us being able to
+store a short-lived reference in a place that expects a longer-lived one,
+creating a dangling reference and letting us use-after-free.</p>
+<p>It will be useful to note that <code>'static</code>, the forever lifetime, is a subtype of
+every lifetime because by definition it outlives everything. We will be using
+this relationship in later examples to keep them as simple as possible.</p>
+<p>With all that said, we still have no idea how to actually <em>use</em> subtyping of lifetimes,
+because nothing ever has type <code>'a</code>. Lifetimes only occur as part of some larger type
+like <code>&amp;'a u32</code> or <code>IterMut&lt;'a, u32&gt;</code>. To apply lifetime subtyping, we need to know
+how to compose subtyping. Once again, we need <em>variance</em>.</p>
+<h2 id="variance"><a class="header" href="#variance">Variance</a></h2>
+<p>Variance is where things get a bit complicated.</p>
+<p>Variance is a property that <em>type constructors</em> have with respect to their
+arguments. A type constructor in Rust is any generic type with unbound arguments.
+For instance <code>Vec</code> is a type constructor that takes a type <code>T</code> and returns
+<code>Vec&lt;T&gt;</code>. <code>&amp;</code> and <code>&amp;mut</code> are type constructors that take two inputs: a
+lifetime, and a type to point to.</p>
+<blockquote>
+<p>NOTE: For convenience we will often refer to <code>F&lt;T&gt;</code> as a type constructor just so
+that we can easily talk about <code>T</code>. Hopefully this is clear in context.</p>
+</blockquote>
+<p>A type constructor F's <em>variance</em> is how the subtyping of its inputs affects the
+subtyping of its outputs. There are three kinds of variance in Rust. Given two
+types <code>Sub</code> and <code>Super</code>, where <code>Sub</code> is a subtype of <code>Super</code>:</p>
+<ul>
+<li><code>F</code> is <em>covariant</em> if <code>F&lt;Sub&gt;</code> is a subtype of <code>F&lt;Super&gt;</code> (subtyping &quot;passes through&quot;)</li>
+<li><code>F</code> is <em>contravariant</em> if <code>F&lt;Super&gt;</code> is a subtype of <code>F&lt;Sub&gt;</code> (subtyping is &quot;inverted&quot;)</li>
+<li><code>F</code> is <em>invariant</em> otherwise (no subtyping relationship exists)</li>
+</ul>
+<p>If <code>F</code> has multiple type parameters, we can talk about the individual variances
+by saying that, for example, <code>F&lt;T, U&gt;</code> is covariant over <code>T</code> and invariant over <code>U</code>.</p>
+<p>It is very useful to keep in mind that covariance is, in practical terms, &quot;the&quot;
+variance. Almost all consideration of variance is in terms of whether something
+should be covariant or invariant. Actually witnessing contravariance is quite difficult
+in Rust, though it does in fact exist.</p>
+<p>Here is a table of important variances which the rest of this section will be devoted
+to trying to explain:</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th></th><th style="text-align: center">'a</th><th style="text-align: center">T</th><th style="text-align: center">U</th></tr></thead><tbody>
+<tr><td>*</td><td><code>&amp;'a T </code></td><td style="text-align: center">covariant</td><td style="text-align: center">covariant</td><td style="text-align: center"></td></tr>
+<tr><td>*</td><td><code>&amp;'a mut T</code></td><td style="text-align: center">covariant</td><td style="text-align: center">invariant</td><td style="text-align: center"></td></tr>
+<tr><td>*</td><td><code>Box&lt;T&gt;</code></td><td style="text-align: center"></td><td style="text-align: center">covariant</td><td style="text-align: center"></td></tr>
+<tr><td></td><td><code>Vec&lt;T&gt;</code></td><td style="text-align: center"></td><td style="text-align: center">covariant</td><td style="text-align: center"></td></tr>
+<tr><td>*</td><td><code>UnsafeCell&lt;T&gt;</code></td><td style="text-align: center"></td><td style="text-align: center">invariant</td><td style="text-align: center"></td></tr>
+<tr><td></td><td><code>Cell&lt;T&gt;</code></td><td style="text-align: center"></td><td style="text-align: center">invariant</td><td style="text-align: center"></td></tr>
+<tr><td>*</td><td><code>fn(T) -&gt; U</code></td><td style="text-align: center"></td><td style="text-align: center"><strong>contra</strong>variant</td><td style="text-align: center">covariant</td></tr>
+<tr><td></td><td><code>*const T</code></td><td style="text-align: center"></td><td style="text-align: center">covariant</td><td style="text-align: center"></td></tr>
+<tr><td></td><td><code>*mut T</code></td><td style="text-align: center"></td><td style="text-align: center">invariant</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>The types with *'s are the ones we will be focusing on, as they are in
+some sense &quot;fundamental&quot;. All the others can be understood by analogy to the others:</p>
+<ul>
+<li><code>Vec&lt;T&gt;</code> and all other owning pointers and collections follow the same logic as <code>Box&lt;T&gt;</code></li>
+<li><code>Cell&lt;T&gt;</code> and all other interior mutability types follow the same logic as <code>UnsafeCell&lt;T&gt;</code></li>
+<li><code>*const T</code> follows the logic of <code>&amp;T</code></li>
+<li><code>*mut T</code> follows the logic of <code>&amp;mut T</code> (or <code>UnsafeCell&lt;T&gt;</code>)</li>
+</ul>
+<p>For more types, see the <a href="../reference/subtyping.html#variance">&quot;Variance&quot; section</a> on the reference.</p>
+<blockquote>
+<p>NOTE: the <em>only</em> source of contravariance in the language is the arguments to
+a function, which is why it really doesn't come up much in practice. Invoking
+contravariance involves higher-order programming with function pointers that
+take references with specific lifetimes (as opposed to the usual &quot;any lifetime&quot;,
+which gets into higher rank lifetimes, which work independently of subtyping).</p>
+</blockquote>
+<p>Ok, that's enough type theory! Let's try to apply the concept of variance to Rust
+and look at some examples.</p>
+<p>First off, let's revisit the meowing dog example:</p>
+<!-- ignore: simplified code -->
+<pre><code class="language-rust ignore">fn evil_feeder(pet: &amp;mut Animal) {
+    let spike: Dog = ...;
+
+    // `pet` is an Animal, and Dog is a subtype of Animal,
+    // so this should be fine, right..?
+    *pet = spike;
+}
+
+fn main() {
+    let mut mr_snuggles: Cat = ...;
+    evil_feeder(&amp;mut mr_snuggles);  // Replaces mr_snuggles with a Dog
+    mr_snuggles.meow();             // OH NO, MEOWING DOG!
+}</code></pre>
+<p>If we look at our table of variances, we see that <code>&amp;mut T</code> is <em>invariant</em> over <code>T</code>.
+As it turns out, this completely fixes the issue! With invariance, the fact that
+Cat is a subtype of Animal doesn't matter; <code>&amp;mut Cat</code> still won't be a subtype of
+<code>&amp;mut Animal</code>. The static type checker will then correctly stop us from passing
+a Cat into <code>evil_feeder</code>.</p>
+<p>The soundness of subtyping is based on the idea that it's ok to forget unnecessary
+details. But with references, there's always someone that remembers those details:
+the value being referenced. That value expects those details to keep being true,
+and may behave incorrectly if its expectations are violated.</p>
+<p>The problem with making <code>&amp;mut T</code> covariant over <code>T</code> is that it gives us the power
+to modify the original value <em>when we don't remember all of its constraints</em>.
+And so, we can make someone have a Dog when they're certain they still have a Cat.</p>
+<p>With that established, we can easily see why <code>&amp;T</code> being covariant over <code>T</code> <em>is</em>
+sound: it doesn't let you modify the value, only look at it. Without any way to
+mutate, there's no way for us to mess with any details. We can also see why
+<code>UnsafeCell</code> and all the other interior mutability types must be invariant: they
+make <code>&amp;T</code> work like <code>&amp;mut T</code>!</p>
+<p>Now what about the lifetime on references? Why is it ok for both kinds of references
+to be covariant over their lifetimes? Well, here's a two-pronged argument:</p>
+<p>First and foremost, subtyping references based on their lifetimes is <em>the entire point
+of subtyping in Rust</em>. The only reason we have subtyping is so we can pass
+long-lived things where short-lived things are expected. So it better work!</p>
+<p>Second, and more seriously, lifetimes are only a part of the reference itself. The
+type of the referent is shared knowledge, which is why adjusting that type in only
+one place (the reference) can lead to issues. But if you shrink down a reference's
+lifetime when you hand it to someone, that lifetime information isn't shared in
+any way. There are now two independent references with independent lifetimes.
+There's no way to mess with the original reference's lifetime using the other one.</p>
+<p>Or rather, the only way to mess with someone's lifetime is to build a meowing dog.
+But as soon as you try to build a meowing dog, the lifetime should be wrapped up
+in an invariant type, preventing the lifetime from being shrunk. To understand this
+better, let's port the meowing dog problem over to real Rust.</p>
+<p>In the meowing dog problem we take a subtype (Cat), convert it into a supertype
+(Animal), and then use that fact to overwrite the subtype with a value that satisfies
+the constraints of the supertype but not the subtype (Dog).</p>
+<p>So with lifetimes, we want to take a long-lived thing, convert it into a
+short-lived thing, and then use that to write something that doesn't live long
+enough into the place expecting something long-lived.</p>
+<p>Here it is:</p>
+<pre><pre class="playground"><code class="language-rust compile_fail edition2021">fn evil_feeder&lt;T&gt;(input: &amp;mut T, val: T) {
+    *input = val;
+}
+
+fn main() {
+    let mut mr_snuggles: &amp;'static str = &quot;meow! :3&quot;;  // mr. snuggles forever!!
+    {
+        let spike = String::from(&quot;bark! &gt;:V&quot;);
+        let spike_str: &amp;str = &amp;spike;                // Only lives for the block
+        evil_feeder(&amp;mut mr_snuggles, spike_str);    // EVIL!
+    }
+    println!(&quot;{}&quot;, mr_snuggles);                     // Use after free?
+}</code></pre></pre>
+<p>And what do we get when we run this?</p>
+<pre><code class="language-text">error[E0597]: `spike` does not live long enough
+  --&gt; src/main.rs:9:31
+   |
+6  |     let mut mr_snuggles: &amp;'static str = &quot;meow! :3&quot;;  // mr. snuggles forever!!
+   |                          ------------ type annotation requires that `spike` is borrowed for `'static`
+...
+9  |         let spike_str: &amp;str = &amp;spike;                // Only lives for the block
+   |                               ^^^^^^ borrowed value does not live long enough
+10 |         evil_feeder(&amp;mut mr_snuggles, spike_str);    // EVIL!
+11 |     }
+   |     - `spike` dropped here while still borrowed
+</code></pre>
+<p>Good, it doesn't compile! Let's break down what's happening here in detail.</p>
+<p>First let's look at the new <code>evil_feeder</code> function:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn evil_feeder&lt;T&gt;(input: &amp;mut T, val: T) {
+    *input = val;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>All it does is take a mutable reference and a value and overwrite the referent with it.
+What's important about this function is that it creates a type equality constraint. It
+clearly says in its signature the referent and the value must be the <em>exact same</em> type.</p>
+<p>Meanwhile, in the caller we pass in <code>&amp;mut &amp;'static str</code> and <code>&amp;'spike_str str</code>.</p>
+<p>Because <code>&amp;mut T</code> is invariant over <code>T</code>, the compiler concludes it can't apply any subtyping
+to the first argument, and so <code>T</code> must be exactly <code>&amp;'static str</code>.</p>
+<p>The other argument is only an <code>&amp;'a str</code>, which <em>is</em> covariant over <code>'a</code>. So the compiler
+adopts a constraint: <code>&amp;'spike_str str</code> must be a subtype of <code>&amp;'static str</code> (inclusive),
+which in turn implies <code>'spike_str</code> must be a subtype of <code>'static</code> (inclusive). Which is to say,
+<code>'spike_str</code> must contain <code>'static</code>. But only one thing contains <code>'static</code> -- <code>'static</code> itself!</p>
+<p>This is why we get an error when we try to assign <code>&amp;spike</code> to <code>spike_str</code>. The
+compiler has worked backwards to conclude <code>spike_str</code> must live forever, and <code>&amp;spike</code>
+simply can't live that long.</p>
+<p>So even though references are covariant over their lifetimes, they &quot;inherit&quot; invariance
+whenever they're put into a context that could do something bad with that. In this case,
+we inherited invariance as soon as we put our reference inside an <code>&amp;mut T</code>.</p>
+<p>As it turns out, the argument for why it's ok for Box (and Vec, Hashmap, etc.) to
+be covariant is pretty similar to the argument for why it's ok for
+references to be covariant: as soon as you try to stuff them in something like a
+mutable reference, they inherit invariance and you're prevented from doing anything
+bad.</p>
+<p>However, Box makes it easier to focus on the by-value aspect of references that we
+partially glossed over.</p>
+<p>Unlike a lot of languages which allow values to be freely aliased at all times,
+Rust has a very strict rule: if you're allowed to mutate or move a value, you
+are guaranteed to be the only one with access to it.</p>
+<p>Consider the following code:</p>
+<!-- ignore: simplified code -->
+<pre><code class="language-rust ignore">let mr_snuggles: Box&lt;Cat&gt; = ..;
+let spike: Box&lt;Dog&gt; = ..;
+
+let mut pet: Box&lt;Animal&gt;;
+pet = mr_snuggles;
+pet = spike;</code></pre>
+<p>There is no problem at all with the fact that we have forgotten that <code>mr_snuggles</code> was a Cat,
+or that we overwrote him with a Dog, because as soon as we moved mr_snuggles to a variable
+that only knew he was an Animal, <strong>we destroyed the only thing in the universe that
+remembered he was a Cat</strong>!</p>
+<p>In contrast to the argument about immutable references being soundly covariant because they
+don't let you change anything, owned values can be covariant because they make you
+change <em>everything</em>. There is no connection between old locations and new locations.
+Applying by-value subtyping is an irreversible act of knowledge destruction, and
+without any memory of how things used to be, no one can be tricked into acting on
+that old information!</p>
+<p>Only one thing left to explain: function pointers.</p>
+<p>To see why <code>fn(T) -&gt; U</code> should be covariant over <code>U</code>, consider the following signature:</p>
+<!-- ignore: simplified code -->
+<pre><code class="language-rust ignore">fn get_animal() -&gt; Animal;</code></pre>
+<p>This function claims to produce an Animal. As such, it is perfectly valid to
+provide a function with the following signature instead:</p>
+<!-- ignore: simplified code -->
+<pre><code class="language-rust ignore">fn get_animal() -&gt; Cat;</code></pre>
+<p>After all, Cats are Animals, so always producing a Cat is a perfectly valid way
+to produce Animals. Or to relate it back to real Rust: if we need a function
+that is supposed to produce something that lives for <code>'short</code>, it's perfectly
+fine for it to produce something that lives for <code>'long</code>. We don't care, we can
+just forget that fact.</p>
+<p>However, the same logic does not apply to <em>arguments</em>. Consider trying to satisfy:</p>
+<!-- ignore: simplified code -->
+<pre><code class="language-rust ignore">fn handle_animal(Animal);</code></pre>
+<p>with:</p>
+<!-- ignore: simplified code -->
+<pre><code class="language-rust ignore">fn handle_animal(Cat);</code></pre>
+<p>The first function can accept Dogs, but the second function absolutely can't.
+Covariance doesn't work here. But if we flip it around, it actually <em>does</em>
+work! If we need a function that can handle Cats, a function that can handle <em>any</em>
+Animal will surely work fine. Or to relate it back to real Rust: if we need a
+function that can handle anything that lives for at least <code>'long</code>, it's perfectly
+fine for it to be able to handle anything that lives for at least <code>'short</code>.</p>
+<p>And that's why function types, unlike anything else in the language, are
+<strong>contra</strong>variant over their arguments.</p>
+<p>Now, this is all well and good for the types the standard library provides, but
+how is variance determined for types that <em>you</em> define? A struct, informally
+speaking, inherits the variance of its fields. If a struct <code>MyType</code>
+has a generic argument <code>A</code> that is used in a field <code>a</code>, then MyType's variance
+over <code>A</code> is exactly <code>a</code>'s variance over <code>A</code>.</p>
+<p>However if <code>A</code> is used in multiple fields:</p>
+<ul>
+<li>If all uses of <code>A</code> are covariant, then MyType is covariant over <code>A</code></li>
+<li>If all uses of <code>A</code> are contravariant, then MyType is contravariant over <code>A</code></li>
+<li>Otherwise, MyType is invariant over <code>A</code></li>
+</ul>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::cell::Cell;
+
+struct MyType&lt;'a, 'b, A: 'a, B: 'b, C, D, E, F, G, H, In, Out, Mixed&gt; {
+    a: &amp;'a A,     // covariant over 'a and A
+    b: &amp;'b mut B, // covariant over 'b and invariant over B
+
+    c: *const C,  // covariant over C
+    d: *mut D,    // invariant over D
+
+    e: E,         // covariant over E
+    f: Vec&lt;F&gt;,    // covariant over F
+    g: Cell&lt;G&gt;,   // invariant over G
+
+    h1: H,        // would also be covariant over H except...
+    h2: Cell&lt;H&gt;,  // invariant over H, because invariance wins all conflicts
+
+    i: fn(In) -&gt; Out,       // contravariant over In, covariant over Out
+
+    k1: fn(Mixed) -&gt; usize, // would be contravariant over Mixed except..
+    k2: Mixed,              // invariant over Mixed, because invariance wins all conflicts
+}
+<span class="boring">}</span></code></pre></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="hrtb.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="dropck.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="hrtb.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="dropck.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

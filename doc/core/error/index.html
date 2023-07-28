@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="处理错误的接口。"><title>core::error - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../core/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../core/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Module error</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">core</a>::<wbr><a class="mod" href="#">error</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../../src/core/error.rs.html#1-496">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><span class="item-info"><div class="stab unstable"><span class="emoji">🔬</span><span>This is a nightly-only experimental API. (<code>error_in_core</code>&nbsp;<a href="https://github.com/rust-lang/rust/issues/103765">#103765</a>)</span></div></span><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>处理错误的接口。</p>
+<h2 id="rust-中的错误处理"><a href="#rust-中的错误处理">Rust 中的错误处理</a></h2>
+<p>Rust 语言提供了两个互补的系统来构建、表示、报告、传播、响应和丢弃错误。
+这些职责统称为 “error handling.” 第一个系统的组件，panic 运行时和接口，最常用于表示在您的程序中检测到的错误。
+第二个系统的组件 <code>Result</code>、错误 traits 和用户定义类型用于表示程序的预期运行时故障模式。</p>
+<h3 id="panic-接口"><a href="#panic-接口">panic 接口</a></h3>
+<p>以下是 panic 系统的主要接口及其涵盖的职责:</p>
+<ul>
+<li><a href="../macro.panic.html" title="macro core::panic"><code>panic!</code></a> 和 <a href="../../std/panic/fn.panic_any.html"><code>panic_any</code></a> (构造，自动传播)</li>
+<li><a href="../panic/struct.PanicInfo.html" title="struct core::panic::PanicInfo"><code>PanicInfo</code></a> (Reporting)</li>
+<li><a href="../../std/panic/fn.set_hook.html"><code>set_hook</code></a>、<a href="../../std/panic/fn.take_hook.html"><code>take_hook</code></a> 和 <a href="https://doc.rust-lang.org/nomicon/panic-handler.html"><code>#[panic_handler]</code></a> (Reporting)</li>
+<li><a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind</code></a> 和 <a href="../../std/panic/fn.resume_unwind.html"><code>resume_unwind</code></a> (丢弃、传播)</li>
+</ul>
+<p>以下是错误系统的主要接口及其涵盖的职责:</p>
+<ul>
+<li><a href="../result/enum.Result.html" title="enum core::result::Result"><code>Result</code></a> (传播，反应)</li>
+<li><a href="trait.Error.html" title="trait core::error::Error"><code>Error</code></a> trait (报告)</li>
+<li>用户定义类型 (构造 / 表示)</li>
+<li><a href="../../std/keyword.match.html"><code>match</code></a> 和 <a href="trait.Error.html" title="trait core::error::Error"><code>downcast</code></a> (反应)</li>
+<li>问号运算符 (<a href="../../std/result/index.html#the-question-mark-operator-"><code>?</code></a>) (传播)</li>
+<li>部分稳定的 <a href="../ops/trait.Try.html" title="trait core::ops::Try"><code>Try</code></a> traits (传播, 构造)</li>
+<li><a href="../../std/process/trait.Termination.html"><code>Termination</code></a> (Reporting)</li>
+</ul>
+<h3 id="将错误转化为-panic"><a href="#将错误转化为-panic">将错误转化为 panic</a></h3>
+<p>panic 和错误系统并不完全不同。通常，API 中预期的运行时失败的错误可能会向调用者表示错误。
+对于这些情况，标准库提供了 API 来构建以 <code>Error</code> 作为源的 panic。</p>
+<ul>
+<li><a href="../result/enum.Result.html#method.unwrap" title="method core::result::Result::unwrap"><code>Result::unwrap</code></a></li>
+<li><a href="../result/enum.Result.html#method.expect" title="method core::result::Result::expect"><code>Result::expect</code></a></li>
+</ul>
+<p>这些函数是等价的，如果 <code>Result</code> 为 <code>Ok</code>，则返回内部值; 如果 <code>Result</code> 为 <code>Err</code>，则返回内部值，将内部错误打印为源。
+它们之间的唯一区别是，对于 <code>expect</code>，您提供了一个紧急错误消息以与源一起打印，而 <code>unwrap</code> 有一条默认消息，仅指示您打开了 <code>Err</code>。</p>
+<p>在这两者中，<code>expect</code> 通常是首选，因为它的 <code>msg</code> 字段允许您传达您的意图和假设，从而更容易追踪 panic 的来源。
+另一方面，<code>unwrap</code> 仍然非常适合您可以简单地证明一段代码永远不会 panic 的情况，例如 <code>&quot;127.0.0.1&quot;.parse::&lt;std::net::IpAddr&gt;().unwrap()</code> 或早期原型设计。</p>
+<h2 id="常见的消息样式"><a href="#常见的消息样式">常见的消息样式</a></h2>
+<p>人们对表达 <code>expect</code> 信息有两种常见的方式。
+使用消息向遇到 panic 的用户提供信息 (<code>预期为错误消息</code>) 或使用该消息向调试 panic 的开发人员提供信息 (<code>预期作为前提条件</code>)。</p>
+<p>在前一种情况下，expect 消息用于描述已发生的错误，该错误被视为错误。考虑以下示例:</p>
+
+<div class="example-wrap should_panic"><a href="#" class="tooltip" title="This example panics">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="comment">// Read environment variable, panic if it is not present
+</span><span class="kw">let </span>path = std::env::var(<span class="string">&quot;IMPORTANT_PATH&quot;</span>).unwrap();</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A//+Read+environment+variable,+panic+if+it+is+not+present%0Afn+main()+%7B%0Alet+path+=+std::env::var(%22IMPORTANT_PATH%22).unwrap();%0A%7D&amp;edition=2021">Run</a></div>
+<p>在 “期望作为错误消息” 风格中，我们会使用 expect 来描述环境变量在应该设置的时候没有设置:</p>
+
+<div class="example-wrap should_panic"><a href="#" class="tooltip" title="This example panics">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">let </span>path = std::env::var(<span class="string">&quot;IMPORTANT_PATH&quot;</span>)
+    .expect(<span class="string">&quot;env variable `IMPORTANT_PATH` is not set&quot;</span>);</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Alet+path+=+std::env::var(%22IMPORTANT_PATH%22)%0A++++.expect(%22env+variable+%60IMPORTANT_PATH%60+is+not+set%22);%0A%7D&amp;edition=2021">Run</a></div>
+<p>在 “期望作为前提条件” 风格中，我们将改为描述我们期望 <code>Result</code> 应该是 <code>Ok</code> 的原因。使用这种风格，我们更愿意写:</p>
+
+<div class="example-wrap should_panic"><a href="#" class="tooltip" title="This example panics">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">let </span>path = std::env::var(<span class="string">&quot;IMPORTANT_PATH&quot;</span>)
+    .expect(<span class="string">&quot;env variable `IMPORTANT_PATH` should be set by `wrapper_script.sh`&quot;</span>);</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Alet+path+=+std::env::var(%22IMPORTANT_PATH%22)%0A++++.expect(%22env+variable+%60IMPORTANT_PATH%60+should+be+set+by+%60wrapper_script.sh%60%22);%0A%7D&amp;edition=2021">Run</a></div>
+<p>“期望作为错误消息” 样式在 std panic 钩子的默认输出中效果不佳，并且通常会重复信息，这些信息已经被解包的源错误传达:</p>
+<div class="example-wrap"><pre class="language-text"><code>thread &#39;main&#39; panicked at &#39;env variable `IMPORTANT_PATH` is not set: NotPresent&#39;, src/main.rs:4:6
+</code></pre></div>
+<p>在这个例子中，我们最终提到一个 env 变量没有设置，然后是我们的源消息说 env 不存在，我们传达的唯一附加信息是正在检查的环境变量的名称。</p>
+<p>“期望作为前提条件” 风格反而专注于源代码的可读性，使得在使用 panic 专门表示错误的情况下更容易理解肯定出了什么问题。
+此外，通过根据 “SHOULD” 发生什么来防止源错误来构建我们的期望，我们最终引入了独立于源错误的新信息。</p>
+<div class="example-wrap"><pre class="language-text"><code>thread &#39;main&#39; panicked at &#39;env variable `IMPORTANT_PATH` should be set by `wrapper_script.sh`: NotPresent&#39;, src/main.rs:4:6
+</code></pre></div>
+<p>在这个例子中，我们不仅传达了应该设置的环境变量的名称，还解释了为什么应该设置它，并且我们让源错误显示为与我们的预期明显矛盾。</p>
+<p><strong>提示</strong>: 如果您无法记住如何表达期望作为前置条件样式的错误消息，请记住将注意力集中在 “should” 上，如 “env variable should be set by blah” 或 “the given binary should be available and executable by the current user” 中。</p>
+</div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.Source.html" title="struct core::error::Source">Source</a><span class="stab unstable" title="">Experimental</span></div><div class="desc docblock-short"><a href="trait.Error.html" title="trait core::error::Error"><code>Error</code></a> 及其源上的迭代器。</div></li></ul><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.Error.html" title="trait core::error::Error">Error</a></div><div class="desc docblock-short"><code>Error</code> 是一个 trait，代表对错误值的基本期望，即 <a href="../result/enum.Result.html" title="enum core::result::Result"><code>Result&lt;T, E&gt;</code></a> 中 <code>E</code> 类型的值。</div></li></ul></section></div></main></body></html>

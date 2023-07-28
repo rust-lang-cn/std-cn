@@ -1,0 +1,713 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Manifest Format - The Cargo Book</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+            dd {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/first-steps.html"><strong aria-hidden="true">1.2.</strong> First Steps with Cargo</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Cargo Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-cargo-exists.html"><strong aria-hidden="true">2.1.</strong> Why Cargo Exists</a></li><li class="chapter-item expanded "><a href="../guide/creating-a-new-project.html"><strong aria-hidden="true">2.2.</strong> Creating a New Package</a></li><li class="chapter-item expanded "><a href="../guide/working-on-an-existing-project.html"><strong aria-hidden="true">2.3.</strong> Working on an Existing Package</a></li><li class="chapter-item expanded "><a href="../guide/dependencies.html"><strong aria-hidden="true">2.4.</strong> Dependencies</a></li><li class="chapter-item expanded "><a href="../guide/project-layout.html"><strong aria-hidden="true">2.5.</strong> Package Layout</a></li><li class="chapter-item expanded "><a href="../guide/cargo-toml-vs-cargo-lock.html"><strong aria-hidden="true">2.6.</strong> Cargo.toml vs Cargo.lock</a></li><li class="chapter-item expanded "><a href="../guide/tests.html"><strong aria-hidden="true">2.7.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../guide/continuous-integration.html"><strong aria-hidden="true">2.8.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../guide/cargo-home.html"><strong aria-hidden="true">2.9.</strong> Cargo Home</a></li><li class="chapter-item expanded "><a href="../guide/build-cache.html"><strong aria-hidden="true">2.10.</strong> Build Cache</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">3.</strong> Cargo Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/specifying-dependencies.html"><strong aria-hidden="true">3.1.</strong> Specifying Dependencies</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/overriding-dependencies.html"><strong aria-hidden="true">3.1.1.</strong> Overriding Dependencies</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/manifest.html" class="active"><strong aria-hidden="true">3.2.</strong> The Manifest Format</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/cargo-targets.html"><strong aria-hidden="true">3.2.1.</strong> Cargo Targets</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/workspaces.html"><strong aria-hidden="true">3.3.</strong> Workspaces</a></li><li class="chapter-item expanded "><a href="../reference/features.html"><strong aria-hidden="true">3.4.</strong> Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/features-examples.html"><strong aria-hidden="true">3.4.1.</strong> Features Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/profiles.html"><strong aria-hidden="true">3.5.</strong> Profiles</a></li><li class="chapter-item expanded "><a href="../reference/config.html"><strong aria-hidden="true">3.6.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../reference/environment-variables.html"><strong aria-hidden="true">3.7.</strong> Environment Variables</a></li><li class="chapter-item expanded "><a href="../reference/build-scripts.html"><strong aria-hidden="true">3.8.</strong> Build Scripts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/build-script-examples.html"><strong aria-hidden="true">3.8.1.</strong> Build Script Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/publishing.html"><strong aria-hidden="true">3.9.</strong> Publishing on crates.io</a></li><li class="chapter-item expanded "><a href="../reference/pkgid-spec.html"><strong aria-hidden="true">3.10.</strong> Package ID Specifications</a></li><li class="chapter-item expanded "><a href="../reference/source-replacement.html"><strong aria-hidden="true">3.11.</strong> Source Replacement</a></li><li class="chapter-item expanded "><a href="../reference/external-tools.html"><strong aria-hidden="true">3.12.</strong> External Tools</a></li><li class="chapter-item expanded "><a href="../reference/registries.html"><strong aria-hidden="true">3.13.</strong> Registries</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/running-a-registry.html"><strong aria-hidden="true">3.13.1.</strong> Running a Registry</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/registry-index.html"><strong aria-hidden="true">3.13.1.1.</strong> Registry Index</a></li><li class="chapter-item expanded "><a href="../reference/registry-web-api.html"><strong aria-hidden="true">3.13.1.2.</strong> Registry Web API</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../reference/resolver.html"><strong aria-hidden="true">3.14.</strong> Dependency Resolution</a></li><li class="chapter-item expanded "><a href="../reference/semver.html"><strong aria-hidden="true">3.15.</strong> SemVer Compatibility</a></li><li class="chapter-item expanded "><a href="../reference/future-incompat-report.html"><strong aria-hidden="true">3.16.</strong> Future incompat report</a></li><li class="chapter-item expanded "><a href="../reference/timings.html"><strong aria-hidden="true">3.17.</strong> Reporting build timings</a></li><li class="chapter-item expanded "><a href="../reference/unstable.html"><strong aria-hidden="true">3.18.</strong> Unstable Features</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/index.html"><strong aria-hidden="true">4.</strong> Cargo Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/general-commands.html"><strong aria-hidden="true">4.1.</strong> General Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo.html"><strong aria-hidden="true">4.1.1.</strong> cargo</a></li><li class="chapter-item expanded "><a href="../commands/cargo-help.html"><strong aria-hidden="true">4.1.2.</strong> cargo help</a></li><li class="chapter-item expanded "><a href="../commands/cargo-version.html"><strong aria-hidden="true">4.1.3.</strong> cargo version</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/build-commands.html"><strong aria-hidden="true">4.2.</strong> Build Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-bench.html"><strong aria-hidden="true">4.2.1.</strong> cargo bench</a></li><li class="chapter-item expanded "><a href="../commands/cargo-build.html"><strong aria-hidden="true">4.2.2.</strong> cargo build</a></li><li class="chapter-item expanded "><a href="../commands/cargo-check.html"><strong aria-hidden="true">4.2.3.</strong> cargo check</a></li><li class="chapter-item expanded "><a href="../commands/cargo-clean.html"><strong aria-hidden="true">4.2.4.</strong> cargo clean</a></li><li class="chapter-item expanded "><a href="../commands/cargo-doc.html"><strong aria-hidden="true">4.2.5.</strong> cargo doc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fetch.html"><strong aria-hidden="true">4.2.6.</strong> cargo fetch</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fix.html"><strong aria-hidden="true">4.2.7.</strong> cargo fix</a></li><li class="chapter-item expanded "><a href="../commands/cargo-run.html"><strong aria-hidden="true">4.2.8.</strong> cargo run</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustc.html"><strong aria-hidden="true">4.2.9.</strong> cargo rustc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustdoc.html"><strong aria-hidden="true">4.2.10.</strong> cargo rustdoc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-test.html"><strong aria-hidden="true">4.2.11.</strong> cargo test</a></li><li class="chapter-item expanded "><a href="../commands/cargo-report.html"><strong aria-hidden="true">4.2.12.</strong> cargo report</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/manifest-commands.html"><strong aria-hidden="true">4.3.</strong> Manifest Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-add.html"><strong aria-hidden="true">4.3.1.</strong> cargo add</a></li><li class="chapter-item expanded "><a href="../commands/cargo-generate-lockfile.html"><strong aria-hidden="true">4.3.2.</strong> cargo generate-lockfile</a></li><li class="chapter-item expanded "><a href="../commands/cargo-locate-project.html"><strong aria-hidden="true">4.3.3.</strong> cargo locate-project</a></li><li class="chapter-item expanded "><a href="../commands/cargo-metadata.html"><strong aria-hidden="true">4.3.4.</strong> cargo metadata</a></li><li class="chapter-item expanded "><a href="../commands/cargo-pkgid.html"><strong aria-hidden="true">4.3.5.</strong> cargo pkgid</a></li><li class="chapter-item expanded "><a href="../commands/cargo-remove.html"><strong aria-hidden="true">4.3.6.</strong> cargo remove</a></li><li class="chapter-item expanded "><a href="../commands/cargo-tree.html"><strong aria-hidden="true">4.3.7.</strong> cargo tree</a></li><li class="chapter-item expanded "><a href="../commands/cargo-update.html"><strong aria-hidden="true">4.3.8.</strong> cargo update</a></li><li class="chapter-item expanded "><a href="../commands/cargo-vendor.html"><strong aria-hidden="true">4.3.9.</strong> cargo vendor</a></li><li class="chapter-item expanded "><a href="../commands/cargo-verify-project.html"><strong aria-hidden="true">4.3.10.</strong> cargo verify-project</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/package-commands.html"><strong aria-hidden="true">4.4.</strong> Package Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-init.html"><strong aria-hidden="true">4.4.1.</strong> cargo init</a></li><li class="chapter-item expanded "><a href="../commands/cargo-install.html"><strong aria-hidden="true">4.4.2.</strong> cargo install</a></li><li class="chapter-item expanded "><a href="../commands/cargo-new.html"><strong aria-hidden="true">4.4.3.</strong> cargo new</a></li><li class="chapter-item expanded "><a href="../commands/cargo-search.html"><strong aria-hidden="true">4.4.4.</strong> cargo search</a></li><li class="chapter-item expanded "><a href="../commands/cargo-uninstall.html"><strong aria-hidden="true">4.4.5.</strong> cargo uninstall</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/publishing-commands.html"><strong aria-hidden="true">4.5.</strong> Publishing Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-login.html"><strong aria-hidden="true">4.5.1.</strong> cargo login</a></li><li class="chapter-item expanded "><a href="../commands/cargo-logout.html"><strong aria-hidden="true">4.5.2.</strong> cargo logout</a></li><li class="chapter-item expanded "><a href="../commands/cargo-owner.html"><strong aria-hidden="true">4.5.3.</strong> cargo owner</a></li><li class="chapter-item expanded "><a href="../commands/cargo-package.html"><strong aria-hidden="true">4.5.4.</strong> cargo package</a></li><li class="chapter-item expanded "><a href="../commands/cargo-publish.html"><strong aria-hidden="true">4.5.5.</strong> cargo publish</a></li><li class="chapter-item expanded "><a href="../commands/cargo-yank.html"><strong aria-hidden="true">4.5.6.</strong> cargo yank</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">5.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">6.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/git-authentication.html"><strong aria-hidden="true">7.</strong> Appendix: Git Authentication</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Cargo Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/tree/master/src/doc/src" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/edit/master/src/doc/src/reference/manifest.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="the-manifest-format"><a class="header" href="#the-manifest-format">The Manifest Format</a></h2>
+<p>The <code>Cargo.toml</code> file for each package is called its <em>manifest</em>. It is written
+in the <a href="https://toml.io/">TOML</a> format. It contains metadata that is needed to compile the package. Checkout
+the <code>cargo locate-project</code> section for more detail on how cargo finds the manifest file.</p>
+<p>Every manifest file consists of the following sections:</p>
+<ul>
+<li><a href="unstable.html"><code>cargo-features</code></a> — Unstable, nightly-only features.</li>
+<li><a href="#the-package-section"><code>[package]</code></a> — Defines a package.
+<ul>
+<li><a href="#the-name-field"><code>name</code></a> — The name of the package.</li>
+<li><a href="#the-version-field"><code>version</code></a> — The version of the package.</li>
+<li><a href="#the-authors-field"><code>authors</code></a> — The authors of the package.</li>
+<li><a href="#the-edition-field"><code>edition</code></a> — The Rust edition.</li>
+<li><a href="#the-rust-version-field"><code>rust-version</code></a> — The minimal supported Rust version.</li>
+<li><a href="#the-description-field"><code>description</code></a> — A description of the package.</li>
+<li><a href="#the-documentation-field"><code>documentation</code></a> — URL of the package documentation.</li>
+<li><a href="#the-readme-field"><code>readme</code></a> — Path to the package’s README file.</li>
+<li><a href="#the-homepage-field"><code>homepage</code></a> — URL of the package homepage.</li>
+<li><a href="#the-repository-field"><code>repository</code></a> — URL of the package source repository.</li>
+<li><a href="#the-license-and-license-file-fields"><code>license</code></a> — The package license.</li>
+<li><a href="#the-license-and-license-file-fields"><code>license-file</code></a> — Path to the text of the license.</li>
+<li><a href="#the-keywords-field"><code>keywords</code></a> — Keywords for the package.</li>
+<li><a href="#the-categories-field"><code>categories</code></a> — Categories of the package.</li>
+<li><a href="#the-workspace-field"><code>workspace</code></a> — Path to the workspace for the package.</li>
+<li><a href="#the-build-field"><code>build</code></a> — Path to the package build script.</li>
+<li><a href="#the-links-field"><code>links</code></a> — Name of the native library the package links with.</li>
+<li><a href="#the-exclude-and-include-fields"><code>exclude</code></a> — Files to exclude when publishing.</li>
+<li><a href="#the-exclude-and-include-fields"><code>include</code></a> — Files to include when publishing.</li>
+<li><a href="#the-publish-field"><code>publish</code></a> — Can be used to prevent publishing the package.</li>
+<li><a href="#the-metadata-table"><code>metadata</code></a> — Extra settings for external tools.</li>
+<li><a href="#the-default-run-field"><code>default-run</code></a> — The default binary to run by <a href="../commands/cargo-run.html"><code>cargo run</code></a>.</li>
+<li><a href="cargo-targets.html#target-auto-discovery"><code>autobins</code></a> — Disables binary auto discovery.</li>
+<li><a href="cargo-targets.html#target-auto-discovery"><code>autoexamples</code></a> — Disables example auto discovery.</li>
+<li><a href="cargo-targets.html#target-auto-discovery"><code>autotests</code></a> — Disables test auto discovery.</li>
+<li><a href="cargo-targets.html#target-auto-discovery"><code>autobenches</code></a> — Disables bench auto discovery.</li>
+<li><a href="resolver.html#resolver-versions"><code>resolver</code></a> — Sets the dependency resolver to use.</li>
+</ul>
+</li>
+<li>Target tables: (see <a href="cargo-targets.html#configuring-a-target">configuration</a> for settings)
+<ul>
+<li><a href="cargo-targets.html#library"><code>[lib]</code></a> — Library target settings.</li>
+<li><a href="cargo-targets.html#binaries"><code>[[bin]]</code></a> — Binary target settings.</li>
+<li><a href="cargo-targets.html#examples"><code>[[example]]</code></a> — Example target settings.</li>
+<li><a href="cargo-targets.html#tests"><code>[[test]]</code></a> — Test target settings.</li>
+<li><a href="cargo-targets.html#benchmarks"><code>[[bench]]</code></a> — Benchmark target settings.</li>
+</ul>
+</li>
+<li>Dependency tables:
+<ul>
+<li><a href="specifying-dependencies.html"><code>[dependencies]</code></a> — Package library dependencies.</li>
+<li><a href="specifying-dependencies.html#development-dependencies"><code>[dev-dependencies]</code></a> — Dependencies for examples, tests, and benchmarks.</li>
+<li><a href="specifying-dependencies.html#build-dependencies"><code>[build-dependencies]</code></a> — Dependencies for build scripts.</li>
+<li><a href="specifying-dependencies.html#platform-specific-dependencies"><code>[target]</code></a> — Platform-specific dependencies.</li>
+</ul>
+</li>
+<li><a href="#the-badges-section"><code>[badges]</code></a> — Badges to display on a registry.</li>
+<li><a href="features.html"><code>[features]</code></a> — Conditional compilation features.</li>
+<li><a href="overriding-dependencies.html#the-patch-section"><code>[patch]</code></a> — Override dependencies.</li>
+<li><a href="overriding-dependencies.html#the-replace-section"><code>[replace]</code></a> — Override dependencies (deprecated).</li>
+<li><a href="profiles.html"><code>[profile]</code></a> — Compiler settings and optimizations.</li>
+<li><a href="workspaces.html"><code>[workspace]</code></a> — The workspace definition.</li>
+</ul>
+<p><a id="package-metadata"></a></p>
+<h3 id="the-package-section"><a class="header" href="#the-package-section">The <code>[package]</code> section</a></h3>
+<p>The first section in a <code>Cargo.toml</code> is <code>[package]</code>.</p>
+<pre><code class="language-toml">[package]
+name = &quot;hello_world&quot; # the name of the package
+version = &quot;0.1.0&quot;    # the current version, obeying semver
+authors = [&quot;Alice &lt;a@example.com&gt;&quot;, &quot;Bob &lt;b@example.com&gt;&quot;]
+</code></pre>
+<p>The only fields required by Cargo are <a href="#the-name-field"><code>name</code></a> and
+<a href="#the-version-field"><code>version</code></a>. If publishing to a registry, the registry may
+require additional fields. See the notes below and <a href="publishing.html">the publishing
+chapter</a> for requirements for publishing to <a href="https://crates.io/">crates.io</a>.</p>
+<h4 id="the-name-field"><a class="header" href="#the-name-field">The <code>name</code> field</a></h4>
+<p>The package name is an identifier used to refer to the package. It is used
+when listed as a dependency in another package, and as the default name of
+inferred lib and bin targets.</p>
+<p>The name must use only <a href="../../std/primitive.char.html#method.is_alphanumeric">alphanumeric</a> characters or <code>-</code> or <code>_</code>, and cannot be empty.</p>
+<p>Note that <a href="../commands/cargo-new.html"><code>cargo new</code></a> and <a href="../commands/cargo-init.html"><code>cargo init</code></a> impose some additional restrictions on
+the package name, such as enforcing that it is a valid Rust identifier and not
+a keyword. <a href="https://crates.io/">crates.io</a> imposes even more restrictions, such as:</p>
+<ul>
+<li>Only ASCII characters are allowed.</li>
+<li>Do not use reserved names.</li>
+<li>Do not use special Windows names such as “nul”.</li>
+<li>Use a maximum of 64 characters of length.</li>
+</ul>
+<h4 id="the-version-field"><a class="header" href="#the-version-field">The <code>version</code> field</a></h4>
+<p>Cargo bakes in the concept of <a href="https://semver.org/">Semantic
+Versioning</a>, so make sure you follow some basic rules:</p>
+<ul>
+<li>Before you reach 1.0.0, anything goes, but if you make breaking changes,
+increment the minor version. In Rust, breaking changes include adding fields to
+structs or variants to enums.</li>
+<li>After 1.0.0, only make breaking changes when you increment the major version.
+Don’t break the build.</li>
+<li>After 1.0.0, don’t add any new public API (no new <code>pub</code> anything) in patch-level
+versions. Always increment the minor version if you add any new <code>pub</code> structs,
+traits, fields, types, functions, methods or anything else.</li>
+<li>Use version numbers with three numeric parts such as 1.0.0 rather than 1.0.</li>
+</ul>
+<p>See the <a href="resolver.html">Resolver</a> chapter for more information on how Cargo uses versions to
+resolve dependencies, and for guidelines on setting your own version. See the
+<a href="semver.html">SemVer compatibility</a> chapter for more details on exactly what constitutes a
+breaking change.</p>
+<p><a id="the-authors-field-optional"></a></p>
+<h4 id="the-authors-field"><a class="header" href="#the-authors-field">The <code>authors</code> field</a></h4>
+<p>The optional <code>authors</code> field lists in an array the people or organizations that are considered
+the “authors” of the package. The exact meaning is open to interpretation — it
+may list the original or primary authors, current maintainers, or owners of the
+package. An optional email address may be included within angled brackets at
+the end of each author entry.</p>
+<pre><code class="language-toml">[package]
+# ...
+authors = [&quot;Graydon Hoare&quot;, &quot;Fnu Lnu &lt;no-reply@rust-lang.org&gt;&quot;]
+</code></pre>
+<p>This field is only surfaced in package metadata and in the <code>CARGO_PKG_AUTHORS</code>
+environment variable within <code>build.rs</code>. It is not displayed in the <a href="https://crates.io/">crates.io</a>
+user interface.</p>
+<blockquote>
+<p><strong>Warning</strong>: Package manifests cannot be changed once published, so this
+field cannot be changed or removed in already-published versions of a
+package.</p>
+</blockquote>
+<p><a id="the-edition-field-optional"></a></p>
+<h4 id="the-edition-field"><a class="header" href="#the-edition-field">The <code>edition</code> field</a></h4>
+<p>The <code>edition</code> key is an optional key that affects which <a href="../../edition-guide/index.html">Rust Edition</a> your package
+is compiled with. Setting the <code>edition</code> key in <code>[package]</code> will affect all
+targets/crates in the package, including test suites, benchmarks, binaries,
+examples, etc.</p>
+<pre><code class="language-toml">[package]
+# ...
+edition = '2021'
+</code></pre>
+<p>Most manifests have the <code>edition</code> field filled in automatically by <a href="../commands/cargo-new.html"><code>cargo new</code></a>
+with the latest stable edition. By default <code>cargo new</code> creates a manifest with
+the 2021 edition currently.</p>
+<p>If the <code>edition</code> field is not present in <code>Cargo.toml</code>, then the 2015 edition is
+assumed for backwards compatibility. Note that all manifests
+created with <a href="../commands/cargo-new.html"><code>cargo new</code></a> will not use this historical fallback because they
+will have <code>edition</code> explicitly specified to a newer value.</p>
+<h4 id="the-rust-version-field"><a class="header" href="#the-rust-version-field">The <code>rust-version</code> field</a></h4>
+<p>The <code>rust-version</code> field is an optional key that tells cargo what version of the
+Rust language and compiler your package can be compiled with. If the currently
+selected version of the Rust compiler is older than the stated version, cargo
+will exit with an error, telling the user what version is required.</p>
+<p>The first version of Cargo that supports this field was released with Rust 1.56.0.
+In older releases, the field will be ignored, and Cargo will display a warning.</p>
+<pre><code class="language-toml">[package]
+# ...
+rust-version = &quot;1.56&quot;
+</code></pre>
+<p>The Rust version must be a bare version number with two or three components; it
+cannot include semver operators or pre-release identifiers. Compiler pre-release
+identifiers such as -nightly will be ignored while checking the Rust version.
+The <code>rust-version</code> must be equal to or newer than the version that first
+introduced the configured <code>edition</code>.</p>
+<p>The <code>rust-version</code> may be ignored using the <code>--ignore-rust-version</code> option.</p>
+<p>Setting the <code>rust-version</code> key in <code>[package]</code> will affect all targets/crates in
+the package, including test suites, benchmarks, binaries, examples, etc.</p>
+<h4 id="the-description-field"><a class="header" href="#the-description-field">The <code>description</code> field</a></h4>
+<p>The description is a short blurb about the package. <a href="https://crates.io/">crates.io</a> will display
+this with your package. This should be plain text (not Markdown).</p>
+<pre><code class="language-toml">[package]
+# ...
+description = &quot;A short description of my package&quot;
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: <a href="https://crates.io/">crates.io</a> requires the <code>description</code> to be set.</p>
+</blockquote>
+<p><a id="the-documentation-field-optional"></a></p>
+<h4 id="the-documentation-field"><a class="header" href="#the-documentation-field">The <code>documentation</code> field</a></h4>
+<p>The <code>documentation</code> field specifies a URL to a website hosting the crate’s
+documentation. If no URL is specified in the manifest file, <a href="https://crates.io/">crates.io</a> will
+automatically link your crate to the corresponding <a href="https://docs.rs/">docs.rs</a> page when the
+documentation has been built and is available (see <a href="https://docs.rs/releases/queue">docs.rs queue</a>).</p>
+<pre><code class="language-toml">[package]
+# ...
+documentation = &quot;https://docs.rs/bitflags&quot;
+</code></pre>
+<h4 id="the-readme-field"><a class="header" href="#the-readme-field">The <code>readme</code> field</a></h4>
+<p>The <code>readme</code> field should be the path to a file in the package root (relative
+to this <code>Cargo.toml</code>) that contains general information about the package.
+This file will be transferred to the registry when you publish. <a href="https://crates.io/">crates.io</a>
+will interpret it as Markdown and render it on the crate’s page.</p>
+<pre><code class="language-toml">[package]
+# ...
+readme = &quot;README.md&quot;
+</code></pre>
+<p>If no value is specified for this field, and a file named <code>README.md</code>,
+<code>README.txt</code> or <code>README</code> exists in the package root, then the name of that
+file will be used. You can suppress this behavior by setting this field to
+<code>false</code>. If the field is set to <code>true</code>, a default value of <code>README.md</code> will
+be assumed.</p>
+<h4 id="the-homepage-field"><a class="header" href="#the-homepage-field">The <code>homepage</code> field</a></h4>
+<p>The <code>homepage</code> field should be a URL to a site that is the home page for your
+package.</p>
+<pre><code class="language-toml">[package]
+# ...
+homepage = &quot;https://serde.rs/&quot;
+</code></pre>
+<h4 id="the-repository-field"><a class="header" href="#the-repository-field">The <code>repository</code> field</a></h4>
+<p>The <code>repository</code> field should be a URL to the source repository for your
+package.</p>
+<pre><code class="language-toml">[package]
+# ...
+repository = &quot;https://github.com/rust-lang/cargo/&quot;
+</code></pre>
+<h4 id="the-license-and-license-file-fields"><a class="header" href="#the-license-and-license-file-fields">The <code>license</code> and <code>license-file</code> fields</a></h4>
+<p>The <code>license</code> field contains the name of the software license that the package
+is released under. The <code>license-file</code> field contains the path to a file
+containing the text of the license (relative to this <code>Cargo.toml</code>).</p>
+<p><a href="https://crates.io/">crates.io</a> interprets the <code>license</code> field as an <a href="https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60">SPDX 2.1 license
+expression</a>. The name must be a known license
+from the <a href="https://github.com/spdx/license-list-data/tree/v3.11">SPDX license list 3.11</a>. Parentheses are not
+currently supported. See the <a href="https://spdx.org/license-list">SPDX site</a> for more information.</p>
+<p>SPDX license expressions support AND and OR operators to combine multiple
+licenses.<sup class="footnote-reference"><a href="#slash">1</a></sup></p>
+<pre><code class="language-toml">[package]
+# ...
+license = &quot;MIT OR Apache-2.0&quot;
+</code></pre>
+<p>Using <code>OR</code> indicates the user may choose either license. Using <code>AND</code> indicates
+the user must comply with both licenses simultaneously. The <code>WITH</code> operator
+indicates a license with a special exception. Some examples:</p>
+<ul>
+<li><code>MIT OR Apache-2.0</code></li>
+<li><code>LGPL-2.1-only AND MIT AND BSD-2-Clause</code></li>
+<li><code>GPL-2.0-or-later WITH Bison-exception-2.2</code></li>
+</ul>
+<p>If a package is using a nonstandard license, then the <code>license-file</code> field may
+be specified in lieu of the <code>license</code> field.</p>
+<pre><code class="language-toml">[package]
+# ...
+license-file = &quot;LICENSE.txt&quot;
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: <a href="https://crates.io/">crates.io</a> requires either <code>license</code> or <code>license-file</code> to be set.</p>
+</blockquote>
+<div class="footnote-definition" id="slash"><sup class="footnote-definition-label">1</sup>
+<p>Previously multiple licenses could be separated with a <code>/</code>, but that
+usage is deprecated.</p>
+</div>
+<h4 id="the-keywords-field"><a class="header" href="#the-keywords-field">The <code>keywords</code> field</a></h4>
+<p>The <code>keywords</code> field is an array of strings that describe this package. This
+can help when searching for the package on a registry, and you may choose any
+words that would help someone find this crate.</p>
+<pre><code class="language-toml">[package]
+# ...
+keywords = [&quot;gamedev&quot;, &quot;graphics&quot;]
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: <a href="https://crates.io/">crates.io</a> has a maximum of 5 keywords. Each keyword must be
+ASCII text, start with a letter, and only contain letters, numbers, <code>_</code> or
+<code>-</code>, and have at most 20 characters.</p>
+</blockquote>
+<h4 id="the-categories-field"><a class="header" href="#the-categories-field">The <code>categories</code> field</a></h4>
+<p>The <code>categories</code> field is an array of strings of the categories this package
+belongs to.</p>
+<pre><code class="language-toml">categories = [&quot;command-line-utilities&quot;, &quot;development-tools::cargo-plugins&quot;]
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: <a href="https://crates.io/">crates.io</a> has a maximum of 5 categories. Each category should
+match one of the strings available at <a href="https://crates.io/category_slugs">https://crates.io/category_slugs</a>, and
+must match exactly.</p>
+</blockquote>
+<p><a id="the-workspace--field-optional"></a></p>
+<h4 id="the-workspace-field"><a class="header" href="#the-workspace-field">The <code>workspace</code> field</a></h4>
+<p>The <code>workspace</code> field can be used to configure the workspace that this package
+will be a member of. If not specified this will be inferred as the first
+Cargo.toml with <code>[workspace]</code> upwards in the filesystem. Setting this is
+useful if the member is not inside a subdirectory of the workspace root.</p>
+<pre><code class="language-toml">[package]
+# ...
+workspace = &quot;path/to/workspace/root&quot;
+</code></pre>
+<p>This field cannot be specified if the manifest already has a <code>[workspace]</code>
+table defined. That is, a crate cannot both be a root crate in a workspace
+(contain <code>[workspace]</code>) and also be a member crate of another workspace
+(contain <code>package.workspace</code>).</p>
+<p>For more information, see the <a href="workspaces.html">workspaces chapter</a>.</p>
+<p><a id="package-build"></a>
+<a id="the-build-field-optional"></a></p>
+<h4 id="the-build-field"><a class="header" href="#the-build-field">The <code>build</code> field</a></h4>
+<p>The <code>build</code> field specifies a file in the package root which is a <a href="build-scripts.html">build
+script</a> for building native code. More information can be found in the <a href="build-scripts.html">build
+script guide</a>.</p>
+<pre><code class="language-toml">[package]
+# ...
+build = &quot;build.rs&quot;
+</code></pre>
+<p>The default is <code>&quot;build.rs&quot;</code>, which loads the script from a file named
+<code>build.rs</code> in the root of the package. Use <code>build = &quot;custom_build_name.rs&quot;</code> to
+specify a path to a different file or <code>build = false</code> to disable automatic
+detection of the build script.</p>
+<p><a id="the-links-field-optional"></a></p>
+<h4 id="the-links-field"><a class="header" href="#the-links-field">The <code>links</code> field</a></h4>
+<p>The <code>links</code> field specifies the name of a native library that is being linked
+to. More information can be found in the <a href="build-scripts.html#the-links-manifest-key"><code>links</code></a> section of the build
+script guide.</p>
+<p>For example, a crate that links a native library called “git2” (e.g. <code>libgit2.a</code>
+on Linux) may specify:</p>
+<pre><code class="language-toml">[package]
+# ...
+links = &quot;git2&quot;
+</code></pre>
+<p><a id="the-exclude-and-include-fields-optional"></a></p>
+<h4 id="the-exclude-and-include-fields"><a class="header" href="#the-exclude-and-include-fields">The <code>exclude</code> and <code>include</code> fields</a></h4>
+<p>The <code>exclude</code> and <code>include</code> fields can be used to explicitly specify which
+files are included when packaging a project to be <a href="publishing.html">published</a>,
+and certain kinds of change tracking (described below).
+The patterns specified in the <code>exclude</code> field identify a set of files that are
+not included, and the patterns in <code>include</code> specify files that are explicitly
+included.
+You may run <a href="../commands/cargo-package.html"><code>cargo package --list</code></a> to verify which files will
+be included in the package.</p>
+<pre><code class="language-toml">[package]
+# ...
+exclude = [&quot;/ci&quot;, &quot;images/&quot;, &quot;.*&quot;]
+</code></pre>
+<pre><code class="language-toml">[package]
+# ...
+include = [&quot;/src&quot;, &quot;COPYRIGHT&quot;, &quot;/examples&quot;, &quot;!/examples/big_example&quot;]
+</code></pre>
+<p>The default if neither field is specified is to include all files from the
+root of the package, except for the exclusions listed below.</p>
+<p>If <code>include</code> is not specified, then the following files will be excluded:</p>
+<ul>
+<li>If the package is not in a git repository, all “hidden” files starting with
+a dot will be skipped.</li>
+<li>If the package is in a git repository, any files that are ignored by the
+<a href="https://git-scm.com/docs/gitignore">gitignore</a> rules of the repository and global git configuration will be
+skipped.</li>
+</ul>
+<p>Regardless of whether <code>exclude</code> or <code>include</code> is specified, the following files
+are always excluded:</p>
+<ul>
+<li>Any sub-packages will be skipped (any subdirectory that contains a
+<code>Cargo.toml</code> file).</li>
+<li>A directory named <code>target</code> in the root of the package will be skipped.</li>
+</ul>
+<p>The following files are always included:</p>
+<ul>
+<li>The <code>Cargo.toml</code> file of the package itself is always included, it does not
+need to be listed in <code>include</code>.</li>
+<li>A minimized <code>Cargo.lock</code> is automatically included if the package contains a
+binary or example target, see <a href="../commands/cargo-package.html"><code>cargo package</code></a> for more information.</li>
+<li>If a <a href="#the-license-and-license-file-fields"><code>license-file</code></a> is specified, it
+is always included.</li>
+</ul>
+<p>The options are mutually exclusive; setting <code>include</code> will override an
+<code>exclude</code>. If you need to have exclusions to a set of <code>include</code> files, use the
+<code>!</code> operator described below.</p>
+<p>The patterns should be <a href="https://git-scm.com/docs/gitignore">gitignore</a>-style patterns. Briefly:</p>
+<ul>
+<li><code>foo</code> matches any file or directory with the name <code>foo</code> anywhere in the
+package. This is equivalent to the pattern <code>**/foo</code>.</li>
+<li><code>/foo</code> matches any file or directory with the name <code>foo</code> only in the root of
+the package.</li>
+<li><code>foo/</code> matches any <em>directory</em> with the name <code>foo</code> anywhere in the package.</li>
+<li>Common glob patterns like <code>*</code>, <code>?</code>, and <code>[]</code> are supported:
+<ul>
+<li><code>*</code> matches zero or more characters except <code>/</code>.  For example, <code>*.html</code>
+matches any file or directory with the <code>.html</code> extension anywhere in the
+package.</li>
+<li><code>?</code> matches any character except <code>/</code>. For example, <code>foo?</code> matches <code>food</code>,
+but not <code>foo</code>.</li>
+<li><code>[]</code> allows for matching a range of characters. For example, <code>[ab]</code>
+matches either <code>a</code> or <code>b</code>. <code>[a-z]</code> matches letters a through z.</li>
+</ul>
+</li>
+<li><code>**/</code> prefix matches in any directory. For example, <code>**/foo/bar</code> matches the
+file or directory <code>bar</code> anywhere that is directly under directory <code>foo</code>.</li>
+<li><code>/**</code> suffix matches everything inside. For example, <code>foo/**</code> matches all
+files inside directory <code>foo</code>, including all files in subdirectories below
+<code>foo</code>.</li>
+<li><code>/**/</code> matches zero or more directories. For example, <code>a/**/b</code> matches
+<code>a/b</code>, <code>a/x/b</code>, <code>a/x/y/b</code>, and so on.</li>
+<li><code>!</code> prefix negates a pattern. For example, a pattern of <code>src/*.rs</code> and
+<code>!foo.rs</code> would match all files with the <code>.rs</code> extension inside the <code>src</code>
+directory, except for any file named <code>foo.rs</code>.</li>
+</ul>
+<p>The include/exclude list is also used for change tracking in some situations.
+For targets built with <code>rustdoc</code>, it is used to determine the list of files to
+track to determine if the target should be rebuilt. If the package has a
+<a href="build-scripts.html">build script</a> that does not emit any <code>rerun-if-*</code> directives, then the
+include/exclude list is used for tracking if the build script should be re-run
+if any of those files change.</p>
+<p><a id="the-publish--field-optional"></a></p>
+<h4 id="the-publish-field"><a class="header" href="#the-publish-field">The <code>publish</code> field</a></h4>
+<p>The <code>publish</code> field can be used to prevent a package from being published to a
+package registry (like <em>crates.io</em>) by mistake, for instance to keep a package
+private in a company.</p>
+<pre><code class="language-toml">[package]
+# ...
+publish = false
+</code></pre>
+<p>The value may also be an array of strings which are registry names that are
+allowed to be published to.</p>
+<pre><code class="language-toml">[package]
+# ...
+publish = [&quot;some-registry-name&quot;]
+</code></pre>
+<p>If publish array contains a single registry, <code>cargo publish</code> command will use
+it when <code>--registry</code> flag is not specified.</p>
+<p><a id="the-metadata-table-optional"></a></p>
+<h4 id="the-metadata-table"><a class="header" href="#the-metadata-table">The <code>metadata</code> table</a></h4>
+<p>Cargo by default will warn about unused keys in <code>Cargo.toml</code> to assist in
+detecting typos and such. The <code>package.metadata</code> table, however, is completely
+ignored by Cargo and will not be warned about. This section can be used for
+tools which would like to store package configuration in <code>Cargo.toml</code>. For
+example:</p>
+<pre><code class="language-toml">[package]
+name = &quot;...&quot;
+# ...
+
+# Metadata used when generating an Android APK, for example.
+[package.metadata.android]
+package-name = &quot;my-awesome-android-app&quot;
+assets = &quot;path/to/static&quot;
+</code></pre>
+<p>There is a similar table at the workspace level at
+<a href="workspaces.html#the-metadata-table"><code>workspace.metadata</code></a>. While cargo does not specify a
+format for the content of either of these tables, it is suggested that
+external tools may wish to use them in a consistent fashion, such as referring
+to the data in <code>workspace.metadata</code> if data is missing from <code>package.metadata</code>,
+if that makes sense for the tool in question.</p>
+<h4 id="the-default-run-field"><a class="header" href="#the-default-run-field">The <code>default-run</code> field</a></h4>
+<p>The <code>default-run</code> field in the <code>[package]</code> section of the manifest can be used
+to specify a default binary picked by <a href="../commands/cargo-run.html"><code>cargo run</code></a>. For example, when there is
+both <code>src/bin/a.rs</code> and <code>src/bin/b.rs</code>:</p>
+<pre><code class="language-toml">[package]
+default-run = &quot;a&quot;
+</code></pre>
+<h3 id="the-badges-section"><a class="header" href="#the-badges-section">The <code>[badges]</code> section</a></h3>
+<p>The <code>[badges]</code> section is for specifying status badges that can be displayed
+on a registry website when the package is published.</p>
+<blockquote>
+<p>Note: <a href="https://crates.io/">crates.io</a> previously displayed badges next to a crate on its
+website, but that functionality has been removed. Packages should place
+badges in its README file which will be displayed on <a href="https://crates.io/">crates.io</a> (see <a href="#the-readme-field">the
+<code>readme</code> field</a>).</p>
+</blockquote>
+<pre><code class="language-toml">[badges]
+# The `maintenance` table indicates the status of the maintenance of
+# the crate. This may be used by a registry, but is currently not
+# used by crates.io. See https://github.com/rust-lang/crates.io/issues/2437
+# and https://github.com/rust-lang/crates.io/issues/2438 for more details.
+#
+# The `status` field is required. Available options are:
+# - `actively-developed`: New features are being added and bugs are being fixed.
+# - `passively-maintained`: There are no plans for new features, but the maintainer intends to
+#   respond to issues that get filed.
+# - `as-is`: The crate is feature complete, the maintainer does not intend to continue working on
+#   it or providing support, but it works for the purposes it was designed for.
+# - `experimental`: The author wants to share it with the community but is not intending to meet
+#   anyone's particular use case.
+# - `looking-for-maintainer`: The current maintainer would like to transfer the crate to someone
+#   else.
+# - `deprecated`: The maintainer does not recommend using this crate (the description of the crate
+#   can describe why, there could be a better solution available or there could be problems with
+#   the crate that the author does not want to fix).
+# - `none`: Displays no badge on crates.io, since the maintainer has not chosen to specify
+#   their intentions, potential crate users will need to investigate on their own.
+maintenance = { status = &quot;...&quot; }
+</code></pre>
+<h3 id="dependency-sections"><a class="header" href="#dependency-sections">Dependency sections</a></h3>
+<p>See the <a href="specifying-dependencies.html">specifying dependencies page</a> for
+information on the <code>[dependencies]</code>, <code>[dev-dependencies]</code>,
+<code>[build-dependencies]</code>, and target-specific <code>[target.*.dependencies]</code> sections.</p>
+<h3 id="the-profile-sections"><a class="header" href="#the-profile-sections">The <code>[profile.*]</code> sections</a></h3>
+<p>The <code>[profile]</code> tables provide a way to customize compiler settings such as
+optimizations and debug settings. See <a href="profiles.html">the Profiles chapter</a> for
+more detail.</p>
+<script>
+(function() {
+    var fragments = {
+        "#the-project-layout": "../guide/project-layout.html",
+        "#examples": "cargo-targets.html#examples",
+        "#tests": "cargo-targets.html#tests",
+        "#integration-tests": "cargo-targets.html#integration-tests",
+        "#configuring-a-target": "cargo-targets.html#configuring-a-target",
+        "#target-auto-discovery": "cargo-targets.html#target-auto-discovery",
+        "#the-required-features-field-optional": "cargo-targets.html#the-required-features-field",
+        "#building-dynamic-or-static-libraries": "cargo-targets.html#the-crate-type-field",
+        "#the-workspace-section": "workspaces.html#the-workspace-section",
+        "#virtual-workspace": "workspaces.html",
+        "#package-selection": "workspaces.html#package-selection",
+        "#the-features-section": "features.html#the-features-section",
+        "#rules": "features.html",
+        "#usage-in-end-products": "features.html",
+        "#usage-in-packages": "features.html",
+        "#the-patch-section": "overriding-dependencies.html#the-patch-section",
+        "#using-patch-with-multiple-versions": "overriding-dependencies.html#using-patch-with-multiple-versions",
+        "#the-replace-section": "overriding-dependencies.html#the-replace-section",
+    };
+    var target = fragments[window.location.hash];
+    if (target) {
+        var url = window.location.toString();
+        var base = url.substring(0, url.lastIndexOf('/'));
+        window.location.replace(base + "/" + target);
+    }
+})();
+</script>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/overriding-dependencies.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../reference/cargo-targets.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/overriding-dependencies.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../reference/cargo-targets.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

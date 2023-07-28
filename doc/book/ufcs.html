@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <title>Universal Function Call Syntax</title>
+
+    <link rel="stylesheet" href="../rust.css">
+    <meta name="robots" content="noindex,follow">
+<link rel="icon" href="https://www.rust-lang.org/favicon.ico">
+
+
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    <div id="versioninfo">
+  <img src="https://www.rust-lang.org/logos/rust-logo-32x32-blk.png" width="32" height="32" alt="Rust logo"><br>
+  <span class="white-sticker"><a href="https://www.rust-lang.org">Rust</a> 1.71.0-dev</span><br>
+  <a href="https://github.com/rust-lang/rust/commit/"
+    class="hash white-sticker"></a>
+</div>
+
+
+    <h1 class="title">Universal Function Call Syntax</h1>
+    <p><small>There is a new edition of the book and this is an old link.</small></p>
+<blockquote>
+<p>Rust cannot prevent a trait from having a method with the same name as another trait’s method, nor can it prevent us from implementing both of these traits on one type.
+In order to be able to call each of the methods with the same name, then, we need to tell Rust which one we want to use.</p>
+</blockquote>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">trait </span>Pilot {
+    <span class="kw">fn </span>fly(<span class="kw-2">&amp;</span><span class="self">self</span>);
+}
+
+<span class="kw">trait </span>Wizard {
+    <span class="kw">fn </span>fly(<span class="kw-2">&amp;</span><span class="self">self</span>);
+}
+
+<span class="kw">struct </span>Human;
+
+<span class="kw">impl </span>Pilot <span class="kw">for </span>Human {
+}
+
+<span class="kw">impl </span>Wizard <span class="kw">for </span>Human {
+}
+
+<span class="kw">impl </span>Human {
+}
+
+<span class="kw">fn </span>main() {
+    <span class="kw">let </span>person = Human;
+    Pilot::fly(<span class="kw-2">&amp;</span>person);
+    Wizard::fly(<span class="kw-2">&amp;</span>person);
+    person.fly();
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Atrait+Pilot+%7B%0A++++fn+fly(%26self);%0A%7D%0A%0Atrait+Wizard+%7B%0A++++fn+fly(%26self);%0A%7D%0A%0Astruct+Human;%0A%0Aimpl+Pilot+for+Human+%7B%0A++++fn+fly(%26self)+%7B%0A++++++++println!(%22This+is+your+captain+speaking.%22);%0A++++%7D%0A%7D%0A%0Aimpl+Wizard+for+Human+%7B%0A++++fn+fly(%26self)+%7B%0A++++++++println!(%22Up!%22);%0A++++%7D%0A%7D%0A%0Aimpl+Human+%7B%0A++++fn+fly(%26self)+%7B%0A++++++++println!(%22*waving+arms+furiously*%22);%0A++++%7D%0A%7D%0A%0Afn+main()+%7B%0A++++let+person+=+Human;%0A++++Pilot::fly(%26person);%0A++++Wizard::fly(%26person);%0A++++person.fly();%0A%7D&amp;edition=2015">Run</a></div>
+<hr />
+<p>You can find the latest version of this information
+<a href="ch19-03-advanced-traits.html#fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name">here</a>.</p>
+
+    <!-- REUSE-IgnoreStart -->
+<footer><p>
+Copyright &copy; 2011 The Rust Project Developers. Licensed under the
+<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>
+or the <a href="https://opensource.org/licenses/MIT">MIT license</a>, at your option.
+</p><p>
+This file may not be copied, modified, or distributed except according to those terms.
+</p></footer>
+<!-- REUSE-IgnoreEnd -->
+
+
+</body>
+</html>

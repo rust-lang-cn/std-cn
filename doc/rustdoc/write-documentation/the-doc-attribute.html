@@ -1,0 +1,405 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The #[doc] attribute - The rustdoc book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what-is-rustdoc.html"><strong aria-hidden="true">1.</strong> What is rustdoc?</a></li><li class="chapter-item expanded "><a href="../command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line arguments</a></li><li class="chapter-item expanded "><a href="../how-to-read-rustdoc.html"><strong aria-hidden="true">3.</strong> How to read rustdoc output</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../read-documentation/in-doc-settings.html"><strong aria-hidden="true">3.1.</strong> In-doc settings</a></li></ol></li><li class="chapter-item expanded "><a href="../how-to-write-documentation.html"><strong aria-hidden="true">4.</strong> How to write documentation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../write-documentation/what-to-include.html"><strong aria-hidden="true">4.1.</strong> What to include (and exclude)</a></li><li class="chapter-item expanded "><a href="../write-documentation/the-doc-attribute.html" class="active"><strong aria-hidden="true">4.2.</strong> The #[doc] attribute</a></li><li class="chapter-item expanded "><a href="../write-documentation/linking-to-items-by-name.html"><strong aria-hidden="true">4.3.</strong> Linking to items by name</a></li><li class="chapter-item expanded "><a href="../write-documentation/documentation-tests.html"><strong aria-hidden="true">4.4.</strong> Documentation tests</a></li></ol></li><li class="chapter-item expanded "><a href="../lints.html"><strong aria-hidden="true">5.</strong> Rustdoc-specific lints</a></li><li class="chapter-item expanded "><a href="../scraped-examples.html"><strong aria-hidden="true">6.</strong> Scraped examples</a></li><li class="chapter-item expanded "><a href="../advanced-features.html"><strong aria-hidden="true">7.</strong> Advanced features</a></li><li class="chapter-item expanded "><a href="../unstable-features.html"><strong aria-hidden="true">8.</strong> Unstable features</a></li><li class="chapter-item expanded "><a href="../deprecated-features.html"><strong aria-hidden="true">9.</strong> Deprecated features</a></li><li class="chapter-item expanded "><a href="../references.html"><strong aria-hidden="true">10.</strong> References</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The rustdoc book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/master/src/doc/rustdoc" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="the-doc-attribute"><a class="header" href="#the-doc-attribute">The <code>#[doc]</code> attribute</a></h1>
+<p>The <code>#[doc]</code> attribute lets you control various aspects of how <code>rustdoc</code> does
+its job.</p>
+<p>The most basic function of <code>#[doc]</code> is to handle the actual documentation
+text. That is, <code>///</code> is syntax sugar for <code>#[doc]</code>. This means that these two
+are the same:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// This is a doc comment.
+#[doc = r&quot; This is a doc comment.&quot;]
+<span class="boring">fn f() {}
+</span><span class="boring">}</span></code></pre></pre>
+<p>(Note the leading space and the raw string literal in the attribute version.)</p>
+<p>In most cases, <code>///</code> is easier to use than <code>#[doc]</code>. One case where the latter is easier is
+when generating documentation in macros; the <code>collapse-docs</code> pass will combine multiple
+<code>#[doc]</code> attributes into a single doc comment, letting you generate code like this:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[doc = &quot;This is&quot;]
+#[doc = &quot; a &quot;]
+#[doc = &quot;doc comment&quot;]
+<span class="boring">fn f() {}
+</span><span class="boring">}</span></code></pre></pre>
+<p>Which can feel more flexible. Note that this would generate this:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[doc = &quot;This is\n a \ndoc comment&quot;]
+<span class="boring">fn f() {}
+</span><span class="boring">}</span></code></pre></pre>
+<p>but given that docs are rendered via Markdown, it will remove these newlines.</p>
+<p>Another use case is for including external files as documentation:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[doc = include_str!(&quot;../../README.md&quot;)]
+<span class="boring">fn f() {}
+</span><span class="boring">}</span></code></pre></pre>
+<p>The <code>doc</code> attribute has more options though! These don't involve the text of
+the output, but instead, various aspects of the presentation of the output.
+We've split them into two kinds below: attributes that are useful at the
+crate level, and ones that are useful at the item level.</p>
+<h2 id="at-the-crate-level"><a class="header" href="#at-the-crate-level">At the crate level</a></h2>
+<p>These options control how the docs look at a crate level.</p>
+<h3 id="html_favicon_url"><a class="header" href="#html_favicon_url"><code>html_favicon_url</code></a></h3>
+<p>This form of the <code>doc</code> attribute lets you control the favicon of your docs.</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span>#![doc(html_favicon_url = &quot;https://example.com/favicon.ico&quot;)]
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre></pre>
+<p>This will put <code>&lt;link rel=&quot;icon&quot; href=&quot;{}&quot;&gt;</code> into your docs, where
+the string for the attribute goes into the <code>{}</code>.</p>
+<p>If you don't use this attribute, there will be no favicon.</p>
+<h3 id="html_logo_url"><a class="header" href="#html_logo_url"><code>html_logo_url</code></a></h3>
+<p>This form of the <code>doc</code> attribute lets you control the logo in the upper
+left hand side of the docs.</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span>#![doc(html_logo_url = &quot;https://example.com/logo.jpg&quot;)]
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre></pre>
+<p>This will put <code>&lt;a href='../index.html'&gt;&lt;img src='{}' alt='logo' width='100'&gt;&lt;/a&gt;</code> into
+your docs, where the string for the attribute goes into the <code>{}</code>.</p>
+<p>If you don't use this attribute, there will be no logo.</p>
+<h3 id="html_playground_url"><a class="header" href="#html_playground_url"><code>html_playground_url</code></a></h3>
+<p>This form of the <code>doc</code> attribute lets you control where the &quot;run&quot; buttons
+on your documentation examples make requests to.</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span>#![doc(html_playground_url = &quot;https://playground.example.com/&quot;)]
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre></pre>
+<p>Now, when you press &quot;run&quot;, the button will make a request to this domain. The request
+URL will contain 2 query parameters: <code>code</code> and <code>edition</code> for the code in the documentation
+and the Rust edition respectively.</p>
+<p>If you don't use this attribute, there will be no run buttons.</p>
+<h3 id="issue_tracker_base_url"><a class="header" href="#issue_tracker_base_url"><code>issue_tracker_base_url</code></a></h3>
+<p>This form of the <code>doc</code> attribute is mostly only useful for the standard library;
+When a feature is unstable, an issue number for tracking the feature must be
+given. <code>rustdoc</code> uses this number, plus the base URL given here, to link to
+the tracking issue.</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span>#![doc(issue_tracker_base_url = &quot;https://github.com/rust-lang/rust/issues/&quot;)]
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre></pre>
+<h3 id="html_root_url"><a class="header" href="#html_root_url"><code>html_root_url</code></a></h3>
+<p>The <code>#[doc(html_root_url = &quot;…&quot;)]</code> attribute value indicates the URL for
+generating links to external crates. When rustdoc needs to generate a link to
+an item in an external crate, it will first check if the extern crate has been
+documented locally on-disk, and if so link directly to it. Failing that, it
+will use the URL given by the <code>--extern-html-root-url</code> command-line flag if
+available. If that is not available, then it will use the <code>html_root_url</code>
+value in the extern crate if it is available. If that is not available, then
+the extern items will not be linked.</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span>#![doc(html_root_url = &quot;https://docs.rs/serde/1.0&quot;)]
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre></pre>
+<h3 id="html_no_source"><a class="header" href="#html_no_source"><code>html_no_source</code></a></h3>
+<p>By default, <code>rustdoc</code> will include the source code of your program, with links
+to it in the docs. But if you include this:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span>#![doc(html_no_source)]
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre></pre>
+<p>it will not.</p>
+<h3 id="testno_crate_inject"><a class="header" href="#testno_crate_inject"><code>test(no_crate_inject)</code></a></h3>
+<p>By default, <code>rustdoc</code> will automatically add a line with <code>extern crate my_crate;</code> into each doctest.
+But if you include this:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span>#![doc(test(no_crate_inject))]
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre></pre>
+<p>it will not.</p>
+<h3 id="testattr"><a class="header" href="#testattr"><code>test(attr(...))</code></a></h3>
+<p>This form of the <code>doc</code> attribute allows you to add arbitrary attributes to all your doctests. For
+example, if you want your doctests to fail if they produce any warnings, you could add this:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span>#![doc(test(attr(deny(warnings))))]
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre></pre>
+<h2 id="at-the-item-level"><a class="header" href="#at-the-item-level">At the item level</a></h2>
+<p>These forms of the <code>#[doc]</code> attribute are used on individual items, to control how
+they are documented.</p>
+<h3 id="inline-and-no_inline"><a class="header" href="#inline-and-no_inline"><code>inline</code> and <code>no_inline</code></a></h3>
+<p><span id="docno_inlinedocinline"></span></p>
+<p>These attributes are used on <code>use</code> statements, and control where the documentation shows
+up. For example, consider this Rust code:</p>
+<pre><pre class="playground"><code class="language-rust no_run">pub use bar::Bar;
+
+/// bar docs
+pub mod bar {
+    /// the docs for Bar
+    pub struct Bar;
+}
+<span class="boring">fn main() {}</span></code></pre></pre>
+<p>The documentation will generate a &quot;Re-exports&quot; section, and say <code>pub use bar::Bar;</code>, where
+<code>Bar</code> is a link to its page.</p>
+<p>If we change the <code>use</code> line like this:</p>
+<pre><pre class="playground"><code class="language-rust no_run">#[doc(inline)]
+pub use bar::Bar;
+<span class="boring">pub mod bar { pub struct Bar; }
+</span><span class="boring">fn main() {}</span></code></pre></pre>
+<p>Instead, <code>Bar</code> will appear in a <code>Structs</code> section, just like <code>Bar</code> was defined at the
+top level, rather than <code>pub use</code>'d.</p>
+<p>Let's change our original example, by making <code>bar</code> private:</p>
+<pre><pre class="playground"><code class="language-rust no_run">pub use bar::Bar;
+
+/// bar docs
+mod bar {
+    /// the docs for Bar
+    pub struct Bar;
+}
+<span class="boring">fn main() {}</span></code></pre></pre>
+<p>Here, because <code>bar</code> is not public, <code>Bar</code> wouldn't have its own page, so there's nowhere
+to link to. <code>rustdoc</code> will inline these definitions, and so we end up in the same case
+as the <code>#[doc(inline)]</code> above; <code>Bar</code> is in a <code>Structs</code> section, as if it were defined at
+the top level. If we add the <code>no_inline</code> form of the attribute:</p>
+<pre><pre class="playground"><code class="language-rust no_run">#[doc(no_inline)]
+pub use bar::Bar;
+
+/// bar docs
+mod bar {
+    /// the docs for Bar
+    pub struct Bar;
+}
+<span class="boring">fn main() {}</span></code></pre></pre>
+<p>Now we'll have a <code>Re-exports</code> line, and <code>Bar</code> will not link to anywhere.</p>
+<p>One special case: In Rust 2018 and later, if you <code>pub use</code> one of your dependencies, <code>rustdoc</code> will
+not eagerly inline it as a module unless you add <code>#[doc(inline)]</code>.</p>
+<h3 id="hidden"><a class="header" href="#hidden"><code>hidden</code></a></h3>
+<p><span id="dochidden"></span></p>
+<p>Any item annotated with <code>#[doc(hidden)]</code> will not appear in the documentation, unless
+the <code>strip-hidden</code> pass is removed.</p>
+<h3 id="alias"><a class="header" href="#alias"><code>alias</code></a></h3>
+<p>This attribute adds an alias in the search index.</p>
+<p>Let's take an example:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[doc(alias = &quot;TheAlias&quot;)]
+pub struct SomeType;
+<span class="boring">}</span></code></pre></pre>
+<p>So now, if you enter &quot;TheAlias&quot; in the search, it'll display <code>SomeType</code>.
+Of course, if you enter <code>SomeType</code> it'll return <code>SomeType</code> as expected!</p>
+<h4 id="ffi-example"><a class="header" href="#ffi-example">FFI example</a></h4>
+<p>This doc attribute is especially useful when writing bindings for a C library.
+For example, let's say we have a C function that looks like this:</p>
+<pre><code class="language-c">int lib_name_do_something(Obj *obj);
+</code></pre>
+<p>It takes a pointer to an <code>Obj</code> type and returns an integer. In Rust, it might
+be written like this:</p>
+<pre><code class="language-ignore (using non-existing ffi types)">pub struct Obj {
+    inner: *mut ffi::Obj,
+}
+
+impl Obj {
+    pub fn do_something(&amp;mut self) -&gt; i32 {
+        unsafe { ffi::lib_name_do_something(self.inner) }
+    }
+}
+</code></pre>
+<p>The function has been turned into a method to make it more convenient to use.
+However, if you want to look for the Rust equivalent of <code>lib_name_do_something</code>,
+you have no way to do so.</p>
+<p>To get around this limitation, we just add <code>#[doc(alias = &quot;lib_name_do_something&quot;)]</code>
+on the <code>do_something</code> method and then it's all good!
+Users can now look for <code>lib_name_do_something</code> in our crate directly and find
+<code>Obj::do_something</code>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../write-documentation/what-to-include.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../write-documentation/linking-to-items-by-name.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../write-documentation/what-to-include.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../write-documentation/linking-to-items-by-name.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

@@ -1,1668 +1,2029 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library&#x2F;core&#x2F;src&#x2F;marker.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>marker.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../../storage1.58.0.js"></script><script src="../../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow1.58.0.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../core/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo1.58.0.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
-<span id="100">100</span>
-<span id="101">101</span>
-<span id="102">102</span>
-<span id="103">103</span>
-<span id="104">104</span>
-<span id="105">105</span>
-<span id="106">106</span>
-<span id="107">107</span>
-<span id="108">108</span>
-<span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
-<span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
-<span id="124">124</span>
-<span id="125">125</span>
-<span id="126">126</span>
-<span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
-<span id="130">130</span>
-<span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
-<span id="181">181</span>
-<span id="182">182</span>
-<span id="183">183</span>
-<span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
-<span id="190">190</span>
-<span id="191">191</span>
-<span id="192">192</span>
-<span id="193">193</span>
-<span id="194">194</span>
-<span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
-<span id="214">214</span>
-<span id="215">215</span>
-<span id="216">216</span>
-<span id="217">217</span>
-<span id="218">218</span>
-<span id="219">219</span>
-<span id="220">220</span>
-<span id="221">221</span>
-<span id="222">222</span>
-<span id="223">223</span>
-<span id="224">224</span>
-<span id="225">225</span>
-<span id="226">226</span>
-<span id="227">227</span>
-<span id="228">228</span>
-<span id="229">229</span>
-<span id="230">230</span>
-<span id="231">231</span>
-<span id="232">232</span>
-<span id="233">233</span>
-<span id="234">234</span>
-<span id="235">235</span>
-<span id="236">236</span>
-<span id="237">237</span>
-<span id="238">238</span>
-<span id="239">239</span>
-<span id="240">240</span>
-<span id="241">241</span>
-<span id="242">242</span>
-<span id="243">243</span>
-<span id="244">244</span>
-<span id="245">245</span>
-<span id="246">246</span>
-<span id="247">247</span>
-<span id="248">248</span>
-<span id="249">249</span>
-<span id="250">250</span>
-<span id="251">251</span>
-<span id="252">252</span>
-<span id="253">253</span>
-<span id="254">254</span>
-<span id="255">255</span>
-<span id="256">256</span>
-<span id="257">257</span>
-<span id="258">258</span>
-<span id="259">259</span>
-<span id="260">260</span>
-<span id="261">261</span>
-<span id="262">262</span>
-<span id="263">263</span>
-<span id="264">264</span>
-<span id="265">265</span>
-<span id="266">266</span>
-<span id="267">267</span>
-<span id="268">268</span>
-<span id="269">269</span>
-<span id="270">270</span>
-<span id="271">271</span>
-<span id="272">272</span>
-<span id="273">273</span>
-<span id="274">274</span>
-<span id="275">275</span>
-<span id="276">276</span>
-<span id="277">277</span>
-<span id="278">278</span>
-<span id="279">279</span>
-<span id="280">280</span>
-<span id="281">281</span>
-<span id="282">282</span>
-<span id="283">283</span>
-<span id="284">284</span>
-<span id="285">285</span>
-<span id="286">286</span>
-<span id="287">287</span>
-<span id="288">288</span>
-<span id="289">289</span>
-<span id="290">290</span>
-<span id="291">291</span>
-<span id="292">292</span>
-<span id="293">293</span>
-<span id="294">294</span>
-<span id="295">295</span>
-<span id="296">296</span>
-<span id="297">297</span>
-<span id="298">298</span>
-<span id="299">299</span>
-<span id="300">300</span>
-<span id="301">301</span>
-<span id="302">302</span>
-<span id="303">303</span>
-<span id="304">304</span>
-<span id="305">305</span>
-<span id="306">306</span>
-<span id="307">307</span>
-<span id="308">308</span>
-<span id="309">309</span>
-<span id="310">310</span>
-<span id="311">311</span>
-<span id="312">312</span>
-<span id="313">313</span>
-<span id="314">314</span>
-<span id="315">315</span>
-<span id="316">316</span>
-<span id="317">317</span>
-<span id="318">318</span>
-<span id="319">319</span>
-<span id="320">320</span>
-<span id="321">321</span>
-<span id="322">322</span>
-<span id="323">323</span>
-<span id="324">324</span>
-<span id="325">325</span>
-<span id="326">326</span>
-<span id="327">327</span>
-<span id="328">328</span>
-<span id="329">329</span>
-<span id="330">330</span>
-<span id="331">331</span>
-<span id="332">332</span>
-<span id="333">333</span>
-<span id="334">334</span>
-<span id="335">335</span>
-<span id="336">336</span>
-<span id="337">337</span>
-<span id="338">338</span>
-<span id="339">339</span>
-<span id="340">340</span>
-<span id="341">341</span>
-<span id="342">342</span>
-<span id="343">343</span>
-<span id="344">344</span>
-<span id="345">345</span>
-<span id="346">346</span>
-<span id="347">347</span>
-<span id="348">348</span>
-<span id="349">349</span>
-<span id="350">350</span>
-<span id="351">351</span>
-<span id="352">352</span>
-<span id="353">353</span>
-<span id="354">354</span>
-<span id="355">355</span>
-<span id="356">356</span>
-<span id="357">357</span>
-<span id="358">358</span>
-<span id="359">359</span>
-<span id="360">360</span>
-<span id="361">361</span>
-<span id="362">362</span>
-<span id="363">363</span>
-<span id="364">364</span>
-<span id="365">365</span>
-<span id="366">366</span>
-<span id="367">367</span>
-<span id="368">368</span>
-<span id="369">369</span>
-<span id="370">370</span>
-<span id="371">371</span>
-<span id="372">372</span>
-<span id="373">373</span>
-<span id="374">374</span>
-<span id="375">375</span>
-<span id="376">376</span>
-<span id="377">377</span>
-<span id="378">378</span>
-<span id="379">379</span>
-<span id="380">380</span>
-<span id="381">381</span>
-<span id="382">382</span>
-<span id="383">383</span>
-<span id="384">384</span>
-<span id="385">385</span>
-<span id="386">386</span>
-<span id="387">387</span>
-<span id="388">388</span>
-<span id="389">389</span>
-<span id="390">390</span>
-<span id="391">391</span>
-<span id="392">392</span>
-<span id="393">393</span>
-<span id="394">394</span>
-<span id="395">395</span>
-<span id="396">396</span>
-<span id="397">397</span>
-<span id="398">398</span>
-<span id="399">399</span>
-<span id="400">400</span>
-<span id="401">401</span>
-<span id="402">402</span>
-<span id="403">403</span>
-<span id="404">404</span>
-<span id="405">405</span>
-<span id="406">406</span>
-<span id="407">407</span>
-<span id="408">408</span>
-<span id="409">409</span>
-<span id="410">410</span>
-<span id="411">411</span>
-<span id="412">412</span>
-<span id="413">413</span>
-<span id="414">414</span>
-<span id="415">415</span>
-<span id="416">416</span>
-<span id="417">417</span>
-<span id="418">418</span>
-<span id="419">419</span>
-<span id="420">420</span>
-<span id="421">421</span>
-<span id="422">422</span>
-<span id="423">423</span>
-<span id="424">424</span>
-<span id="425">425</span>
-<span id="426">426</span>
-<span id="427">427</span>
-<span id="428">428</span>
-<span id="429">429</span>
-<span id="430">430</span>
-<span id="431">431</span>
-<span id="432">432</span>
-<span id="433">433</span>
-<span id="434">434</span>
-<span id="435">435</span>
-<span id="436">436</span>
-<span id="437">437</span>
-<span id="438">438</span>
-<span id="439">439</span>
-<span id="440">440</span>
-<span id="441">441</span>
-<span id="442">442</span>
-<span id="443">443</span>
-<span id="444">444</span>
-<span id="445">445</span>
-<span id="446">446</span>
-<span id="447">447</span>
-<span id="448">448</span>
-<span id="449">449</span>
-<span id="450">450</span>
-<span id="451">451</span>
-<span id="452">452</span>
-<span id="453">453</span>
-<span id="454">454</span>
-<span id="455">455</span>
-<span id="456">456</span>
-<span id="457">457</span>
-<span id="458">458</span>
-<span id="459">459</span>
-<span id="460">460</span>
-<span id="461">461</span>
-<span id="462">462</span>
-<span id="463">463</span>
-<span id="464">464</span>
-<span id="465">465</span>
-<span id="466">466</span>
-<span id="467">467</span>
-<span id="468">468</span>
-<span id="469">469</span>
-<span id="470">470</span>
-<span id="471">471</span>
-<span id="472">472</span>
-<span id="473">473</span>
-<span id="474">474</span>
-<span id="475">475</span>
-<span id="476">476</span>
-<span id="477">477</span>
-<span id="478">478</span>
-<span id="479">479</span>
-<span id="480">480</span>
-<span id="481">481</span>
-<span id="482">482</span>
-<span id="483">483</span>
-<span id="484">484</span>
-<span id="485">485</span>
-<span id="486">486</span>
-<span id="487">487</span>
-<span id="488">488</span>
-<span id="489">489</span>
-<span id="490">490</span>
-<span id="491">491</span>
-<span id="492">492</span>
-<span id="493">493</span>
-<span id="494">494</span>
-<span id="495">495</span>
-<span id="496">496</span>
-<span id="497">497</span>
-<span id="498">498</span>
-<span id="499">499</span>
-<span id="500">500</span>
-<span id="501">501</span>
-<span id="502">502</span>
-<span id="503">503</span>
-<span id="504">504</span>
-<span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
-<span id="508">508</span>
-<span id="509">509</span>
-<span id="510">510</span>
-<span id="511">511</span>
-<span id="512">512</span>
-<span id="513">513</span>
-<span id="514">514</span>
-<span id="515">515</span>
-<span id="516">516</span>
-<span id="517">517</span>
-<span id="518">518</span>
-<span id="519">519</span>
-<span id="520">520</span>
-<span id="521">521</span>
-<span id="522">522</span>
-<span id="523">523</span>
-<span id="524">524</span>
-<span id="525">525</span>
-<span id="526">526</span>
-<span id="527">527</span>
-<span id="528">528</span>
-<span id="529">529</span>
-<span id="530">530</span>
-<span id="531">531</span>
-<span id="532">532</span>
-<span id="533">533</span>
-<span id="534">534</span>
-<span id="535">535</span>
-<span id="536">536</span>
-<span id="537">537</span>
-<span id="538">538</span>
-<span id="539">539</span>
-<span id="540">540</span>
-<span id="541">541</span>
-<span id="542">542</span>
-<span id="543">543</span>
-<span id="544">544</span>
-<span id="545">545</span>
-<span id="546">546</span>
-<span id="547">547</span>
-<span id="548">548</span>
-<span id="549">549</span>
-<span id="550">550</span>
-<span id="551">551</span>
-<span id="552">552</span>
-<span id="553">553</span>
-<span id="554">554</span>
-<span id="555">555</span>
-<span id="556">556</span>
-<span id="557">557</span>
-<span id="558">558</span>
-<span id="559">559</span>
-<span id="560">560</span>
-<span id="561">561</span>
-<span id="562">562</span>
-<span id="563">563</span>
-<span id="564">564</span>
-<span id="565">565</span>
-<span id="566">566</span>
-<span id="567">567</span>
-<span id="568">568</span>
-<span id="569">569</span>
-<span id="570">570</span>
-<span id="571">571</span>
-<span id="572">572</span>
-<span id="573">573</span>
-<span id="574">574</span>
-<span id="575">575</span>
-<span id="576">576</span>
-<span id="577">577</span>
-<span id="578">578</span>
-<span id="579">579</span>
-<span id="580">580</span>
-<span id="581">581</span>
-<span id="582">582</span>
-<span id="583">583</span>
-<span id="584">584</span>
-<span id="585">585</span>
-<span id="586">586</span>
-<span id="587">587</span>
-<span id="588">588</span>
-<span id="589">589</span>
-<span id="590">590</span>
-<span id="591">591</span>
-<span id="592">592</span>
-<span id="593">593</span>
-<span id="594">594</span>
-<span id="595">595</span>
-<span id="596">596</span>
-<span id="597">597</span>
-<span id="598">598</span>
-<span id="599">599</span>
-<span id="600">600</span>
-<span id="601">601</span>
-<span id="602">602</span>
-<span id="603">603</span>
-<span id="604">604</span>
-<span id="605">605</span>
-<span id="606">606</span>
-<span id="607">607</span>
-<span id="608">608</span>
-<span id="609">609</span>
-<span id="610">610</span>
-<span id="611">611</span>
-<span id="612">612</span>
-<span id="613">613</span>
-<span id="614">614</span>
-<span id="615">615</span>
-<span id="616">616</span>
-<span id="617">617</span>
-<span id="618">618</span>
-<span id="619">619</span>
-<span id="620">620</span>
-<span id="621">621</span>
-<span id="622">622</span>
-<span id="623">623</span>
-<span id="624">624</span>
-<span id="625">625</span>
-<span id="626">626</span>
-<span id="627">627</span>
-<span id="628">628</span>
-<span id="629">629</span>
-<span id="630">630</span>
-<span id="631">631</span>
-<span id="632">632</span>
-<span id="633">633</span>
-<span id="634">634</span>
-<span id="635">635</span>
-<span id="636">636</span>
-<span id="637">637</span>
-<span id="638">638</span>
-<span id="639">639</span>
-<span id="640">640</span>
-<span id="641">641</span>
-<span id="642">642</span>
-<span id="643">643</span>
-<span id="644">644</span>
-<span id="645">645</span>
-<span id="646">646</span>
-<span id="647">647</span>
-<span id="648">648</span>
-<span id="649">649</span>
-<span id="650">650</span>
-<span id="651">651</span>
-<span id="652">652</span>
-<span id="653">653</span>
-<span id="654">654</span>
-<span id="655">655</span>
-<span id="656">656</span>
-<span id="657">657</span>
-<span id="658">658</span>
-<span id="659">659</span>
-<span id="660">660</span>
-<span id="661">661</span>
-<span id="662">662</span>
-<span id="663">663</span>
-<span id="664">664</span>
-<span id="665">665</span>
-<span id="666">666</span>
-<span id="667">667</span>
-<span id="668">668</span>
-<span id="669">669</span>
-<span id="670">670</span>
-<span id="671">671</span>
-<span id="672">672</span>
-<span id="673">673</span>
-<span id="674">674</span>
-<span id="675">675</span>
-<span id="676">676</span>
-<span id="677">677</span>
-<span id="678">678</span>
-<span id="679">679</span>
-<span id="680">680</span>
-<span id="681">681</span>
-<span id="682">682</span>
-<span id="683">683</span>
-<span id="684">684</span>
-<span id="685">685</span>
-<span id="686">686</span>
-<span id="687">687</span>
-<span id="688">688</span>
-<span id="689">689</span>
-<span id="690">690</span>
-<span id="691">691</span>
-<span id="692">692</span>
-<span id="693">693</span>
-<span id="694">694</span>
-<span id="695">695</span>
-<span id="696">696</span>
-<span id="697">697</span>
-<span id="698">698</span>
-<span id="699">699</span>
-<span id="700">700</span>
-<span id="701">701</span>
-<span id="702">702</span>
-<span id="703">703</span>
-<span id="704">704</span>
-<span id="705">705</span>
-<span id="706">706</span>
-<span id="707">707</span>
-<span id="708">708</span>
-<span id="709">709</span>
-<span id="710">710</span>
-<span id="711">711</span>
-<span id="712">712</span>
-<span id="713">713</span>
-<span id="714">714</span>
-<span id="715">715</span>
-<span id="716">716</span>
-<span id="717">717</span>
-<span id="718">718</span>
-<span id="719">719</span>
-<span id="720">720</span>
-<span id="721">721</span>
-<span id="722">722</span>
-<span id="723">723</span>
-<span id="724">724</span>
-<span id="725">725</span>
-<span id="726">726</span>
-<span id="727">727</span>
-<span id="728">728</span>
-<span id="729">729</span>
-<span id="730">730</span>
-<span id="731">731</span>
-<span id="732">732</span>
-<span id="733">733</span>
-<span id="734">734</span>
-<span id="735">735</span>
-<span id="736">736</span>
-<span id="737">737</span>
-<span id="738">738</span>
-<span id="739">739</span>
-<span id="740">740</span>
-<span id="741">741</span>
-<span id="742">742</span>
-<span id="743">743</span>
-<span id="744">744</span>
-<span id="745">745</span>
-<span id="746">746</span>
-<span id="747">747</span>
-<span id="748">748</span>
-<span id="749">749</span>
-<span id="750">750</span>
-<span id="751">751</span>
-<span id="752">752</span>
-<span id="753">753</span>
-<span id="754">754</span>
-<span id="755">755</span>
-<span id="756">756</span>
-<span id="757">757</span>
-<span id="758">758</span>
-<span id="759">759</span>
-<span id="760">760</span>
-<span id="761">761</span>
-<span id="762">762</span>
-<span id="763">763</span>
-<span id="764">764</span>
-<span id="765">765</span>
-<span id="766">766</span>
-<span id="767">767</span>
-<span id="768">768</span>
-<span id="769">769</span>
-<span id="770">770</span>
-<span id="771">771</span>
-<span id="772">772</span>
-<span id="773">773</span>
-<span id="774">774</span>
-<span id="775">775</span>
-<span id="776">776</span>
-<span id="777">777</span>
-<span id="778">778</span>
-<span id="779">779</span>
-<span id="780">780</span>
-<span id="781">781</span>
-<span id="782">782</span>
-<span id="783">783</span>
-<span id="784">784</span>
-<span id="785">785</span>
-<span id="786">786</span>
-<span id="787">787</span>
-<span id="788">788</span>
-<span id="789">789</span>
-<span id="790">790</span>
-<span id="791">791</span>
-<span id="792">792</span>
-<span id="793">793</span>
-<span id="794">794</span>
-<span id="795">795</span>
-<span id="796">796</span>
-<span id="797">797</span>
-<span id="798">798</span>
-<span id="799">799</span>
-<span id="800">800</span>
-<span id="801">801</span>
-<span id="802">802</span>
-<span id="803">803</span>
-<span id="804">804</span>
-<span id="805">805</span>
-<span id="806">806</span>
-<span id="807">807</span>
-<span id="808">808</span>
-<span id="809">809</span>
-<span id="810">810</span>
-<span id="811">811</span>
-<span id="812">812</span>
-<span id="813">813</span>
-<span id="814">814</span>
-<span id="815">815</span>
-<span id="816">816</span>
-<span id="817">817</span>
-<span id="818">818</span>
-<span id="819">819</span>
-<span id="820">820</span>
-<span id="821">821</span>
-<span id="822">822</span>
-<span id="823">823</span>
-<span id="824">824</span>
-<span id="825">825</span>
-<span id="826">826</span>
-<span id="827">827</span>
-<span id="828">828</span>
-<span id="829">829</span>
-<span id="830">830</span>
-<span id="831">831</span>
-<span id="832">832</span>
-</pre><pre class="rust"><code><span class="doccomment">//! 代表类型基本属性的原始 traits 和类型。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Rust 类型可以根据其固有属性以各种有用的方式进行分类。</span>
-<span class="doccomment">//! 这些分类表示为 traits。</span>
-<span class="doccomment">//!</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/marker.rs`."><title>marker.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files1.71.0.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../core/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<a href="#2" id="2">2</a>
+<a href="#3" id="3">3</a>
+<a href="#4" id="4">4</a>
+<a href="#5" id="5">5</a>
+<a href="#6" id="6">6</a>
+<a href="#7" id="7">7</a>
+<a href="#8" id="8">8</a>
+<a href="#9" id="9">9</a>
+<a href="#10" id="10">10</a>
+<a href="#11" id="11">11</a>
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
+<a href="#48" id="48">48</a>
+<a href="#49" id="49">49</a>
+<a href="#50" id="50">50</a>
+<a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
+<a href="#364" id="364">364</a>
+<a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
+<a href="#368" id="368">368</a>
+<a href="#369" id="369">369</a>
+<a href="#370" id="370">370</a>
+<a href="#371" id="371">371</a>
+<a href="#372" id="372">372</a>
+<a href="#373" id="373">373</a>
+<a href="#374" id="374">374</a>
+<a href="#375" id="375">375</a>
+<a href="#376" id="376">376</a>
+<a href="#377" id="377">377</a>
+<a href="#378" id="378">378</a>
+<a href="#379" id="379">379</a>
+<a href="#380" id="380">380</a>
+<a href="#381" id="381">381</a>
+<a href="#382" id="382">382</a>
+<a href="#383" id="383">383</a>
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
+<a href="#387" id="387">387</a>
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a>
+<a href="#431" id="431">431</a>
+<a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
+<a href="#439" id="439">439</a>
+<a href="#440" id="440">440</a>
+<a href="#441" id="441">441</a>
+<a href="#442" id="442">442</a>
+<a href="#443" id="443">443</a>
+<a href="#444" id="444">444</a>
+<a href="#445" id="445">445</a>
+<a href="#446" id="446">446</a>
+<a href="#447" id="447">447</a>
+<a href="#448" id="448">448</a>
+<a href="#449" id="449">449</a>
+<a href="#450" id="450">450</a>
+<a href="#451" id="451">451</a>
+<a href="#452" id="452">452</a>
+<a href="#453" id="453">453</a>
+<a href="#454" id="454">454</a>
+<a href="#455" id="455">455</a>
+<a href="#456" id="456">456</a>
+<a href="#457" id="457">457</a>
+<a href="#458" id="458">458</a>
+<a href="#459" id="459">459</a>
+<a href="#460" id="460">460</a>
+<a href="#461" id="461">461</a>
+<a href="#462" id="462">462</a>
+<a href="#463" id="463">463</a>
+<a href="#464" id="464">464</a>
+<a href="#465" id="465">465</a>
+<a href="#466" id="466">466</a>
+<a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
+<a href="#489" id="489">489</a>
+<a href="#490" id="490">490</a>
+<a href="#491" id="491">491</a>
+<a href="#492" id="492">492</a>
+<a href="#493" id="493">493</a>
+<a href="#494" id="494">494</a>
+<a href="#495" id="495">495</a>
+<a href="#496" id="496">496</a>
+<a href="#497" id="497">497</a>
+<a href="#498" id="498">498</a>
+<a href="#499" id="499">499</a>
+<a href="#500" id="500">500</a>
+<a href="#501" id="501">501</a>
+<a href="#502" id="502">502</a>
+<a href="#503" id="503">503</a>
+<a href="#504" id="504">504</a>
+<a href="#505" id="505">505</a>
+<a href="#506" id="506">506</a>
+<a href="#507" id="507">507</a>
+<a href="#508" id="508">508</a>
+<a href="#509" id="509">509</a>
+<a href="#510" id="510">510</a>
+<a href="#511" id="511">511</a>
+<a href="#512" id="512">512</a>
+<a href="#513" id="513">513</a>
+<a href="#514" id="514">514</a>
+<a href="#515" id="515">515</a>
+<a href="#516" id="516">516</a>
+<a href="#517" id="517">517</a>
+<a href="#518" id="518">518</a>
+<a href="#519" id="519">519</a>
+<a href="#520" id="520">520</a>
+<a href="#521" id="521">521</a>
+<a href="#522" id="522">522</a>
+<a href="#523" id="523">523</a>
+<a href="#524" id="524">524</a>
+<a href="#525" id="525">525</a>
+<a href="#526" id="526">526</a>
+<a href="#527" id="527">527</a>
+<a href="#528" id="528">528</a>
+<a href="#529" id="529">529</a>
+<a href="#530" id="530">530</a>
+<a href="#531" id="531">531</a>
+<a href="#532" id="532">532</a>
+<a href="#533" id="533">533</a>
+<a href="#534" id="534">534</a>
+<a href="#535" id="535">535</a>
+<a href="#536" id="536">536</a>
+<a href="#537" id="537">537</a>
+<a href="#538" id="538">538</a>
+<a href="#539" id="539">539</a>
+<a href="#540" id="540">540</a>
+<a href="#541" id="541">541</a>
+<a href="#542" id="542">542</a>
+<a href="#543" id="543">543</a>
+<a href="#544" id="544">544</a>
+<a href="#545" id="545">545</a>
+<a href="#546" id="546">546</a>
+<a href="#547" id="547">547</a>
+<a href="#548" id="548">548</a>
+<a href="#549" id="549">549</a>
+<a href="#550" id="550">550</a>
+<a href="#551" id="551">551</a>
+<a href="#552" id="552">552</a>
+<a href="#553" id="553">553</a>
+<a href="#554" id="554">554</a>
+<a href="#555" id="555">555</a>
+<a href="#556" id="556">556</a>
+<a href="#557" id="557">557</a>
+<a href="#558" id="558">558</a>
+<a href="#559" id="559">559</a>
+<a href="#560" id="560">560</a>
+<a href="#561" id="561">561</a>
+<a href="#562" id="562">562</a>
+<a href="#563" id="563">563</a>
+<a href="#564" id="564">564</a>
+<a href="#565" id="565">565</a>
+<a href="#566" id="566">566</a>
+<a href="#567" id="567">567</a>
+<a href="#568" id="568">568</a>
+<a href="#569" id="569">569</a>
+<a href="#570" id="570">570</a>
+<a href="#571" id="571">571</a>
+<a href="#572" id="572">572</a>
+<a href="#573" id="573">573</a>
+<a href="#574" id="574">574</a>
+<a href="#575" id="575">575</a>
+<a href="#576" id="576">576</a>
+<a href="#577" id="577">577</a>
+<a href="#578" id="578">578</a>
+<a href="#579" id="579">579</a>
+<a href="#580" id="580">580</a>
+<a href="#581" id="581">581</a>
+<a href="#582" id="582">582</a>
+<a href="#583" id="583">583</a>
+<a href="#584" id="584">584</a>
+<a href="#585" id="585">585</a>
+<a href="#586" id="586">586</a>
+<a href="#587" id="587">587</a>
+<a href="#588" id="588">588</a>
+<a href="#589" id="589">589</a>
+<a href="#590" id="590">590</a>
+<a href="#591" id="591">591</a>
+<a href="#592" id="592">592</a>
+<a href="#593" id="593">593</a>
+<a href="#594" id="594">594</a>
+<a href="#595" id="595">595</a>
+<a href="#596" id="596">596</a>
+<a href="#597" id="597">597</a>
+<a href="#598" id="598">598</a>
+<a href="#599" id="599">599</a>
+<a href="#600" id="600">600</a>
+<a href="#601" id="601">601</a>
+<a href="#602" id="602">602</a>
+<a href="#603" id="603">603</a>
+<a href="#604" id="604">604</a>
+<a href="#605" id="605">605</a>
+<a href="#606" id="606">606</a>
+<a href="#607" id="607">607</a>
+<a href="#608" id="608">608</a>
+<a href="#609" id="609">609</a>
+<a href="#610" id="610">610</a>
+<a href="#611" id="611">611</a>
+<a href="#612" id="612">612</a>
+<a href="#613" id="613">613</a>
+<a href="#614" id="614">614</a>
+<a href="#615" id="615">615</a>
+<a href="#616" id="616">616</a>
+<a href="#617" id="617">617</a>
+<a href="#618" id="618">618</a>
+<a href="#619" id="619">619</a>
+<a href="#620" id="620">620</a>
+<a href="#621" id="621">621</a>
+<a href="#622" id="622">622</a>
+<a href="#623" id="623">623</a>
+<a href="#624" id="624">624</a>
+<a href="#625" id="625">625</a>
+<a href="#626" id="626">626</a>
+<a href="#627" id="627">627</a>
+<a href="#628" id="628">628</a>
+<a href="#629" id="629">629</a>
+<a href="#630" id="630">630</a>
+<a href="#631" id="631">631</a>
+<a href="#632" id="632">632</a>
+<a href="#633" id="633">633</a>
+<a href="#634" id="634">634</a>
+<a href="#635" id="635">635</a>
+<a href="#636" id="636">636</a>
+<a href="#637" id="637">637</a>
+<a href="#638" id="638">638</a>
+<a href="#639" id="639">639</a>
+<a href="#640" id="640">640</a>
+<a href="#641" id="641">641</a>
+<a href="#642" id="642">642</a>
+<a href="#643" id="643">643</a>
+<a href="#644" id="644">644</a>
+<a href="#645" id="645">645</a>
+<a href="#646" id="646">646</a>
+<a href="#647" id="647">647</a>
+<a href="#648" id="648">648</a>
+<a href="#649" id="649">649</a>
+<a href="#650" id="650">650</a>
+<a href="#651" id="651">651</a>
+<a href="#652" id="652">652</a>
+<a href="#653" id="653">653</a>
+<a href="#654" id="654">654</a>
+<a href="#655" id="655">655</a>
+<a href="#656" id="656">656</a>
+<a href="#657" id="657">657</a>
+<a href="#658" id="658">658</a>
+<a href="#659" id="659">659</a>
+<a href="#660" id="660">660</a>
+<a href="#661" id="661">661</a>
+<a href="#662" id="662">662</a>
+<a href="#663" id="663">663</a>
+<a href="#664" id="664">664</a>
+<a href="#665" id="665">665</a>
+<a href="#666" id="666">666</a>
+<a href="#667" id="667">667</a>
+<a href="#668" id="668">668</a>
+<a href="#669" id="669">669</a>
+<a href="#670" id="670">670</a>
+<a href="#671" id="671">671</a>
+<a href="#672" id="672">672</a>
+<a href="#673" id="673">673</a>
+<a href="#674" id="674">674</a>
+<a href="#675" id="675">675</a>
+<a href="#676" id="676">676</a>
+<a href="#677" id="677">677</a>
+<a href="#678" id="678">678</a>
+<a href="#679" id="679">679</a>
+<a href="#680" id="680">680</a>
+<a href="#681" id="681">681</a>
+<a href="#682" id="682">682</a>
+<a href="#683" id="683">683</a>
+<a href="#684" id="684">684</a>
+<a href="#685" id="685">685</a>
+<a href="#686" id="686">686</a>
+<a href="#687" id="687">687</a>
+<a href="#688" id="688">688</a>
+<a href="#689" id="689">689</a>
+<a href="#690" id="690">690</a>
+<a href="#691" id="691">691</a>
+<a href="#692" id="692">692</a>
+<a href="#693" id="693">693</a>
+<a href="#694" id="694">694</a>
+<a href="#695" id="695">695</a>
+<a href="#696" id="696">696</a>
+<a href="#697" id="697">697</a>
+<a href="#698" id="698">698</a>
+<a href="#699" id="699">699</a>
+<a href="#700" id="700">700</a>
+<a href="#701" id="701">701</a>
+<a href="#702" id="702">702</a>
+<a href="#703" id="703">703</a>
+<a href="#704" id="704">704</a>
+<a href="#705" id="705">705</a>
+<a href="#706" id="706">706</a>
+<a href="#707" id="707">707</a>
+<a href="#708" id="708">708</a>
+<a href="#709" id="709">709</a>
+<a href="#710" id="710">710</a>
+<a href="#711" id="711">711</a>
+<a href="#712" id="712">712</a>
+<a href="#713" id="713">713</a>
+<a href="#714" id="714">714</a>
+<a href="#715" id="715">715</a>
+<a href="#716" id="716">716</a>
+<a href="#717" id="717">717</a>
+<a href="#718" id="718">718</a>
+<a href="#719" id="719">719</a>
+<a href="#720" id="720">720</a>
+<a href="#721" id="721">721</a>
+<a href="#722" id="722">722</a>
+<a href="#723" id="723">723</a>
+<a href="#724" id="724">724</a>
+<a href="#725" id="725">725</a>
+<a href="#726" id="726">726</a>
+<a href="#727" id="727">727</a>
+<a href="#728" id="728">728</a>
+<a href="#729" id="729">729</a>
+<a href="#730" id="730">730</a>
+<a href="#731" id="731">731</a>
+<a href="#732" id="732">732</a>
+<a href="#733" id="733">733</a>
+<a href="#734" id="734">734</a>
+<a href="#735" id="735">735</a>
+<a href="#736" id="736">736</a>
+<a href="#737" id="737">737</a>
+<a href="#738" id="738">738</a>
+<a href="#739" id="739">739</a>
+<a href="#740" id="740">740</a>
+<a href="#741" id="741">741</a>
+<a href="#742" id="742">742</a>
+<a href="#743" id="743">743</a>
+<a href="#744" id="744">744</a>
+<a href="#745" id="745">745</a>
+<a href="#746" id="746">746</a>
+<a href="#747" id="747">747</a>
+<a href="#748" id="748">748</a>
+<a href="#749" id="749">749</a>
+<a href="#750" id="750">750</a>
+<a href="#751" id="751">751</a>
+<a href="#752" id="752">752</a>
+<a href="#753" id="753">753</a>
+<a href="#754" id="754">754</a>
+<a href="#755" id="755">755</a>
+<a href="#756" id="756">756</a>
+<a href="#757" id="757">757</a>
+<a href="#758" id="758">758</a>
+<a href="#759" id="759">759</a>
+<a href="#760" id="760">760</a>
+<a href="#761" id="761">761</a>
+<a href="#762" id="762">762</a>
+<a href="#763" id="763">763</a>
+<a href="#764" id="764">764</a>
+<a href="#765" id="765">765</a>
+<a href="#766" id="766">766</a>
+<a href="#767" id="767">767</a>
+<a href="#768" id="768">768</a>
+<a href="#769" id="769">769</a>
+<a href="#770" id="770">770</a>
+<a href="#771" id="771">771</a>
+<a href="#772" id="772">772</a>
+<a href="#773" id="773">773</a>
+<a href="#774" id="774">774</a>
+<a href="#775" id="775">775</a>
+<a href="#776" id="776">776</a>
+<a href="#777" id="777">777</a>
+<a href="#778" id="778">778</a>
+<a href="#779" id="779">779</a>
+<a href="#780" id="780">780</a>
+<a href="#781" id="781">781</a>
+<a href="#782" id="782">782</a>
+<a href="#783" id="783">783</a>
+<a href="#784" id="784">784</a>
+<a href="#785" id="785">785</a>
+<a href="#786" id="786">786</a>
+<a href="#787" id="787">787</a>
+<a href="#788" id="788">788</a>
+<a href="#789" id="789">789</a>
+<a href="#790" id="790">790</a>
+<a href="#791" id="791">791</a>
+<a href="#792" id="792">792</a>
+<a href="#793" id="793">793</a>
+<a href="#794" id="794">794</a>
+<a href="#795" id="795">795</a>
+<a href="#796" id="796">796</a>
+<a href="#797" id="797">797</a>
+<a href="#798" id="798">798</a>
+<a href="#799" id="799">799</a>
+<a href="#800" id="800">800</a>
+<a href="#801" id="801">801</a>
+<a href="#802" id="802">802</a>
+<a href="#803" id="803">803</a>
+<a href="#804" id="804">804</a>
+<a href="#805" id="805">805</a>
+<a href="#806" id="806">806</a>
+<a href="#807" id="807">807</a>
+<a href="#808" id="808">808</a>
+<a href="#809" id="809">809</a>
+<a href="#810" id="810">810</a>
+<a href="#811" id="811">811</a>
+<a href="#812" id="812">812</a>
+<a href="#813" id="813">813</a>
+<a href="#814" id="814">814</a>
+<a href="#815" id="815">815</a>
+<a href="#816" id="816">816</a>
+<a href="#817" id="817">817</a>
+<a href="#818" id="818">818</a>
+<a href="#819" id="819">819</a>
+<a href="#820" id="820">820</a>
+<a href="#821" id="821">821</a>
+<a href="#822" id="822">822</a>
+<a href="#823" id="823">823</a>
+<a href="#824" id="824">824</a>
+<a href="#825" id="825">825</a>
+<a href="#826" id="826">826</a>
+<a href="#827" id="827">827</a>
+<a href="#828" id="828">828</a>
+<a href="#829" id="829">829</a>
+<a href="#830" id="830">830</a>
+<a href="#831" id="831">831</a>
+<a href="#832" id="832">832</a>
+<a href="#833" id="833">833</a>
+<a href="#834" id="834">834</a>
+<a href="#835" id="835">835</a>
+<a href="#836" id="836">836</a>
+<a href="#837" id="837">837</a>
+<a href="#838" id="838">838</a>
+<a href="#839" id="839">839</a>
+<a href="#840" id="840">840</a>
+<a href="#841" id="841">841</a>
+<a href="#842" id="842">842</a>
+<a href="#843" id="843">843</a>
+<a href="#844" id="844">844</a>
+<a href="#845" id="845">845</a>
+<a href="#846" id="846">846</a>
+<a href="#847" id="847">847</a>
+<a href="#848" id="848">848</a>
+<a href="#849" id="849">849</a>
+<a href="#850" id="850">850</a>
+<a href="#851" id="851">851</a>
+<a href="#852" id="852">852</a>
+<a href="#853" id="853">853</a>
+<a href="#854" id="854">854</a>
+<a href="#855" id="855">855</a>
+<a href="#856" id="856">856</a>
+<a href="#857" id="857">857</a>
+<a href="#858" id="858">858</a>
+<a href="#859" id="859">859</a>
+<a href="#860" id="860">860</a>
+<a href="#861" id="861">861</a>
+<a href="#862" id="862">862</a>
+<a href="#863" id="863">863</a>
+<a href="#864" id="864">864</a>
+<a href="#865" id="865">865</a>
+<a href="#866" id="866">866</a>
+<a href="#867" id="867">867</a>
+<a href="#868" id="868">868</a>
+<a href="#869" id="869">869</a>
+<a href="#870" id="870">870</a>
+<a href="#871" id="871">871</a>
+<a href="#872" id="872">872</a>
+<a href="#873" id="873">873</a>
+<a href="#874" id="874">874</a>
+<a href="#875" id="875">875</a>
+<a href="#876" id="876">876</a>
+<a href="#877" id="877">877</a>
+<a href="#878" id="878">878</a>
+<a href="#879" id="879">879</a>
+<a href="#880" id="880">880</a>
+<a href="#881" id="881">881</a>
+<a href="#882" id="882">882</a>
+<a href="#883" id="883">883</a>
+<a href="#884" id="884">884</a>
+<a href="#885" id="885">885</a>
+<a href="#886" id="886">886</a>
+<a href="#887" id="887">887</a>
+<a href="#888" id="888">888</a>
+<a href="#889" id="889">889</a>
+<a href="#890" id="890">890</a>
+<a href="#891" id="891">891</a>
+<a href="#892" id="892">892</a>
+<a href="#893" id="893">893</a>
+<a href="#894" id="894">894</a>
+<a href="#895" id="895">895</a>
+<a href="#896" id="896">896</a>
+<a href="#897" id="897">897</a>
+<a href="#898" id="898">898</a>
+<a href="#899" id="899">899</a>
+<a href="#900" id="900">900</a>
+<a href="#901" id="901">901</a>
+<a href="#902" id="902">902</a>
+<a href="#903" id="903">903</a>
+<a href="#904" id="904">904</a>
+<a href="#905" id="905">905</a>
+<a href="#906" id="906">906</a>
+<a href="#907" id="907">907</a>
+<a href="#908" id="908">908</a>
+<a href="#909" id="909">909</a>
+<a href="#910" id="910">910</a>
+<a href="#911" id="911">911</a>
+<a href="#912" id="912">912</a>
+<a href="#913" id="913">913</a>
+<a href="#914" id="914">914</a>
+<a href="#915" id="915">915</a>
+<a href="#916" id="916">916</a>
+<a href="#917" id="917">917</a>
+<a href="#918" id="918">918</a>
+<a href="#919" id="919">919</a>
+<a href="#920" id="920">920</a>
+<a href="#921" id="921">921</a>
+<a href="#922" id="922">922</a>
+<a href="#923" id="923">923</a>
+<a href="#924" id="924">924</a>
+<a href="#925" id="925">925</a>
+<a href="#926" id="926">926</a>
+<a href="#927" id="927">927</a>
+<a href="#928" id="928">928</a>
+<a href="#929" id="929">929</a>
+<a href="#930" id="930">930</a>
+<a href="#931" id="931">931</a>
+<a href="#932" id="932">932</a>
+<a href="#933" id="933">933</a>
+<a href="#934" id="934">934</a>
+<a href="#935" id="935">935</a>
+<a href="#936" id="936">936</a>
+<a href="#937" id="937">937</a>
+<a href="#938" id="938">938</a>
+<a href="#939" id="939">939</a>
+<a href="#940" id="940">940</a>
+<a href="#941" id="941">941</a>
+<a href="#942" id="942">942</a>
+<a href="#943" id="943">943</a>
+<a href="#944" id="944">944</a>
+<a href="#945" id="945">945</a>
+<a href="#946" id="946">946</a>
+<a href="#947" id="947">947</a>
+<a href="#948" id="948">948</a>
+<a href="#949" id="949">949</a>
+<a href="#950" id="950">950</a>
+<a href="#951" id="951">951</a>
+<a href="#952" id="952">952</a>
+<a href="#953" id="953">953</a>
+<a href="#954" id="954">954</a>
+<a href="#955" id="955">955</a>
+<a href="#956" id="956">956</a>
+<a href="#957" id="957">957</a>
+<a href="#958" id="958">958</a>
+<a href="#959" id="959">959</a>
+<a href="#960" id="960">960</a>
+<a href="#961" id="961">961</a>
+<a href="#962" id="962">962</a>
+<a href="#963" id="963">963</a>
+<a href="#964" id="964">964</a>
+<a href="#965" id="965">965</a>
+<a href="#966" id="966">966</a>
+<a href="#967" id="967">967</a>
+<a href="#968" id="968">968</a>
+<a href="#969" id="969">969</a>
+<a href="#970" id="970">970</a>
+<a href="#971" id="971">971</a>
+<a href="#972" id="972">972</a>
+<a href="#973" id="973">973</a>
+<a href="#974" id="974">974</a>
+<a href="#975" id="975">975</a>
+<a href="#976" id="976">976</a>
+<a href="#977" id="977">977</a>
+<a href="#978" id="978">978</a>
+<a href="#979" id="979">979</a>
+<a href="#980" id="980">980</a>
+<a href="#981" id="981">981</a>
+<a href="#982" id="982">982</a>
+<a href="#983" id="983">983</a>
+<a href="#984" id="984">984</a>
+<a href="#985" id="985">985</a>
+<a href="#986" id="986">986</a>
+<a href="#987" id="987">987</a>
+<a href="#988" id="988">988</a>
+<a href="#989" id="989">989</a>
+<a href="#990" id="990">990</a>
+<a href="#991" id="991">991</a>
+<a href="#992" id="992">992</a>
+<a href="#993" id="993">993</a>
+<a href="#994" id="994">994</a>
+<a href="#995" id="995">995</a>
+<a href="#996" id="996">996</a>
+<a href="#997" id="997">997</a>
+<a href="#998" id="998">998</a>
+<a href="#999" id="999">999</a>
+<a href="#1000" id="1000">1000</a>
+<a href="#1001" id="1001">1001</a>
+<a href="#1002" id="1002">1002</a>
+<a href="#1003" id="1003">1003</a>
+<a href="#1004" id="1004">1004</a>
+<a href="#1005" id="1005">1005</a>
+<a href="#1006" id="1006">1006</a>
+<a href="#1007" id="1007">1007</a>
+<a href="#1008" id="1008">1008</a>
+<a href="#1009" id="1009">1009</a>
+<a href="#1010" id="1010">1010</a>
+<a href="#1011" id="1011">1011</a>
+<a href="#1012" id="1012">1012</a>
+<a href="#1013" id="1013">1013</a>
+<a href="#1014" id="1014">1014</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 代表类型基本属性的原始 traits 和类型。
+//!
+//! Rust 类型可以根据其固有属性以各种有用的方式进行分类。
+//! 这些分类表示为 traits。
+//!
 
-<span class="attribute">#![<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
+</span><span class="attr">#![stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cell::UnsafeCell</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cmp</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::fmt::Debug</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::hash::Hash</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::hash::Hasher</span>;
+</span><span class="kw">use </span><span class="kw">crate</span>::cell::UnsafeCell;
+<span class="kw">use </span><span class="kw">crate</span>::cmp;
+<span class="kw">use </span><span class="kw">crate</span>::fmt::Debug;
+<span class="kw">use </span><span class="kw">crate</span>::hash::Hash;
+<span class="kw">use </span><span class="kw">crate</span>::hash::Hasher;
 
-<span class="doccomment">/// 可以跨线程边界传输的类型。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 当编译器确定适当时，会自动实现此 trait。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 非 `Send` 类型的一个例子是引用计数指针 [`rc::Rc`][`Rc`]。</span>
-<span class="doccomment">/// 如果两个线程试图克隆指向相同引用计数值的 [`Rc`]，它们可能会同时尝试更新引用计数，这是 [未定义行为][ub] 因为 [`Rc`] 不使用原子操作。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 它的表亲 [`sync::Arc`][arc] 确实使用原子操作 (产生一些开销)，因此它是 `Send`。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 有关更多详细信息，请参见 [the Nomicon](../../nomicon/send-and-sync.html)。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`Rc`]: ../../std/rc/struct.Rc.html</span>
-<span class="doccomment">/// [arc]: ../../std/sync/struct.Arc.html</span>
-<span class="doccomment">/// [ub]: ../../reference/behavior-considered-undefined.html</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">test</span>), <span class="ident">rustc_diagnostic_item</span> <span class="op">=</span> <span class="string">&quot;Send&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">rustc_on_unimplemented</span>(
-    <span class="ident">message</span> <span class="op">=</span> <span class="string">&quot;`{Self}` cannot be sent between threads safely&quot;</span>,
-    <span class="ident">label</span> <span class="op">=</span> <span class="string">&quot;`{Self}` cannot be sent between threads safely&quot;</span>
-)]</span>
-<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="ident">auto</span> <span class="kw">trait</span> <span class="ident">Send</span> {
-    <span class="comment">// empty.</span>
+<span class="doccomment">/// 同时为多种类型实现给定标记 trait。
+///
+/// 基本语法如下所示:
+/// ```ignore private macro
+/// marker_impls! { MarkerTrait for u8, i8 }
+/// ```
+/// 您还可以实现 `unsafe` traits
+/// ```ignore private macro
+/// marker_impls! { unsafe MarkerTrait for u8, i8 }
+/// ```
+/// 为所有 impls 添加属性:
+/// ```ignore private macro
+/// marker_impls! {
+///     #[allow(lint)]
+///     #[unstable(feature = &quot;marker_trait&quot;, issue = &quot;none&quot;)]
+///     MarkerTrait for u8, i8
+/// }
+/// ```
+/// 并使用泛型:
+/// ```ignore private macro
+/// marker_impls! {
+///     MarkerTrait for
+///         u8, i8,
+///         {T: ?Sized} *const T,
+///         {T: ?Sized} *mut T,
+///         {T: MarkerTrait} PhantomData&lt;T&gt;,
+///         u32,
+/// }
+/// ```
+</span><span class="attr">#[unstable(feature = <span class="string">&quot;internal_impls_macro&quot;</span>, issue = <span class="string">&quot;none&quot;</span>)]
+</span><span class="kw">macro </span>marker_impls {
+    ( $(<span class="attr">#[$(<span class="macro-nonterminal">$meta</span>:tt)<span class="kw-2">*</span>]</span>)* <span class="macro-nonterminal">$Trait</span>:ident <span class="kw">for </span>$({$(<span class="macro-nonterminal">$bounds</span>:tt)<span class="kw-2">*</span>})<span class="question-mark">? </span><span class="macro-nonterminal">$T</span>:ty $(, $(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+        $(<span class="attr">#[$(<span class="macro-nonterminal">$meta</span>)<span class="kw-2">*</span>]</span>)* <span class="kw">impl</span>&lt; $($(<span class="macro-nonterminal">$bounds</span>)<span class="kw-2">*</span>)<span class="question-mark">? </span>&gt; <span class="macro-nonterminal">$Trait </span><span class="kw">for </span><span class="macro-nonterminal">$T </span>{}
+        <span class="macro">marker_impls! </span>{ $(<span class="attr">#[$(<span class="macro-nonterminal">$meta</span>)<span class="kw-2">*</span>]</span>)* <span class="macro-nonterminal">$Trait </span><span class="kw">for </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">? </span>}
+    },
+    ( $(<span class="attr">#[$(<span class="macro-nonterminal">$meta</span>:tt)<span class="kw-2">*</span>]</span>)* <span class="macro-nonterminal">$Trait</span>:ident <span class="kw">for </span>) =&gt; {},
+
+    ( $(<span class="attr">#[$(<span class="macro-nonterminal">$meta</span>:tt)<span class="kw-2">*</span>]</span>)* <span class="kw">unsafe </span><span class="macro-nonterminal">$Trait</span>:ident <span class="kw">for </span>$({$(<span class="macro-nonterminal">$bounds</span>:tt)<span class="kw-2">*</span>})<span class="question-mark">? </span><span class="macro-nonterminal">$T</span>:ty $(, $(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+        $(<span class="attr">#[$(<span class="macro-nonterminal">$meta</span>)<span class="kw-2">*</span>]</span>)* <span class="kw">unsafe impl</span>&lt; $($(<span class="macro-nonterminal">$bounds</span>)<span class="kw-2">*</span>)<span class="question-mark">? </span>&gt; <span class="macro-nonterminal">$Trait </span><span class="kw">for </span><span class="macro-nonterminal">$T </span>{}
+        <span class="macro">marker_impls! </span>{ $(<span class="attr">#[$(<span class="macro-nonterminal">$meta</span>)<span class="kw-2">*</span>]</span>)* <span class="kw">unsafe </span><span class="macro-nonterminal">$Trait </span><span class="kw">for </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">? </span>}
+    },
+    ( $(<span class="attr">#[$(<span class="macro-nonterminal">$meta</span>:tt)<span class="kw-2">*</span>]</span>)* <span class="kw">unsafe </span><span class="macro-nonterminal">$Trait</span>:ident <span class="kw">for </span>) =&gt; {},
 }
 
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="op">!</span><span class="ident">Send</span> <span class="kw">for</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">T</span> {}
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="op">!</span><span class="ident">Send</span> <span class="kw">for</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span> {}
+<span class="doccomment">/// 可以跨线程边界传输的类型。
+///
+/// 当编译器确定适当时，会自动实现此 trait。
+///
+/// 非 `Send` 类型的一个例子是引用计数指针 [`rc::Rc`][`Rc`]。
+/// 如果两个线程试图克隆指向相同引用计数值的 [`Rc`]，它们可能会同时尝试更新引用计数，这是 [未定义行为][ub] 因为 [`Rc`] 不使用原子操作。
+///
+/// 它的表亲 [`sync::Arc`][arc] 确实使用原子操作 (产生一些开销)，因此它是 `Send`。
+///
+/// 有关详细信息，请参见 [the Nomicon](../../nomicon/send-and-sync.html) 和 [`Sync`] trait。
+///
+/// [`Rc`]: ../../std/rc/struct.Rc.html
+/// [arc]: ../../std/sync/struct.Arc.html
+/// [ub]: ../../reference/behavior-considered-undefined.html
+///
+///
+///
+</span><span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+#[cfg_attr(not(test), rustc_diagnostic_item = <span class="string">&quot;Send&quot;</span>)]
+#[rustc_on_unimplemented(
+    message = <span class="string">&quot;`{Self}` cannot be sent between threads safely&quot;</span>,
+    label = <span class="string">&quot;`{Self}` cannot be sent between threads safely&quot;
+</span>)]
+</span><span class="kw">pub unsafe </span>auto <span class="kw">trait </span>Send {
+    <span class="comment">// empty.
+</span>}
 
-<span class="doccomment">/// 在编译时已知大小为常量的类型。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 所有类型参数都有一个 `Sized` 的隐式界限。如果不合适，可以使用特殊语法 `?Sized` 删除这个界限。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// # #![allow(dead_code)]</span>
-<span class="doccomment">/// struct Foo&lt;T&gt;(T);</span>
-<span class="doccomment">/// struct Bar&lt;T: ?Sized&gt;(T);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // struct FooUse(Foo&lt;[i32]&gt;);  // 错误：没有为 [i32] 实现 Sized</span>
-<span class="doccomment">/// struct BarUse(Bar&lt;[i32]&gt;); // OK</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 一个例外是 trait 的隐式 `Self` 类型。</span>
-<span class="doccomment">/// 这个 trait 没有隐式的 `Sized` 界限，因为它与 [trait 对象][trait object] 不兼容，根据定义，trait 需要与所有可能的实现者一起工作，因此可以为任意大小。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 尽管 Rust 可以让你将 `Sized` 绑定到一个 trait，但是以后您将无法使用它来生成 trait 对象：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// # #![allow(unused_variables)]</span>
-<span class="doccomment">/// trait Foo { }</span>
-<span class="doccomment">/// trait Bar: Sized { }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// struct Impl;</span>
-<span class="doccomment">/// impl Foo for Impl { }</span>
-<span class="doccomment">/// impl Bar for Impl { }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let x: &amp;dyn Foo = &amp;Impl;    // OK</span>
-<span class="doccomment">/// // let y: &amp;dyn Bar = &amp;Impl;  // 错误：无法将 `Bar` trait 制作成对象</span>
-<span class="comment">/////</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [trait object]: ../../book/ch17-02-trait-objects.html</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">lang</span> <span class="op">=</span> <span class="string">&quot;sized&quot;</span>]</span>
-<span class="attribute">#[<span class="ident">rustc_on_unimplemented</span>(
-    <span class="ident">message</span> <span class="op">=</span> <span class="string">&quot;the size for values of type `{Self}` cannot be known at compilation time&quot;</span>,
-    <span class="ident">label</span> <span class="op">=</span> <span class="string">&quot;doesn&#39;t have a size known at compile-time&quot;</span>
-)]</span>
-<span class="attribute">#[<span class="ident">fundamental</span>]</span> <span class="comment">// 例如，对于 Default，它要求 `[T]: !Default` 必须是可评估的</span>
-<span class="attribute">#[<span class="ident">rustc_specialization_trait</span>]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Sized</span> {
-    <span class="comment">// Empty.</span>
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; !Send <span class="kw">for </span><span class="kw-2">*const </span>T {}
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; !Send <span class="kw">for </span><span class="kw-2">*mut </span>T {}
+
+<span class="comment">// 大多数实例会自动出现，但需要此实例将 `T: Sync` 与 `&amp;T: Send` 链接起来 (并且它还删除了不合理的默认实例 `T Send` -&gt; `&amp;T: Send` 否则会存在)。
+//
+//
+</span><span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">unsafe impl</span>&lt;T: Sync + <span class="question-mark">?</span>Sized&gt; Send <span class="kw">for </span><span class="kw-2">&amp;</span>T {}
+
+<span class="doccomment">/// 在编译时已知大小为常量的类型。
+///
+/// 所有类型参数都有一个 `Sized` 的隐式界限。如果不合适，可以使用特殊语法 `?Sized` 删除这个界限。
+///
+/// ```
+/// # #![allow(dead_code)]
+/// struct Foo&lt;T&gt;(T);
+/// struct Bar&lt;T: ?Sized&gt;(T);
+///
+/// // struct FooUse(Foo&lt;[i32]&gt;);  // 错误：没有为 [i32] 实现 Sized
+/// struct BarUse(Bar&lt;[i32]&gt;); // OK
+/// ```
+///
+/// 一个例外是 trait 的隐式 `Self` 类型。
+/// 这个 trait 没有隐式的 `Sized` 界限，因为它与 [trait 对象][trait object] 不兼容，根据定义，trait 需要与所有可能的实现者一起工作，因此可以为任意大小。
+///
+///
+/// 尽管 Rust 可以让你将 `Sized` 绑定到一个 trait，但是以后您将无法使用它来生成 trait 对象：
+///
+/// ```
+/// # #![allow(unused_variables)]
+/// trait Foo { }
+/// trait Bar: Sized { }
+///
+/// struct Impl;
+/// impl Foo for Impl { }
+/// impl Bar for Impl { }
+///
+/// let x: &amp;dyn Foo = &amp;Impl;    // OK
+/// // let y: &amp;dyn Bar = &amp;Impl;  // 错误：无法将 `Bar` trait 制作成对象
+</span><span class="comment">/////
+</span><span class="doccomment">/// ```
+///
+/// [trait object]: ../../book/ch17-02-trait-objects.html
+///
+///
+///
+</span><span class="attr">#[doc(alias = <span class="string">&quot;?&quot;</span>, alias = <span class="string">&quot;?Sized&quot;</span>)]
+#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+#[lang = <span class="string">&quot;sized&quot;</span>]
+#[rustc_on_unimplemented(
+    message = <span class="string">&quot;the size for values of type `{Self}` cannot be known at compilation time&quot;</span>,
+    label = <span class="string">&quot;doesn&#39;t have a size known at compile-time&quot;
+</span>)]
+#[fundamental] </span><span class="comment">// 例如，对于 Default，它要求 `[T]: !Default` 必须是可评估的
+</span><span class="attr">#[rustc_specialization_trait]
+#[rustc_deny_explicit_impl]
+#[rustc_coinductive]
+</span><span class="kw">pub trait </span>Sized {
+    <span class="comment">// Empty.
+</span>}
+
+<span class="doccomment">/// 可以把没有大小的类型改为动态大小的类型。
+///
+/// 例如，按大小排列的数组类型 `[i8; 2]` 实现 `Unsize&lt;[i8]&gt;` 和 `Unsize&lt;dyn fmt::Debug&gt;`。
+///
+/// `Unsize` 的所有实现都是由编译器自动提供的。
+/// 这些实现是：
+///
+/// - Arrays `[T; N]` implement `Unsize&lt;[T]&gt;`.
+/// - 实现 `Trait` trait 的类型也实现了 `Unsize&lt;dyn Trait&gt;`。
+/// - 结构体 `Foo&lt;..., T, ...&gt;` 实现了 `Unsize&lt;Foo&lt;..., U, ...&gt;&gt;` 如果所有这些条件都满足：
+///   - `T: Unsize&lt;U&gt;`.
+///   - 只有 `Foo` 的最后一个字段具有包含 `T` 的类型。
+///   - `Bar&lt;T&gt;: Unsize&lt;Bar&lt;U&gt;&gt;`，其中 `Bar&lt;T&gt;` 代表最后一个字段的实际类型。
+///
+/// `Unsize` 与 [`ops::CoerceUnsized`] 一起使用以允许 &quot;user-defined&quot; 容器 (例如 [`Rc`]) 包含动态大小的类型。
+/// 有关更多详细信息，请参见 [DST coercion RFC][RFC982] 和 [the nomicon entry on coercion][nomicon-coerce]。
+///
+/// [`ops::CoerceUnsized`]: crate::ops::CoerceUnsized
+/// [`Rc`]: ../../std/rc/struct.Rc.html
+/// [RFC982]: https://github.com/rust-lang/rfcs/blob/master/text/0982-dst-coercion.md
+/// [nomicon-coerce]: ../../nomicon/coercions.html
+///
+///
+///
+///
+</span><span class="attr">#[unstable(feature = <span class="string">&quot;unsize&quot;</span>, issue = <span class="string">&quot;18598&quot;</span>)]
+#[lang = <span class="string">&quot;unsize&quot;</span>]
+#[rustc_deny_explicit_impl]
+</span><span class="kw">pub trait </span>Unsize&lt;T: <span class="question-mark">?</span>Sized&gt; {
+    <span class="comment">// Empty.
+</span>}
+
+<span class="doccomment">/// 模式匹配中使用的常量的必需 trait。
+///
+/// 不管其类型参数是否实现了 `Eq`，任何派生 `PartialEq` 的类型都会自动实现这个 trait。
+///
+/// 如果 `const` 项包含某种不实现此 trait 的类型，则该类型要么 (1.) 不实现 `PartialEq` (这意味着常量将不提供该比较方法 (代码生成假定可用) )，要么 (2.) 自身实现 *its*`PartialEq` 的版本 (我们认为不符合结构相等性比较)。
+///
+///
+/// 在以上两种情况中的任何一种情况下，我们都拒绝在模式匹配中使用此类常量。
+///
+/// 另请参见 [结构匹配 RFC][RFC1445] 和 [issue 63438]，它们促使从基于属性的设计迁移到此 trait。
+///
+/// [RFC1445]: https://github.com/rust-lang/rfcs/blob/master/text/1445-restrict-constants-in-patterns.md
+/// [issue 63438]: https://github.com/rust-lang/rust/issues/63438
+///
+///
+///
+///
+///
+///
+///
+</span><span class="attr">#[unstable(feature = <span class="string">&quot;structural_match&quot;</span>, issue = <span class="string">&quot;31434&quot;</span>)]
+#[rustc_on_unimplemented(message = <span class="string">&quot;the type `{Self}` does not `#[derive(PartialEq)]`&quot;</span>)]
+#[lang = <span class="string">&quot;structural_peq&quot;</span>]
+</span><span class="kw">pub trait </span>StructuralPartialEq {
+    <span class="comment">// Empty.
+</span>}
+
+<span class="doccomment">/// 模式匹配中使用的常量的必需 trait。
+///
+/// 派生 `Eq` 的任何类型都会自动实现此 trait，无论其类型参数是否实现 `Eq`。
+///
+/// 这是一种解决我们类型系统中的限制的技巧。
+///
+/// # Background
+///
+/// 我们要要求模式匹配中使用的 const 类型具有属性 `#[derive(PartialEq, Eq)]`。
+///
+/// 在更理想的世界中，我们可以通过仅检查给定类型是否同时实现 `StructuralPartialEq` trait 和 `Eq` trait 来检查该要求。
+/// 但是，您可能拥有 *do*`derive(PartialEq, Eq)` 的 ADT，这是我们希望编译器接受的情况，但是 const 的类型无法实现 `Eq`。
+///
+/// 也就是说，像这样的情况：
+///
+/// ```rust
+/// #[derive(PartialEq, Eq)]
+/// struct Wrap&lt;X&gt;(X);
+///
+/// fn higher_order(_: &amp;()) { }
+///
+/// const CFN: Wrap&lt;fn(&amp;())&gt; = Wrap(higher_order);
+///
+/// fn main() {
+///     match CFN {
+///         CFN =&gt; {}
+///         _ =&gt; {}
+///     }
+/// }
+/// ```
+///
+/// (以上代码中的问题是 `Wrap&lt;fn(&amp;())&gt;` 既不实现 `PartialEq` 也不实现 `Eq`，因为 `for &lt;&#39;a&gt; fn(&amp;&#39;a _)` does not implement those traits.)
+///
+/// 因此，我们不能仅仅依靠 `StructuralPartialEq` 和 `Eq` 的幼稚检查。
+///
+/// 要解决此问题，我们使用两个派生对象 (`#[derive(PartialEq)]` 和 `#[derive(Eq)]`) 中的每个派生注入的两个单独的 traits，并检查它们是否都作为结构匹配检查的一部分出现。
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+</span><span class="attr">#[unstable(feature = <span class="string">&quot;structural_match&quot;</span>, issue = <span class="string">&quot;31434&quot;</span>)]
+#[rustc_on_unimplemented(message = <span class="string">&quot;the type `{Self}` does not `#[derive(Eq)]`&quot;</span>)]
+#[lang = <span class="string">&quot;structural_teq&quot;</span>]
+</span><span class="kw">pub trait </span>StructuralEq {
+    <span class="comment">// Empty.
+</span>}
+
+<span class="comment">// FIXME: 从编译器模式检查代码中删除这些类型的特殊情况，并始终检查 `T: StructuralEq`
+</span><span class="macro">marker_impls! </span>{
+    <span class="attr">#[unstable(feature = <span class="string">&quot;structural_match&quot;</span>, issue = <span class="string">&quot;31434&quot;</span>)]
+    </span>StructuralEq <span class="kw">for
+        </span>usize, u8, u16, u32, u64, u128,
+        isize, i8, i16, i32, i64, i128,
+        bool,
+        char,
+        str <span class="comment">/* Technically requires `[u8]: StructuralEq` */</span>,
+        {T, <span class="kw">const </span>N: usize} [T; N],
+        {T} [T],
+        {T: <span class="question-mark">?</span>Sized} <span class="kw-2">&amp;</span>T,
 }
 
-<span class="doccomment">/// 可以把没有大小的类型改为动态大小的类型。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 例如，按大小排列的数组类型 `[i8; 2]` 实现 `Unsize&lt;[i8]&gt;` 和 `Unsize&lt;dyn fmt::Debug&gt;`。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// `Unsize` 的所有实现都是由编译器自动提供的。</span>
-<span class="doccomment">/// 这些实现是：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - Arrays `[T; N]` implement `Unsize&lt;[T]&gt;`.</span>
-<span class="doccomment">/// - 实现 `Trait` trait 的类型也实现了 `Unsize&lt;dyn Trait&gt;`。</span>
-<span class="doccomment">/// - 结构体 `Foo&lt;..., T, ...&gt;` 实现了 `Unsize&lt;Foo&lt;..., U, ...&gt;&gt;` 如果所有这些条件都满足：</span>
-<span class="doccomment">///   - `T: Unsize&lt;U&gt;`.</span>
-<span class="doccomment">///   - 只有 `Foo` 的最后一个字段具有包含 `T` 的类型。</span>
-<span class="doccomment">///   - `Bar&lt;T&gt;: Unsize&lt;Bar&lt;U&gt;&gt;`，其中 `Bar&lt;T&gt;` 代表最后一个字段的实际类型。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// `Unsize` 与 [`ops::CoerceUnsized`] 一起使用以允许 &quot;user-defined&quot; 容器 (例如 [`Rc`]) 包含动态大小的类型。</span>
-<span class="doccomment">/// 有关更多详细信息，请参见 [DST coercion RFC][RFC982] 和 [the nomicon entry on coercion][nomicon-coerce]。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`ops::CoerceUnsized`]: crate::ops::CoerceUnsized</span>
-<span class="doccomment">/// [`Rc`]: ../../std/rc/struct.Rc.html</span>
-<span class="doccomment">/// [RFC982]: https://github.com/rust-lang/rfcs/blob/master/text/0982-dst-coercion.md</span>
-<span class="doccomment">/// [nomicon-coerce]: ../../nomicon/coercions.html</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;unsize&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;27732&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">lang</span> <span class="op">=</span> <span class="string">&quot;unsize&quot;</span>]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Unsize</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> {
-    <span class="comment">// Empty.</span>
+<span class="doccomment">/// 只需复制位即可复制其值的类型。
+///
+/// 默认情况下，变量绑定具有移动语义。换句话说：
+///
+/// ```
+/// #[derive(Debug)]
+/// struct Foo;
+///
+/// let x = Foo;
+///
+/// let y = x;
+///
+/// // `x` 已移入 `y`，因此无法使用
+///
+/// // println!(&quot;{x:?}&quot;); // error: use of moved value
+/// ```
+///
+/// 但是，如果类型实现 `Copy`，则它具有复制语义：
+///
+/// ```
+/// // 我们可以派生一个 `Copy` 实现。
+/// // `Clone` 也是必需的，因为它是 `Copy` 的 super trait。
+/// #[derive(Debug, Copy, Clone)]
+/// struct Foo;
+///
+/// let x = Foo;
+///
+/// let y = x;
+///
+/// // `y` 是 `x` 的副本
+///
+/// println!(&quot;{x:?}&quot;); // A-OK!
+/// ```
+///
+/// 重要的是要注意，在这两个示例中，唯一的区别是分配后是否允许您访问 `x`。
+/// 在后台，复制和移动都可能导致将位复制到内存中，尽管有时会对其进行优化。
+///
+/// ## 如何实现 `Copy`？
+///
+/// 有两种方法可以在您的类型上实现 `Copy`。最简单的是使用 `derive`：
+///
+/// ```
+/// #[derive(Copy, Clone)]
+/// struct MyStruct;
+/// ```
+///
+/// 您还可以手动实现 `Copy` 和 `Clone`：
+///
+/// ```
+/// struct MyStruct;
+///
+/// impl Copy for MyStruct { }
+///
+/// impl Clone for MyStruct {
+///     fn clone(&amp;self) -&gt; MyStruct {
+///         *self
+///     }
+/// }
+/// ```
+///
+/// 这两者之间有一个小小的区别: `derive` 策略还将 `Copy` 绑定在类型参数上，这并不总是需要的。
+///
+/// ## `Copy` 和 `Clone` 有什么区别？
+///
+/// Copy 是隐式发生的，例如作为赋值 `y = x` 的一部分。`Copy` 的行为不可重载； 它始终是简单的按位复制。
+///
+/// Clone 是一个显式操作，`x.clone()`。[`Clone`] 的实现可以提供安全复制值所需的任何特定于类型的行为。
+/// 例如，用于 [`String`] 的 [`Clone`] 的实现需要在堆中复制指向字符串的缓冲区。
+/// [`String`] 值的简单按位副本将仅复制指针，从而导致该行向下双重释放。
+/// 因此，[`String`] 是 [`Clone`]，但不是 `Copy`。
+///
+/// [`Clone`] 是 `Copy` 的一个 super trait，所以所有 `Copy` 的东西也必须实现 [`Clone`]。
+/// 如果类型为 `Copy`，则其 [`Clone`] 实现仅需要返回 `*self` (请参见上面的示例)。
+///
+/// ## 什么时候可以输入 `Copy`？
+///
+/// 如果类型的所有组件都实现 `Copy`，则它可以实现 `Copy`。例如，此结构体可以是 `Copy`：
+///
+/// ```
+/// # #[allow(dead_code)]
+/// #[derive(Copy, Clone)]
+/// struct Point {
+///    x: i32,
+///    y: i32,
+/// }
+/// ```
+///
+/// 一个结构体可以是 `Copy`，而 [`i32`] 是 `Copy`，因此 `Point` 有资格成为 `Copy`。
+/// 相比之下，考虑
+///
+/// ```
+/// # #![allow(dead_code)]
+/// # struct Point;
+/// struct PointList {
+///     points: Vec&lt;Point&gt;,
+/// }
+/// ```
+///
+/// 结构体 `PointList` 无法实现 `Copy`，因为 [`Vec&lt;T&gt;`] 不是 `Copy`。如果尝试派生 `Copy` 实现，则会收到错误消息：
+///
+/// ```text
+/// the trait `Copy` cannot be implemented for this type; field `points` does not implement `Copy`
+/// ```
+///
+/// 共享引用 (`&amp;T`) 也是 `Copy`，因此，即使类型中包含 *04* 不是*`Copy` 类型的共享引用 `T`，也可以是 `Copy`。
+/// 考虑下面的结构体，它可以实现 `Copy`，因为它从上方仅对我们的非 Copy 类型 `PointList` 持有一个 *shared 引用*：
+///
+/// ```
+/// # #![allow(dead_code)]
+/// # struct PointList;
+/// #[derive(Copy, Clone)]
+/// struct PointListWrapper&lt;&#39;a&gt; {
+///     point_list_ref: &amp;&#39;a PointList,
+/// }
+/// ```
+///
+/// ## 什么时候我的类型不能为 `Copy`？
+///
+/// 某些类型无法安全复制。例如，复制 `&amp;mut T` 将创建一个别名可变引用。
+/// 复制 [`String`] 将重复管理 [`String`] 缓冲区，从而导致双重释放。
+///
+/// 概括后一种情况，任何实现 [`Drop`] 的类型都不能是 `Copy`，因为它除了管理自己的 [`size_of::&lt;T&gt;`] 字节外还管理一些资源。
+///
+/// 果您尝试在包含非 `Copy` 数据的结构或枚举上实现 `Copy`，则会收到 [E0204] 错误。
+///
+/// [E0204]: ../../error_codes/E0204.html
+///
+/// ## 什么时候我的类型应该是 `Copy`？
+///
+/// 一般来说，如果您的类型可以实现 `Copy`，则应该这样做。
+/// 但是请记住，实现 `Copy` 是您类型的公共 API 的一部分。
+/// 如果该类型将来可能变为非 `Copy`，则最好现在省略 `Copy` 实现，以避免 API 发生重大更改。
+///
+/// ## 其他实现者
+///
+/// 除 [下面列出的实现者][impls] 之外，以下类型也实现了 `Copy`：
+///
+/// * 函数项类型 (即，为每个函数定义的不同类型)
+/// * 函数指针类型 (例如 `fn() -&gt; i32`)
+/// * 闭包类型，如果它们没有从环境中捕获任何值，或者所有此类捕获的值本身都实现了 `Copy`。
+///   请注意，由共享引用捕获的变量始终实现 `Copy` (即使引用对象没有实现)，而由变量引用捕获的变量从不实现 `Copy`。
+///
+///
+/// [`Vec&lt;T&gt;`]: ../../std/vec/struct.Vec.html
+/// [`String`]: ../../std/string/struct.String.html
+/// [`size_of::&lt;T&gt;`]: crate::mem::size_of
+/// [impls]: #implementors
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+</span><span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+#[lang = <span class="string">&quot;copy&quot;</span>]
+</span><span class="comment">// FIXME(matthewjasper) 这允许复制由于不满足生命周期实现边界而没有 `Copy` 的类型 (仅在 `A&lt;&#39;static&gt;: Copy` 和 `A&lt;&#39;_&gt;: Clone` 时复制 `A&lt;&#39;_&gt;`)。
+// 我们现在在这里具有此属性的原因仅是因为标准库中已经存在 `Copy` 上的许多现有专长，并且目前尚无办法安全地具有此行为。
+//
+//
+//
+//
+</span><span class="attr">#[rustc_unsafe_specialization_marker]
+#[rustc_diagnostic_item = <span class="string">&quot;Copy&quot;</span>]
+</span><span class="kw">pub trait </span>Copy: Clone {
+    <span class="comment">// Empty.
+</span>}
+
+<span class="doccomment">/// 派生宏，生成 `Copy` trait 的 impl。
+</span><span class="attr">#[rustc_builtin_macro]
+#[stable(feature = <span class="string">&quot;builtin_macro_prelude&quot;</span>, since = <span class="string">&quot;1.38.0&quot;</span>)]
+#[allow_internal_unstable(core_intrinsics, derive_clone_copy)]
+</span><span class="kw">pub macro </span>Copy(<span class="macro-nonterminal">$item</span>:item) {
+    <span class="comment">/* compiler built-in */
+</span>}
+
+<span class="comment">// 原始类型的 `Copy` 实现。
+//
+// `rustc_trait_selection` 中的 `traits::SelectionContext::copy_clone_conditions()` 中实现了 Rust 中无法描述的实现。
+//
+//
+</span><span class="macro">marker_impls! </span>{
+    <span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+    </span>Copy <span class="kw">for
+        </span>usize, u8, u16, u32, u64, u128,
+        isize, i8, i16, i32, i64, i128,
+        f32, f64,
+        bool, char,
+        {T: <span class="question-mark">?</span>Sized} <span class="kw-2">*const </span>T,
+        {T: <span class="question-mark">?</span>Sized} <span class="kw-2">*mut </span>T,
+
 }
 
-<span class="doccomment">/// 模式匹配中使用的常量的必需 trait。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 不管其类型参数是否实现了 `Eq`，任何派生 `PartialEq` 的类型都会自动实现这个 trait。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 如果 `const` 项包含某种不实现此 trait 的类型，则该类型要么 (1.) 不实现 `PartialEq` (这意味着常量将不提供该比较方法 (代码生成假定可用) )，要么 (2.) 自身实现 *its*`PartialEq` 的版本 (我们认为不符合结构相等性比较)。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 在以上两种情况中的任何一种情况下，我们都拒绝在模式匹配中使用此类常量。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 另请参见 [结构匹配 RFC][RFC1445] 和 [issue 63438]，它们促使从基于属性的设计迁移到此 trait。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [RFC1445]: https://github.com/rust-lang/rfcs/blob/master/text/1445-restrict-constants-in-patterns.md</span>
-<span class="doccomment">/// [issue 63438]: https://github.com/rust-lang/rust/issues/63438</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;structural_match&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;31434&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">rustc_on_unimplemented</span>(<span class="ident">message</span> <span class="op">=</span> <span class="string">&quot;the type `{Self}` does not `#[derive(PartialEq)]`&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">lang</span> <span class="op">=</span> <span class="string">&quot;structural_peq&quot;</span>]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">StructuralPartialEq</span> {
-    <span class="comment">// Empty.</span>
+<span class="attr">#[unstable(feature = <span class="string">&quot;never_type&quot;</span>, issue = <span class="string">&quot;35121&quot;</span>)]
+</span><span class="kw">impl </span>Copy <span class="kw">for </span>! {}
+
+<span class="doccomment">/// 共享的引用可以复制，但是可变引用 *不能*!
+</span><span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; Copy <span class="kw">for </span><span class="kw-2">&amp;</span>T {}
+
+<span class="doccomment">/// 可以在线程之间安全共享引用的类型。
+///
+/// 当编译器确定适当时，会自动实现此 trait。
+///
+/// 确切的定义是：当且仅当 `&amp;T` 是 [`Send`] 时，类型 `T` 才是 [`Sync`]。
+/// 换句话说，如果在线程之间传递 `&amp;T` 引用时没有 [未定义的行为][ub] (包括数据竞争) 的可能性。
+///
+/// 正如人们所料，像 [`u8`] 和 [`f64`] 这样的原始类型都是 [`Sync`]，包含它们的简单聚合类型也是如此，比如元组、结构体和枚举。
+/// 基本 [`Sync`] 类型的更多示例包括不可变类型 (例如 `&amp;T`) 以及具有简单继承的可变性的类型，例如 [`Box&lt;T&gt;`][box]，[`Vec&lt;T&gt;`][vec] 和大多数其他集合类型。
+///
+/// (泛型参数必须为 [`Sync`]，才能使其容器为 [[Sync]]。)
+///
+/// 该定义的一个令人惊讶的结果是 `&amp;mut T` 是 `Sync` (如果 `T` 是 `Sync`)，即使看起来可能提供了不同步的可变的。
+/// 诀窍是，共享引用 (即 `&amp; &amp;mut T`) 后面的可变引用将变为只读，就好像它是 `&amp; &amp;T` 一样。
+/// 因此，没有数据竞争的风险。
+///
+/// [`Sync`] 和 [`Send`] 与引用的关系的简短概述:
+/// * `&amp;T` 是 [`Send`] 当且仅当 `T` 是 [`Sync`]
+/// * `&amp;mut T` 是 [`Send`] 当且仅当 `T` 是 [`Send`]
+/// * `&amp;T` 和 `&amp;mut T` 是 [`Sync`] 当且仅当 `T` 是 [`Sync`]
+///
+/// 不是 `Sync` 的类型是具有非线程安全形式的 &quot;内部可变性&quot; 的类型，例如 [`Cell`][cell] 和 [`RefCell`][refcell]。
+/// 这些类型甚至允许通过不可变，共享引用来更改其内容。
+/// 例如，[`Cell&lt;T&gt;`][cell] 上的 `set` 方法采用 `&amp;self`，因此它仅需要共享的引用 [`&amp;Cell&lt;T&gt;`][cell]。
+/// 该方法不执行同步，因此 [`Cell`][cell] 不能为 `Sync`。
+///
+/// 另一个非 `Sync` 类型的例子是引用计数指针 [`Rc`][rc]。
+/// 给定任何引用 [`&amp;Rc&lt;T&gt;`][rc]，您可以克隆新的 [`Rc&lt;T&gt;`][rc]，以非原子方式修改引用计数。
+///
+/// 对于确实需要线程安全的内部可变性的情况，Rust 提供 [原子数据类型][atomic data types] 以及通过 [`sync::Mutex`][mutex] 和 [`sync::RwLock`][rwlock] 进行的显式锁定。
+/// 这些类型可确保任何可变的都不会引起数据竞争，因此类型为 `Sync`。
+/// 同样，[`sync::Arc`][arc] 提供了 [`Rc`][rc] 的线程安全模拟。
+///
+/// 任何具有内部可变性的类型还必须在值周围使用 [`cell::UnsafeCell`][unsafecell] 包装器，该包装器可以通过共享引用进行转变。
+/// 不这样做是 [未定义的行为][ub]。
+/// 例如，从 `&amp;T` 到 `&amp;mut T` 的 [`transmute`][transmute] 无效。
+///
+/// 有关 `Sync` 的更多详细信息，请参见 [the Nomicon][nomicon-send-and-sync]。
+///
+/// [box]: ../../std/boxed/struct.Box.html
+/// [vec]: ../../std/vec/struct.Vec.html
+/// [cell]: crate::cell::Cell
+/// [refcell]: crate::cell::RefCell
+/// [rc]: ../../std/rc/struct.Rc.html
+/// [arc]: ../../std/sync/struct.Arc.html
+/// [atomic data types]: crate::sync::atomic
+/// [mutex]: ../../std/sync/struct.Mutex.html
+/// [rwlock]: ../../std/sync/struct.RwLock.html
+/// [unsafecell]: crate::cell::UnsafeCell
+/// [ub]: ../../reference/behavior-considered-undefined.html
+/// [transmute]: crate::mem::transmute
+/// [nomicon-send-and-sync]: ../../nomicon/send-and-sync.html
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+</span><span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+#[cfg_attr(not(test), rustc_diagnostic_item = <span class="string">&quot;Sync&quot;</span>)]
+#[lang = <span class="string">&quot;sync&quot;</span>]
+#[rustc_on_unimplemented(
+    on(
+        _Self = <span class="string">&quot;std::cell::OnceCell&lt;T&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::OnceLock` instead&quot;
+    </span>),
+    on(
+        _Self = <span class="string">&quot;std::cell::Cell&lt;u8&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicU8` instead&quot;</span>,
+    ),
+    on(
+        _Self = <span class="string">&quot;std::cell::Cell&lt;u16&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicU16` instead&quot;</span>,
+    ),
+    on(
+        _Self = <span class="string">&quot;std::cell::Cell&lt;u32&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicU32` instead&quot;</span>,
+    ),
+    on(
+        _Self = <span class="string">&quot;std::cell::Cell&lt;u64&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicU64` instead&quot;</span>,
+    ),
+    on(
+        _Self = <span class="string">&quot;std::cell::Cell&lt;usize&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicUsize` instead&quot;</span>,
+    ),
+    on(
+        _Self = <span class="string">&quot;std::cell::Cell&lt;i8&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicI8` instead&quot;</span>,
+    ),
+    on(
+        _Self = <span class="string">&quot;std::cell::Cell&lt;i16&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicI16` instead&quot;</span>,
+    ),
+    on(
+        _Self = <span class="string">&quot;std::cell::Cell&lt;i32&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicI32` instead&quot;</span>,
+    ),
+    on(
+        _Self = <span class="string">&quot;std::cell::Cell&lt;i64&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicI64` instead&quot;</span>,
+    ),
+    on(
+        _Self = <span class="string">&quot;std::cell::Cell&lt;isize&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicIsize` instead&quot;</span>,
+    ),
+    on(
+        _Self = <span class="string">&quot;std::cell::Cell&lt;bool&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` or `std::sync::atomic::AtomicBool` instead&quot;</span>,
+    ),
+    on(
+        _Self = <span class="string">&quot;std::cell::Cell&lt;T&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock`&quot;</span>,
+    ),
+    on(
+        _Self = <span class="string">&quot;std::cell::RefCell&lt;T&gt;&quot;</span>,
+        note = <span class="string">&quot;if you want to do aliasing and mutation between multiple threads, use `std::sync::RwLock` instead&quot;</span>,
+    ),
+    message = <span class="string">&quot;`{Self}` cannot be shared between threads safely&quot;</span>,
+    label = <span class="string">&quot;`{Self}` cannot be shared between threads safely&quot;
+</span>)]
+</span><span class="kw">pub unsafe </span>auto <span class="kw">trait </span>Sync {
+    <span class="comment">// FIXME(estebank): 曾经支持在 `rustc_on_unimplemented` 中添加注释登陆 beta，并且已经扩展以检查闭包是否在需求链中的任何位置，将其扩展为 (#48534)：
+    //
+    //
+    // ```
+    // on(
+    //     closure,
+    //     note=&quot;`{Self}` cannot be shared safely, consider marking the closure `move`&quot;
+    // ),
+    // ```
+
+    // Empty
+</span>}
+
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; !Sync <span class="kw">for </span><span class="kw-2">*const </span>T {}
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; !Sync <span class="kw">for </span><span class="kw-2">*mut </span>T {}
+
+<span class="doccomment">/// 零大小的类型用来标记那些行为像它们拥有一个 `T` 的东西。
+///
+/// 向您的类型添加 `PhantomData&lt;T&gt;` 字段将告诉编译器，您的类型的行为就像它存储了 `T` 类型的值一样，即使实际上并非如此。
+/// 在计算某些安全属性时会使用此信息。
+///
+/// 有关如何使用 `PhantomData&lt;T&gt;` 的更深入的说明，请参见 [the Nomicon](../../nomicon/phantom-data.html)。
+///
+/// # 一个可怕的笔记 👻👻👻
+///
+/// 尽管它们都有可怕的名称，但 `PhantomData` 和 phantom 类型是相关的，但并不完全相同。phantom 类型参数只是从未使用过的类型参数。
+/// 在 Rust 中，这通常会导致编译器抱怨，而解决方案是通过 `PhantomData` 添加 &quot;dummy&quot; 用途。
+///
+/// # Examples
+///
+/// ## 未使用的生命周期参数
+///
+/// `PhantomData` 的最常见用例也许是具有未使用的生命周期参数的结构体，通常将其用作某些不安全代码的一部分。
+/// 例如，这是一个结构体 `Slice`，它具有两个 `*const T` 类型的指针，大概指向某个地方的数组：
+///
+/// ```compile_fail,E0392
+/// struct Slice&lt;&#39;a, T&gt; {
+///     start: *const T,
+///     end: *const T,
+/// }
+/// ```
+///
+/// 目的是底层数据仅在生命周期 `&#39;a` 内有效，因此 `Slice` 不应超过 `&#39;a`。
+/// 但是，此意图未在代码中表达，因为没有使用生命周期 `&#39;a`，因此尚不清楚它适用于什么数据。
+/// 我们可以通过告诉编译器如果 `Slice` 结构体包含引用 `&amp;&#39;a T` 来执行 *as 来纠正此问题：
+///
+/// ```
+/// use std::marker::PhantomData;
+///
+/// # #[allow(dead_code)]
+/// struct Slice&lt;&#39;a, T&gt; {
+///     start: *const T,
+///     end: *const T,
+///     phantom: PhantomData&lt;&amp;&#39;a T&gt;,
+/// }
+/// ```
+///
+/// 这也反过来推断生命周期绑定 `T: &#39;a`，表明 `T` 中的任何引用在生命周期 `&#39;a` 内有效。
+///
+/// 初始化 `Slice` 时，只需为字段 `phantom` 提供值 `PhantomData`：
+///
+/// ```
+/// # #![allow(dead_code)]
+/// # use std::marker::PhantomData;
+/// # struct Slice&lt;&#39;a, T&gt; {
+/// #     start: *const T,
+/// #     end: *const T,
+/// #     phantom: PhantomData&lt;&amp;&#39;a T&gt;,
+/// # }
+/// fn borrow_vec&lt;T&gt;(vec: &amp;Vec&lt;T&gt;) -&gt; Slice&lt;&#39;_, T&gt; {
+///     let ptr = vec.as_ptr();
+///     Slice {
+///         start: ptr,
+///         end: unsafe { ptr.add(vec.len()) },
+///         phantom: PhantomData,
+///     }
+/// }
+/// ```
+///
+/// ## 未使用的类型参数
+///
+/// 有时可能会发生未使用的类型参数，这些参数指示 &quot;tied&quot; 将结构体数据类型化的数据，即使该数据实际上不是在结构体本身中找到的也是如此。
+///
+/// 这是 [FFI] 出现此情况的示例。
+/// 外部接口使用 `*mut ()` 类型的句柄来引用不同类型的 Rust 值。
+/// 我们使用包裹句柄的结构体 `ExternalResource` 上的 `phantom` 类型参数来跟踪 Rust 类型。
+///
+/// [FFI]: ../../book/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code
+///
+/// ```
+/// # #![allow(dead_code)]
+/// # trait ResType { }
+/// # struct ParamType;
+/// # mod foreign_lib {
+/// #     pub fn new(_: usize) -&gt; *mut () { 42 as *mut () }
+/// #     pub fn do_stuff(_: *mut (), _: usize) {}
+/// # }
+/// # fn convert_params(_: ParamType) -&gt; usize { 42 }
+/// use std::marker::PhantomData;
+/// use std::mem;
+///
+/// struct ExternalResource&lt;R&gt; {
+///    resource_handle: *mut (),
+///    resource_type: PhantomData&lt;R&gt;,
+/// }
+///
+/// impl&lt;R: ResType&gt; ExternalResource&lt;R&gt; {
+///     fn new() -&gt; Self {
+///         let size_of_res = mem::size_of::&lt;R&gt;();
+///         Self {
+///             resource_handle: foreign_lib::new(size_of_res),
+///             resource_type: PhantomData,
+///         }
+///     }
+///
+///     fn do_stuff(&amp;self, param: ParamType) {
+///         let foreign_params = convert_params(param);
+///         foreign_lib::do_stuff(self.resource_handle, foreign_params);
+///     }
+/// }
+/// ```
+///
+/// ## 所有权和 drop 检测
+///
+/// `PhantomData` 与丢弃检查的确切交互**可能会在 future**中发生变化。
+///
+/// 目前，添加 `PhantomData&lt;T&gt;` 类型的字段表示在极少数情况下您的类型*拥有*`T` 类型的数据。
+/// 这反过来又会影响 Rust 编译器的 [drop check] 分析。
+/// 有关确切规则，请参见 [drop check] 文档。
+///
+/// ## Layout
+///
+/// 对于所有 `T`，保证以下内容:
+/// * `size_of::&lt;PhantomData&lt;T&gt;&gt;() == 0`
+/// * `align_of::&lt;PhantomData&lt;T&gt;&gt;() == 1`
+///
+/// [drop check]: Drop#drop-check
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+</span><span class="attr">#[lang = <span class="string">&quot;phantom_data&quot;</span>]
+#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">pub struct </span>PhantomData&lt;T: <span class="question-mark">?</span>Sized&gt;;
+
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; Hash <span class="kw">for </span>PhantomData&lt;T&gt; {
+    <span class="attr">#[inline]
+    </span><span class="kw">fn </span>hash&lt;H: Hasher&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>H) {}
 }
 
-<span class="doccomment">/// 模式匹配中使用的常量的必需 trait。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 派生 `Eq` 的任何类型都会自动实现此 trait，无论其类型参数是否实现 `Eq`。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 这是一种解决我们类型系统中的限制的技巧。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Background</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 我们要要求模式匹配中使用的 const 类型具有属性 `#[derive(PartialEq, Eq)]`。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 在更理想的世界中，我们可以通过仅检查给定类型是否同时实现 `StructuralPartialEq` trait 和 `Eq` trait 来检查该要求。</span>
-<span class="doccomment">/// 但是，您可能拥有 *do*`derive(PartialEq, Eq)` 的 ADT，这是我们希望编译器接受的情况，但是 const 的类型无法实现 `Eq`。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 也就是说，像这样的情况：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// #[derive(PartialEq, Eq)]</span>
-<span class="doccomment">/// struct Wrap&lt;X&gt;(X);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// fn higher_order(_: &amp;()) { }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// const CFN: Wrap&lt;fn(&amp;())&gt; = Wrap(higher_order);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// fn main() {</span>
-<span class="doccomment">///     match CFN {</span>
-<span class="doccomment">///         CFN =&gt; {}</span>
-<span class="doccomment">///         _ =&gt; {}</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// (以上代码中的问题是 `Wrap&lt;fn(&amp;())&gt;` 既不实现 `PartialEq` 也不实现 `Eq`，因为 `for &lt;&#39;a&gt; fn(&amp;&#39;a _)` does not implement those traits.)</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 因此，我们不能仅仅依靠 `StructuralPartialEq` 和 `Eq` 的幼稚检查。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 要解决此问题，我们使用两个派生对象 (`#[derive(PartialEq)]` 和 `#[derive(Eq)]`) 中的每个派生注入的两个单独的 traits，并检查它们是否都作为结构匹配检查的一部分出现。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;structural_match&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;31434&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">rustc_on_unimplemented</span>(<span class="ident">message</span> <span class="op">=</span> <span class="string">&quot;the type `{Self}` does not `#[derive(Eq)]`&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">lang</span> <span class="op">=</span> <span class="string">&quot;structural_teq&quot;</span>]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">StructuralEq</span> {
-    <span class="comment">// Empty.</span>
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; cmp::PartialEq <span class="kw">for </span>PhantomData&lt;T&gt; {
+    <span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, _other: <span class="kw-2">&amp;</span>PhantomData&lt;T&gt;) -&gt; bool {
+        <span class="bool-val">true
+    </span>}
 }
 
-<span class="doccomment">/// 只需复制位即可复制其值的类型。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 默认情况下，变量绑定具有移动语义。换句话说：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// #[derive(Debug)]</span>
-<span class="doccomment">/// struct Foo;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let x = Foo;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let y = x;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // `x` 已移入 `y`，因此无法使用</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // println!(&quot;{:?}&quot;, x); // error: use of moved value</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 但是，如果类型实现 `Copy`，则它具有复制语义：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// // 我们可以派生一个 `Copy` 实现。</span>
-<span class="doccomment">/// // `Clone` 也是必需的，因为它是 `Copy` 的 super trait。</span>
-<span class="doccomment">/// #[derive(Debug, Copy, Clone)]</span>
-<span class="doccomment">/// struct Foo;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let x = Foo;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let y = x;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // `y` 是 `x` 的副本</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// println!(&quot;{:?}&quot;, x); // A-OK!</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 重要的是要注意，在这两个示例中，唯一的区别是分配后是否允许您访问 `x`。</span>
-<span class="doccomment">/// 在后台，复制和移动都可能导致将位复制到内存中，尽管有时会对其进行优化。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## 如何实现 `Copy`？</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 有两种方法可以在您的类型上实现 `Copy`。最简单的是使用 `derive`：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// #[derive(Copy, Clone)]</span>
-<span class="doccomment">/// struct MyStruct;</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 您还可以手动实现 `Copy` 和 `Clone`：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// struct MyStruct;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl Copy for MyStruct { }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl Clone for MyStruct {</span>
-<span class="doccomment">///     fn clone(&amp;self) -&gt; MyStruct {</span>
-<span class="doccomment">///         *self</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 这两者之间有一个小小的区别: `derive` 策略还将 `Copy` 绑定在类型参数上，这并不总是需要的。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## `Copy` 和 `Clone` 有什么区别？</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Copy 是隐式发生的，例如作为赋值 `y = x` 的一部分。`Copy` 的行为不可重载； 它始终是简单的按位复制。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Clone 是一个显式操作，`x.clone()`。[`Clone`] 的实现可以提供安全复制值所需的任何特定于类型的行为。</span>
-<span class="doccomment">/// 例如，用于 [`String`] 的 [`Clone`] 的实现需要在堆中复制指向字符串的缓冲区。</span>
-<span class="doccomment">/// [`String`] 值的简单按位副本将仅复制指针，从而导致该行向下双重释放。</span>
-<span class="doccomment">/// 因此，[`String`] 是 [`Clone`]，但不是 `Copy`。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`Clone`] 是 `Copy` 的一个 super trait，所以所有 `Copy` 的东西也必须实现 [`Clone`]。</span>
-<span class="doccomment">/// 如果类型为 `Copy`，则其 [`Clone`] 实现仅需要返回 `*self` (请参见上面的示例)。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## 什么时候可以输入 `Copy`？</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 如果类型的所有组件都实现 `Copy`，则它可以实现 `Copy`。例如，此结构体可以是 `Copy`：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// # #[allow(dead_code)]</span>
-<span class="doccomment">/// #[derive(Copy, Clone)]</span>
-<span class="doccomment">/// struct Point {</span>
-<span class="doccomment">///    x: i32,</span>
-<span class="doccomment">///    y: i32,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 一个结构体可以是 `Copy`，而 [`i32`] 是 `Copy`，因此 `Point` 有资格成为 `Copy`。</span>
-<span class="doccomment">/// 相比之下，考虑</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// # #![allow(dead_code)]</span>
-<span class="doccomment">/// # struct Point;</span>
-<span class="doccomment">/// struct PointList {</span>
-<span class="doccomment">///     points: Vec&lt;Point&gt;,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 结构体 `PointList` 无法实现 `Copy`，因为 [`Vec&lt;T&gt;`] 不是 `Copy`。如果尝试派生 `Copy` 实现，则会收到错误消息：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```text</span>
-<span class="doccomment">/// the trait `Copy` may not be implemented for this type; field `points` does not implement `Copy`</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 共享引用 (`&amp;T`) 也是 `Copy`，因此，即使类型中包含 *04* 不是*`Copy` 类型的共享引用 `T`，也可以是 `Copy`。</span>
-<span class="doccomment">/// 考虑下面的结构体，它可以实现 `Copy`，因为它从上方仅对我们的非 Copy 类型 `PointList` 持有一个 *shared 引用*：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// # #![allow(dead_code)]</span>
-<span class="doccomment">/// # struct PointList;</span>
-<span class="doccomment">/// #[derive(Copy, Clone)]</span>
-<span class="doccomment">/// struct PointListWrapper&lt;&#39;a&gt; {</span>
-<span class="doccomment">///     point_list_ref: &amp;&#39;a PointList,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## 什么时候我的类型不能为 `Copy`？</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 某些类型无法安全复制。例如，复制 `&amp;mut T` 将创建一个别名可变引用。</span>
-<span class="doccomment">/// 复制 [`String`] 将重复管理 [`String`] 缓冲区，从而导致双重释放。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 概括后一种情况，任何实现 [`Drop`] 的类型都不能是 `Copy`，因为它除了管理自己的 [`size_of::&lt;T&gt;`] 字节外还管理一些资源。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 果您尝试在包含非 `Copy` 数据的结构或枚举上实现 `Copy`，则会收到 [E0204] 错误。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [E0204]: ../../error-index.html#E0204</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## 什么时候我的类型应该是 `Copy`？</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 一般来说，如果您的类型可以实现 `Copy`，则应该这样做。</span>
-<span class="doccomment">/// 但是请记住，实现 `Copy` 是您类型的公共 API 的一部分。</span>
-<span class="doccomment">/// 如果该类型将来可能变为非 `Copy`，则最好现在省略 `Copy` 实现，以避免 API 发生重大更改。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## 其他实现者</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 除 [下面列出的实现者][impls] 之外，以下类型也实现了 `Copy`：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// * 函数项类型 (即，为每个函数定义的不同类型)</span>
-<span class="doccomment">/// * 函数指针类型 (例如 `fn() -&gt; i32`)</span>
-<span class="doccomment">/// * 元组类型，如果每个组件还实现 `Copy` (例如 `()`，`(i32, bool)`)</span>
-<span class="doccomment">/// * 闭包类型，如果它们没有从环境中捕获任何值，或者所有此类捕获的值本身都实现了 `Copy`。</span>
-<span class="doccomment">///   请注意，由共享引用捕获的变量始终实现 `Copy` (即使引用对象没有实现)，而由变量引用捕获的变量从不实现 `Copy`。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`Vec&lt;T&gt;`]: ../../std/vec/struct.Vec.html</span>
-<span class="doccomment">/// [`String`]: ../../std/string/struct.String.html</span>
-<span class="doccomment">/// [`size_of::&lt;T&gt;`]: crate::mem::size_of</span>
-<span class="doccomment">/// [impls]: #implementors</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">lang</span> <span class="op">=</span> <span class="string">&quot;copy&quot;</span>]</span>
-<span class="comment">// FIXME(matthewjasper) 这允许复制由于不满足生命周期实现边界而没有 `Copy` 的类型 (仅在 `A&lt;&#39;static&gt;: Copy` 和 `A&lt;&#39;_&gt;: Clone` 时复制 `A&lt;&#39;_&gt;`)。</span>
-<span class="comment">// 我们现在在这里具有此属性的原因仅是因为标准库中已经存在 `Copy` 上的许多现有专长，并且目前尚无办法安全地具有此行为。</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="attribute">#[<span class="ident">rustc_unsafe_specialization_marker</span>]</span>
-<span class="attribute">#[<span class="ident">rustc_diagnostic_item</span> <span class="op">=</span> <span class="string">&quot;Copy&quot;</span>]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Copy</span>: <span class="ident">Clone</span> {
-    <span class="comment">// Empty.</span>
-}
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; cmp::Eq <span class="kw">for </span>PhantomData&lt;T&gt; {}
 
-<span class="doccomment">/// 派生宏，生成 `Copy` trait 的 impl。</span>
-<span class="attribute">#[<span class="ident">rustc_builtin_macro</span>]</span>
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;builtin_macro_prelude&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.38.0&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">allow_internal_unstable</span>(<span class="ident">core_intrinsics</span>, <span class="ident">derive_clone_copy</span>)]</span>
-<span class="kw">pub</span> <span class="kw">macro</span> <span class="ident">Copy</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>:<span class="ident">item</span>) {
-    <span class="comment">/* compiler built-in */</span>
-}
-
-<span class="doccomment">/// 可以在线程之间安全共享引用的类型。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 当编译器确定适当时，会自动实现此 trait。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 确切的定义是：当且仅当 `&amp;T` 是 [`Send`] 时，类型 `T` 才是 [`Sync`]。</span>
-<span class="doccomment">/// 换句话说，如果在线程之间传递 `&amp;T` 引用时没有 [未定义的行为][ub] (包括数据竞争) 的可能性。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 正如人们所料，像 [`u8`] 和 [`f64`] 这样的原始类型都是 [`Sync`]，包含它们的简单聚合类型也是如此，比如元组、结构体和枚举。</span>
-<span class="doccomment">/// 基本 [`Sync`] 类型的更多示例包括不可变类型 (例如 `&amp;T`) 以及具有简单继承的可变性的类型，例如 [`Box&lt;T&gt;`][box]，[`Vec&lt;T&gt;`][vec] 和大多数其他集合类型。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// (泛型参数必须为 [`Sync`]，才能使其容器为 [[Sync]]。)</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 该定义的一个令人惊讶的结果是 `&amp;mut T` 是 `Sync` (如果 `T` 是 `Sync`)，即使看起来可能提供了不同步的可变的。</span>
-<span class="doccomment">/// 诀窍是，共享引用 (即 `&amp; &amp;mut T`) 后面的可变引用将变为只读，就好像它是 `&amp; &amp;T` 一样。</span>
-<span class="doccomment">/// 因此，没有数据竞争的风险。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 不是 `Sync` 的类型是具有非线程安全形式的 &quot;内部可变性&quot; 的类型，例如 [`Cell`][cell] 和 [`RefCell`][refcell]。</span>
-<span class="doccomment">/// 这些类型甚至允许通过不可变，共享引用来更改其内容。</span>
-<span class="doccomment">/// 例如，[`Cell&lt;T&gt;`][cell] 上的 `set` 方法采用 `&amp;self`，因此它仅需要共享的引用 [`&amp;Cell&lt;T&gt;`][cell]。</span>
-<span class="doccomment">/// 该方法不执行同步，因此 [`Cell`][cell] 不能为 `Sync`。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 另一个非 `Sync` 类型的例子是引用计数指针 [`Rc`][rc]。</span>
-<span class="doccomment">/// 给定任何引用 [`&amp;Rc&lt;T&gt;`][rc]，您可以克隆新的 [`Rc&lt;T&gt;`][rc]，以非原子方式修改引用计数。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 对于确实需要线程安全的内部可变性的情况，Rust 提供 [原子数据类型][atomic data types] 以及通过 [`sync::Mutex`][mutex] 和 [`sync::RwLock`][rwlock] 进行的显式锁定。</span>
-<span class="doccomment">/// 这些类型可确保任何可变的都不会引起数据竞争，因此类型为 `Sync`。</span>
-<span class="doccomment">/// 同样，[`sync::Arc`][arc] 提供了 [`Rc`][rc] 的线程安全模拟。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 任何具有内部可变性的类型还必须在值周围使用 [`cell::UnsafeCell`][unsafecell] 包装器，该包装器可以通过共享引用进行转变。</span>
-<span class="doccomment">/// 不这样做是 [未定义的行为][ub]。</span>
-<span class="doccomment">/// 例如，从 `&amp;T` 到 `&amp;mut T` 的 [`transmute`][transmute] 无效。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 有关 `Sync` 的更多详细信息，请参见 [the Nomicon][nomicon-send-and-sync]。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [box]: ../../std/boxed/struct.Box.html</span>
-<span class="doccomment">/// [vec]: ../../std/vec/struct.Vec.html</span>
-<span class="doccomment">/// [cell]: crate::cell::Cell</span>
-<span class="doccomment">/// [refcell]: crate::cell::RefCell</span>
-<span class="doccomment">/// [rc]: ../../std/rc/struct.Rc.html</span>
-<span class="doccomment">/// [arc]: ../../std/sync/struct.Arc.html</span>
-<span class="doccomment">/// [atomic data types]: crate::sync::atomic</span>
-<span class="doccomment">/// [mutex]: ../../std/sync/struct.Mutex.html</span>
-<span class="doccomment">/// [rwlock]: ../../std/sync/struct.RwLock.html</span>
-<span class="doccomment">/// [unsafecell]: crate::cell::UnsafeCell</span>
-<span class="doccomment">/// [ub]: ../../reference/behavior-considered-undefined.html</span>
-<span class="doccomment">/// [transmute]: crate::mem::transmute</span>
-<span class="doccomment">/// [nomicon-send-and-sync]: ../../nomicon/send-and-sync.html</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">test</span>), <span class="ident">rustc_diagnostic_item</span> <span class="op">=</span> <span class="string">&quot;Sync&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">lang</span> <span class="op">=</span> <span class="string">&quot;sync&quot;</span>]</span>
-<span class="attribute">#[<span class="ident">rustc_on_unimplemented</span>(
-    <span class="ident">message</span> <span class="op">=</span> <span class="string">&quot;`{Self}` cannot be shared between threads safely&quot;</span>,
-    <span class="ident">label</span> <span class="op">=</span> <span class="string">&quot;`{Self}` cannot be shared between threads safely&quot;</span>
-)]</span>
-<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="ident">auto</span> <span class="kw">trait</span> <span class="ident">Sync</span> {
-    <span class="comment">// FIXME(estebank): 曾经支持在 `rustc_on_unimplemented` 中添加注释登陆 beta，并且已经扩展以检查闭包是否在需求链中的任何位置，将其扩展为 (#48534)：</span>
-    <span class="comment">//</span>
-    <span class="comment">//</span>
-    <span class="comment">// ```</span>
-    <span class="comment">// on(</span>
-    <span class="comment">//     closure,</span>
-    <span class="comment">//     note=&quot;`{Self}` cannot be shared safely, consider marking the closure `move`&quot;</span>
-    <span class="comment">// ),</span>
-    <span class="comment">// ```</span>
-
-    <span class="comment">// Empty</span>
-}
-
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="op">!</span><span class="ident">Sync</span> <span class="kw">for</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">T</span> {}
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="op">!</span><span class="ident">Sync</span> <span class="kw">for</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span> {}
-
-<span class="macro">macro_rules!</span> <span class="ident">impls</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>: <span class="ident">ident</span>) =&gt; {
-        <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Hash</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-            <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">hash</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">Hasher</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">H</span>) {}
-        }
-
-        <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">cmp::PartialEq</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-            <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="ident">bool</span> {
-                <span class="bool-val">true</span>
-            }
-        }
-
-        <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">cmp::Eq</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
-
-        <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">cmp::PartialOrd</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-            <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">cmp::Ordering</span><span class="op">&gt;</span> {
-                <span class="ident">Option::Some</span>(<span class="ident">cmp::Ordering::Equal</span>)
-            }
-        }
-
-        <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">cmp::Ord</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-            <span class="kw">fn</span> <span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="ident">cmp::Ordering</span> {
-                <span class="ident">cmp::Ordering::Equal</span>
-            }
-        }
-
-        <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Copy</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
-
-        <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-            <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span> {
-                <span class="self">Self</span>
-            }
-        }
-
-        <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-        <span class="attribute">#[<span class="ident">rustc_const_unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;const_default_impls&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;87864&quot;</span>)]</span>
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="kw">const</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-            <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-                <span class="self">Self</span>
-            }
-        }
-
-        <span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;structural_match&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;31434&quot;</span>)]</span>
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">StructuralPartialEq</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
-
-        <span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;structural_match&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;31434&quot;</span>)]</span>
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">StructuralEq</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
-    };
-}
-
-<span class="doccomment">/// 零大小的类型用来标记那些行为像它们拥有一个 `T` 的东西。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 向您的类型添加 `PhantomData&lt;T&gt;` 字段将告诉编译器，您的类型的行为就像它存储了 `T` 类型的值一样，即使实际上并非如此。</span>
-<span class="doccomment">/// 在计算某些安全属性时会使用此信息。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 有关如何使用 `PhantomData&lt;T&gt;` 的更深入的说明，请参见 [the Nomicon](../../nomicon/phantom-data.html)。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # 一个可怕的笔记 👻👻👻</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 尽管它们都有可怕的名称，但 `PhantomData` 和 phantom 类型是相关的，但并不完全相同。phantom 类型参数只是从未使用过的类型参数。</span>
-<span class="doccomment">/// 在 Rust 中，这通常会导致编译器抱怨，而解决方案是通过 `PhantomData` 添加 &quot;dummy&quot; 用途。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## 未使用的生命周期参数</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// `PhantomData` 的最常见用例也许是具有未使用的生命周期参数的结构体，通常将其用作某些不安全代码的一部分。</span>
-<span class="doccomment">/// 例如，这是一个结构体 `Slice`，它具有两个 `*const T` 类型的指针，大概指向某个地方的数组：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```compile_fail,E0392</span>
-<span class="doccomment">/// struct Slice&lt;&#39;a, T&gt; {</span>
-<span class="doccomment">///     start: *const T,</span>
-<span class="doccomment">///     end: *const T,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 目的是底层数据仅在生命周期 `&#39;a` 内有效，因此 `Slice` 不应超过 `&#39;a`。</span>
-<span class="doccomment">/// 但是，此意图未在代码中表达，因为没有使用生命周期 `&#39;a`，因此尚不清楚它适用于什么数据。</span>
-<span class="doccomment">/// 我们可以通过告诉编译器如果 `Slice` 结构体包含引用 `&amp;&#39;a T` 来执行 *as 来纠正此问题：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// use std::marker::PhantomData;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # #[allow(dead_code)]</span>
-<span class="doccomment">/// struct Slice&lt;&#39;a, T: &#39;a&gt; {</span>
-<span class="doccomment">///     start: *const T,</span>
-<span class="doccomment">///     end: *const T,</span>
-<span class="doccomment">///     phantom: PhantomData&lt;&amp;&#39;a T&gt;,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 这也需要注解 `T: &#39;a`，以指示 `T` 中的所有引用在生命周期 `&#39;a` 上均有效。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 初始化 `Slice` 时，只需为字段 `phantom` 提供值 `PhantomData`：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// # #![allow(dead_code)]</span>
-<span class="doccomment">/// # use std::marker::PhantomData;</span>
-<span class="doccomment">/// # struct Slice&lt;&#39;a, T: &#39;a&gt; {</span>
-<span class="doccomment">/// #     start: *const T,</span>
-<span class="doccomment">/// #     end: *const T,</span>
-<span class="doccomment">/// #     phantom: PhantomData&lt;&amp;&#39;a T&gt;,</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// fn borrow_vec&lt;T&gt;(vec: &amp;Vec&lt;T&gt;) -&gt; Slice&lt;&#39;_, T&gt; {</span>
-<span class="doccomment">///     let ptr = vec.as_ptr();</span>
-<span class="doccomment">///     Slice {</span>
-<span class="doccomment">///         start: ptr,</span>
-<span class="doccomment">///         end: unsafe { ptr.add(vec.len()) },</span>
-<span class="doccomment">///         phantom: PhantomData,</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## 未使用的类型参数</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 有时可能会发生未使用的类型参数，这些参数指示 &quot;tied&quot; 将结构体数据类型化的数据，即使该数据实际上不是在结构体本身中找到的也是如此。</span>
-<span class="doccomment">/// 这是 [FFI] 出现此情况的示例。</span>
-<span class="doccomment">/// 外部接口使用 `*mut ()` 类型的句柄来引用不同类型的 Rust 值。</span>
-<span class="doccomment">/// 我们使用包裹句柄的结构体 `ExternalResource` 上的 `phantom` 类型参数来跟踪 Rust 类型。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [FFI]: ../../book/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// # #![allow(dead_code)]</span>
-<span class="doccomment">/// # trait ResType { }</span>
-<span class="doccomment">/// # struct ParamType;</span>
-<span class="doccomment">/// # mod foreign_lib {</span>
-<span class="doccomment">/// #     pub fn new(_: usize) -&gt; *mut () { 42 as *mut () }</span>
-<span class="doccomment">/// #     pub fn do_stuff(_: *mut (), _: usize) {}</span>
-<span class="doccomment">/// # }</span>
-<span class="doccomment">/// # fn convert_params(_: ParamType) -&gt; usize { 42 }</span>
-<span class="doccomment">/// use std::marker::PhantomData;</span>
-<span class="doccomment">/// use std::mem;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// struct ExternalResource&lt;R&gt; {</span>
-<span class="doccomment">///    resource_handle: *mut (),</span>
-<span class="doccomment">///    resource_type: PhantomData&lt;R&gt;,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl&lt;R: ResType&gt; ExternalResource&lt;R&gt; {</span>
-<span class="doccomment">///     fn new() -&gt; Self {</span>
-<span class="doccomment">///         let size_of_res = mem::size_of::&lt;R&gt;();</span>
-<span class="doccomment">///         Self {</span>
-<span class="doccomment">///             resource_handle: foreign_lib::new(size_of_res),</span>
-<span class="doccomment">///             resource_type: PhantomData,</span>
-<span class="doccomment">///         }</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     fn do_stuff(&amp;self, param: ParamType) {</span>
-<span class="doccomment">///         let foreign_params = convert_params(param);</span>
-<span class="doccomment">///         foreign_lib::do_stuff(self.resource_handle, foreign_params);</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## 所有权和 drop 检测</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 添加 `PhantomData&lt;T&gt;` 类型的字段表示您的类型拥有 `T` 类型的数据。反过来，这意味着丢弃您的类型时，它可能会丢弃一个或多个 `T` 类型的实例。</span>
-<span class="doccomment">/// 这与 Rust 编译器的 [丢弃检查][drop check] 分析有关。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 如果您的结构体实际上并不 *拥有*`T` 类型的数据，则最好使用引用类型，例如 `PhantomData&lt;&amp;&#39;a T&gt;` (ideally) 或 `PhantomData&lt;*const T&gt;` (如果没有生命周期适用)，以免表示所有权。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [drop check]: ../../nomicon/dropck.html</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">lang</span> <span class="op">=</span> <span class="string">&quot;phantom_data&quot;</span>]</span>
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span>;
-
-<span class="macro">impls!</span> { <span class="ident">PhantomData</span> }
-
-<span class="kw">mod</span> <span class="ident">impls</span> {
-    <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-    <span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Sync</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {}
-    <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-    <span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span> {}
-}
-
-<span class="doccomment">/// 编译器内部的 trait 用于指示枚举判别式的类型。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 这个 trait 是为每种类型自动实现的，并且不会给 [`mem::Discriminant`] 添加任何保证。</span>
-<span class="doccomment">/// 在 `DiscriminantKind::Discriminant` 和 `mem::Discriminant` 之间转换是未定义的行为。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`mem::Discriminant`]: crate::mem::Discriminant</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">unstable</span>(
-    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;discriminant_kind&quot;</span>,
-    <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;none&quot;</span>,
-    <span class="ident">reason</span> <span class="op">=</span> <span class="string">&quot;this trait is unlikely to ever be stabilized, use `mem::discriminant` instead&quot;</span>
-)]</span>
-<span class="attribute">#[<span class="ident">lang</span> <span class="op">=</span> <span class="string">&quot;discriminant_kind&quot;</span>]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">DiscriminantKind</span> {
-    <span class="doccomment">/// 判别类型，必须满足 `mem::Discriminant` 要求的 trait bounds。</span>
-    <span class="doccomment">///</span>
-    <span class="attribute">#[<span class="ident">lang</span> <span class="op">=</span> <span class="string">&quot;discriminant_type&quot;</span>]</span>
-    <span class="kw">type</span> <span class="ident">Discriminant</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">PartialEq</span> <span class="op">+</span> <span class="ident">Hash</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="ident">Unpin</span>;
-}
-
-<span class="doccomment">/// 编译器内部的 trait 用于确定类型是否在内部包含任何 `UnsafeCell`，但不是通过间接寻址。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 例如，这会影响该类型的 `static` 是否放置在只读静态存储器或可写静态存储器中。</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">lang</span> <span class="op">=</span> <span class="string">&quot;freeze&quot;</span>]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe</span> <span class="ident">auto</span> <span class="kw">trait</span> <span class="ident">Freeze</span> {}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="op">!</span><span class="ident">Freeze</span> <span class="kw">for</span> <span class="ident">UnsafeCell</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
-<span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Freeze</span> <span class="kw">for</span> <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
-<span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Freeze</span> <span class="kw">for</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">T</span> {}
-<span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Freeze</span> <span class="kw">for</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span> {}
-<span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Freeze</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {}
-<span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Freeze</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span> {}
-
-<span class="doccomment">/// 固定后可以安全移动的类型。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Rust 本身没有固定类型的概念，并认为移动 (例如，通过赋值或 [`mem::replace`]) 始终是安全的。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`Pin`][Pin] 类型代替使用，以防止在类型系统中移动。[`Pin&lt;P&lt;T&gt;&gt;`][Pin] 包装器中包裹的指针 `P&lt;T&gt;` 不能移出。</span>
-<span class="doccomment">/// 有关固定的更多信息，请参见 [`pin` module] 文档。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 为 `T` 实现 `Unpin` trait 消除了固定该类型的限制，然后允许使用诸如 [`mem::replace`] 之类的功能将 `T` 从 [`Pin&lt;P&lt;T&gt;&gt;`][Pin] 中移出。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// `Unpin` 对未固定的数据没有任何影响。</span>
-<span class="doccomment">/// 特别是，[`mem::replace`] 可以愉快地移动 `!Unpin` 数据 (它适用于任何 `&amp;mut T`，而不仅限于 `T: Unpin`)。</span>
-<span class="doccomment">/// 但是，您不能对包装在 [`Pin&lt;P&lt;T&gt;&gt;`][Pin] 内的数据使用 [`mem::replace`]，因为您无法获得所需的 `&amp;mut T`，并且 *that* 是使此系统正常工作的原因。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 因此，例如，这只能在实现 `Unpin` 的类型上完成：</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// # #![allow(unused_must_use)]</span>
-<span class="doccomment">/// use std::mem;</span>
-<span class="doccomment">/// use std::pin::Pin;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut string = &quot;this&quot;.to_string();</span>
-<span class="doccomment">/// let mut pinned_string = Pin::new(&amp;mut string);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // 我们需要一个可变引用来调用 `mem::replace`。</span>
-<span class="doccomment">/// // 我们可以通过 (implicitly) 调用 `Pin::deref_mut` 来获得这样的引用，但这仅是可能的，因为 `String` 实现了 `Unpin`。</span>
-<span class="comment">/////</span>
-<span class="doccomment">/// mem::replace(&amp;mut *pinned_string, &quot;other&quot;.to_string());</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 几乎所有类型都会自动实现这个 trait。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`mem::replace`]: crate::mem::replace</span>
-<span class="doccomment">/// [Pin]: crate::pin::Pin</span>
-<span class="doccomment">/// [`pin` module]: crate::pin</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pin&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.33.0&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">rustc_on_unimplemented</span>(
-    <span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;consider using `Box::pin`&quot;</span>,
-    <span class="ident">message</span> <span class="op">=</span> <span class="string">&quot;`{Self}` cannot be unpinned&quot;</span>
-)]</span>
-<span class="attribute">#[<span class="ident">lang</span> <span class="op">=</span> <span class="string">&quot;unpin&quot;</span>]</span>
-<span class="kw">pub</span> <span class="ident">auto</span> <span class="kw">trait</span> <span class="ident">Unpin</span> {}
-
-<span class="doccomment">/// 没有实现 `Unpin` 的标记类型。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 如果类型包含 `PhantomPinned`，则默认情况下将不实现 `Unpin`。</span>
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pin&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.33.0&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PhantomPinned</span>;
-
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pin&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.33.0&quot;</span>)]</span>
-<span class="kw">impl</span> <span class="op">!</span><span class="ident">Unpin</span> <span class="kw">for</span> <span class="ident">PhantomPinned</span> {}
-
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pin&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.33.0&quot;</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span> <span class="op">+</span> <span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Unpin</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span> {}
-
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pin&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.33.0&quot;</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span> <span class="op">+</span> <span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Unpin</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">T</span> {}
-
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pin_raw&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.38.0&quot;</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Unpin</span> <span class="kw">for</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">T</span> {}
-
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;pin_raw&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.38.0&quot;</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Unpin</span> <span class="kw">for</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span> {}
-
-<span class="doccomment">/// 原始类型的 `Copy` 实现。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// `rustc_trait_selection` 中的 `traits::SelectionContext::copy_clone_conditions()` 中实现了 Rust 中无法描述的实现。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///</span>
-<span class="kw">mod</span> <span class="ident">copy_impls</span> {
-
-    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Copy</span>;
-
-    <span class="macro">macro_rules!</span> <span class="ident">impl_copy</span> {
-        ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>)<span class="kw-2">*</span>) =&gt; {
-            $(
-                <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-                <span class="kw">impl</span> <span class="ident">Copy</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> {}
-            )<span class="op">*</span>
-        }
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; cmp::PartialOrd <span class="kw">for </span>PhantomData&lt;T&gt; {
+    <span class="kw">fn </span>partial_cmp(<span class="kw-2">&amp;</span><span class="self">self</span>, _other: <span class="kw-2">&amp;</span>PhantomData&lt;T&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;cmp::Ordering&gt; {
+        Option::Some(cmp::Ordering::Equal)
     }
-
-    <span class="macro">impl_copy!</span> {
-        <span class="ident">usize</span> <span class="ident">u8</span> <span class="ident">u16</span> <span class="ident">u32</span> <span class="ident">u64</span> <span class="ident">u128</span>
-        <span class="ident">isize</span> <span class="ident">i8</span> <span class="ident">i16</span> <span class="ident">i32</span> <span class="ident">i64</span> <span class="ident">i128</span>
-        <span class="ident">f32</span> <span class="ident">f64</span>
-        <span class="ident">bool</span> <span class="ident">char</span>
-    }
-
-    <span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;never_type&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;35121&quot;</span>)]</span>
-    <span class="kw">impl</span> <span class="ident">Copy</span> <span class="kw">for</span> <span class="op">!</span> {}
-
-    <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Copy</span> <span class="kw">for</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">T</span> {}
-
-    <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Copy</span> <span class="kw">for</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span> {}
-
-    <span class="doccomment">/// 共享的引用可以复制，但是可变引用 *不能*!</span>
-    <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Copy</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {}
 }
-</code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="core" data-search-index-js="../../search-index1.58.0.js" data-search-js="../../search1.58.0.js"></div>
-    <script src="../../main1.58.0.js"></script><script src="../../source-script1.58.0.js"></script><script src="../../source-files1.58.0.js"></script>
-</body></html>
+
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; cmp::Ord <span class="kw">for </span>PhantomData&lt;T&gt; {
+    <span class="kw">fn </span>cmp(<span class="kw-2">&amp;</span><span class="self">self</span>, _other: <span class="kw-2">&amp;</span>PhantomData&lt;T&gt;) -&gt; cmp::Ordering {
+        cmp::Ordering::Equal
+    }
+}
+
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; Copy <span class="kw">for </span>PhantomData&lt;T&gt; {}
+
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; Clone <span class="kw">for </span>PhantomData&lt;T&gt; {
+    <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">Self
+    </span>}
+}
+
+<span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; Default <span class="kw">for </span>PhantomData&lt;T&gt; {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        <span class="self">Self
+    </span>}
+}
+
+<span class="attr">#[unstable(feature = <span class="string">&quot;structural_match&quot;</span>, issue = <span class="string">&quot;31434&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; StructuralPartialEq <span class="kw">for </span>PhantomData&lt;T&gt; {}
+
+<span class="attr">#[unstable(feature = <span class="string">&quot;structural_match&quot;</span>, issue = <span class="string">&quot;31434&quot;</span>)]
+</span><span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; StructuralEq <span class="kw">for </span>PhantomData&lt;T&gt; {}
+
+<span class="doccomment">/// 编译器内部的 trait 用于指示枚举判别式的类型。
+///
+/// 这个 trait 是为每种类型自动实现的，并且不会给 [`mem::Discriminant`] 添加任何保证。
+/// 在 `DiscriminantKind::Discriminant` 和 `mem::Discriminant` 之间转换是未定义的行为。
+///
+/// [`mem::Discriminant`]: crate::mem::Discriminant
+///
+</span><span class="attr">#[unstable(
+    feature = <span class="string">&quot;discriminant_kind&quot;</span>,
+    issue = <span class="string">&quot;none&quot;</span>,
+    reason = <span class="string">&quot;this trait is unlikely to ever be stabilized, use `mem::discriminant` instead&quot;
+</span>)]
+#[lang = <span class="string">&quot;discriminant_kind&quot;</span>]
+#[rustc_deny_explicit_impl]
+</span><span class="kw">pub trait </span>DiscriminantKind {
+    <span class="doccomment">/// 判别类型，必须满足 `mem::Discriminant` 要求的 trait bounds。
+    ///
+    </span><span class="attr">#[lang = <span class="string">&quot;discriminant_type&quot;</span>]
+    </span><span class="kw">type </span>Discriminant: Clone + Copy + Debug + Eq + PartialEq + Hash + Send + Sync + Unpin;
+}
+
+<span class="doccomment">/// 编译器内部的 trait 用于确定类型是否在内部包含任何 `UnsafeCell`，但不是通过间接寻址。
+///
+/// 例如，这会影响该类型的 `static` 是否放置在只读静态存储器或可写静态存储器中。
+///
+</span><span class="attr">#[lang = <span class="string">&quot;freeze&quot;</span>]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe </span>auto <span class="kw">trait </span>Freeze {}
+
+<span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; !Freeze <span class="kw">for </span>UnsafeCell&lt;T&gt; {}
+<span class="macro">marker_impls! </span>{
+    <span class="kw">unsafe </span>Freeze <span class="kw">for
+        </span>{T: <span class="question-mark">?</span>Sized} PhantomData&lt;T&gt;,
+        {T: <span class="question-mark">?</span>Sized} <span class="kw-2">*const </span>T,
+        {T: <span class="question-mark">?</span>Sized} <span class="kw-2">*mut </span>T,
+        {T: <span class="question-mark">?</span>Sized} <span class="kw-2">&amp;</span>T,
+        {T: <span class="question-mark">?</span>Sized} <span class="kw-2">&amp;mut </span>T,
+}
+
+<span class="doccomment">/// 固定后可以安全移动的类型。
+///
+/// Rust 本身没有固定类型的概念，并认为移动 (例如，通过赋值或 [`mem::replace`]) 始终是安全的。
+///
+/// [`Pin`][Pin] 类型代替使用，以防止在类型系统中移动。[`Pin&lt;P&lt;T&gt;&gt;`][Pin] 包装器中包裹的指针 `P&lt;T&gt;` 不能移出。
+/// 有关固定的更多信息，请参见 [`pin` module] 文档。
+///
+/// 为 `T` 实现 `Unpin` trait 消除了固定该类型的限制，然后允许使用诸如 [`mem::replace`] 之类的功能将 `T` 从 [`Pin&lt;P&lt;T&gt;&gt;`][Pin] 中移出。
+///
+///
+/// `Unpin` 对未固定的数据没有任何影响。
+/// 特别是，[`mem::replace`] 可以愉快地移动 `!Unpin` 数据 (它适用于任何 `&amp;mut T`，而不仅限于 `T: Unpin`)。
+/// 但是，您不能对包装在 [`Pin&lt;P&lt;T&gt;&gt;`][Pin] 内的数据使用 [`mem::replace`]，因为您无法获得所需的 `&amp;mut T`，并且 *that* 是使此系统正常工作的原因。
+///
+/// 因此，例如，这只能在实现 `Unpin` 的类型上完成：
+///
+/// ```rust
+/// # #![allow(unused_must_use)]
+/// use std::mem;
+/// use std::pin::Pin;
+///
+/// let mut string = &quot;this&quot;.to_string();
+/// let mut pinned_string = Pin::new(&amp;mut string);
+///
+/// // 我们需要一个可变引用来调用 `mem::replace`。
+/// // 我们可以通过 (implicitly) 调用 `Pin::deref_mut` 来获得这样的引用，但这仅是可能的，因为 `String` 实现了 `Unpin`。
+</span><span class="comment">/////
+</span><span class="doccomment">/// mem::replace(&amp;mut *pinned_string, &quot;other&quot;.to_string());
+/// ```
+///
+/// 几乎所有类型都会自动实现这个 trait。
+///
+/// [`mem::replace`]: crate::mem::replace
+/// [Pin]: crate::pin::Pin
+/// [`pin` module]: crate::pin
+///
+///
+///
+///
+///
+///
+</span><span class="attr">#[stable(feature = <span class="string">&quot;pin&quot;</span>, since = <span class="string">&quot;1.33.0&quot;</span>)]
+#[rustc_on_unimplemented(
+    note = <span class="string">&quot;consider using the `pin!` macro\nconsider using `Box::pin` if you need to access the pinned value outside of the current scope&quot;</span>,
+    message = <span class="string">&quot;`{Self}` cannot be unpinned&quot;
+</span>)]
+#[lang = <span class="string">&quot;unpin&quot;</span>]
+</span><span class="kw">pub </span>auto <span class="kw">trait </span>Unpin {}
+
+<span class="doccomment">/// 没有实现 `Unpin` 的标记类型。
+///
+/// 如果类型包含 `PhantomPinned`，则默认情况下将不实现 `Unpin`。
+</span><span class="attr">#[stable(feature = <span class="string">&quot;pin&quot;</span>, since = <span class="string">&quot;1.33.0&quot;</span>)]
+#[derive(Debug, Default, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+</span><span class="kw">pub struct </span>PhantomPinned;
+
+<span class="attr">#[stable(feature = <span class="string">&quot;pin&quot;</span>, since = <span class="string">&quot;1.33.0&quot;</span>)]
+</span><span class="kw">impl </span>!Unpin <span class="kw">for </span>PhantomPinned {}
+
+<span class="macro">marker_impls! </span>{
+    <span class="attr">#[stable(feature = <span class="string">&quot;pin&quot;</span>, since = <span class="string">&quot;1.33.0&quot;</span>)]
+    </span>Unpin <span class="kw">for
+        </span>{T: <span class="question-mark">?</span>Sized} <span class="kw-2">&amp;</span>T,
+        {T: <span class="question-mark">?</span>Sized} <span class="kw-2">&amp;mut </span>T,
+}
+
+<span class="macro">marker_impls! </span>{
+    <span class="attr">#[stable(feature = <span class="string">&quot;pin_raw&quot;</span>, since = <span class="string">&quot;1.38.0&quot;</span>)]
+    </span>Unpin <span class="kw">for
+        </span>{T: <span class="question-mark">?</span>Sized} <span class="kw-2">*const </span>T,
+        {T: <span class="question-mark">?</span>Sized} <span class="kw-2">*mut </span>T,
+}
+
+<span class="doccomment">/// 可以丢弃的类型的标记。
+///
+/// 这应该用于 `~const` 边界，因为非常量边界将始终适用于每种类型。
+///
+</span><span class="attr">#[unstable(feature = <span class="string">&quot;const_trait_impl&quot;</span>, issue = <span class="string">&quot;67792&quot;</span>)]
+#[lang = <span class="string">&quot;destruct&quot;</span>]
+#[rustc_on_unimplemented(message = <span class="string">&quot;can&#39;t drop `{Self}`&quot;</span>, append_const_msg)]
+#[rustc_deny_explicit_impl]
+#[const_trait]
+</span><span class="kw">pub trait </span>Destruct {}
+
+<span class="doccomment">/// 元组类型的标记。
+///
+/// 这个 trait 的实现是内置的，不能为任何用户类型实现。
+///
+</span><span class="attr">#[unstable(feature = <span class="string">&quot;tuple_trait&quot;</span>, issue = <span class="string">&quot;none&quot;</span>)]
+#[lang = <span class="string">&quot;tuple_trait&quot;</span>]
+#[rustc_on_unimplemented(message = <span class="string">&quot;`{Self}` is not a tuple&quot;</span>)]
+#[rustc_deny_explicit_impl]
+</span><span class="kw">pub trait </span>Tuple {}
+
+<span class="doccomment">/// 类指针类型的标记。
+///
+/// 所有与 `usize` 或 `*const ()` 具有相同大小和对齐方式的类型都会自动实现此 trait。
+///
+</span><span class="attr">#[unstable(feature = <span class="string">&quot;pointer_like_trait&quot;</span>, issue = <span class="string">&quot;none&quot;</span>)]
+#[lang = <span class="string">&quot;pointer_like&quot;</span>]
+#[rustc_on_unimplemented(
+    message = <span class="string">&quot;`{Self}` needs to have the same ABI as a pointer&quot;</span>,
+    label = <span class="string">&quot;`{Self}` needs to be a pointer-like type&quot;
+</span>)]
+</span><span class="kw">pub trait </span>PointerLike {}
+
+<span class="doccomment">/// 可用作 `const` 泛型参数类型的类型的标记。
+</span><span class="attr">#[cfg_attr(not(bootstrap), lang = <span class="string">&quot;const_param_ty&quot;</span>)]
+#[unstable(feature = <span class="string">&quot;adt_const_params&quot;</span>, issue = <span class="string">&quot;95174&quot;</span>)]
+#[rustc_on_unimplemented(message = <span class="string">&quot;`{Self}` can&#39;t be used as a const parameter type&quot;</span>)]
+</span><span class="kw">pub trait </span>ConstParamTy: StructuralEq {}
+
+<span class="doccomment">/// 派生宏生成 trait `ConstParamTy` 的一个 impl。
+</span><span class="attr">#[rustc_builtin_macro]
+#[unstable(feature = <span class="string">&quot;adt_const_params&quot;</span>, issue = <span class="string">&quot;95174&quot;</span>)]
+#[cfg(not(bootstrap))]
+</span><span class="kw">pub macro </span>ConstParamTy(<span class="macro-nonterminal">$item</span>:item) {
+    <span class="comment">/* compiler built-in */
+</span>}
+
+<span class="comment">// FIXME(generic_const_parameter_types): 句柄 `ty::FnDef`/`ty::Closure`
+// FIXME(generic_const_parameter_types): 句柄 `ty::Tuple`
+</span><span class="macro">marker_impls! </span>{
+    <span class="attr">#[unstable(feature = <span class="string">&quot;adt_const_params&quot;</span>, issue = <span class="string">&quot;95174&quot;</span>)]
+    </span>ConstParamTy <span class="kw">for
+        </span>usize, u8, u16, u32, u64, u128,
+        isize, i8, i16, i32, i64, i128,
+        bool,
+        char,
+        str <span class="comment">/* Technically requires `[u8]: ConstParamTy` */</span>,
+        {T: ConstParamTy, <span class="kw">const </span>N: usize} [T; N],
+        {T: ConstParamTy} [T],
+        {T: <span class="question-mark">?</span>Sized + ConstParamTy} <span class="kw-2">&amp;</span>T,
+}
+
+<span class="doccomment">/// 由所有函数指针实现的公共 trait。
+</span><span class="attr">#[unstable(
+    feature = <span class="string">&quot;fn_ptr_trait&quot;</span>,
+    issue = <span class="string">&quot;none&quot;</span>,
+    reason = <span class="string">&quot;internal trait for implementing various traits for all function pointers&quot;
+</span>)]
+#[lang = <span class="string">&quot;fn_ptr_trait&quot;</span>]
+#[rustc_deny_explicit_impl]
+</span><span class="kw">pub trait </span>FnPtr: Copy + Clone {
+    <span class="doccomment">/// 返回函数指针的地址。
+    </span><span class="attr">#[lang = <span class="string">&quot;fn_ptr_addr&quot;</span>]
+    </span><span class="kw">fn </span>addr(<span class="self">self</span>) -&gt; <span class="kw-2">*const </span>();
+}
+</code></pre></div></section></main></body></html>

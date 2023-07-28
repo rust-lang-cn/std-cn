@@ -1,0 +1,505 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Platform Support - The rustc book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="what-is-rustc.html"><strong aria-hidden="true">1.</strong> What is rustc?</a></li><li class="chapter-item expanded "><a href="command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line Arguments</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="codegen-options/index.html"><strong aria-hidden="true">2.1.</strong> Codegen Options</a></li></ol></li><li class="chapter-item expanded "><a href="lints/index.html"><strong aria-hidden="true">3.</strong> Lints</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lints/levels.html"><strong aria-hidden="true">3.1.</strong> Lint Levels</a></li><li class="chapter-item expanded "><a href="lints/groups.html"><strong aria-hidden="true">3.2.</strong> Lint Groups</a></li><li class="chapter-item expanded "><a href="lints/listing/index.html"><strong aria-hidden="true">3.3.</strong> Lint Listing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lints/listing/allowed-by-default.html"><strong aria-hidden="true">3.3.1.</strong> Allowed-by-default Lints</a></li><li class="chapter-item expanded "><a href="lints/listing/warn-by-default.html"><strong aria-hidden="true">3.3.2.</strong> Warn-by-default Lints</a></li><li class="chapter-item expanded "><a href="lints/listing/deny-by-default.html"><strong aria-hidden="true">3.3.3.</strong> Deny-by-default Lints</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="json.html"><strong aria-hidden="true">4.</strong> JSON Output</a></li><li class="chapter-item expanded "><a href="tests/index.html"><strong aria-hidden="true">5.</strong> Tests</a></li><li class="chapter-item expanded "><a href="platform-support.html" class="active"><strong aria-hidden="true">6.</strong> Platform Support</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="target-tier-policy.html"><strong aria-hidden="true">6.1.</strong> Target Tier Policy</a></li><li class="chapter-item expanded "><a href="platform-support/TEMPLATE.html"><strong aria-hidden="true">6.2.</strong> Template for Target-specific Documentation</a></li><li class="chapter-item expanded "><a href="platform-support/aarch64-apple-ios-sim.html"><strong aria-hidden="true">6.3.</strong> aarch64-apple-ios-sim</a></li><li class="chapter-item expanded "><a href="platform-support/apple-watchos.html"><strong aria-hidden="true">6.4.</strong> *-apple-watchos*</a></li><li class="chapter-item expanded "><a href="platform-support/aarch64-nintendo-switch-freestanding.html"><strong aria-hidden="true">6.5.</strong> aarch64-nintendo-switch-freestanding</a></li><li class="chapter-item expanded "><a href="platform-support/armeb-unknown-linux-gnueabi.html"><strong aria-hidden="true">6.6.</strong> armeb-unknown-linux-gnueabi</a></li><li class="chapter-item expanded "><a href="platform-support/armv4t-none-eabi.html"><strong aria-hidden="true">6.7.</strong> armv4t-none-eabi</a></li><li class="chapter-item expanded "><a href="platform-support/armv5te-none-eabi.html"><strong aria-hidden="true">6.8.</strong> armv5te-none-eabi</a></li><li class="chapter-item expanded "><a href="platform-support/armv6k-nintendo-3ds.html"><strong aria-hidden="true">6.9.</strong> armv6k-nintendo-3ds</a></li><li class="chapter-item expanded "><a href="platform-support/armv7-sony-vita-newlibeabihf.html"><strong aria-hidden="true">6.10.</strong> armv7-sony-vita-newlibeabihf</a></li><li class="chapter-item expanded "><a href="platform-support/armv7-unknown-linux-uclibceabi.html"><strong aria-hidden="true">6.11.</strong> armv7-unknown-linux-uclibceabi</a></li><li class="chapter-item expanded "><a href="platform-support/armv7-unknown-linux-uclibceabihf.html"><strong aria-hidden="true">6.12.</strong> armv7-unknown-linux-uclibceabihf</a></li><li class="chapter-item expanded "><a href="platform-support/android.html"><strong aria-hidden="true">6.13.</strong> *-android and *-androideabi</a></li><li class="chapter-item expanded "><a href="platform-support/openharmony.html"><strong aria-hidden="true">6.14.</strong> *-linux-ohos</a></li><li class="chapter-item expanded "><a href="platform-support/esp-idf.html"><strong aria-hidden="true">6.15.</strong> *-esp-espidf</a></li><li class="chapter-item expanded "><a href="platform-support/fuchsia.html"><strong aria-hidden="true">6.16.</strong> *-unknown-fuchsia</a></li><li class="chapter-item expanded "><a href="platform-support/kmc-solid.html"><strong aria-hidden="true">6.17.</strong> *-kmc-solid_*</a></li><li class="chapter-item expanded "><a href="platform-support/loongarch-linux.html"><strong aria-hidden="true">6.18.</strong> loongarch*-unknown-linux-*</a></li><li class="chapter-item expanded "><a href="platform-support/m68k-unknown-linux-gnu.html"><strong aria-hidden="true">6.19.</strong> m68k-unknown-linux-gnu</a></li><li class="chapter-item expanded "><a href="platform-support/mips64-openwrt-linux-musl.html"><strong aria-hidden="true">6.20.</strong> mips64-openwrt-linux-musl</a></li><li class="chapter-item expanded "><a href="platform-support/mipsel-sony-psx.html"><strong aria-hidden="true">6.21.</strong> mipsel-sony-psx</a></li><li class="chapter-item expanded "><a href="platform-support/nvptx64-nvidia-cuda.html"><strong aria-hidden="true">6.22.</strong> nvptx64-nvidia-cuda</a></li><li class="chapter-item expanded "><a href="platform-support/riscv32imac-unknown-xous-elf.html"><strong aria-hidden="true">6.23.</strong> riscv32imac-unknown-xous-elf</a></li><li class="chapter-item expanded "><a href="platform-support/pc-windows-gnullvm.html"><strong aria-hidden="true">6.24.</strong> *-pc-windows-gnullvm</a></li><li class="chapter-item expanded "><a href="platform-support/nto-qnx.html"><strong aria-hidden="true">6.25.</strong> *-nto-qnx-*</a></li><li class="chapter-item expanded "><a href="platform-support/openbsd.html"><strong aria-hidden="true">6.26.</strong> *-unknown-openbsd</a></li><li class="chapter-item expanded "><a href="platform-support/unknown-uefi.html"><strong aria-hidden="true">6.27.</strong> *-unknown-uefi</a></li><li class="chapter-item expanded "><a href="platform-support/wasm64-unknown-unknown.html"><strong aria-hidden="true">6.28.</strong> wasm64-unknown-unknown</a></li><li class="chapter-item expanded "><a href="platform-support/x86_64-fortanix-unknown-sgx.html"><strong aria-hidden="true">6.29.</strong> x86_64-fortanix-unknown-sgx</a></li><li class="chapter-item expanded "><a href="platform-support/x86_64-unknown-none.html"><strong aria-hidden="true">6.30.</strong> x86_64-unknown-none</a></li><li class="chapter-item expanded "><a href="platform-support/x86_64h-apple-darwin.html"><strong aria-hidden="true">6.31.</strong> x86_64h-apple-darwin</a></li></ol></li><li class="chapter-item expanded "><a href="targets/index.html"><strong aria-hidden="true">7.</strong> Targets</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="targets/built-in.html"><strong aria-hidden="true">7.1.</strong> Built-in Targets</a></li><li class="chapter-item expanded "><a href="targets/custom.html"><strong aria-hidden="true">7.2.</strong> Custom Targets</a></li><li class="chapter-item expanded "><a href="targets/known-issues.html"><strong aria-hidden="true">7.3.</strong> Known Issues</a></li></ol></li><li class="chapter-item expanded "><a href="profile-guided-optimization.html"><strong aria-hidden="true">8.</strong> Profile-guided Optimization</a></li><li class="chapter-item expanded "><a href="instrument-coverage.html"><strong aria-hidden="true">9.</strong> Instrumentation-based Code Coverage</a></li><li class="chapter-item expanded "><a href="linker-plugin-lto.html"><strong aria-hidden="true">10.</strong> Linker-plugin-based LTO</a></li><li class="chapter-item expanded "><a href="exploit-mitigations.html"><strong aria-hidden="true">11.</strong> Exploit Mitigations</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">12.</strong> Contributing to rustc</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The rustc book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/master/src/doc/rustc" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/edit/master/src/doc/rustc/src/platform-support.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="platform-support"><a class="header" href="#platform-support">Platform Support</a></h1>
+<style type="text/css">
+    td code {
+        white-space: nowrap;
+    }
+</style>
+<p>Support for different platforms (&quot;targets&quot;) are organized into three tiers,
+each with a different set of guarantees. For more information on the policies
+for targets at each tier, see the <a href="target-tier-policy.html">Target Tier Policy</a>.</p>
+<p>Targets are identified by their &quot;target triple&quot; which is the string to inform
+the compiler what kind of output should be produced.</p>
+<p>Component availability is tracked <a href="https://rust-lang.github.io/rustup-components-history/">here</a>.</p>
+<h2 id="tier-1-with-host-tools"><a class="header" href="#tier-1-with-host-tools">Tier 1 with Host Tools</a></h2>
+<p>Tier 1 targets can be thought of as &quot;guaranteed to work&quot;. The Rust project
+builds official binary releases for each tier 1 target, and automated testing
+ensures that each tier 1 target builds and passes tests after each change.</p>
+<p>Tier 1 targets with host tools additionally support running tools like <code>rustc</code>
+and <code>cargo</code> natively on the target, and automated testing ensures that tests
+pass for the host tools as well. This allows the target to be used as a
+development platform, not just a compilation target. For the full requirements,
+see <a href="target-tier-policy.html#tier-1-with-host-tools">Tier 1 with Host Tools</a> in
+the Target Tier Policy.</p>
+<p>All tier 1 targets with host tools support the full standard library.</p>
+<div class="table-wrapper"><table><thead><tr><th>target</th><th>notes</th></tr></thead><tbody>
+<tr><td><code>aarch64-unknown-linux-gnu</code></td><td>ARM64 Linux (kernel 4.1, glibc 2.17+) <sup class="footnote-reference"><a href="#missing-stack-probes">1</a></sup></td></tr>
+<tr><td><code>i686-pc-windows-gnu</code></td><td>32-bit MinGW (Windows 7+) <sup class="footnote-reference"><a href="#windows-support">2</a></sup></td></tr>
+<tr><td><code>i686-pc-windows-msvc</code></td><td>32-bit MSVC (Windows 7+) <sup class="footnote-reference"><a href="#windows-support">2</a></sup></td></tr>
+<tr><td><code>i686-unknown-linux-gnu</code></td><td>32-bit Linux (kernel 3.2+, glibc 2.17+)</td></tr>
+<tr><td><code>x86_64-apple-darwin</code></td><td>64-bit macOS (10.7+, Lion+)</td></tr>
+<tr><td><code>x86_64-pc-windows-gnu</code></td><td>64-bit MinGW (Windows 7+) <sup class="footnote-reference"><a href="#windows-support">2</a></sup></td></tr>
+<tr><td><code>x86_64-pc-windows-msvc</code></td><td>64-bit MSVC (Windows 7+) <sup class="footnote-reference"><a href="#windows-support">2</a></sup></td></tr>
+<tr><td><code>x86_64-unknown-linux-gnu</code></td><td>64-bit Linux (kernel 3.2+, glibc 2.17+)</td></tr>
+</tbody></table>
+</div>
+<div class="footnote-definition" id="missing-stack-probes"><sup class="footnote-definition-label">1</sup>
+<p>Stack probes support is missing on
+<code>aarch64-unknown-linux-gnu</code>, but it's planned to be implemented in the near
+future. The implementation is tracked on <a href="https://github.com/rust-lang/rust/issues/77071">issue #77071</a>.</p>
+</div>
+<div class="footnote-definition" id="windows-support"><sup class="footnote-definition-label">2</sup>
+<p>Only Windows 10 currently undergoes automated testing. Earlier versions of Windows rely on testing and support from the community.</p>
+</div>
+<h2 id="tier-1"><a class="header" href="#tier-1">Tier 1</a></h2>
+<p>Tier 1 targets can be thought of as &quot;guaranteed to work&quot;. The Rust project
+builds official binary releases for each tier 1 target, and automated testing
+ensures that each tier 1 target builds and passes tests after each change. For
+the full requirements, see <a href="target-tier-policy.html#tier-1-target-policy">Tier 1 target
+policy</a> in the Target Tier Policy.</p>
+<p>At this time, all Tier 1 targets are <a href="#tier-1-with-host-tools">Tier 1 with Host
+Tools</a>.</p>
+<h2 id="tier-2-with-host-tools"><a class="header" href="#tier-2-with-host-tools">Tier 2 with Host Tools</a></h2>
+<p>Tier 2 targets can be thought of as &quot;guaranteed to build&quot;. The Rust project
+builds official binary releases for each tier 2 target, and automated builds
+ensure that each tier 2 target builds after each change. Automated tests are
+not always run so it's not guaranteed to produce a working build, but tier 2
+targets often work to quite a good degree and patches are always welcome!</p>
+<p>Tier 2 targets with host tools additionally support running tools like <code>rustc</code>
+and <code>cargo</code> natively on the target, and automated builds ensure that the host
+tools build as well. This allows the target to be used as a development
+platform, not just a compilation target. For the full requirements, see <a href="target-tier-policy.html#tier-2-with-host-tools">Tier 2
+with Host Tools</a> in the Target
+Tier Policy.</p>
+<p>All tier 2 targets with host tools support the full standard library.</p>
+<p><strong>NOTE:</strong> The <code>rust-docs</code> component is not usually built for tier 2 targets,
+so Rustup may install the documentation for a similar tier 1 target instead.</p>
+<div class="table-wrapper"><table><thead><tr><th>target</th><th>notes</th></tr></thead><tbody>
+<tr><td><code>aarch64-apple-darwin</code></td><td>ARM64 macOS (11.0+, Big Sur+)</td></tr>
+<tr><td><code>aarch64-pc-windows-msvc</code></td><td>ARM64 Windows MSVC</td></tr>
+<tr><td><code>aarch64-unknown-linux-musl</code></td><td>ARM64 Linux with MUSL</td></tr>
+<tr><td><code>arm-unknown-linux-gnueabi</code></td><td>ARMv6 Linux (kernel 3.2, glibc 2.17)</td></tr>
+<tr><td><code>arm-unknown-linux-gnueabihf</code></td><td>ARMv6 Linux, hardfloat (kernel 3.2, glibc 2.17)</td></tr>
+<tr><td><code>armv7-unknown-linux-gnueabihf</code></td><td>ARMv7 Linux, hardfloat (kernel 3.2, glibc 2.17)</td></tr>
+<tr><td><a href="platform-support/loongarch-linux.html"><code>loongarch64-unknown-linux-gnu</code></a></td><td>LoongArch64 Linux, LP64D ABI (kernel 5.19, glibc 2.36)</td></tr>
+<tr><td><code>mips-unknown-linux-gnu</code></td><td>MIPS Linux (kernel 4.4, glibc 2.23)</td></tr>
+<tr><td><code>mips64-unknown-linux-gnuabi64</code></td><td>MIPS64 Linux, n64 ABI (kernel 4.4, glibc 2.23)</td></tr>
+<tr><td><code>mips64el-unknown-linux-gnuabi64</code></td><td>MIPS64 (LE) Linux, n64 ABI (kernel 4.4, glibc 2.23)</td></tr>
+<tr><td><code>mipsel-unknown-linux-gnu</code></td><td>MIPS (LE) Linux (kernel 4.4, glibc 2.23)</td></tr>
+<tr><td><code>powerpc-unknown-linux-gnu</code></td><td>PowerPC Linux (kernel 3.2, glibc 2.17)</td></tr>
+<tr><td><code>powerpc64-unknown-linux-gnu</code></td><td>PPC64 Linux (kernel 3.2, glibc 2.17)</td></tr>
+<tr><td><code>powerpc64le-unknown-linux-gnu</code></td><td>PPC64LE Linux (kernel 3.10, glibc 2.17)</td></tr>
+<tr><td><code>riscv64gc-unknown-linux-gnu</code></td><td>RISC-V Linux (kernel 4.20, glibc 2.29)</td></tr>
+<tr><td><code>s390x-unknown-linux-gnu</code></td><td>S390x Linux (kernel 3.2, glibc 2.17)</td></tr>
+<tr><td><code>x86_64-unknown-freebsd</code></td><td>64-bit FreeBSD</td></tr>
+<tr><td><code>x86_64-unknown-illumos</code></td><td>illumos</td></tr>
+<tr><td><code>x86_64-unknown-linux-musl</code></td><td>64-bit Linux with MUSL</td></tr>
+<tr><td><code>x86_64-unknown-netbsd</code></td><td>NetBSD/amd64</td></tr>
+</tbody></table>
+</div>
+<h2 id="tier-2"><a class="header" href="#tier-2">Tier 2</a></h2>
+<p>Tier 2 targets can be thought of as &quot;guaranteed to build&quot;. The Rust project
+builds official binary releases for each tier 2 target, and automated builds
+ensure that each tier 2 target builds after each change. Automated tests are
+not always run so it's not guaranteed to produce a working build, but tier 2
+targets often work to quite a good degree and patches are always welcome! For
+the full requirements, see <a href="target-tier-policy.html#tier-2-target-policy">Tier 2 target
+policy</a> in the Target Tier Policy.</p>
+<p>The <code>std</code> column in the table below has the following meanings:</p>
+<ul>
+<li>✓ indicates the full standard library is available.</li>
+<li>* indicates the target only supports <a href="https://rust-embedded.github.io/book/intro/no-std.html"><code>no_std</code></a> development.</li>
+</ul>
+<p><strong>NOTE:</strong> The <code>rust-docs</code> component is not usually built for tier 2 targets,
+so Rustup may install the documentation for a similar tier 1 target instead.</p>
+<div class="table-wrapper"><table><thead><tr><th>target</th><th style="text-align: center">std</th><th>notes</th></tr></thead><tbody>
+<tr><td><code>aarch64-apple-ios</code></td><td style="text-align: center">✓</td><td>ARM64 iOS</td></tr>
+<tr><td><a href="platform-support/aarch64-apple-ios-sim.html"><code>aarch64-apple-ios-sim</code></a></td><td style="text-align: center">✓</td><td>Apple iOS Simulator on ARM64</td></tr>
+<tr><td><code>aarch64-fuchsia</code></td><td style="text-align: center">✓</td><td>Alias for <code>aarch64-unknown-fuchsia</code></td></tr>
+<tr><td><code>aarch64-unknown-fuchsia</code></td><td style="text-align: center">✓</td><td>ARM64 Fuchsia</td></tr>
+<tr><td><a href="platform-support/android.html"><code>aarch64-linux-android</code></a></td><td style="text-align: center">✓</td><td>ARM64 Android</td></tr>
+<tr><td><code>aarch64-unknown-none-softfloat</code></td><td style="text-align: center">*</td><td>Bare ARM64, softfloat</td></tr>
+<tr><td><code>aarch64-unknown-none</code></td><td style="text-align: center">*</td><td>Bare ARM64, hardfloat</td></tr>
+<tr><td><a href="platform-support/unknown-uefi.html"><code>aarch64-unknown-uefi</code></a></td><td style="text-align: center">*</td><td>ARM64 UEFI</td></tr>
+<tr><td><a href="platform-support/android.html"><code>arm-linux-androideabi</code></a></td><td style="text-align: center">✓</td><td>ARMv7 Android</td></tr>
+<tr><td><code>arm-unknown-linux-musleabi</code></td><td style="text-align: center">✓</td><td>ARMv6 Linux with MUSL</td></tr>
+<tr><td><code>arm-unknown-linux-musleabihf</code></td><td style="text-align: center">✓</td><td>ARMv6 Linux with MUSL, hardfloat</td></tr>
+<tr><td><code>armebv7r-none-eabi</code></td><td style="text-align: center">*</td><td>Bare ARMv7-R, Big Endian</td></tr>
+<tr><td><code>armebv7r-none-eabihf</code></td><td style="text-align: center">*</td><td>Bare ARMv7-R, Big Endian, hardfloat</td></tr>
+<tr><td><code>armv5te-unknown-linux-gnueabi</code></td><td style="text-align: center">✓</td><td>ARMv5TE Linux (kernel 4.4, glibc 2.23)</td></tr>
+<tr><td><code>armv5te-unknown-linux-musleabi</code></td><td style="text-align: center">✓</td><td>ARMv5TE Linux with MUSL</td></tr>
+<tr><td><a href="platform-support/android.html"><code>armv7-linux-androideabi</code></a></td><td style="text-align: center">✓</td><td>ARMv7a Android</td></tr>
+<tr><td><code>armv7-unknown-linux-gnueabi</code></td><td style="text-align: center">✓</td><td>ARMv7 Linux (kernel 4.15, glibc 2.27)</td></tr>
+<tr><td><code>armv7-unknown-linux-musleabi</code></td><td style="text-align: center">✓</td><td>ARMv7 Linux with MUSL</td></tr>
+<tr><td><code>armv7-unknown-linux-musleabihf</code></td><td style="text-align: center">✓</td><td>ARMv7 Linux with MUSL, hardfloat</td></tr>
+<tr><td><code>armv7a-none-eabi</code></td><td style="text-align: center">*</td><td>Bare ARMv7-A</td></tr>
+<tr><td><code>armv7r-none-eabi</code></td><td style="text-align: center">*</td><td>Bare ARMv7-R</td></tr>
+<tr><td><code>armv7r-none-eabihf</code></td><td style="text-align: center">*</td><td>Bare ARMv7-R, hardfloat</td></tr>
+<tr><td><code>asmjs-unknown-emscripten</code></td><td style="text-align: center">✓</td><td>asm.js via Emscripten</td></tr>
+<tr><td><code>i586-pc-windows-msvc</code></td><td style="text-align: center">*</td><td>32-bit Windows w/o SSE</td></tr>
+<tr><td><code>i586-unknown-linux-gnu</code></td><td style="text-align: center">✓</td><td>32-bit Linux w/o SSE (kernel 3.2, glibc 2.17)</td></tr>
+<tr><td><code>i586-unknown-linux-musl</code></td><td style="text-align: center">✓</td><td>32-bit Linux w/o SSE, MUSL</td></tr>
+<tr><td><a href="platform-support/android.html"><code>i686-linux-android</code></a></td><td style="text-align: center">✓</td><td>32-bit x86 Android</td></tr>
+<tr><td><code>i686-unknown-freebsd</code></td><td style="text-align: center">✓</td><td>32-bit FreeBSD</td></tr>
+<tr><td><code>i686-unknown-linux-musl</code></td><td style="text-align: center">✓</td><td>32-bit Linux with MUSL</td></tr>
+<tr><td><a href="platform-support/unknown-uefi.html"><code>i686-unknown-uefi</code></a></td><td style="text-align: center">*</td><td>32-bit UEFI</td></tr>
+<tr><td><code>mips-unknown-linux-musl</code></td><td style="text-align: center">✓</td><td>MIPS Linux with MUSL</td></tr>
+<tr><td><code>mips64-unknown-linux-muslabi64</code></td><td style="text-align: center">✓</td><td>MIPS64 Linux, n64 ABI, MUSL</td></tr>
+<tr><td><code>mips64el-unknown-linux-muslabi64</code></td><td style="text-align: center">✓</td><td>MIPS64 (LE) Linux, n64 ABI, MUSL</td></tr>
+<tr><td><code>mipsel-unknown-linux-musl</code></td><td style="text-align: center">✓</td><td>MIPS (LE) Linux with MUSL</td></tr>
+<tr><td><code>nvptx64-nvidia-cuda</code></td><td style="text-align: center">*</td><td>--emit=asm generates PTX code that <a href="https://github.com/japaric-archived/nvptx#targets">runs on NVIDIA GPUs</a></td></tr>
+<tr><td><code>riscv32i-unknown-none-elf</code></td><td style="text-align: center">*</td><td>Bare RISC-V (RV32I ISA)</td></tr>
+<tr><td><code>riscv32imac-unknown-none-elf</code></td><td style="text-align: center">*</td><td>Bare RISC-V (RV32IMAC ISA)</td></tr>
+<tr><td><code>riscv32imc-unknown-none-elf</code></td><td style="text-align: center">*</td><td>Bare RISC-V (RV32IMC ISA)</td></tr>
+<tr><td><code>riscv64gc-unknown-none-elf</code></td><td style="text-align: center">*</td><td>Bare RISC-V (RV64IMAFDC ISA)</td></tr>
+<tr><td><code>riscv64imac-unknown-none-elf</code></td><td style="text-align: center">*</td><td>Bare RISC-V (RV64IMAC ISA)</td></tr>
+<tr><td><code>sparc64-unknown-linux-gnu</code></td><td style="text-align: center">✓</td><td>SPARC Linux (kernel 4.4, glibc 2.23)</td></tr>
+<tr><td><code>sparcv9-sun-solaris</code></td><td style="text-align: center">✓</td><td>SPARC Solaris 10/11, illumos</td></tr>
+<tr><td><code>thumbv6m-none-eabi</code></td><td style="text-align: center">*</td><td>Bare Cortex-M0, M0+, M1</td></tr>
+<tr><td><code>thumbv7em-none-eabi</code></td><td style="text-align: center">*</td><td>Bare Cortex-M4, M7</td></tr>
+<tr><td><code>thumbv7em-none-eabihf</code></td><td style="text-align: center">*</td><td>Bare Cortex-M4F, M7F, FPU, hardfloat</td></tr>
+<tr><td><code>thumbv7m-none-eabi</code></td><td style="text-align: center">*</td><td>Bare Cortex-M3</td></tr>
+<tr><td><a href="platform-support/android.html"><code>thumbv7neon-linux-androideabi</code></a></td><td style="text-align: center">✓</td><td>Thumb2-mode ARMv7a Android with NEON</td></tr>
+<tr><td><code>thumbv7neon-unknown-linux-gnueabihf</code></td><td style="text-align: center">✓</td><td>Thumb2-mode ARMv7a Linux with NEON (kernel 4.4, glibc 2.23)</td></tr>
+<tr><td><code>thumbv8m.base-none-eabi</code></td><td style="text-align: center">*</td><td>ARMv8-M Baseline</td></tr>
+<tr><td><code>thumbv8m.main-none-eabi</code></td><td style="text-align: center">*</td><td>ARMv8-M Mainline</td></tr>
+<tr><td><code>thumbv8m.main-none-eabihf</code></td><td style="text-align: center">*</td><td>ARMv8-M Mainline, hardfloat</td></tr>
+<tr><td><code>wasm32-unknown-emscripten</code></td><td style="text-align: center">✓</td><td>WebAssembly via Emscripten</td></tr>
+<tr><td><code>wasm32-unknown-unknown</code></td><td style="text-align: center">✓</td><td>WebAssembly</td></tr>
+<tr><td><code>wasm32-wasi</code></td><td style="text-align: center">✓</td><td>WebAssembly with WASI</td></tr>
+<tr><td><code>x86_64-apple-ios</code></td><td style="text-align: center">✓</td><td>64-bit x86 iOS</td></tr>
+<tr><td><a href="platform-support/x86_64-fortanix-unknown-sgx.html"><code>x86_64-fortanix-unknown-sgx</code></a></td><td style="text-align: center">✓</td><td><a href="https://edp.fortanix.com/">Fortanix ABI</a> for 64-bit Intel SGX</td></tr>
+<tr><td><code>x86_64-fuchsia</code></td><td style="text-align: center">✓</td><td>Alias for <code>x86_64-unknown-fuchsia</code></td></tr>
+<tr><td><code>x86_64-unknown-fuchsia</code></td><td style="text-align: center">✓</td><td>64-bit Fuchsia</td></tr>
+<tr><td><a href="platform-support/android.html"><code>x86_64-linux-android</code></a></td><td style="text-align: center">✓</td><td>64-bit x86 Android</td></tr>
+<tr><td><code>x86_64-pc-solaris</code></td><td style="text-align: center">✓</td><td>64-bit Solaris 10/11, illumos</td></tr>
+<tr><td><code>x86_64-unknown-linux-gnux32</code></td><td style="text-align: center">✓</td><td>64-bit Linux (x32 ABI) (kernel 4.15, glibc 2.27)</td></tr>
+<tr><td><a href="platform-support/x86_64-unknown-none.html"><code>x86_64-unknown-none</code></a></td><td style="text-align: center">*</td><td>Freestanding/bare-metal x86_64, softfloat</td></tr>
+<tr><td><code>x86_64-unknown-redox</code></td><td style="text-align: center">✓</td><td>Redox OS</td></tr>
+<tr><td><a href="platform-support/unknown-uefi.html"><code>x86_64-unknown-uefi</code></a></td><td style="text-align: center">*</td><td>64-bit UEFI</td></tr>
+</tbody></table>
+</div>
+<h2 id="tier-3"><a class="header" href="#tier-3">Tier 3</a></h2>
+<p>Tier 3 targets are those which the Rust codebase has support for, but which the
+Rust project does not build or test automatically, so they may or may not work.
+Official builds are not available. For the full requirements, see <a href="target-tier-policy.html#tier-3-target-policy">Tier 3
+target policy</a> in the Target Tier
+Policy.</p>
+<p>The <code>std</code> column in the table below has the following meanings:</p>
+<ul>
+<li>✓ indicates the full standard library is available.</li>
+<li>* indicates the target only supports <a href="https://rust-embedded.github.io/book/intro/no-std.html"><code>no_std</code></a> development.</li>
+<li>? indicates the standard library support is unknown or a work-in-progress.</li>
+</ul>
+<p>The <code>host</code> column indicates whether the codebase includes support for building
+host tools.</p>
+<div class="table-wrapper"><table><thead><tr><th>target</th><th style="text-align: center">std</th><th style="text-align: center">host</th><th>notes</th></tr></thead><tbody>
+<tr><td><code>aarch64-apple-ios-macabi</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>Apple Catalyst on ARM64</td></tr>
+<tr><td><code>aarch64-apple-tvos</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>ARM64 tvOS</td></tr>
+<tr><td><a href="platform-support/apple-watchos.html"><code>aarch64-apple-watchos-sim</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>ARM64 Apple WatchOS Simulator</td></tr>
+<tr><td><a href="platform-support/kmc-solid.html"><code>aarch64-kmc-solid_asp3</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>ARM64 SOLID with TOPPERS/ASP3</td></tr>
+<tr><td><a href="platform-support/aarch64-nintendo-switch-freestanding.html"><code>aarch64-nintendo-switch-freestanding</code></a></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>ARM64 Nintendo Switch, Horizon</td></tr>
+<tr><td><a href="platform-support/pc-windows-gnullvm.html"><code>aarch64-pc-windows-gnullvm</code></a></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td></td></tr>
+<tr><td><a href="platform-support/openharmony.html"><code>aarch64-unknown-linux-ohos</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>ARM64 OpenHarmony</td></tr>
+<tr><td><a href="platform-support/nto-qnx.html"><code>aarch64-unknown-nto-qnx710</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>ARM64 QNX Neutrino 7.1 RTOS</td></tr>
+<tr><td><code>aarch64-unknown-freebsd</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>ARM64 FreeBSD</td></tr>
+<tr><td><code>aarch64-unknown-hermit</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>ARM64 HermitCore</td></tr>
+<tr><td><code>aarch64-unknown-linux-gnu_ilp32</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>ARM64 Linux (ILP32 ABI)</td></tr>
+<tr><td><code>aarch64-unknown-netbsd</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td></td></tr>
+<tr><td><a href="platform-support/openbsd.html"><code>aarch64-unknown-openbsd</code></a></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>ARM64 OpenBSD</td></tr>
+<tr><td><code>aarch64-unknown-redox</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>ARM64 Redox OS</td></tr>
+<tr><td><code>aarch64-uwp-windows-msvc</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>aarch64-wrs-vxworks</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>aarch64_be-unknown-linux-gnu_ilp32</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>ARM64 Linux (big-endian, ILP32 ABI)</td></tr>
+<tr><td><code>aarch64_be-unknown-linux-gnu</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>ARM64 Linux (big-endian)</td></tr>
+<tr><td><a href="platform-support/apple-watchos.html"><code>arm64_32-apple-watchos</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>ARM Apple WatchOS 64-bit with 32-bit pointers</td></tr>
+<tr><td><a href="platform-support/armeb-unknown-linux-gnueabi.html"><code>armeb-unknown-linux-gnueabi</code></a></td><td style="text-align: center">✓</td><td style="text-align: center">?</td><td>ARM BE8 the default ARM big-endian architecture since <a href="https://developer.arm.com/documentation/101754/0616/armlink-Reference/armlink-Command-line-Options/--be8?lang=en">ARMv6</a>.</td></tr>
+<tr><td><code>armv4t-none-eabi</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>ARMv4T A32</td></tr>
+<tr><td><code>armv4t-unknown-linux-gnueabi</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><a href="platform-support/armv5te-none-eabi.html"><code>armv5te-none-eabi</code></a></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>ARMv5TE A32</td></tr>
+<tr><td><code>armv5te-unknown-linux-uclibceabi</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>ARMv5TE Linux with uClibc</td></tr>
+<tr><td><code>armv6-unknown-freebsd</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>ARMv6 FreeBSD</td></tr>
+<tr><td><code>armv6-unknown-netbsd-eabihf</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><a href="platform-support/armv6k-nintendo-3ds.html"><code>armv6k-nintendo-3ds</code></a></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>ARMv6K Nintendo 3DS, Horizon (Requires devkitARM toolchain)</td></tr>
+<tr><td><code>armv7-apple-ios</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>ARMv7 iOS, Cortex-a8</td></tr>
+<tr><td><a href="platform-support/armv7-sony-vita-newlibeabihf.html"><code>armv7-sony-vita-newlibeabihf</code></a></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>ARM Cortex-A9 Sony PlayStation Vita (requires VITASDK toolchain)</td></tr>
+<tr><td><a href="platform-support/openharmony.html"><code>armv7-unknown-linux-ohos</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>ARMv7 OpenHarmony</td></tr>
+<tr><td><a href="platform-support/armv7-unknown-linux-uclibceabi.html"><code>armv7-unknown-linux-uclibceabi</code></a></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>ARMv7 Linux with uClibc, softfloat</td></tr>
+<tr><td><a href="platform-support/armv7-unknown-linux-uclibceabihf.html"><code>armv7-unknown-linux-uclibceabihf</code></a></td><td style="text-align: center">✓</td><td style="text-align: center">?</td><td>ARMv7 Linux with uClibc, hardfloat</td></tr>
+<tr><td><code>armv7-unknown-freebsd</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>ARMv7 FreeBSD</td></tr>
+<tr><td><code>armv7-unknown-netbsd-eabihf</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td></td></tr>
+<tr><td><code>armv7-wrs-vxworks-eabihf</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><a href="platform-support/kmc-solid.html"><code>armv7a-kmc-solid_asp3-eabi</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>ARM SOLID with TOPPERS/ASP3</td></tr>
+<tr><td><a href="platform-support/kmc-solid.html"><code>armv7a-kmc-solid_asp3-eabihf</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>ARM SOLID with TOPPERS/ASP3, hardfloat</td></tr>
+<tr><td><code>armv7a-none-eabihf</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>ARM Cortex-A, hardfloat</td></tr>
+<tr><td><a href="platform-support/apple-watchos.html"><code>armv7k-apple-watchos</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>ARM Apple WatchOS</td></tr>
+<tr><td><code>armv7s-apple-ios</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>avr-unknown-gnu-atmega328</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>AVR. Requires <code>-Z build-std=core</code></td></tr>
+<tr><td><code>bpfeb-unknown-none</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>BPF (big endian)</td></tr>
+<tr><td><code>bpfel-unknown-none</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>BPF (little endian)</td></tr>
+<tr><td><code>hexagon-unknown-linux-musl</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>i386-apple-ios</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>32-bit x86 iOS</td></tr>
+<tr><td><a href="platform-support/nto-qnx.html"><code>i586-pc-nto-qnx700</code></a></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>32-bit x86 QNX Neutrino 7.0 RTOS</td></tr>
+<tr><td><code>i686-apple-darwin</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>32-bit macOS (10.7+, Lion+)</td></tr>
+<tr><td><code>i686-pc-windows-msvc</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>32-bit Windows XP support</td></tr>
+<tr><td><code>i686-unknown-haiku</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>32-bit Haiku</td></tr>
+<tr><td><code>i686-unknown-netbsd</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>NetBSD/i386 with SSE2</td></tr>
+<tr><td><a href="platform-support/openbsd.html"><code>i686-unknown-openbsd</code></a></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>32-bit OpenBSD</td></tr>
+<tr><td><code>i686-uwp-windows-gnu</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>i686-uwp-windows-msvc</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>i686-wrs-vxworks</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><a href="platform-support/m68k-unknown-linux-gnu.html"><code>m68k-unknown-linux-gnu</code></a></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>Motorola 680x0 Linux</td></tr>
+<tr><td><code>mips-unknown-linux-uclibc</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>MIPS Linux with uClibc</td></tr>
+<tr><td><a href="platform-support/mips64-openwrt-linux-musl.html"><code>mips64-openwrt-linux-musl</code></a></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>MIPS64 for OpenWrt Linux MUSL</td></tr>
+<tr><td><code>mipsel-sony-psp</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>MIPS (LE) Sony PlayStation Portable (PSP)</td></tr>
+<tr><td><a href="platform-support/mipsel-sony-psx.html"><code>mipsel-sony-psx</code></a></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>MIPS (LE) Sony PlayStation 1 (PSX)</td></tr>
+<tr><td><code>mipsel-unknown-linux-uclibc</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>MIPS (LE) Linux with uClibc</td></tr>
+<tr><td><code>mipsel-unknown-none</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>Bare MIPS (LE) softfloat</td></tr>
+<tr><td><code>mipsisa32r6-unknown-linux-gnu</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>mipsisa32r6el-unknown-linux-gnu</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>mipsisa64r6-unknown-linux-gnuabi64</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>mipsisa64r6el-unknown-linux-gnuabi64</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>msp430-none-elf</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>16-bit MSP430 microcontrollers</td></tr>
+<tr><td><code>powerpc-unknown-linux-gnuspe</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>PowerPC SPE Linux</td></tr>
+<tr><td><code>powerpc-unknown-linux-musl</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>powerpc-unknown-netbsd</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td></td></tr>
+<tr><td><code>powerpc-unknown-openbsd</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>powerpc-wrs-vxworks-spe</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>powerpc-wrs-vxworks</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>powerpc64-unknown-freebsd</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>PPC64 FreeBSD (ELFv1 and ELFv2)</td></tr>
+<tr><td><code>powerpc64le-unknown-freebsd</code></td><td style="text-align: center"></td><td style="text-align: center"></td><td>PPC64LE FreeBSD</td></tr>
+<tr><td><code>powerpc-unknown-freebsd</code></td><td style="text-align: center"></td><td style="text-align: center"></td><td>PowerPC FreeBSD</td></tr>
+<tr><td><code>powerpc64-unknown-linux-musl</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>powerpc64-wrs-vxworks</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>powerpc64le-unknown-linux-musl</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><a href="platform-support/openbsd.html"><code>powerpc64-unknown-openbsd</code></a></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>OpenBSD/powerpc64</td></tr>
+<tr><td><code>powerpc64-ibm-aix</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>64-bit AIX (7.2 and newer)</td></tr>
+<tr><td><code>riscv32gc-unknown-linux-gnu</code></td><td style="text-align: center"></td><td style="text-align: center"></td><td>RISC-V Linux (kernel 5.4, glibc 2.33)</td></tr>
+<tr><td><code>riscv32gc-unknown-linux-musl</code></td><td style="text-align: center"></td><td style="text-align: center"></td><td>RISC-V Linux (kernel 5.4, musl + RISCV32 support patches)</td></tr>
+<tr><td><code>riscv32im-unknown-none-elf</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>Bare RISC-V (RV32IM ISA)</td></tr>
+<tr><td><a href="platform-support/riscv32imac-unknown-xous-elf.html"><code>riscv32imac-unknown-xous-elf</code></a></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>RISC-V Xous (RV32IMAC ISA)</td></tr>
+<tr><td><a href="platform-support/esp-idf.html"><code>riscv32imc-esp-espidf</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>RISC-V ESP-IDF</td></tr>
+<tr><td><code>riscv64gc-unknown-freebsd</code></td><td style="text-align: center"></td><td style="text-align: center"></td><td>RISC-V FreeBSD</td></tr>
+<tr><td><code>riscv64gc-unknown-fuchsia</code></td><td style="text-align: center"></td><td style="text-align: center"></td><td>RISC-V Fuchsia</td></tr>
+<tr><td><code>riscv64gc-unknown-linux-musl</code></td><td style="text-align: center"></td><td style="text-align: center"></td><td>RISC-V Linux (kernel 4.20, musl 1.2.0)</td></tr>
+<tr><td><a href="platform-support/openbsd.html"><code>riscv64gc-unknown-openbsd</code></a></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>OpenBSD/riscv64</td></tr>
+<tr><td><code>s390x-unknown-linux-musl</code></td><td style="text-align: center"></td><td style="text-align: center"></td><td>S390x Linux (kernel 3.2, MUSL)</td></tr>
+<tr><td><code>sparc-unknown-linux-gnu</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>32-bit SPARC Linux</td></tr>
+<tr><td><code>sparc64-unknown-netbsd</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>NetBSD/sparc64</td></tr>
+<tr><td><a href="platform-support/openbsd.html"><code>sparc64-unknown-openbsd</code></a></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>OpenBSD/sparc64</td></tr>
+<tr><td><code>thumbv4t-none-eabi</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>ARMv4T T32</td></tr>
+<tr><td><a href="platform-support/armv5te-none-eabi.html"><code>thumbv5te-none-eabi</code></a></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>ARMv5TE T32</td></tr>
+<tr><td><code>thumbv7a-pc-windows-msvc</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>thumbv7a-uwp-windows-msvc</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>thumbv7neon-unknown-linux-musleabihf</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>Thumb2-mode ARMv7a Linux with NEON, MUSL</td></tr>
+<tr><td><a href="platform-support/wasm64-unknown-unknown.html"><code>wasm64-unknown-unknown</code></a></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>WebAssembly</td></tr>
+<tr><td><code>x86_64-apple-ios-macabi</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>Apple Catalyst on x86_64</td></tr>
+<tr><td><code>x86_64-apple-tvos</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>x86 64-bit tvOS</td></tr>
+<tr><td><a href="platform-support/apple-watchos.html"><code>x86_64-apple-watchos-sim</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>x86 64-bit Apple WatchOS simulator</td></tr>
+<tr><td><a href="platform-support/nto-qnx.html"><code>x86_64-pc-nto-qnx710</code></a></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>x86 64-bit QNX Neutrino 7.1 RTOS</td></tr>
+<tr><td><a href="platform-support/pc-windows-gnullvm.html"><code>x86_64-pc-windows-gnullvm</code></a></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td></td></tr>
+<tr><td><code>x86_64-pc-windows-msvc</code></td><td style="text-align: center">*</td><td style="text-align: center"></td><td>64-bit Windows XP support</td></tr>
+<tr><td><code>x86_64-sun-solaris</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td>Deprecated target for 64-bit Solaris 10/11, illumos</td></tr>
+<tr><td><code>x86_64-unknown-dragonfly</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>64-bit DragonFlyBSD</td></tr>
+<tr><td><code>x86_64-unknown-haiku</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>64-bit Haiku</td></tr>
+<tr><td><code>x86_64-unknown-hermit</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td>HermitCore</td></tr>
+<tr><td><code>x86_64-unknown-l4re-uclibc</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><a href="platform-support/openbsd.html"><code>x86_64-unknown-openbsd</code></a></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>64-bit OpenBSD</td></tr>
+<tr><td><code>x86_64-uwp-windows-gnu</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>x86_64-uwp-windows-msvc</code></td><td style="text-align: center">✓</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>x86_64-wrs-vxworks</code></td><td style="text-align: center">?</td><td style="text-align: center"></td><td></td></tr>
+<tr><td><code>x86_64h-apple-darwin</code></td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td>macOS with late-gen Intel (at least Haswell)</td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="tests/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="target-tier-policy.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="tests/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="target-tier-policy.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

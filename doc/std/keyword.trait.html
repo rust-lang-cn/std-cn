@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="一组类型的通用接口。"><meta name="keywords" content="rust, rustlang, rust-lang, trait"><title>trait - Rust</title><link rel="stylesheet" type="text/css" href="../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../storage1.58.0.js"></script><script src="../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow1.58.0.svg");}</style></head><body class="rustdoc keyword"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../std/index.html'><div class='logo-container rust-logo'><img src='../rust-logo1.58.0.png' alt='logo'></div></a><div class="sidebar-elems"><h2 class="location">Other items in<br><a href="index.html">std</a></h2><div id="sidebar-vars" data-name="trait" data-ty="keyword" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Keyword <a class="keyword" href="#">trait</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard1.58.0.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/std/keyword_docs.rs.html#1778" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>一组类型的通用接口。</p>
-<p><code>trait</code> 就像数据类型可以实现的接口。当类型实现 trait 时，可以使用泛型或 trait 对象抽象地将其视为 trait。</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="一组类型的通用接口。"><title>trait - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../static.files/storage-62ce34ea385b278a.js"></script><script defer src="sidebar-items1.71.0.js"></script><script defer src="../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc keyword"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../std/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../std/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><div class="sidebar-elems"><h2><a href="index.html">In std</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Keyword <a class="keyword" href="#">trait</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../src/std/keyword_docs.rs.html#1792">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>一组类型的通用接口。</p>
+<p><code>trait</code> 就像数据类型可以实现的接口。当一个类型要实现 trait 时，可以使用泛型或 trait 对象将其抽象地视为该 trait。</p>
 <p>traits 可以由三个关联项组成：</p>
 <ul>
 <li>函数和方法</li>
@@ -8,111 +8,109 @@
 </ul>
 <p>traits 也可能包含额外的类型参数。这些类型参数或 trait 本身可以受到其他 traits 的约束。</p>
 <p>traits 可以作为标记，也可以携带其他逻辑语义，这些逻辑语义不是通过其项表示的。
-当一个类型实现该 trait 时，它承诺遵守其契约。
-<a href="marker/trait.Send.html" title="Send"><code>Send</code></a> 和 <a href="marker/trait.Sync.html" title="Sync"><code>Sync</code></a> 是标准库中存在的两个标记 traits。</p>
+当一个类型实现该 trait 时，它就会承诺遵守它的契约。
+<a href="marker/trait.Send.html" title="trait std::marker::Send"><code>Send</code></a> 和 <a href="marker/trait.Sync.html" title="trait std::marker::Sync"><code>Sync</code></a> 就是标准库中存在的两个这样的标记 traits。</p>
 <p>有关 traits 的更多信息，请参见 <a href="../reference/items/traits.html">Reference</a>。</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
 <p>traits 是使用 <code>trait</code> 关键字声明的。类型可以使用 <a href="keyword.impl.html"><code>impl</code></a> <code>Trait</code> <a href="keyword.for.html"><code>for</code></a> <code>Type</code> 来实现它们：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">trait</span> <span class="ident">Zero</span> {
-    <span class="kw">const</span> <span class="ident">ZERO</span>: <span class="self">Self</span>;
-    <span class="kw">fn</span> <span class="ident">is_zero</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">trait </span>Zero {
+    <span class="kw">const </span>ZERO: <span class="self">Self</span>;
+    <span class="kw">fn </span>is_zero(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool;
 }
 
-<span class="kw">impl</span> <span class="ident">Zero</span> <span class="kw">for</span> <span class="ident">i32</span> {
-    <span class="kw">const</span> <span class="ident">ZERO</span>: <span class="self">Self</span> <span class="op">=</span> <span class="number">0</span>;
+<span class="kw">impl </span>Zero <span class="kw">for </span>i32 {
+    <span class="kw">const </span>ZERO: <span class="self">Self </span>= <span class="number">0</span>;
 
-    <span class="kw">fn</span> <span class="ident">is_zero</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw-2">*</span><span class="self">self</span> <span class="op">==</span> <span class="ident"><span class="self">Self</span>::ZERO</span>
+    <span class="kw">fn </span>is_zero(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="kw-2">*</span><span class="self">self </span>== <span class="self">Self</span>::ZERO
     }
 }
 
-<span class="macro">assert_eq!</span>(<span class="ident">i32::ZERO</span>, <span class="number">0</span>);
-<span class="macro">assert!</span>(<span class="ident">i32::ZERO</span>.<span class="ident">is_zero</span>());
-<span class="macro">assert!</span>(<span class="op">!</span><span class="number">4</span>.<span class="ident">is_zero</span>());</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Atrait%20Zero%20%7B%0A%20%20%20%20const%20ZERO%3A%20Self%3B%0A%20%20%20%20fn%20is_zero(%26self)%20-%3E%20bool%3B%0A%7D%0A%0Aimpl%20Zero%20for%20i32%20%7B%0A%20%20%20%20const%20ZERO%3A%20Self%20%3D%200%3B%0A%0A%20%20%20%20fn%20is_zero(%26self)%20-%3E%20bool%20%7B%0A%20%20%20%20%20%20%20%20*self%20%3D%3D%20Self%3A%3AZERO%0A%20%20%20%20%7D%0A%7D%0A%0Aassert_eq!(i32%3A%3AZERO%2C%200)%3B%0Aassert!(i32%3A%3AZERO.is_zero())%3B%0Aassert!(!4.is_zero())%3B%0A%7D&amp;edition=2018">Run</a></div>
+<span class="macro">assert_eq!</span>(i32::ZERO, <span class="number">0</span>);
+<span class="macro">assert!</span>(i32::ZERO.is_zero());
+<span class="macro">assert!</span>(!<span class="number">4</span>.is_zero());</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Atrait+Zero+%7B%0A++++const+ZERO:+Self;%0A++++fn+is_zero(%26self)+-%3E+bool;%0A%7D%0A%0Aimpl+Zero+for+i32+%7B%0A++++const+ZERO:+Self+=+0;%0A%0A++++fn+is_zero(%26self)+-%3E+bool+%7B%0A++++++++*self+==+Self::ZERO%0A++++%7D%0A%7D%0A%0Aassert_eq!(i32::ZERO,+0);%0Aassert!(i32::ZERO.is_zero());%0Aassert!(!4.is_zero());%0A%7D&amp;edition=2021">Run</a></div>
 <p>带有关联类型：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">trait</span> <span class="ident">Builder</span> {
-    <span class="kw">type</span> <span class="ident">Built</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">trait </span>Builder {
+    <span class="kw">type </span>Built;
 
-    <span class="kw">fn</span> <span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Built</span>;
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Atrait%20Builder%20%7B%0A%20%20%20%20type%20Built%3B%0A%0A%20%20%20%20fn%20build(%26self)%20-%3E%20Self%3A%3ABuilt%3B%0A%7D%0A%7D&amp;edition=2018">Run</a></div>
+    <span class="kw">fn </span>build(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Built;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Atrait+Builder+%7B%0A++++type+Built;%0A%0A++++fn+build(%26self)+-%3E+Self::Built;%0A%7D%0A%7D&amp;edition=2021">Run</a></div>
 <p>traits 可以是泛型，可以有约束，也可以没有约束：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">trait</span> <span class="ident">MaybeFrom</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">maybe_from</span>(<span class="ident">value</span>: <span class="ident">T</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="self">Self</span>: <span class="ident">Sized</span>;
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Atrait%20MaybeFrom%3CT%3E%20%7B%0A%20%20%20%20fn%20maybe_from(value%3A%20T)%20-%3E%20Option%3CSelf%3E%0A%20%20%20%20where%0A%20%20%20%20%20%20%20%20Self%3A%20Sized%3B%0A%7D%0A%7D&amp;edition=2018">Run</a></div>
-<p>traits 可以建立在其他 traits 的要求之上。在下面的示例中，<code>Iterator</code> 是 <strong>supertrait</strong>，而 <code>ThreeIterator</code> 是 <strong>subtrait</strong>：</p>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">trait </span>MaybeFrom&lt;T&gt; {
+    <span class="kw">fn </span>maybe_from(value: T) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt;
+    <span class="kw">where
+        </span><span class="self">Self</span>: Sized;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Atrait+MaybeFrom%3CT%3E+%7B%0A++++fn+maybe_from(value:+T)+-%3E+Option%3CSelf%3E%0A++++where%0A++++++++Self:+Sized;%0A%7D%0A%7D&amp;edition=2021">Run</a></div>
+<p>traits 可以建立在其他 traits 的要求之上。在下面的示例中，<code>Iterator</code> 是一个 <strong>supertrait</strong>，而 <code>ThreeIterator</code> 是一个 <strong>subtrait</strong>：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">trait</span> <span class="ident">ThreeIterator</span>: <span class="ident">std::iter::Iterator</span> {
-    <span class="kw">fn</span> <span class="ident">next_three</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>[<span class="ident"><span class="self">Self</span>::Item</span>; <span class="number">3</span>]<span class="op">&gt;</span>;
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Atrait%20ThreeIterator%3A%20std%3A%3Aiter%3A%3AIterator%20%7B%0A%20%20%20%20fn%20next_three(%26mut%20self)%20-%3E%20Option%3C%5BSelf%3A%3AItem%3B%203%5D%3E%3B%0A%7D%0A%7D&amp;edition=2018">Run</a></div>
-<p>traits 可以在函数中用作参数：</p>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">trait </span>ThreeIterator: Iterator {
+    <span class="kw">fn </span>next_three(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;[<span class="self">Self</span>::Item; <span class="number">3</span>]&gt;;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Atrait+ThreeIterator:+Iterator+%7B%0A++++fn+next_three(%26mut+self)+-%3E+Option%3C%5BSelf::Item;+3%5D%3E;%0A%7D%0A%7D&amp;edition=2021">Run</a></div>
+<p>traits 可以在函数中作为参数使用：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">fn</span> <span class="ident">debug_iter</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&gt;</span>(<span class="ident">it</span>: <span class="ident">I</span>) <span class="kw">where</span> <span class="ident">I::Item</span>: <span class="ident">std::fmt::Debug</span> {
-    <span class="kw">for</span> <span class="ident">elem</span> <span class="kw">in</span> <span class="ident">it</span> {
-        <span class="macro">println!</span>(<span class="string">&quot;{:#?}&quot;</span>, <span class="ident">elem</span>);
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">fn </span>debug_iter&lt;I: Iterator&gt;(it: I) <span class="kw">where </span>I::Item: std::fmt::Debug {
+    <span class="kw">for </span>elem <span class="kw">in </span>it {
+        <span class="macro">println!</span>(<span class="string">&quot;{elem:#?}&quot;</span>);
     }
 }
 
-<span class="comment">// u8_len_1，u8_len_2 和 u8_len_3 是等效的</span>
+<span class="comment">// u8_len_1，u8_len_2 和 u8_len_3 是等效的
 
-<span class="kw">fn</span> <span class="ident">u8_len_1</span>(<span class="ident">val</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="ident">usize</span> {
-    <span class="ident">val</span>.<span class="ident">into</span>().<span class="ident">len</span>()
+</span><span class="kw">fn </span>u8_len_1(val: <span class="kw">impl </span>Into&lt;Vec&lt;u8&gt;&gt;) -&gt; usize {
+    val.into().len()
 }
 
-<span class="kw">fn</span> <span class="ident">u8_len_2</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">val</span>: <span class="ident">T</span>) -&gt; <span class="ident">usize</span> {
-    <span class="ident">val</span>.<span class="ident">into</span>().<span class="ident">len</span>()
+<span class="kw">fn </span>u8_len_2&lt;T: Into&lt;Vec&lt;u8&gt;&gt;&gt;(val: T) -&gt; usize {
+    val.into().len()
 }
 
-<span class="kw">fn</span> <span class="ident">u8_len_3</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">val</span>: <span class="ident">T</span>) -&gt; <span class="ident">usize</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+<span class="kw">fn </span>u8_len_3&lt;T&gt;(val: T) -&gt; usize
+<span class="kw">where
+    </span>T: Into&lt;Vec&lt;u8&gt;&gt;,
 {
-    <span class="ident">val</span>.<span class="ident">into</span>().<span class="ident">len</span>()
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(dead_code)%5D%0Afn%20main()%20%7B%0Afn%20debug_iter%3CI%3A%20Iterator%3E(it%3A%20I)%20where%20I%3A%3AItem%3A%20std%3A%3Afmt%3A%3ADebug%20%7B%0A%20%20%20%20for%20elem%20in%20it%20%7B%0A%20%20%20%20%20%20%20%20println!(%22%7B%3A%23%3F%7D%22%2C%20elem)%3B%0A%20%20%20%20%7D%0A%7D%0A%0A%2F%2F%20u8_len_1%EF%BC%8Cu8_len_2%20%E5%92%8C%20u8_len_3%20%E6%98%AF%E7%AD%89%E6%95%88%E7%9A%84%0A%0Afn%20u8_len_1(val%3A%20impl%20Into%3CVec%3Cu8%3E%3E)%20-%3E%20usize%20%7B%0A%20%20%20%20val.into().len()%0A%7D%0A%0Afn%20u8_len_2%3CT%3A%20Into%3CVec%3Cu8%3E%3E%3E(val%3A%20T)%20-%3E%20usize%20%7B%0A%20%20%20%20val.into().len()%0A%7D%0A%0Afn%20u8_len_3%3CT%3E(val%3A%20T)%20-%3E%20usize%0Awhere%0A%20%20%20%20T%3A%20Into%3CVec%3Cu8%3E%3E%2C%0A%7B%0A%20%20%20%20val.into().len()%0A%7D%0A%7D&amp;edition=2018">Run</a></div>
+    val.into().len()
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(dead_code)%5D%0Afn+main()+%7B%0Afn+debug_iter%3CI:+Iterator%3E(it:+I)+where+I::Item:+std::fmt::Debug+%7B%0A++++for+elem+in+it+%7B%0A++++++++println!(%22%7Belem:%23?%7D%22);%0A++++%7D%0A%7D%0A%0A//+u8_len_1%EF%BC%8Cu8_len_2+%E5%92%8C+u8_len_3+%E6%98%AF%E7%AD%89%E6%95%88%E7%9A%84%0A%0Afn+u8_len_1(val:+impl+Into%3CVec%3Cu8%3E%3E)+-%3E+usize+%7B%0A++++val.into().len()%0A%7D%0A%0Afn+u8_len_2%3CT:+Into%3CVec%3Cu8%3E%3E%3E(val:+T)+-%3E+usize+%7B%0A++++val.into().len()%0A%7D%0A%0Afn+u8_len_3%3CT%3E(val:+T)+-%3E+usize%0Awhere%0A++++T:+Into%3CVec%3Cu8%3E%3E,%0A%7B%0A++++val.into().len()%0A%7D%0A%7D&amp;edition=2021">Run</a></div>
 <p>或作为返回类型：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">fn</span> <span class="ident">from_zero_to</span>(<span class="ident">v</span>: <span class="ident">u8</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">u8</span><span class="op">&gt;</span> {
-    (<span class="number">0</span>..<span class="ident">v</span>).<span class="ident">into_iter</span>()
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(dead_code)%5D%0Afn%20main()%20%7B%0Afn%20from_zero_to(v%3A%20u8)%20-%3E%20impl%20Iterator%3CItem%20%3D%20u8%3E%20%7B%0A%20%20%20%20(0..v).into_iter()%0A%7D%0A%7D&amp;edition=2018">Run</a></div>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">fn </span>from_zero_to(v: u8) -&gt; <span class="kw">impl </span>Iterator&lt;Item = u8&gt; {
+    (<span class="number">0</span>..v).into_iter()
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(dead_code)%5D%0Afn+main()+%7B%0Afn+from_zero_to(v:+u8)+-%3E+impl+Iterator%3CItem+=+u8%3E+%7B%0A++++(0..v).into_iter()%0A%7D%0A%7D&amp;edition=2021">Run</a></div>
 <p>在该位置使用 <a href="keyword.impl.html"><code>impl</code></a> 关键字，函数 writer 可以将具体类型隐藏为实现细节，可以在不破坏用户代码的情况下对其进行更改。</p>
-<h2 id="trait-对象" class="section-header"><a href="#trait-对象">trait 对象</a></h2>
+<h2 id="trait-对象"><a href="#trait-对象">trait 对象</a></h2>
 <p><em>trait 对象</em> 是实现一组 traits 的另一种类型的不透明值。一个 trait 对象实现了所有指定的 traits，以及它的 supertraits (如果有的话)。</p>
-<p>语法是这样的: <code>dyn BaseTrait + AutoTrait1 + ... AutoTraitN</code>。
+<p>语法如下: <code>dyn BaseTrait + AutoTrait1 + ... AutoTraitN</code>。
 只能使用一个 <code>BaseTrait</code>，因此无法编译：</p>
 
-<div class='information'><div class='tooltip compile_fail'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered compile_fail"><code><span class="kw">trait</span> <span class="ident">A</span> {}
-<span class="kw">trait</span> <span class="ident">B</span> {}
+<div class="example-wrap compile_fail"><a href="#" class="tooltip" title="This example deliberately fails to compile">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">trait </span>A {}
+<span class="kw">trait </span>B {}
 
-<span class="kw">let</span> <span class="kw">_</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">A</span> <span class="op">+</span> <span class="ident">B</span><span class="op">&gt;</span>;</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Atrait%20A%20%7B%7D%0Atrait%20B%20%7B%7D%0A%0Alet%20_%3A%20Box%3Cdyn%20A%20%2B%20B%3E%3B%0A%7D&amp;edition=2018">Run</a></div>
-<p>这也不能，这是语法错误：</p>
+<span class="kw">let _</span>: Box&lt;<span class="kw">dyn </span>A + B&gt;;</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Atrait+A+%7B%7D%0Atrait+B+%7B%7D%0A%0Alet+_:+Box%3Cdyn+A+%2B+B%3E;%0A%7D&amp;edition=2021">Run</a></div>
+<p>这也不能，这是一个语法错误：</p>
 
-<div class='information'><div class='tooltip compile_fail'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered compile_fail"><code><span class="kw">trait</span> <span class="ident">A</span> {}
-<span class="kw">trait</span> <span class="ident">B</span> {}
+<div class="example-wrap compile_fail"><a href="#" class="tooltip" title="This example deliberately fails to compile">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">trait </span>A {}
+<span class="kw">trait </span>B {}
 
-<span class="kw">let</span> <span class="kw">_</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">A</span> <span class="op">+</span> <span class="kw">dyn</span> <span class="ident">B</span><span class="op">&gt;</span>;</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Atrait%20A%20%7B%7D%0Atrait%20B%20%7B%7D%0A%0Alet%20_%3A%20Box%3Cdyn%20A%20%2B%20dyn%20B%3E%3B%0A%7D&amp;edition=2018">Run</a></div>
+<span class="kw">let _</span>: Box&lt;<span class="kw">dyn </span>A + <span class="kw">dyn </span>B&gt;;</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Atrait+A+%7B%7D%0Atrait+B+%7B%7D%0A%0Alet+_:+Box%3Cdyn+A+%2B+dyn+B%3E;%0A%7D&amp;edition=2021">Run</a></div>
 <p>另一方面，这是正确的：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">trait</span> <span class="ident">A</span> {}
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">trait </span>A {}
 
-<span class="kw">let</span> <span class="kw">_</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">A</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>;</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Atrait%20A%20%7B%7D%0A%0Alet%20_%3A%20Box%3Cdyn%20A%20%2B%20Send%20%2B%20Sync%3E%3B%0A%7D&amp;edition=2018">Run</a></div>
-<p><a href="../reference/types/trait-object.html">参考</a> 有更多关于 trait 对象的信息，以及它们的局限性和版本之间的差异。</p>
-<h2 id="不安全的-traits" class="section-header"><a href="#不安全的-traits">不安全的 traits</a></h2>
-<p>某些 traits 可能无法安全的实现。在 trait 声明的前面使用 <a href="keyword.unsafe.html"><code>unsafe</code></a> 关键字进行标记：</p>
+<span class="kw">let _</span>: Box&lt;<span class="kw">dyn </span>A + Send + Sync&gt;;</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Atrait+A+%7B%7D%0A%0Alet+_:+Box%3Cdyn+A+%2B+Send+%2B+Sync%3E;%0A%7D&amp;edition=2021">Run</a></div>
+<p><a href="../reference/types/trait-object.html">Reference</a> 中记录了更多关于 trait 对象的信息，以及它们的局限性和版本之间的差异。</p>
+<h2 id="不安全的-traits"><a href="#不安全的-traits">不安全的 traits</a></h2>
+<p>某些 traits 可能无法安全的实现。在 trait 声明的前面，使用 <a href="keyword.unsafe.html"><code>unsafe</code></a> 关键字进行标记：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">unsafe</span> <span class="kw">trait</span> <span class="ident">UnsafeTrait</span> {}
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">unsafe trait </span>UnsafeTrait {}
 
-<span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">UnsafeTrait</span> <span class="kw">for</span> <span class="ident">i32</span> {}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Aunsafe%20trait%20UnsafeTrait%20%7B%7D%0A%0Aunsafe%20impl%20UnsafeTrait%20for%20i32%20%7B%7D%0A%7D&amp;edition=2018">Run</a></div>
-<h2 id="2015-年版和-2018-年版之间的差异" class="section-header"><a href="#2015-年版和-2018-年版之间的差异">2015 年版和 2018 年版之间的差异</a></h2>
+<span class="kw">unsafe impl </span>UnsafeTrait <span class="kw">for </span>i32 {}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Aunsafe+trait+UnsafeTrait+%7B%7D%0A%0Aunsafe+impl+UnsafeTrait+for+i32+%7B%7D%0A%7D&amp;edition=2021">Run</a></div>
+<h2 id="2015-年版和-2018-年版之间的差异"><a href="#2015-年版和-2018-年版之间的差异">2015 年版和 2018 年版之间的差异</a></h2>
 <p>在 2015 版中，traits 不需要参数模式：</p>
 
-<div class='information'><div class='tooltip edition' data-edition="2015">ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered edition"><code><span class="kw">trait</span> <span class="ident">Tr</span> {
-    <span class="kw">fn</span> <span class="ident">f</span>(<span class="ident">i32</span>);
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(anonymous_parameters)%5D%0Afn%20main()%20%7B%0Atrait%20Tr%20%7B%0A%20%20%20%20fn%20f(i32)%3B%0A%7D%0A%7D&amp;edition=2015">Run</a></div>
+<div class="example-wrap edition"><a href="#" class="tooltip" title="This example runs with edition 2015">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">trait </span>Tr {
+    <span class="kw">fn </span>f(i32);
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(anonymous_parameters)%5D%0Afn+main()+%7B%0Atrait+Tr+%7B%0A++++fn+f(i32);%0A%7D%0A%7D&amp;edition=2015">Run</a></div>
 <p>此行为在 2018 版中不再有效。</p>
-</div></details></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="std" data-search-index-js="../search-index1.58.0.js" data-search-js="../search1.58.0.js"></div>
-    <script src="../main1.58.0.js"></script>
-</body></html>
+</div></details></section></div></main></body></html>

@@ -1,0 +1,299 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>armv6k-nintendo-3ds - The rustc book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what-is-rustc.html"><strong aria-hidden="true">1.</strong> What is rustc?</a></li><li class="chapter-item expanded "><a href="../command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line Arguments</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../codegen-options/index.html"><strong aria-hidden="true">2.1.</strong> Codegen Options</a></li></ol></li><li class="chapter-item expanded "><a href="../lints/index.html"><strong aria-hidden="true">3.</strong> Lints</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lints/levels.html"><strong aria-hidden="true">3.1.</strong> Lint Levels</a></li><li class="chapter-item expanded "><a href="../lints/groups.html"><strong aria-hidden="true">3.2.</strong> Lint Groups</a></li><li class="chapter-item expanded "><a href="../lints/listing/index.html"><strong aria-hidden="true">3.3.</strong> Lint Listing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lints/listing/allowed-by-default.html"><strong aria-hidden="true">3.3.1.</strong> Allowed-by-default Lints</a></li><li class="chapter-item expanded "><a href="../lints/listing/warn-by-default.html"><strong aria-hidden="true">3.3.2.</strong> Warn-by-default Lints</a></li><li class="chapter-item expanded "><a href="../lints/listing/deny-by-default.html"><strong aria-hidden="true">3.3.3.</strong> Deny-by-default Lints</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../json.html"><strong aria-hidden="true">4.</strong> JSON Output</a></li><li class="chapter-item expanded "><a href="../tests/index.html"><strong aria-hidden="true">5.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../platform-support.html"><strong aria-hidden="true">6.</strong> Platform Support</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../target-tier-policy.html"><strong aria-hidden="true">6.1.</strong> Target Tier Policy</a></li><li class="chapter-item expanded "><a href="../platform-support/TEMPLATE.html"><strong aria-hidden="true">6.2.</strong> Template for Target-specific Documentation</a></li><li class="chapter-item expanded "><a href="../platform-support/aarch64-apple-ios-sim.html"><strong aria-hidden="true">6.3.</strong> aarch64-apple-ios-sim</a></li><li class="chapter-item expanded "><a href="../platform-support/apple-watchos.html"><strong aria-hidden="true">6.4.</strong> *-apple-watchos*</a></li><li class="chapter-item expanded "><a href="../platform-support/aarch64-nintendo-switch-freestanding.html"><strong aria-hidden="true">6.5.</strong> aarch64-nintendo-switch-freestanding</a></li><li class="chapter-item expanded "><a href="../platform-support/armeb-unknown-linux-gnueabi.html"><strong aria-hidden="true">6.6.</strong> armeb-unknown-linux-gnueabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv4t-none-eabi.html"><strong aria-hidden="true">6.7.</strong> armv4t-none-eabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv5te-none-eabi.html"><strong aria-hidden="true">6.8.</strong> armv5te-none-eabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv6k-nintendo-3ds.html" class="active"><strong aria-hidden="true">6.9.</strong> armv6k-nintendo-3ds</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-sony-vita-newlibeabihf.html"><strong aria-hidden="true">6.10.</strong> armv7-sony-vita-newlibeabihf</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-unknown-linux-uclibceabi.html"><strong aria-hidden="true">6.11.</strong> armv7-unknown-linux-uclibceabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-unknown-linux-uclibceabihf.html"><strong aria-hidden="true">6.12.</strong> armv7-unknown-linux-uclibceabihf</a></li><li class="chapter-item expanded "><a href="../platform-support/android.html"><strong aria-hidden="true">6.13.</strong> *-android and *-androideabi</a></li><li class="chapter-item expanded "><a href="../platform-support/openharmony.html"><strong aria-hidden="true">6.14.</strong> *-linux-ohos</a></li><li class="chapter-item expanded "><a href="../platform-support/esp-idf.html"><strong aria-hidden="true">6.15.</strong> *-esp-espidf</a></li><li class="chapter-item expanded "><a href="../platform-support/fuchsia.html"><strong aria-hidden="true">6.16.</strong> *-unknown-fuchsia</a></li><li class="chapter-item expanded "><a href="../platform-support/kmc-solid.html"><strong aria-hidden="true">6.17.</strong> *-kmc-solid_*</a></li><li class="chapter-item expanded "><a href="../platform-support/loongarch-linux.html"><strong aria-hidden="true">6.18.</strong> loongarch*-unknown-linux-*</a></li><li class="chapter-item expanded "><a href="../platform-support/m68k-unknown-linux-gnu.html"><strong aria-hidden="true">6.19.</strong> m68k-unknown-linux-gnu</a></li><li class="chapter-item expanded "><a href="../platform-support/mips64-openwrt-linux-musl.html"><strong aria-hidden="true">6.20.</strong> mips64-openwrt-linux-musl</a></li><li class="chapter-item expanded "><a href="../platform-support/mipsel-sony-psx.html"><strong aria-hidden="true">6.21.</strong> mipsel-sony-psx</a></li><li class="chapter-item expanded "><a href="../platform-support/nvptx64-nvidia-cuda.html"><strong aria-hidden="true">6.22.</strong> nvptx64-nvidia-cuda</a></li><li class="chapter-item expanded "><a href="../platform-support/riscv32imac-unknown-xous-elf.html"><strong aria-hidden="true">6.23.</strong> riscv32imac-unknown-xous-elf</a></li><li class="chapter-item expanded "><a href="../platform-support/pc-windows-gnullvm.html"><strong aria-hidden="true">6.24.</strong> *-pc-windows-gnullvm</a></li><li class="chapter-item expanded "><a href="../platform-support/nto-qnx.html"><strong aria-hidden="true">6.25.</strong> *-nto-qnx-*</a></li><li class="chapter-item expanded "><a href="../platform-support/openbsd.html"><strong aria-hidden="true">6.26.</strong> *-unknown-openbsd</a></li><li class="chapter-item expanded "><a href="../platform-support/unknown-uefi.html"><strong aria-hidden="true">6.27.</strong> *-unknown-uefi</a></li><li class="chapter-item expanded "><a href="../platform-support/wasm64-unknown-unknown.html"><strong aria-hidden="true">6.28.</strong> wasm64-unknown-unknown</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64-fortanix-unknown-sgx.html"><strong aria-hidden="true">6.29.</strong> x86_64-fortanix-unknown-sgx</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64-unknown-none.html"><strong aria-hidden="true">6.30.</strong> x86_64-unknown-none</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64h-apple-darwin.html"><strong aria-hidden="true">6.31.</strong> x86_64h-apple-darwin</a></li></ol></li><li class="chapter-item expanded "><a href="../targets/index.html"><strong aria-hidden="true">7.</strong> Targets</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../targets/built-in.html"><strong aria-hidden="true">7.1.</strong> Built-in Targets</a></li><li class="chapter-item expanded "><a href="../targets/custom.html"><strong aria-hidden="true">7.2.</strong> Custom Targets</a></li><li class="chapter-item expanded "><a href="../targets/known-issues.html"><strong aria-hidden="true">7.3.</strong> Known Issues</a></li></ol></li><li class="chapter-item expanded "><a href="../profile-guided-optimization.html"><strong aria-hidden="true">8.</strong> Profile-guided Optimization</a></li><li class="chapter-item expanded "><a href="../instrument-coverage.html"><strong aria-hidden="true">9.</strong> Instrumentation-based Code Coverage</a></li><li class="chapter-item expanded "><a href="../linker-plugin-lto.html"><strong aria-hidden="true">10.</strong> Linker-plugin-based LTO</a></li><li class="chapter-item expanded "><a href="../exploit-mitigations.html"><strong aria-hidden="true">11.</strong> Exploit Mitigations</a></li><li class="chapter-item expanded "><a href="../contributing.html"><strong aria-hidden="true">12.</strong> Contributing to rustc</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The rustc book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/master/src/doc/rustc" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/edit/master/src/doc/rustc/src/platform-support/armv6k-nintendo-3ds.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="armv6k-nintendo-3ds"><a class="header" href="#armv6k-nintendo-3ds"><code>armv6k-nintendo-3ds</code></a></h1>
+<p><strong>Tier: 3</strong></p>
+<p>The Nintendo 3DS platform, which has an ARMv6K processor, and its associated
+operating system (<code>horizon</code>).</p>
+<p>Rust support for this target is not affiliated with Nintendo, and is not derived
+from nor used with any official Nintendo SDK.</p>
+<h2 id="target-maintainers"><a class="header" href="#target-maintainers">Target maintainers</a></h2>
+<ul>
+<li><a href="https://github.com/Meziu">@Meziu</a></li>
+<li><a href="https://github.com/AzureMarker">@AzureMarker</a></li>
+<li><a href="https://github.com/ian-h-chamberlain">@ian-h-chamberlain</a></li>
+</ul>
+<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
+<p>This target is cross-compiled. Dynamic linking is not supported.</p>
+<p><code>#![no_std]</code> crates can be built using <code>build-std</code> to build <code>core</code> and optionally
+<code>alloc</code>, and either <code>panic_abort</code> or <code>panic_unwind</code>.</p>
+<p><code>std</code> is partially supported, but mostly works. Some APIs are unimplemented
+and will simply return an error, such as <code>std::process</code>. An allocator is provided
+by default.</p>
+<p>In order to support some APIs, binaries must be linked against <code>libc</code> written
+for the target, using a linker for the target. These are provided by the
+devkitARM toolchain. See
+<a href="#cross-compilation-toolchains-and-c-code">Cross-compilation toolchains and C code</a>
+for more details.</p>
+<p>Additionally, some helper crates provide implementations of some <code>libc</code> functions
+use by <code>std</code> that may otherwise be missing. These, or an alternate implementation
+of the relevant functions, are required to use <code>std</code>:</p>
+<ul>
+<li><a href="https://github.com/Meziu/pthread-3ds"><code>pthread-3ds</code></a> provides pthread APIs for <code>std::thread</code>.</li>
+<li><a href="https://github.com/Meziu/rust-linker-fix-3ds"><code>linker-fix-3ds</code></a> fulfills some other missing libc APIs.</li>
+</ul>
+<p>Binaries built for this target should be compatible with all variants of the
+3DS (and 2DS) hardware and firmware, but testing is limited and some versions may
+not work correctly.</p>
+<p>This target generates binaries in the ELF format.</p>
+<h2 id="building-the-target"><a class="header" href="#building-the-target">Building the target</a></h2>
+<p>You can build Rust with support for the target by adding it to the <code>target</code>
+list in <code>config.toml</code> and providing paths to the devkitARM toolchain.</p>
+<pre><code class="language-toml">[build]
+build-stage = 1
+target = [&quot;armv6k-nintendo-3ds&quot;]
+
+[target.armv6k-nintendo-3ds]
+cc = &quot;/opt/devkitpro/devkitARM/bin/arm-none-eabi-gcc&quot;
+cxx = &quot;/opt/devkitpro/devkitARM/bin/arm-none-eabi-g++&quot;
+ar = &quot;/opt/devkitpro/devkitARM/bin/arm-none-eabi-ar&quot;
+ranlib = &quot;/opt/devkitpro/devkitARM/bin/arm-none-eabi-ranlib&quot;
+linker = &quot;/opt/devkitpro/devkitARM/bin/arm-none-eabi-gcc&quot;
+</code></pre>
+<p>Also, to build <code>compiler_builtins</code> for the target, export these flags before
+building the Rust toolchain:</p>
+<pre><code class="language-sh">export CFLAGS_armv6k_nintendo_3ds=&quot;-mfloat-abi=hard -mtune=mpcore -mtp=soft -march=armv6k&quot;
+</code></pre>
+<h2 id="building-rust-programs"><a class="header" href="#building-rust-programs">Building Rust programs</a></h2>
+<p>Rust does not yet ship pre-compiled artifacts for this target.</p>
+<p>The recommended way to build binaries is by using the
+<a href="https://github.com/Meziu/cargo-3ds">cargo-3ds</a> tool, which uses <code>build-std</code>
+and provides commands that work like the usual <code>cargo run</code>, <code>cargo build</code>, etc.</p>
+<p>You can also build Rust with the target enabled (see
+<a href="#building-the-target">Building the target</a> above).</p>
+<p>As mentioned in <a href="#requirements">Requirements</a>, programs that use <code>std</code> must link
+against both the devkitARM toolchain and libraries providing the <code>libc</code> APIs used
+in <code>std</code>.  There is a general-purpose utility crate for working with nonstandard
+APIs provided by the OS: <a href="https://github.com/Meziu/ctru-rs"><code>ctru-rs</code></a>.
+Add it to Cargo.toml to use it in your program:</p>
+<pre><code class="language-toml">[dependencies]
+ctru-rs = { git = &quot;https://github.com/Meziu/ctru-rs.git&quot; }
+</code></pre>
+<p>Using this library's <code>init()</code> function ensures the symbols needed to link
+against <code>std</code> are present (as mentioned in <a href="#requirements">Requirements</a>
+above), as well as providing a runtime suitable for <code>std</code>:</p>
+<pre><code class="language-rust ignore (requires-3rd-party-library)">fn main() {
+    ctru::init();
+}</code></pre>
+<h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
+<p>Binaries built for this target can be run in an emulator (most commonly
+<a href="https://citra-emu.org/">Citra</a>), or sent to a device through
+the use of a tool like devkitARM's <code>3dslink</code>. They may also simply be copied
+to an SD card to be inserted in the device.</p>
+<p>The <code>cargo-3ds</code> tool mentioned in <a href="#building-rust-programs">Building Rust programs</a>
+supports the use of <code>3dslink</code> with <code>cargo 3ds run</code>. The default Rust test runner
+is not supported, but
+<a href="../../unstable-book/language-features/custom-test-frameworks.html">custom test frameworks</a>
+can be used with <code>cargo 3ds test</code> to run unit tests on a device.</p>
+<p>The Rust test suite for <code>library/std</code> is not yet supported.</p>
+<h2 id="cross-compilation-toolchains-and-c-code"><a class="header" href="#cross-compilation-toolchains-and-c-code">Cross-compilation toolchains and C code</a></h2>
+<p>C code can be built for this target using the
+<a href="https://devkitpro.org/wiki/Getting_Started">devkitARM toolchain</a>.
+This toolchain provides <code>arm-none-eabi-gcc</code> as the linker used to link Rust
+programs as well.</p>
+<p>The toolchain also provides a <code>libc</code> implementation, which is required by <code>std</code>
+for many of its APIs, and a helper library <code>libctru</code> which is used by several
+of the helper crates listed in <a href="#requirements">Requirements</a>.
+This toolchain does not, however, include all of the APIs expected by <code>std</code>,
+and the remaining APIs are implemented by <code>pthread-3ds</code> and <code>linker-fix-3ds</code>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../platform-support/armv5te-none-eabi.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../platform-support/armv7-sony-vita-newlibeabihf.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../platform-support/armv5te-none-eabi.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../platform-support/armv7-sony-vita-newlibeabihf.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Tests - The rustc book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what-is-rustc.html"><strong aria-hidden="true">1.</strong> What is rustc?</a></li><li class="chapter-item expanded "><a href="../command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line Arguments</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../codegen-options/index.html"><strong aria-hidden="true">2.1.</strong> Codegen Options</a></li></ol></li><li class="chapter-item expanded "><a href="../lints/index.html"><strong aria-hidden="true">3.</strong> Lints</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lints/levels.html"><strong aria-hidden="true">3.1.</strong> Lint Levels</a></li><li class="chapter-item expanded "><a href="../lints/groups.html"><strong aria-hidden="true">3.2.</strong> Lint Groups</a></li><li class="chapter-item expanded "><a href="../lints/listing/index.html"><strong aria-hidden="true">3.3.</strong> Lint Listing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lints/listing/allowed-by-default.html"><strong aria-hidden="true">3.3.1.</strong> Allowed-by-default Lints</a></li><li class="chapter-item expanded "><a href="../lints/listing/warn-by-default.html"><strong aria-hidden="true">3.3.2.</strong> Warn-by-default Lints</a></li><li class="chapter-item expanded "><a href="../lints/listing/deny-by-default.html"><strong aria-hidden="true">3.3.3.</strong> Deny-by-default Lints</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../json.html"><strong aria-hidden="true">4.</strong> JSON Output</a></li><li class="chapter-item expanded "><a href="../tests/index.html" class="active"><strong aria-hidden="true">5.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../platform-support.html"><strong aria-hidden="true">6.</strong> Platform Support</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../target-tier-policy.html"><strong aria-hidden="true">6.1.</strong> Target Tier Policy</a></li><li class="chapter-item expanded "><a href="../platform-support/TEMPLATE.html"><strong aria-hidden="true">6.2.</strong> Template for Target-specific Documentation</a></li><li class="chapter-item expanded "><a href="../platform-support/aarch64-apple-ios-sim.html"><strong aria-hidden="true">6.3.</strong> aarch64-apple-ios-sim</a></li><li class="chapter-item expanded "><a href="../platform-support/apple-watchos.html"><strong aria-hidden="true">6.4.</strong> *-apple-watchos*</a></li><li class="chapter-item expanded "><a href="../platform-support/aarch64-nintendo-switch-freestanding.html"><strong aria-hidden="true">6.5.</strong> aarch64-nintendo-switch-freestanding</a></li><li class="chapter-item expanded "><a href="../platform-support/armeb-unknown-linux-gnueabi.html"><strong aria-hidden="true">6.6.</strong> armeb-unknown-linux-gnueabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv4t-none-eabi.html"><strong aria-hidden="true">6.7.</strong> armv4t-none-eabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv5te-none-eabi.html"><strong aria-hidden="true">6.8.</strong> armv5te-none-eabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv6k-nintendo-3ds.html"><strong aria-hidden="true">6.9.</strong> armv6k-nintendo-3ds</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-sony-vita-newlibeabihf.html"><strong aria-hidden="true">6.10.</strong> armv7-sony-vita-newlibeabihf</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-unknown-linux-uclibceabi.html"><strong aria-hidden="true">6.11.</strong> armv7-unknown-linux-uclibceabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-unknown-linux-uclibceabihf.html"><strong aria-hidden="true">6.12.</strong> armv7-unknown-linux-uclibceabihf</a></li><li class="chapter-item expanded "><a href="../platform-support/android.html"><strong aria-hidden="true">6.13.</strong> *-android and *-androideabi</a></li><li class="chapter-item expanded "><a href="../platform-support/openharmony.html"><strong aria-hidden="true">6.14.</strong> *-linux-ohos</a></li><li class="chapter-item expanded "><a href="../platform-support/esp-idf.html"><strong aria-hidden="true">6.15.</strong> *-esp-espidf</a></li><li class="chapter-item expanded "><a href="../platform-support/fuchsia.html"><strong aria-hidden="true">6.16.</strong> *-unknown-fuchsia</a></li><li class="chapter-item expanded "><a href="../platform-support/kmc-solid.html"><strong aria-hidden="true">6.17.</strong> *-kmc-solid_*</a></li><li class="chapter-item expanded "><a href="../platform-support/loongarch-linux.html"><strong aria-hidden="true">6.18.</strong> loongarch*-unknown-linux-*</a></li><li class="chapter-item expanded "><a href="../platform-support/m68k-unknown-linux-gnu.html"><strong aria-hidden="true">6.19.</strong> m68k-unknown-linux-gnu</a></li><li class="chapter-item expanded "><a href="../platform-support/mips64-openwrt-linux-musl.html"><strong aria-hidden="true">6.20.</strong> mips64-openwrt-linux-musl</a></li><li class="chapter-item expanded "><a href="../platform-support/mipsel-sony-psx.html"><strong aria-hidden="true">6.21.</strong> mipsel-sony-psx</a></li><li class="chapter-item expanded "><a href="../platform-support/nvptx64-nvidia-cuda.html"><strong aria-hidden="true">6.22.</strong> nvptx64-nvidia-cuda</a></li><li class="chapter-item expanded "><a href="../platform-support/riscv32imac-unknown-xous-elf.html"><strong aria-hidden="true">6.23.</strong> riscv32imac-unknown-xous-elf</a></li><li class="chapter-item expanded "><a href="../platform-support/pc-windows-gnullvm.html"><strong aria-hidden="true">6.24.</strong> *-pc-windows-gnullvm</a></li><li class="chapter-item expanded "><a href="../platform-support/nto-qnx.html"><strong aria-hidden="true">6.25.</strong> *-nto-qnx-*</a></li><li class="chapter-item expanded "><a href="../platform-support/openbsd.html"><strong aria-hidden="true">6.26.</strong> *-unknown-openbsd</a></li><li class="chapter-item expanded "><a href="../platform-support/unknown-uefi.html"><strong aria-hidden="true">6.27.</strong> *-unknown-uefi</a></li><li class="chapter-item expanded "><a href="../platform-support/wasm64-unknown-unknown.html"><strong aria-hidden="true">6.28.</strong> wasm64-unknown-unknown</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64-fortanix-unknown-sgx.html"><strong aria-hidden="true">6.29.</strong> x86_64-fortanix-unknown-sgx</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64-unknown-none.html"><strong aria-hidden="true">6.30.</strong> x86_64-unknown-none</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64h-apple-darwin.html"><strong aria-hidden="true">6.31.</strong> x86_64h-apple-darwin</a></li></ol></li><li class="chapter-item expanded "><a href="../targets/index.html"><strong aria-hidden="true">7.</strong> Targets</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../targets/built-in.html"><strong aria-hidden="true">7.1.</strong> Built-in Targets</a></li><li class="chapter-item expanded "><a href="../targets/custom.html"><strong aria-hidden="true">7.2.</strong> Custom Targets</a></li><li class="chapter-item expanded "><a href="../targets/known-issues.html"><strong aria-hidden="true">7.3.</strong> Known Issues</a></li></ol></li><li class="chapter-item expanded "><a href="../profile-guided-optimization.html"><strong aria-hidden="true">8.</strong> Profile-guided Optimization</a></li><li class="chapter-item expanded "><a href="../instrument-coverage.html"><strong aria-hidden="true">9.</strong> Instrumentation-based Code Coverage</a></li><li class="chapter-item expanded "><a href="../linker-plugin-lto.html"><strong aria-hidden="true">10.</strong> Linker-plugin-based LTO</a></li><li class="chapter-item expanded "><a href="../exploit-mitigations.html"><strong aria-hidden="true">11.</strong> Exploit Mitigations</a></li><li class="chapter-item expanded "><a href="../contributing.html"><strong aria-hidden="true">12.</strong> Contributing to rustc</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The rustc book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/master/src/doc/rustc" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/edit/master/src/doc/rustc/src/tests/index.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="tests"><a class="header" href="#tests">Tests</a></h1>
+<p><code>rustc</code> has a built-in facility for building and running tests for a crate.
+More information about writing and running tests may be found in the <a href="../../book/ch11-00-testing.html">Testing
+Chapter</a> of the Rust Programming Language book.</p>
+<p>Tests are written as free functions with the <a href="../../reference/attributes/testing.html#the-test-attribute"><code>#[test]</code>
+attribute</a>. For example:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[test]
+fn it_works() {
+    assert_eq!(2 + 2, 4);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Tests &quot;pass&quot; if they return without an error. They &quot;fail&quot; if they <a href="../../book/ch09-01-unrecoverable-errors-with-panic.html">panic</a>, or
+return a type such as <a href="../../std/result/index.html"><code>Result</code></a> that implements the <a href="../../std/process/trait.Termination.html"><code>Termination</code></a> trait
+with a non-zero value.</p>
+<p>By passing the <a href="../command-line-arguments.html#option-test"><code>--test</code> option</a> to <code>rustc</code>, the compiler will build the crate
+in a special mode to construct an executable that will run the tests in the
+crate. The <code>--test</code> flag will make the following changes:</p>
+<ul>
+<li>The crate will be built as a <code>bin</code> <a href="../../reference/linkage.html">crate type</a>, forcing it to be an
+executable.</li>
+<li>Links the executable with <a href="../../test/index.html"><code>libtest</code></a>, the test harness that is part of the
+standard library, which handles running the tests.</li>
+<li>Synthesizes a <a href="../../reference/crates-and-source-files.html#main-functions"><code>main</code> function</a> which will process command-line arguments
+and run the tests. This new <code>main</code> function will replace any existing <code>main</code>
+function as the entry point of the executable, though the existing <code>main</code>
+will still be compiled.</li>
+<li>Enables the <a href="../../reference/conditional-compilation.html#test"><code>test</code> cfg option</a>, which allows your code to use conditional
+compilation to detect if it is being built as a test.</li>
+<li>Enables building of functions annotated with the <a href="../../reference/attributes/testing.html#the-test-attribute"><code>test</code></a>
+and <a href="#benchmarks"><code>bench</code></a> attributes, which will be run by the test
+harness.</li>
+</ul>
+<p>After the executable is created, you can run it to execute the tests and
+receive a report on what passes and fails. If you are using <a href="../../cargo/index.html">Cargo</a> to manage
+your project, it has a built-in <a href="../../cargo/commands/cargo-test.html"><code>cargo test</code></a> command which handles all of
+this automatically. An example of the output looks like this:</p>
+<pre><code class="language-text">running 4 tests
+test it_works ... ok
+test check_valid_args ... ok
+test invalid_characters ... ok
+test walks_the_dog ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: Tests must be built with the <a href="../../book/ch09-01-unrecoverable-errors-with-panic.html"><code>unwind</code> panic
+strategy</a>. This is because all tests run in the same
+process, and they are intended to catch panics, which is not possible with
+the <code>abort</code> strategy. See the unstable <a href="https://github.com/rust-lang/rust/issues/67650"><code>-Z panic-abort-tests</code></a> option for
+experimental support of the <code>abort</code> strategy by spawning tests in separate
+processes.</p>
+</blockquote>
+<h2 id="test-attributes"><a class="header" href="#test-attributes">Test attributes</a></h2>
+<p>Tests are indicated using attributes on free functions. The following
+attributes are used for testing, see the linked documentation for more
+details:</p>
+<ul>
+<li><a href="../../reference/attributes/testing.html#the-test-attribute"><code>#[test]</code></a> — Indicates a function is a test to be run.</li>
+<li><code>#[bench]</code> — Indicates a function is a benchmark to be
+run. Benchmarks are currently unstable and only available in the nightly
+channel, see the <a href="../../unstable-book/library-features/test.html">unstable docs</a> for more details.</li>
+<li><a href="../../reference/attributes/testing.html#the-should_panic-attribute"><code>#[should_panic]</code></a> — Indicates that the test
+function will only pass if the function <a href="../../book/ch09-01-unrecoverable-errors-with-panic.html">panics</a>.</li>
+<li><a href="../../reference/attributes/testing.html#the-ignore-attribute"><code>#[ignore]</code></a> — Indicates that the test function will be
+compiled, but not run by default. See the <a href="#--ignored"><code>--ignored</code></a> and
+<a href="#--include-ignored"><code>--include-ignored</code></a> options to run these tests.</li>
+</ul>
+<h2 id="cli-arguments"><a class="header" href="#cli-arguments">CLI arguments</a></h2>
+<p>The libtest harness has several command-line arguments to control its
+behavior.</p>
+<blockquote>
+<p>Note: When running with <a href="../../cargo/commands/cargo-test.html"><code>cargo test</code></a>, the libtest CLI arguments must be
+passed after the <code>--</code> argument to differentiate between flags for Cargo and
+those for the harness. For example: <code>cargo test -- --nocapture</code></p>
+</blockquote>
+<h3 id="filters"><a class="header" href="#filters">Filters</a></h3>
+<p>Positional arguments (those without a <code>-</code> prefix) are treated as filters which
+will only run tests whose name matches one of those strings. The filter will
+match any substring found in the full path of the test function. For example,
+if the test function <code>it_works</code> is located in the module
+<code>utils::paths::tests</code>, then any of the filters <code>works</code>, <code>path</code>, <code>utils::</code>, or
+<code>utils::paths::tests::it_works</code> will match that test.</p>
+<p>See <a href="#selection-options">Selection options</a> for more options to control which
+tests are run.</p>
+<h3 id="action-options"><a class="header" href="#action-options">Action options</a></h3>
+<p>The following options perform different actions other than running tests.</p>
+<h4 id="--list"><a class="header" href="#--list"><code>--list</code></a></h4>
+<p>Prints a list of all tests and benchmarks. Does not run any of the tests.
+<a href="#filters">Filters</a> can be used to list only matching tests.</p>
+<h4 id="-h---help"><a class="header" href="#-h---help"><code>-h</code>, <code>--help</code></a></h4>
+<p>Displays usage information and command-line options.</p>
+<h3 id="selection-options"><a class="header" href="#selection-options">Selection options</a></h3>
+<p>The following options change how tests are selected.</p>
+<h4 id="--test"><a class="header" href="#--test"><code>--test</code></a></h4>
+<p>This is the default mode where all tests will be run as well as running all
+benchmarks with only a single iteration (to ensure the benchmark works,
+without taking the time to actually perform benchmarking). This can be
+combined with the <code>--bench</code> flag to run both tests and perform full
+benchmarking.</p>
+<h4 id="--bench"><a class="header" href="#--bench"><code>--bench</code></a></h4>
+<p>This runs in a mode where tests are ignored, and only runs benchmarks. This
+can be combined with <code>--test</code> to run both benchmarks and tests.</p>
+<h4 id="--exact"><a class="header" href="#--exact"><code>--exact</code></a></h4>
+<p>This forces <a href="#filters">filters</a> to match the full path of the test exactly.
+For example, if the test <code>it_works</code> is in the module <code>utils::paths::tests</code>,
+then only the string <code>utils::paths::tests::it_works</code> will match that test.</p>
+<h4 id="--skip-filter"><a class="header" href="#--skip-filter"><code>--skip</code> <em>FILTER</em></a></h4>
+<p>Skips any tests whose name contains the given <em>FILTER</em> string. This flag may
+be passed multiple times.</p>
+<h4 id="--ignored"><a class="header" href="#--ignored"><code>--ignored</code></a></h4>
+<p>Runs only tests that are marked with the <a href="../../reference/attributes/testing.html#the-ignore-attribute"><code>ignore</code>
+attribute</a>.</p>
+<h4 id="--include-ignored"><a class="header" href="#--include-ignored"><code>--include-ignored</code></a></h4>
+<p>Runs both <a href="#--ignored">ignored</a> and non-ignored tests.</p>
+<h4 id="--exclude-should-panic"><a class="header" href="#--exclude-should-panic"><code>--exclude-should-panic</code></a></h4>
+<p>Excludes tests marked with the <a href="../../reference/attributes/testing.html#the-should_panic-attribute"><code>should_panic</code>
+attribute</a>.</p>
+<p>⚠️ 🚧 This option is <a href="#unstable-options">unstable</a>, and requires the <code>-Z unstable-options</code> flag. See <a href="https://github.com/rust-lang/rust/issues/82348">tracking issue
+#82348</a> for more information.</p>
+<h3 id="execution-options"><a class="header" href="#execution-options">Execution options</a></h3>
+<p>The following options affect how tests are executed.</p>
+<h4 id="--test-threads-num_threads"><a class="header" href="#--test-threads-num_threads"><code>--test-threads</code> <em>NUM_THREADS</em></a></h4>
+<p>Sets the number of threads to use for running tests in parallel. By default,
+uses the amount of concurrency available on the hardware as indicated by
+<a href="../../std/thread/fn.available_parallelism.html"><code>available_parallelism</code></a>.</p>
+<p>This can also be specified with the <code>RUST_TEST_THREADS</code> environment variable.</p>
+<h4 id="--force-run-in-process"><a class="header" href="#--force-run-in-process"><code>--force-run-in-process</code></a></h4>
+<p>Forces the tests to run in a single process when using the <a href="../../book/ch09-01-unrecoverable-errors-with-panic.html"><code>abort</code> panic
+strategy</a>.</p>
+<p>⚠️ 🚧 This only works with the unstable <a href="https://github.com/rust-lang/rust/issues/67650"><code>-Z panic-abort-tests</code></a> option, and
+requires the <code>-Z unstable-options</code> flag. See <a href="https://github.com/rust-lang/rust/issues/67650">tracking issue
+#67650</a> for more information.</p>
+<h4 id="--ensure-time"><a class="header" href="#--ensure-time"><code>--ensure-time</code></a></h4>
+<p>⚠️ 🚧 This option is <a href="#unstable-options">unstable</a>, and requires the <code>-Z unstable-options</code> flag. See <a href="https://github.com/rust-lang/rust/issues/64888">tracking issue
+#64888</a> and the <a href="../../unstable-book/compiler-flags/report-time.html">unstable
+docs</a> for more information.</p>
+<h4 id="--shuffle"><a class="header" href="#--shuffle"><code>--shuffle</code></a></h4>
+<p>Runs the tests in random order, as opposed to the default alphabetical order.</p>
+<p>This may also be specified by setting the <code>RUST_TEST_SHUFFLE</code> environment
+variable to anything but <code>0</code>.</p>
+<p>The random number generator seed that is output can be passed to
+<a href="#--shuffle-seed-seed"><code>--shuffle-seed</code></a> to run the tests in the same order
+again.</p>
+<p>Note that <code>--shuffle</code> does not affect whether the tests are run in parallel. To
+run the tests in random order sequentially, use <code>--shuffle --test-threads 1</code>.</p>
+<p>⚠️ 🚧 This option is <a href="#unstable-options">unstable</a>, and requires the <code>-Z unstable-options</code> flag. See <a href="https://github.com/rust-lang/rust/issues/89583">tracking issue
+#89583</a> for more information.</p>
+<h4 id="--shuffle-seed-seed"><a class="header" href="#--shuffle-seed-seed"><code>--shuffle-seed</code> <em>SEED</em></a></h4>
+<p>Like <a href="#--shuffle"><code>--shuffle</code></a>, but seeds the random number generator with
+<em>SEED</em>. Thus, calling the test harness with <code>--shuffle-seed</code> <em>SEED</em> twice runs
+the tests in the same order both times.</p>
+<p><em>SEED</em> is any 64-bit unsigned integer, for example, one produced by
+<a href="#--shuffle"><code>--shuffle</code></a>.</p>
+<p>This can also be specified with the <code>RUST_TEST_SHUFFLE_SEED</code> environment
+variable.</p>
+<p>⚠️ 🚧 This option is <a href="#unstable-options">unstable</a>, and requires the <code>-Z unstable-options</code> flag. See <a href="https://github.com/rust-lang/rust/issues/89583">tracking issue
+#89583</a> for more information.</p>
+<h3 id="output-options"><a class="header" href="#output-options">Output options</a></h3>
+<p>The following options affect the output behavior.</p>
+<h4 id="-q---quiet"><a class="header" href="#-q---quiet"><code>-q</code>, <code>--quiet</code></a></h4>
+<p>Displays one character per test instead of one line per test. This is an alias
+for <a href="#--format-format"><code>--format=terse</code></a>.</p>
+<h4 id="--nocapture"><a class="header" href="#--nocapture"><code>--nocapture</code></a></h4>
+<p>Does not capture the stdout and stderr of the test, and allows tests to print
+to the console. Usually the output is captured, and only displayed if the test
+fails.</p>
+<p>This may also be specified by setting the <code>RUST_TEST_NOCAPTURE</code> environment
+variable to anything but <code>0</code>.</p>
+<h4 id="--show-output"><a class="header" href="#--show-output"><code>--show-output</code></a></h4>
+<p>Displays the stdout and stderr of successful tests after all tests have run.</p>
+<p>Contrast this with <a href="#--nocapture"><code>--nocapture</code></a> which allows tests to print
+<em>while they are running</em>, which can cause interleaved output if there are
+multiple tests running in parallel, <code>--show-output</code> ensures the output is
+contiguous, but requires waiting for all tests to finish.</p>
+<h4 id="--color-color"><a class="header" href="#--color-color"><code>--color</code> <em>COLOR</em></a></h4>
+<p>Control when colored terminal output is used. Valid options:</p>
+<ul>
+<li><code>auto</code>: Colorize if stdout is a tty and <a href="#--nocapture"><code>--nocapture</code></a> is not
+used. This is the default.</li>
+<li><code>always</code>: Always colorize the output.</li>
+<li><code>never</code>: Never colorize the output.</li>
+</ul>
+<h4 id="--format-format"><a class="header" href="#--format-format"><code>--format</code> <em>FORMAT</em></a></h4>
+<p>Controls the format of the output. Valid options:</p>
+<ul>
+<li><code>pretty</code>: This is the default format, with one line per test.</li>
+<li><code>terse</code>: Displays only a single character per test. <a href="#-q---quiet"><code>--quiet</code></a>
+is an alias for this option.</li>
+<li><code>json</code>: Emits JSON objects, one per line. ⚠️ 🚧 This option is
+<a href="#unstable-options">unstable</a>, and requires the <code>-Z unstable-options</code> flag.
+See <a href="https://github.com/rust-lang/rust/issues/49359">tracking issue #49359</a>
+for more information.</li>
+</ul>
+<h4 id="--logfile-path"><a class="header" href="#--logfile-path"><code>--logfile</code> <em>PATH</em></a></h4>
+<p>Writes the results of the tests to the given file.</p>
+<h4 id="--report-time"><a class="header" href="#--report-time"><code>--report-time</code></a></h4>
+<p>⚠️ 🚧 This option is <a href="#unstable-options">unstable</a>, and requires the <code>-Z unstable-options</code> flag. See <a href="https://github.com/rust-lang/rust/issues/64888">tracking issue
+#64888</a> and the <a href="../../unstable-book/compiler-flags/report-time.html">unstable
+docs</a> for more information.</p>
+<h3 id="unstable-options"><a class="header" href="#unstable-options">Unstable options</a></h3>
+<p>Some CLI options are added in an &quot;unstable&quot; state, where they are intended for
+experimentation and testing to determine if the option works correctly, has
+the right design, and is useful. The option may not work correctly, break, or
+change at any time. To signal that you acknowledge that you are using an
+unstable option, they require passing the <code>-Z unstable-options</code> command-line
+flag.</p>
+<h2 id="benchmarks"><a class="header" href="#benchmarks">Benchmarks</a></h2>
+<p>The libtest harness supports running benchmarks for functions annotated with
+the <code>#[bench]</code> attribute. Benchmarks are currently unstable, and only
+available on the <a href="../../book/appendix-07-nightly-rust.html">nightly channel</a>. More information may be found in the
+<a href="../../unstable-book/library-features/test.html">unstable book</a>.</p>
+<h2 id="custom-test-frameworks"><a class="header" href="#custom-test-frameworks">Custom test frameworks</a></h2>
+<p>Experimental support for using custom test harnesses is available on the
+<a href="../../book/appendix-07-nightly-rust.html">nightly channel</a>. See <a href="https://github.com/rust-lang/rust/issues/50297">tracking issue
+#50297</a> and the
+<a href="../../unstable-book/language-features/custom-test-frameworks.html">custom_test_frameworks documentation</a> for more information.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../json.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../platform-support.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../json.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../platform-support.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

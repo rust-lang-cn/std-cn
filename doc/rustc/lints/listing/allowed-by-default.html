@@ -1,0 +1,1797 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Allowed-by-default Lints - The rustc book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../what-is-rustc.html"><strong aria-hidden="true">1.</strong> What is rustc?</a></li><li class="chapter-item expanded "><a href="../../command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line Arguments</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../codegen-options/index.html"><strong aria-hidden="true">2.1.</strong> Codegen Options</a></li></ol></li><li class="chapter-item expanded "><a href="../../lints/index.html"><strong aria-hidden="true">3.</strong> Lints</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lints/levels.html"><strong aria-hidden="true">3.1.</strong> Lint Levels</a></li><li class="chapter-item expanded "><a href="../../lints/groups.html"><strong aria-hidden="true">3.2.</strong> Lint Groups</a></li><li class="chapter-item expanded "><a href="../../lints/listing/index.html"><strong aria-hidden="true">3.3.</strong> Lint Listing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lints/listing/allowed-by-default.html" class="active"><strong aria-hidden="true">3.3.1.</strong> Allowed-by-default Lints</a></li><li class="chapter-item expanded "><a href="../../lints/listing/warn-by-default.html"><strong aria-hidden="true">3.3.2.</strong> Warn-by-default Lints</a></li><li class="chapter-item expanded "><a href="../../lints/listing/deny-by-default.html"><strong aria-hidden="true">3.3.3.</strong> Deny-by-default Lints</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../../json.html"><strong aria-hidden="true">4.</strong> JSON Output</a></li><li class="chapter-item expanded "><a href="../../tests/index.html"><strong aria-hidden="true">5.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../../platform-support.html"><strong aria-hidden="true">6.</strong> Platform Support</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../target-tier-policy.html"><strong aria-hidden="true">6.1.</strong> Target Tier Policy</a></li><li class="chapter-item expanded "><a href="../../platform-support/TEMPLATE.html"><strong aria-hidden="true">6.2.</strong> Template for Target-specific Documentation</a></li><li class="chapter-item expanded "><a href="../../platform-support/aarch64-apple-ios-sim.html"><strong aria-hidden="true">6.3.</strong> aarch64-apple-ios-sim</a></li><li class="chapter-item expanded "><a href="../../platform-support/apple-watchos.html"><strong aria-hidden="true">6.4.</strong> *-apple-watchos*</a></li><li class="chapter-item expanded "><a href="../../platform-support/aarch64-nintendo-switch-freestanding.html"><strong aria-hidden="true">6.5.</strong> aarch64-nintendo-switch-freestanding</a></li><li class="chapter-item expanded "><a href="../../platform-support/armeb-unknown-linux-gnueabi.html"><strong aria-hidden="true">6.6.</strong> armeb-unknown-linux-gnueabi</a></li><li class="chapter-item expanded "><a href="../../platform-support/armv4t-none-eabi.html"><strong aria-hidden="true">6.7.</strong> armv4t-none-eabi</a></li><li class="chapter-item expanded "><a href="../../platform-support/armv5te-none-eabi.html"><strong aria-hidden="true">6.8.</strong> armv5te-none-eabi</a></li><li class="chapter-item expanded "><a href="../../platform-support/armv6k-nintendo-3ds.html"><strong aria-hidden="true">6.9.</strong> armv6k-nintendo-3ds</a></li><li class="chapter-item expanded "><a href="../../platform-support/armv7-sony-vita-newlibeabihf.html"><strong aria-hidden="true">6.10.</strong> armv7-sony-vita-newlibeabihf</a></li><li class="chapter-item expanded "><a href="../../platform-support/armv7-unknown-linux-uclibceabi.html"><strong aria-hidden="true">6.11.</strong> armv7-unknown-linux-uclibceabi</a></li><li class="chapter-item expanded "><a href="../../platform-support/armv7-unknown-linux-uclibceabihf.html"><strong aria-hidden="true">6.12.</strong> armv7-unknown-linux-uclibceabihf</a></li><li class="chapter-item expanded "><a href="../../platform-support/android.html"><strong aria-hidden="true">6.13.</strong> *-android and *-androideabi</a></li><li class="chapter-item expanded "><a href="../../platform-support/openharmony.html"><strong aria-hidden="true">6.14.</strong> *-linux-ohos</a></li><li class="chapter-item expanded "><a href="../../platform-support/esp-idf.html"><strong aria-hidden="true">6.15.</strong> *-esp-espidf</a></li><li class="chapter-item expanded "><a href="../../platform-support/fuchsia.html"><strong aria-hidden="true">6.16.</strong> *-unknown-fuchsia</a></li><li class="chapter-item expanded "><a href="../../platform-support/kmc-solid.html"><strong aria-hidden="true">6.17.</strong> *-kmc-solid_*</a></li><li class="chapter-item expanded "><a href="../../platform-support/loongarch-linux.html"><strong aria-hidden="true">6.18.</strong> loongarch*-unknown-linux-*</a></li><li class="chapter-item expanded "><a href="../../platform-support/m68k-unknown-linux-gnu.html"><strong aria-hidden="true">6.19.</strong> m68k-unknown-linux-gnu</a></li><li class="chapter-item expanded "><a href="../../platform-support/mips64-openwrt-linux-musl.html"><strong aria-hidden="true">6.20.</strong> mips64-openwrt-linux-musl</a></li><li class="chapter-item expanded "><a href="../../platform-support/mipsel-sony-psx.html"><strong aria-hidden="true">6.21.</strong> mipsel-sony-psx</a></li><li class="chapter-item expanded "><a href="../../platform-support/nvptx64-nvidia-cuda.html"><strong aria-hidden="true">6.22.</strong> nvptx64-nvidia-cuda</a></li><li class="chapter-item expanded "><a href="../../platform-support/riscv32imac-unknown-xous-elf.html"><strong aria-hidden="true">6.23.</strong> riscv32imac-unknown-xous-elf</a></li><li class="chapter-item expanded "><a href="../../platform-support/pc-windows-gnullvm.html"><strong aria-hidden="true">6.24.</strong> *-pc-windows-gnullvm</a></li><li class="chapter-item expanded "><a href="../../platform-support/nto-qnx.html"><strong aria-hidden="true">6.25.</strong> *-nto-qnx-*</a></li><li class="chapter-item expanded "><a href="../../platform-support/openbsd.html"><strong aria-hidden="true">6.26.</strong> *-unknown-openbsd</a></li><li class="chapter-item expanded "><a href="../../platform-support/unknown-uefi.html"><strong aria-hidden="true">6.27.</strong> *-unknown-uefi</a></li><li class="chapter-item expanded "><a href="../../platform-support/wasm64-unknown-unknown.html"><strong aria-hidden="true">6.28.</strong> wasm64-unknown-unknown</a></li><li class="chapter-item expanded "><a href="../../platform-support/x86_64-fortanix-unknown-sgx.html"><strong aria-hidden="true">6.29.</strong> x86_64-fortanix-unknown-sgx</a></li><li class="chapter-item expanded "><a href="../../platform-support/x86_64-unknown-none.html"><strong aria-hidden="true">6.30.</strong> x86_64-unknown-none</a></li><li class="chapter-item expanded "><a href="../../platform-support/x86_64h-apple-darwin.html"><strong aria-hidden="true">6.31.</strong> x86_64h-apple-darwin</a></li></ol></li><li class="chapter-item expanded "><a href="../../targets/index.html"><strong aria-hidden="true">7.</strong> Targets</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../targets/built-in.html"><strong aria-hidden="true">7.1.</strong> Built-in Targets</a></li><li class="chapter-item expanded "><a href="../../targets/custom.html"><strong aria-hidden="true">7.2.</strong> Custom Targets</a></li><li class="chapter-item expanded "><a href="../../targets/known-issues.html"><strong aria-hidden="true">7.3.</strong> Known Issues</a></li></ol></li><li class="chapter-item expanded "><a href="../../profile-guided-optimization.html"><strong aria-hidden="true">8.</strong> Profile-guided Optimization</a></li><li class="chapter-item expanded "><a href="../../instrument-coverage.html"><strong aria-hidden="true">9.</strong> Instrumentation-based Code Coverage</a></li><li class="chapter-item expanded "><a href="../../linker-plugin-lto.html"><strong aria-hidden="true">10.</strong> Linker-plugin-based LTO</a></li><li class="chapter-item expanded "><a href="../../exploit-mitigations.html"><strong aria-hidden="true">11.</strong> Exploit Mitigations</a></li><li class="chapter-item expanded "><a href="../../contributing.html"><strong aria-hidden="true">12.</strong> Contributing to rustc</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The rustc book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/master/src/doc/rustc" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/edit/master/src/doc/rustc/src/lints/listing/allowed-by-default.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="allowed-by-default-lints"><a class="header" href="#allowed-by-default-lints">Allowed-by-default Lints</a></h1>
+<p>These lints are all set to the 'allow' level by default. As such, they won't show up
+unless you set them to a higher lint level with a flag or attribute.</p>
+<ul>
+<li><a href="#absolute-paths-not-starting-with-crate"><code>absolute_paths_not_starting_with_crate</code></a></li>
+<li><a href="#box-pointers"><code>box_pointers</code></a></li>
+<li><a href="#elided-lifetimes-in-paths"><code>elided_lifetimes_in_paths</code></a></li>
+<li><a href="#explicit-outlives-requirements"><code>explicit_outlives_requirements</code></a></li>
+<li><a href="#ffi-unwind-calls"><code>ffi_unwind_calls</code></a></li>
+<li><a href="#fuzzy-provenance-casts"><code>fuzzy_provenance_casts</code></a></li>
+<li><a href="#keyword-idents"><code>keyword_idents</code></a></li>
+<li><a href="#let-underscore-drop"><code>let_underscore_drop</code></a></li>
+<li><a href="#lossy-provenance-casts"><code>lossy_provenance_casts</code></a></li>
+<li><a href="#macro-use-extern-crate"><code>macro_use_extern_crate</code></a></li>
+<li><a href="#meta-variable-misuse"><code>meta_variable_misuse</code></a></li>
+<li><a href="#missing-abi"><code>missing_abi</code></a></li>
+<li><a href="#missing-copy-implementations"><code>missing_copy_implementations</code></a></li>
+<li><a href="#missing-debug-implementations"><code>missing_debug_implementations</code></a></li>
+<li><a href="#missing-docs"><code>missing_docs</code></a></li>
+<li><a href="#multiple-supertrait-upcastable"><code>multiple_supertrait_upcastable</code></a></li>
+<li><a href="#must-not-suspend"><code>must_not_suspend</code></a></li>
+<li><a href="#non-ascii-idents"><code>non_ascii_idents</code></a></li>
+<li><a href="#non-exhaustive-omitted-patterns"><code>non_exhaustive_omitted_patterns</code></a></li>
+<li><a href="#noop-method-call"><code>noop_method_call</code></a></li>
+<li><a href="#pointer-structural-match"><code>pointer_structural_match</code></a></li>
+<li><a href="#rust-2021-incompatible-closure-captures"><code>rust_2021_incompatible_closure_captures</code></a></li>
+<li><a href="#rust-2021-incompatible-or-patterns"><code>rust_2021_incompatible_or_patterns</code></a></li>
+<li><a href="#rust-2021-prefixes-incompatible-syntax"><code>rust_2021_prefixes_incompatible_syntax</code></a></li>
+<li><a href="#rust-2021-prelude-collisions"><code>rust_2021_prelude_collisions</code></a></li>
+<li><a href="#single-use-lifetimes"><code>single_use_lifetimes</code></a></li>
+<li><a href="#trivial-casts"><code>trivial_casts</code></a></li>
+<li><a href="#trivial-numeric-casts"><code>trivial_numeric_casts</code></a></li>
+<li><a href="#unreachable-pub"><code>unreachable_pub</code></a></li>
+<li><a href="#unsafe-code"><code>unsafe_code</code></a></li>
+<li><a href="#unsafe-op-in-unsafe-fn"><code>unsafe_op_in_unsafe_fn</code></a></li>
+<li><a href="#unstable-features"><code>unstable_features</code></a></li>
+<li><a href="#unused-crate-dependencies"><code>unused_crate_dependencies</code></a></li>
+<li><a href="#unused-extern-crates"><code>unused_extern_crates</code></a></li>
+<li><a href="#unused-import-braces"><code>unused_import_braces</code></a></li>
+<li><a href="#unused-lifetimes"><code>unused_lifetimes</code></a></li>
+<li><a href="#unused-macro-rules"><code>unused_macro_rules</code></a></li>
+<li><a href="#unused-qualifications"><code>unused_qualifications</code></a></li>
+<li><a href="#unused-results"><code>unused_results</code></a></li>
+<li><a href="#unused-tuple-struct-fields"><code>unused_tuple_struct_fields</code></a></li>
+<li><a href="#variant-size-differences"><code>variant_size_differences</code></a></li>
+</ul>
+<h2 id="absolute-paths-not-starting-with-crate"><a class="header" href="#absolute-paths-not-starting-with-crate">absolute-paths-not-starting-with-crate</a></h2>
+<p>The <code>absolute_paths_not_starting_with_crate</code> lint detects fully
+qualified paths that start with a module name instead of <code>crate</code>,
+<code>self</code>, or an extern crate name</p>
+<h3 id="example"><a class="header" href="#example">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust edition2015 compile_fail">#![deny(absolute_paths_not_starting_with_crate)]
+
+mod foo {
+    pub fn bar() {}
+}
+
+fn main() {
+    ::foo::bar();
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: absolute paths must start with `self`, `super`, `crate`, or an external crate name in the 2018 edition
+ --&gt; lint_example.rs:8:5
+  |
+8 |     ::foo::bar();
+  |     ^^^^^^^^^^ help: use `crate`: `crate::foo::bar`
+  |
+  = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!
+  = note: for more information, see issue #53130 &lt;https://github.com/rust-lang/rust/issues/53130&gt;
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(absolute_paths_not_starting_with_crate)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation"><a class="header" href="#explanation">Explanation</a></h3>
+<p>Rust <a href="https://doc.rust-lang.org/edition-guide/">editions</a> allow the language to evolve without breaking
+backwards compatibility. This lint catches code that uses absolute
+paths in the style of the 2015 edition. In the 2015 edition, absolute
+paths (those starting with <code>::</code>) refer to either the crate root or an
+external crate. In the 2018 edition it was changed so that they only
+refer to external crates. The path prefix <code>crate::</code> should be used
+instead to reference items from the crate root.</p>
+<p>If you switch the compiler from the 2015 to 2018 edition without
+updating the code, then it will fail to compile if the old style paths
+are used. You can manually change the paths to use the <code>crate::</code>
+prefix to transition to the 2018 edition.</p>
+<p>This lint solves the problem automatically. It is &quot;allow&quot; by default
+because the code is perfectly valid in the 2015 edition. The <a href="https://doc.rust-lang.org/cargo/commands/cargo-fix.html"><code>cargo fix</code></a> tool with the <code>--edition</code> flag will switch this lint to &quot;warn&quot;
+and automatically apply the suggested fix from the compiler. This
+provides a completely automated way to update old code to the 2018
+edition.</p>
+<h2 id="box-pointers"><a class="header" href="#box-pointers">box-pointers</a></h2>
+<p>The <code>box_pointers</code> lints use of the Box type.</p>
+<h3 id="example-1"><a class="header" href="#example-1">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(box_pointers)]
+<span class="boring">fn main() {
+</span>struct Foo {
+    x: Box&lt;isize&gt;,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: type uses owned (Box type) pointers: Box&lt;isize&gt;
+ --&gt; lint_example.rs:4:5
+  |
+4 |     x: Box&lt;isize&gt;,
+  |     ^^^^^^^^^^^^^
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(box_pointers)]
+  |         ^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-1"><a class="header" href="#explanation-1">Explanation</a></h3>
+<p>This lint is mostly historical, and not particularly useful. <code>Box&lt;T&gt;</code>
+used to be built into the language, and the only way to do heap
+allocation. Today's Rust can call into other allocators, etc.</p>
+<h2 id="elided-lifetimes-in-paths"><a class="header" href="#elided-lifetimes-in-paths">elided-lifetimes-in-paths</a></h2>
+<p>The <code>elided_lifetimes_in_paths</code> lint detects the use of hidden
+lifetime parameters.</p>
+<h3 id="example-2"><a class="header" href="#example-2">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(elided_lifetimes_in_paths)]
+#![deny(warnings)]
+<span class="boring">fn main() {
+</span>struct Foo&lt;'a&gt; {
+    x: &amp;'a u32
+}
+
+fn foo(x: &amp;Foo) {
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: hidden lifetime parameters in types are deprecated
+ --&gt; lint_example.rs:8:12
+  |
+8 | fn foo(x: &amp;Foo) {
+  |            ^^^ expected lifetime parameter
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(elided_lifetimes_in_paths)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+help: indicate the anonymous lifetime
+  |
+8 | fn foo(x: &amp;Foo&lt;'_&gt;) {
+  |               ++++
+
+</code></pre>
+<h3 id="explanation-2"><a class="header" href="#explanation-2">Explanation</a></h3>
+<p>Elided lifetime parameters can make it difficult to see at a glance
+that borrowing is occurring. This lint ensures that lifetime
+parameters are always explicitly stated, even if it is the <code>'_</code>
+<a href="https://doc.rust-lang.org/reference/lifetime-elision.html#lifetime-elision-in-functions">placeholder lifetime</a>.</p>
+<p>This lint is &quot;allow&quot; by default because it has some known issues, and
+may require a significant transition for old code.</p>
+<h2 id="explicit-outlives-requirements"><a class="header" href="#explicit-outlives-requirements">explicit-outlives-requirements</a></h2>
+<p>The <code>explicit_outlives_requirements</code> lint detects unnecessary
+lifetime bounds that can be inferred.</p>
+<h3 id="example-3"><a class="header" href="#example-3">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">#![allow(unused)]
+</span>#![deny(explicit_outlives_requirements)]
+#![deny(warnings)]
+
+struct SharedRef&lt;'a, T&gt;
+where
+    T: 'a,
+{
+    data: &amp;'a T,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: outlives requirements can be inferred
+ --&gt; lint_example.rs:6:24
+  |
+6 |   struct SharedRef&lt;'a, T&gt;
+  |  ________________________^
+7 | | where
+8 | |     T: 'a,
+  | |__________^ help: remove this bound
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:2:9
+  |
+2 | #![deny(explicit_outlives_requirements)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-3"><a class="header" href="#explanation-3">Explanation</a></h3>
+<p>If a <code>struct</code> contains a reference, such as <code>&amp;'a T</code>, the compiler
+requires that <code>T</code> outlives the lifetime <code>'a</code>. This historically
+required writing an explicit lifetime bound to indicate this
+requirement. However, this can be overly explicit, causing clutter and
+unnecessary complexity. The language was changed to automatically
+infer the bound if it is not specified. Specifically, if the struct
+contains a reference, directly or indirectly, to <code>T</code> with lifetime
+<code>'x</code>, then it will infer that <code>T: 'x</code> is a requirement.</p>
+<p>This lint is &quot;allow&quot; by default because it can be noisy for existing
+code that already had these requirements. This is a stylistic choice,
+as it is still valid to explicitly state the bound. It also has some
+false positives that can cause confusion.</p>
+<p>See <a href="https://github.com/rust-lang/rfcs/blob/master/text/2093-infer-outlives.md">RFC 2093</a> for more details.</p>
+<h2 id="ffi-unwind-calls"><a class="header" href="#ffi-unwind-calls">ffi-unwind-calls</a></h2>
+<p>The <code>ffi_unwind_calls</code> lint detects calls to foreign functions or function pointers with
+<code>C-unwind</code> or other FFI-unwind ABIs.</p>
+<h3 id="example-4"><a class="header" href="#example-4">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>#![warn(ffi_unwind_calls)]
+
+<span class="boring">fn main() {
+</span>extern &quot;C-unwind&quot; {
+    fn foo();
+}
+
+fn bar() {
+    unsafe { foo(); }
+    let ptr: unsafe extern &quot;C-unwind&quot; fn() = foo;
+    unsafe { ptr(); }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">warning: call to foreign function with FFI-unwind ABI
+ --&gt; lint_example.rs:9:14
+  |
+9 |     unsafe { foo(); }
+  |              ^^^^^ call to foreign function with FFI-unwind ABI
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![warn(ffi_unwind_calls)]
+  |         ^^^^^^^^^^^^^^^^
+
+
+warning: call to function pointer with FFI-unwind ABI
+  --&gt; lint_example.rs:11:14
+   |
+11 |     unsafe { ptr(); }
+   |              ^^^^^ call to function pointer with FFI-unwind ABI
+
+</code></pre>
+<h3 id="explanation-4"><a class="header" href="#explanation-4">Explanation</a></h3>
+<p>For crates containing such calls, if they are compiled with <code>-C panic=unwind</code> then the
+produced library cannot be linked with crates compiled with <code>-C panic=abort</code>. For crates
+that desire this ability it is therefore necessary to avoid such calls.</p>
+<h2 id="fuzzy-provenance-casts"><a class="header" href="#fuzzy-provenance-casts">fuzzy-provenance-casts</a></h2>
+<p>The <code>fuzzy_provenance_casts</code> lint detects an <code>as</code> cast between an integer
+and a pointer.</p>
+<h3 id="example-5"><a class="header" href="#example-5">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust">#![feature(strict_provenance)]
+#![warn(fuzzy_provenance_casts)]
+
+fn main() {
+    let _dangling = 16_usize as *const u8;
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">warning: strict provenance disallows casting integer `usize` to pointer `*const u8`
+ --&gt; lint_example.rs:5:21
+  |
+5 |     let _dangling = 16_usize as *const u8;
+  |                     ^^^^^^^^^^^^^^^^^^^^^
+  |
+  = help: if you can't comply with strict provenance and don't have a pointer with the correct provenance you can use `std::ptr::from_exposed_addr()` instead
+note: the lint level is defined here
+ --&gt; lint_example.rs:2:9
+  |
+2 | #![warn(fuzzy_provenance_casts)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^
+help: use `.with_addr()` to adjust a valid pointer in the same allocation, to this address
+  |
+5 |     let _dangling = (...).with_addr(16_usize);
+  |                     ++++++++++++++++        ~
+
+</code></pre>
+<h3 id="explanation-5"><a class="header" href="#explanation-5">Explanation</a></h3>
+<p>This lint is part of the strict provenance effort, see <a href="https://github.com/rust-lang/rust/issues/95228">issue #95228</a>.
+Casting an integer to a pointer is considered bad style, as a pointer
+contains, besides the <em>address</em> also a <em>provenance</em>, indicating what
+memory the pointer is allowed to read/write. Casting an integer, which
+doesn't have provenance, to a pointer requires the compiler to assign
+(guess) provenance. The compiler assigns &quot;all exposed valid&quot; (see the
+docs of <a href="https://doc.rust-lang.org/core/ptr/fn.from_exposed_addr"><code>ptr::from_exposed_addr</code></a> for more information about this
+&quot;exposing&quot;). This penalizes the optimiser and is not well suited for
+dynamic analysis/dynamic program verification (e.g. Miri or CHERI
+platforms).</p>
+<p>It is much better to use <a href="https://doc.rust-lang.org/core/ptr/fn.with_addr"><code>ptr::with_addr</code></a> instead to specify the
+provenance you want. If using this function is not possible because the
+code relies on exposed provenance then there is as an escape hatch
+<a href="https://doc.rust-lang.org/core/ptr/fn.from_exposed_addr"><code>ptr::from_exposed_addr</code></a>.</p>
+<h2 id="keyword-idents"><a class="header" href="#keyword-idents">keyword-idents</a></h2>
+<p>The <code>keyword_idents</code> lint detects edition keywords being used as an
+identifier.</p>
+<h3 id="example-6"><a class="header" href="#example-6">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust edition2015 compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(keyword_idents)]
+<span class="boring">fn main() {
+</span>// edition 2015
+fn dyn() {}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: `dyn` is a keyword in the 2018 edition
+ --&gt; lint_example.rs:4:4
+  |
+4 | fn dyn() {}
+  |    ^^^ help: you can use a raw identifier to stay compatible: `r#dyn`
+  |
+  = warning: this is accepted in the current edition (Rust 2015) but is a hard error in Rust 2018!
+  = note: for more information, see issue #49716 &lt;https://github.com/rust-lang/rust/issues/49716&gt;
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(keyword_idents)]
+  |         ^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-6"><a class="header" href="#explanation-6">Explanation</a></h3>
+<p>Rust <a href="https://doc.rust-lang.org/edition-guide/">editions</a> allow the language to evolve without breaking
+backwards compatibility. This lint catches code that uses new keywords
+that are added to the language that are used as identifiers (such as a
+variable name, function name, etc.). If you switch the compiler to a
+new edition without updating the code, then it will fail to compile if
+you are using a new keyword as an identifier.</p>
+<p>You can manually change the identifiers to a non-keyword, or use a
+<a href="https://doc.rust-lang.org/reference/identifiers.html">raw identifier</a>, for example <code>r#dyn</code>, to transition to a new edition.</p>
+<p>This lint solves the problem automatically. It is &quot;allow&quot; by default
+because the code is perfectly valid in older editions. The <a href="https://doc.rust-lang.org/cargo/commands/cargo-fix.html"><code>cargo fix</code></a> tool with the <code>--edition</code> flag will switch this lint to &quot;warn&quot;
+and automatically apply the suggested fix from the compiler (which is
+to use a raw identifier). This provides a completely automated way to
+update old code for a new edition.</p>
+<h2 id="let-underscore-drop"><a class="header" href="#let-underscore-drop">let-underscore-drop</a></h2>
+<p>The <code>let_underscore_drop</code> lint checks for statements which don't bind
+an expression which has a non-trivial Drop implementation to anything,
+causing the expression to be dropped immediately instead of at end of
+scope.</p>
+<h3 id="example-7"><a class="header" href="#example-7">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust">struct SomeStruct;
+impl Drop for SomeStruct {
+    fn drop(&amp;mut self) {
+        println!(&quot;Dropping SomeStruct&quot;);
+    }
+}
+
+fn main() {
+   #[warn(let_underscore_drop)]
+    // SomeStruct is dropped immediately instead of at end of scope,
+    // so &quot;Dropping SomeStruct&quot; is printed before &quot;end of main&quot;.
+    // The order of prints would be reversed if SomeStruct was bound to
+    // a name (such as &quot;_foo&quot;).
+    let _ = SomeStruct;
+    println!(&quot;end of main&quot;);
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">warning: non-binding let on a type that implements `Drop`
+  --&gt; lint_example.rs:14:5
+   |
+14 |     let _ = SomeStruct;
+   |     ^^^^^^^^^^^^^^^^^^^
+   |
+note: the lint level is defined here
+  --&gt; lint_example.rs:9:11
+   |
+9  |    #[warn(let_underscore_drop)]
+   |           ^^^^^^^^^^^^^^^^^^^
+help: consider binding to an unused variable to avoid immediately dropping the value
+   |
+14 |     let _unused = SomeStruct;
+   |         ~~~~~~~
+help: consider immediately dropping the value
+   |
+14 |     drop(SomeStruct);
+   |     ~~~~~          +
+
+</code></pre>
+<h3 id="explanation-7"><a class="header" href="#explanation-7">Explanation</a></h3>
+<p>Statements which assign an expression to an underscore causes the
+expression to immediately drop instead of extending the expression's
+lifetime to the end of the scope. This is usually unintended,
+especially for types like <code>MutexGuard</code>, which are typically used to
+lock a mutex for the duration of an entire scope.</p>
+<p>If you want to extend the expression's lifetime to the end of the scope,
+assign an underscore-prefixed name (such as <code>_foo</code>) to the expression.
+If you do actually want to drop the expression immediately, then
+calling <code>std::mem::drop</code> on the expression is clearer and helps convey
+intent.</p>
+<h2 id="lossy-provenance-casts"><a class="header" href="#lossy-provenance-casts">lossy-provenance-casts</a></h2>
+<p>The <code>lossy_provenance_casts</code> lint detects an <code>as</code> cast between a pointer
+and an integer.</p>
+<h3 id="example-8"><a class="header" href="#example-8">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust">#![feature(strict_provenance)]
+#![warn(lossy_provenance_casts)]
+
+fn main() {
+    let x: u8 = 37;
+    let _addr: usize = &amp;x as *const u8 as usize;
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">warning: under strict provenance it is considered bad style to cast pointer `*const u8` to integer `usize`
+ --&gt; lint_example.rs:6:24
+  |
+6 |     let _addr: usize = &amp;x as *const u8 as usize;
+  |                        ^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = help: if you can't comply with strict provenance and need to expose the pointer provenance you can use `.expose_addr()` instead
+note: the lint level is defined here
+ --&gt; lint_example.rs:2:9
+  |
+2 | #![warn(lossy_provenance_casts)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^
+help: use `.addr()` to obtain the address of a pointer
+  |
+6 |     let _addr: usize = (&amp;x as *const u8).addr();
+  |                        +               ~~~~~~~~
+
+</code></pre>
+<h3 id="explanation-8"><a class="header" href="#explanation-8">Explanation</a></h3>
+<p>This lint is part of the strict provenance effort, see <a href="https://github.com/rust-lang/rust/issues/95228">issue #95228</a>.
+Casting a pointer to an integer is a lossy operation, because beyond
+just an <em>address</em> a pointer may be associated with a particular
+<em>provenance</em>. This information is used by the optimiser and for dynamic
+analysis/dynamic program verification (e.g. Miri or CHERI platforms).</p>
+<p>Since this cast is lossy, it is considered good style to use the
+<a href="https://doc.rust-lang.org/core/ptr/fn.addr"><code>ptr::addr</code></a> method instead, which has a similar effect, but doesn't
+&quot;expose&quot; the pointer provenance. This improves optimisation potential.
+See the docs of <a href="https://doc.rust-lang.org/core/ptr/fn.addr"><code>ptr::addr</code></a> and <a href="https://doc.rust-lang.org/core/ptr/fn.expose_addr"><code>ptr::expose_addr</code></a> for more information
+about exposing pointer provenance.</p>
+<p>If your code can't comply with strict provenance and needs to expose
+the provenance, then there is <a href="https://doc.rust-lang.org/core/ptr/fn.expose_addr"><code>ptr::expose_addr</code></a> as an escape hatch,
+which preserves the behaviour of <code>as usize</code> casts while being explicit
+about the semantics.</p>
+<h2 id="macro-use-extern-crate"><a class="header" href="#macro-use-extern-crate">macro-use-extern-crate</a></h2>
+<p>The <code>macro_use_extern_crate</code> lint detects the use of the
+<a href="https://doc.rust-lang.org/reference/macros-by-example.html#the-macro_use-attribute"><code>macro_use</code> attribute</a>.</p>
+<h3 id="example-9"><a class="header" href="#example-9">Example</a></h3>
+<pre><code class="language-rust ignore (needs extern crate)">#![deny(macro_use_extern_crate)]
+
+#[macro_use]
+extern crate serde_json;
+
+fn main() {
+    let _ = json!{{}};
+}</code></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: deprecated `#[macro_use]` attribute used to import macros should be replaced at use sites with a `use` item to import the macro instead
+ --&gt; src/main.rs:3:1
+  |
+3 | #[macro_use]
+  | ^^^^^^^^^^^^
+  |
+note: the lint level is defined here
+ --&gt; src/main.rs:1:9
+  |
+1 | #![deny(macro_use_extern_crate)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^
+</code></pre>
+<h3 id="explanation-9"><a class="header" href="#explanation-9">Explanation</a></h3>
+<p>The <a href="https://doc.rust-lang.org/reference/macros-by-example.html#the-macro_use-attribute"><code>macro_use</code> attribute</a> on an <a href="https://doc.rust-lang.org/reference/items/extern-crates.html"><code>extern crate</code></a> item causes
+macros in that external crate to be brought into the prelude of the
+crate, making the macros in scope everywhere. As part of the efforts
+to simplify handling of dependencies in the <a href="https://doc.rust-lang.org/edition-guide/rust-2018/module-system/path-clarity.html#no-more-extern-crate">2018 edition</a>, the use of
+<code>extern crate</code> is being phased out. To bring macros from extern crates
+into scope, it is recommended to use a <a href="https://doc.rust-lang.org/reference/items/use-declarations.html"><code>use</code> import</a>.</p>
+<p>This lint is &quot;allow&quot; by default because this is a stylistic choice
+that has not been settled, see <a href="https://github.com/rust-lang/rust/issues/52043">issue #52043</a> for more information.</p>
+<h2 id="meta-variable-misuse"><a class="header" href="#meta-variable-misuse">meta-variable-misuse</a></h2>
+<p>The <code>meta_variable_misuse</code> lint detects possible meta-variable misuse
+in macro definitions.</p>
+<h3 id="example-10"><a class="header" href="#example-10">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail">#![deny(meta_variable_misuse)]
+
+macro_rules! foo {
+    () =&gt; {};
+    ($( $i:ident = $($j:ident),+ );*) =&gt; { $( $( $i = $k; )+ )* };
+}
+
+fn main() {
+    foo!();
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: unknown macro variable `k`
+ --&gt; lint_example.rs:5:55
+  |
+5 |     ($( $i:ident = $($j:ident),+ );*) =&gt; { $( $( $i = $k; )+ )* };
+  |                                                       ^^
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(meta_variable_misuse)]
+  |         ^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-10"><a class="header" href="#explanation-10">Explanation</a></h3>
+<p>There are quite a few different ways a <a href="https://doc.rust-lang.org/reference/macros-by-example.html"><code>macro_rules</code></a> macro can be
+improperly defined. Many of these errors were previously only detected
+when the macro was expanded or not at all. This lint is an attempt to
+catch some of these problems when the macro is <em>defined</em>.</p>
+<p>This lint is &quot;allow&quot; by default because it may have false positives
+and other issues. See <a href="https://github.com/rust-lang/rust/issues/61053">issue #61053</a> for more details.</p>
+<h2 id="missing-abi"><a class="header" href="#missing-abi">missing-abi</a></h2>
+<p>The <code>missing_abi</code> lint detects cases where the ABI is omitted from
+extern declarations.</p>
+<h3 id="example-11"><a class="header" href="#example-11">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(missing_abi)]
+
+<span class="boring">fn main() {
+</span>extern fn foo() {}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: extern declarations without an explicit ABI are deprecated
+ --&gt; lint_example.rs:4:1
+  |
+4 | extern fn foo() {}
+  | ^^^^^^^^^^^^^^^ ABI should be specified here
+  |
+  = help: the default ABI is C
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(missing_abi)]
+  |         ^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-11"><a class="header" href="#explanation-11">Explanation</a></h3>
+<p>Historically, Rust implicitly selected C as the ABI for extern
+declarations. We expect to add new ABIs, like <code>C-unwind</code>, in the future,
+though this has not yet happened, and especially with their addition
+seeing the ABI easily will make code review easier.</p>
+<h2 id="missing-copy-implementations"><a class="header" href="#missing-copy-implementations">missing-copy-implementations</a></h2>
+<p>The <code>missing_copy_implementations</code> lint detects potentially-forgotten
+implementations of <a href="https://doc.rust-lang.org/std/marker/trait.Copy.html"><code>Copy</code></a> for public types.</p>
+<h3 id="example-12"><a class="header" href="#example-12">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail">#![deny(missing_copy_implementations)]
+pub struct Foo {
+    pub field: i32
+}
+<span class="boring">fn main() {}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: type could implement `Copy`; consider adding `impl Copy`
+ --&gt; lint_example.rs:2:1
+  |
+2 | / pub struct Foo {
+3 | |     pub field: i32
+4 | | }
+  | |_^
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(missing_copy_implementations)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-12"><a class="header" href="#explanation-12">Explanation</a></h3>
+<p>Historically (before 1.0), types were automatically marked as <code>Copy</code>
+if possible. This was changed so that it required an explicit opt-in
+by implementing the <code>Copy</code> trait. As part of this change, a lint was
+added to alert if a copyable type was not marked <code>Copy</code>.</p>
+<p>This lint is &quot;allow&quot; by default because this code isn't bad; it is
+common to write newtypes like this specifically so that a <code>Copy</code> type
+is no longer <code>Copy</code>. <code>Copy</code> types can result in unintended copies of
+large data which can impact performance.</p>
+<h2 id="missing-debug-implementations"><a class="header" href="#missing-debug-implementations">missing-debug-implementations</a></h2>
+<p>The <code>missing_debug_implementations</code> lint detects missing
+implementations of <a href="https://doc.rust-lang.org/std/fmt/trait.Debug.html"><code>fmt::Debug</code></a> for public types.</p>
+<h3 id="example-13"><a class="header" href="#example-13">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail">#![deny(missing_debug_implementations)]
+pub struct Foo;
+<span class="boring">fn main() {}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: type does not implement `Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+ --&gt; lint_example.rs:2:1
+  |
+2 | pub struct Foo;
+  | ^^^^^^^^^^^^^^^
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(missing_debug_implementations)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-13"><a class="header" href="#explanation-13">Explanation</a></h3>
+<p>Having a <code>Debug</code> implementation on all types can assist with
+debugging, as it provides a convenient way to format and display a
+value. Using the <code>#[derive(Debug)]</code> attribute will automatically
+generate a typical implementation, or a custom implementation can be
+added by manually implementing the <code>Debug</code> trait.</p>
+<p>This lint is &quot;allow&quot; by default because adding <code>Debug</code> to all types can
+have a negative impact on compile time and code size. It also requires
+boilerplate to be added to every type, which can be an impediment.</p>
+<h2 id="missing-docs"><a class="header" href="#missing-docs">missing-docs</a></h2>
+<p>The <code>missing_docs</code> lint detects missing documentation for public items.</p>
+<h3 id="example-14"><a class="header" href="#example-14">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(missing_docs)]
+<span class="boring">fn main() {
+</span>pub fn foo() {}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: missing documentation for the crate
+ --&gt; lint_example.rs:1:1
+  |
+1 | / #![deny(missing_docs)]
+2 | | fn main() {
+3 | | pub fn foo() {}
+4 | | }
+  | |_^
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(missing_docs)]
+  |         ^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-14"><a class="header" href="#explanation-14">Explanation</a></h3>
+<p>This lint is intended to ensure that a library is well-documented.
+Items without documentation can be difficult for users to understand
+how to use properly.</p>
+<p>This lint is &quot;allow&quot; by default because it can be noisy, and not all
+projects may want to enforce everything to be documented.</p>
+<h2 id="multiple-supertrait-upcastable"><a class="header" href="#multiple-supertrait-upcastable">multiple-supertrait-upcastable</a></h2>
+<p>The <code>multiple_supertrait_upcastable</code> lint detects when an object-safe trait has multiple
+supertraits.</p>
+<h3 id="example-15"><a class="header" href="#example-15">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait A {}
+trait B {}
+
+#[warn(multiple_supertrait_upcastable)]
+trait C: A + B {}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">warning: unknown lint: `multiple_supertrait_upcastable`
+ --&gt; lint_example.rs:5:1
+  |
+5 | #[warn(multiple_supertrait_upcastable)]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: the `multiple_supertrait_upcastable` lint is unstable
+  = help: add `#![feature(multiple_supertrait_upcastable)]` to the crate attributes to enable
+  = note: `#[warn(unknown_lints)]` on by default
+
+</code></pre>
+<h3 id="explanation-15"><a class="header" href="#explanation-15">Explanation</a></h3>
+<p>To support upcasting with multiple supertraits, we need to store multiple vtables and this
+can result in extra space overhead, even if no code actually uses upcasting.
+This lint allows users to identify when such scenarios occur and to decide whether the
+additional overhead is justified.</p>
+<h2 id="must-not-suspend"><a class="header" href="#must-not-suspend">must-not-suspend</a></h2>
+<p>The <code>must_not_suspend</code> lint guards against values that shouldn't be held across suspend points
+(<code>.await</code>)</p>
+<h3 id="example-16"><a class="header" href="#example-16">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>#![feature(must_not_suspend)]
+#![warn(must_not_suspend)]
+
+<span class="boring">fn main() {
+</span>#[must_not_suspend]
+struct SyncThing {}
+
+async fn yield_now() {}
+
+pub async fn uhoh() {
+    let guard = SyncThing {};
+    yield_now().await;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">warning: `SyncThing` held across a suspend point, but should not be
+  --&gt; lint_example.rs:11:9
+   |
+11 |     let guard = SyncThing {};
+   |         ^^^^^
+12 |     yield_now().await;
+   |                 ----- the value is held across this suspend point
+   |
+help: consider using a block (`{ ... }`) to shrink the value's scope, ending before the suspend point
+  --&gt; lint_example.rs:11:9
+   |
+11 |     let guard = SyncThing {};
+   |         ^^^^^
+note: the lint level is defined here
+  --&gt; lint_example.rs:2:9
+   |
+2  | #![warn(must_not_suspend)]
+   |         ^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-16"><a class="header" href="#explanation-16">Explanation</a></h3>
+<p>The <code>must_not_suspend</code> lint detects values that are marked with the <code>#[must_not_suspend]</code>
+attribute being held across suspend points. A &quot;suspend&quot; point is usually a <code>.await</code> in an async
+function.</p>
+<p>This attribute can be used to mark values that are semantically incorrect across suspends
+(like certain types of timers), values that have async alternatives, and values that
+regularly cause problems with the <code>Send</code>-ness of async fn's returned futures (like
+<code>MutexGuard</code>'s)</p>
+<h2 id="non-ascii-idents"><a class="header" href="#non-ascii-idents">non-ascii-idents</a></h2>
+<p>The <code>non_ascii_idents</code> lint detects non-ASCII identifiers.</p>
+<h3 id="example-17"><a class="header" href="#example-17">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(non_ascii_idents)]
+fn main() {
+    let föö = 1;
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: identifier contains non-ASCII characters
+ --&gt; lint_example.rs:4:9
+  |
+4 |     let föö = 1;
+  |         ^^^
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:2:9
+  |
+2 | #![deny(non_ascii_idents)]
+  |         ^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-17"><a class="header" href="#explanation-17">Explanation</a></h3>
+<p>This lint allows projects that wish to retain the limit of only using
+ASCII characters to switch this lint to &quot;forbid&quot; (for example to ease
+collaboration or for security reasons).
+See <a href="https://github.com/rust-lang/rfcs/blob/master/text/2457-non-ascii-idents.md">RFC 2457</a> for more details.</p>
+<h2 id="non-exhaustive-omitted-patterns"><a class="header" href="#non-exhaustive-omitted-patterns">non-exhaustive-omitted-patterns</a></h2>
+<p>The <code>non_exhaustive_omitted_patterns</code> lint detects when a wildcard (<code>_</code> or <code>..</code>) in a
+pattern for a <code>#[non_exhaustive]</code> struct or enum is reachable.</p>
+<h3 id="example-18"><a class="header" href="#example-18">Example</a></h3>
+<pre><code class="language-rust ignore (needs separate crate)">// crate A
+#[non_exhaustive]
+pub enum Bar {
+    A,
+    B, // added variant in non breaking change
+}
+
+// in crate B
+#![feature(non_exhaustive_omitted_patterns_lint)]
+
+match Bar::A {
+    Bar::A =&gt; {},
+    #[warn(non_exhaustive_omitted_patterns)]
+    _ =&gt; {},
+}</code></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">warning: reachable patterns not covered of non exhaustive enum
+   --&gt; $DIR/reachable-patterns.rs:70:9
+   |
+LL |         _ =&gt; {}
+   |         ^ pattern `B` not covered
+   |
+ note: the lint level is defined here
+  --&gt; $DIR/reachable-patterns.rs:69:16
+   |
+LL |         #[warn(non_exhaustive_omitted_patterns)]
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: ensure that all possible cases are being handled by adding the suggested match arms
+   = note: the matched value is of type `Bar` and the `non_exhaustive_omitted_patterns` attribute was found
+</code></pre>
+<h3 id="explanation-18"><a class="header" href="#explanation-18">Explanation</a></h3>
+<p>Structs and enums tagged with <code>#[non_exhaustive]</code> force the user to add a
+(potentially redundant) wildcard when pattern-matching, to allow for future
+addition of fields or variants. The <code>non_exhaustive_omitted_patterns</code> lint
+detects when such a wildcard happens to actually catch some fields/variants.
+In other words, when the match without the wildcard would not be exhaustive.
+This lets the user be informed if new fields/variants were added.</p>
+<h2 id="noop-method-call"><a class="header" href="#noop-method-call">noop-method-call</a></h2>
+<p>The <code>noop_method_call</code> lint detects specific calls to noop methods
+such as a calling <code>&lt;&amp;T as Clone&gt;::clone</code> where <code>T: !Clone</code>.</p>
+<h3 id="example-19"><a class="header" href="#example-19">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">#![allow(unused)]
+</span>#![warn(noop_method_call)]
+struct Foo;
+let foo = &amp;Foo;
+let clone: &amp;Foo = foo.clone();
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">warning: call to `.clone()` on a reference in this situation does nothing
+ --&gt; lint_example.rs:6:22
+  |
+6 | let clone: &amp;Foo = foo.clone();
+  |                      ^^^^^^^^ unnecessary method call
+  |
+  = note: the type `&amp;Foo` which `clone` is being called on is the same as the type returned from `clone`, so the method call does not do anything and can be removed
+note: the lint level is defined here
+ --&gt; lint_example.rs:2:9
+  |
+2 | #![warn(noop_method_call)]
+  |         ^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-19"><a class="header" href="#explanation-19">Explanation</a></h3>
+<p>Some method calls are noops meaning that they do nothing. Usually such methods
+are the result of blanket implementations that happen to create some method invocations
+that end up not doing anything. For instance, <code>Clone</code> is implemented on all <code>&amp;T</code>, but
+calling <code>clone</code> on a <code>&amp;T</code> where <code>T</code> does not implement clone, actually doesn't do anything
+as references are copy. This lint detects these calls and warns the user about them.</p>
+<h2 id="pointer-structural-match"><a class="header" href="#pointer-structural-match">pointer-structural-match</a></h2>
+<p>The <code>pointer_structural_match</code> lint detects pointers used in patterns whose behaviour
+cannot be relied upon across compiler versions and optimization levels.</p>
+<h3 id="example-20"><a class="header" href="#example-20">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail">#![deny(pointer_structural_match)]
+fn foo(a: usize, b: usize) -&gt; usize { a + b }
+const FOO: fn(usize, usize) -&gt; usize = foo;
+fn main() {
+    match FOO {
+        FOO =&gt; {},
+        _ =&gt; {},
+    }
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: function pointers and unsized pointers in patterns behave unpredictably and should not be relied upon. See https://github.com/rust-lang/rust/issues/70861 for details.
+ --&gt; lint_example.rs:6:9
+  |
+6 |         FOO =&gt; {},
+  |         ^^^
+  |
+  = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #62411 &lt;https://github.com/rust-lang/rust/issues/70861&gt;
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(pointer_structural_match)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-20"><a class="header" href="#explanation-20">Explanation</a></h3>
+<p>Previous versions of Rust allowed function pointers and wide raw pointers in patterns.
+While these work in many cases as expected by users, it is possible that due to
+optimizations pointers are &quot;not equal to themselves&quot; or pointers to different functions
+compare as equal during runtime. This is because LLVM optimizations can deduplicate
+functions if their bodies are the same, thus also making pointers to these functions point
+to the same location. Additionally functions may get duplicated if they are instantiated
+in different crates and not deduplicated again via LTO.</p>
+<h2 id="rust-2021-incompatible-closure-captures"><a class="header" href="#rust-2021-incompatible-closure-captures">rust-2021-incompatible-closure-captures</a></h2>
+<p>The <code>rust_2021_incompatible_closure_captures</code> lint detects variables that aren't completely
+captured in Rust 2021, such that the <code>Drop</code> order of their fields may differ between
+Rust 2018 and 2021.</p>
+<p>It can also detect when a variable implements a trait like <code>Send</code>, but one of its fields does not,
+and the field is captured by a closure and used with the assumption that said field implements
+the same trait as the root variable.</p>
+<h3 id="example-of-drop-reorder"><a class="header" href="#example-of-drop-reorder">Example of drop reorder</a></h3>
+<pre><pre class="playground"><code class="language-rust edition2018 compile_fail">#![deny(rust_2021_incompatible_closure_captures)]
+<span class="boring">#![allow(unused)]
+</span>
+struct FancyInteger(i32);
+
+impl Drop for FancyInteger {
+    fn drop(&amp;mut self) {
+        println!(&quot;Just dropped {}&quot;, self.0);
+    }
+}
+
+struct Point { x: FancyInteger, y: FancyInteger }
+
+fn main() {
+  let p = Point { x: FancyInteger(10), y: FancyInteger(20) };
+
+  let c = || {
+     let x = p.x;
+  };
+
+  c();
+
+  // ... More code ...
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: changes to closure capture in Rust 2021 will affect drop order
+  --&gt; lint_example.rs:17:11
+   |
+17 |   let c = || {
+   |           ^^
+18 |      let x = p.x;
+   |              --- in Rust 2018, this closure captures all of `p`, but in Rust 2021, it will only capture `p.x`
+...
+24 | }
+   | - in Rust 2018, `p` is dropped here, but in Rust 2021, only `p.x` will be dropped here as part of the closure
+   |
+   = note: for more information, see &lt;https://doc.rust-lang.org/nightly/edition-guide/rust-2021/disjoint-capture-in-closures.html&gt;
+note: the lint level is defined here
+  --&gt; lint_example.rs:1:9
+   |
+1  | #![deny(rust_2021_incompatible_closure_captures)]
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: add a dummy let to cause `p` to be fully captured
+   |
+17 ~   let c = || {
+18 +      let _ = &amp;p;
+   |
+
+</code></pre>
+<h3 id="explanation-21"><a class="header" href="#explanation-21">Explanation</a></h3>
+<p>In the above example, <code>p.y</code> will be dropped at the end of <code>f</code> instead of
+with <code>c</code> in Rust 2021.</p>
+<h3 id="example-of-auto-trait"><a class="header" href="#example-of-auto-trait">Example of auto-trait</a></h3>
+<pre><pre class="playground"><code class="language-rust edition2018 compile_fail">#![deny(rust_2021_incompatible_closure_captures)]
+use std::thread;
+
+struct Pointer(*mut i32);
+unsafe impl Send for Pointer {}
+
+fn main() {
+    let mut f = 10;
+    let fptr = Pointer(&amp;mut f as *mut i32);
+    thread::spawn(move || unsafe {
+        *fptr.0 = 20;
+    });
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: changes to closure capture in Rust 2021 will affect which traits the closure implements
+  --&gt; lint_example.rs:10:19
+   |
+10 |     thread::spawn(move || unsafe {
+   |                   ^^^^^^^ in Rust 2018, this closure implements `Send` as `fptr` implements `Send`, but in Rust 2021, this closure will no longer implement `Send` because `fptr` is not fully captured and `fptr.0` does not implement `Send`
+11 |         *fptr.0 = 20;
+   |         ------- in Rust 2018, this closure captures all of `fptr`, but in Rust 2021, it will only capture `fptr.0`
+   |
+   = note: for more information, see &lt;https://doc.rust-lang.org/nightly/edition-guide/rust-2021/disjoint-capture-in-closures.html&gt;
+note: the lint level is defined here
+  --&gt; lint_example.rs:1:9
+   |
+1  | #![deny(rust_2021_incompatible_closure_captures)]
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: add a dummy let to cause `fptr` to be fully captured
+   |
+10 ~     thread::spawn(move || { let _ = &amp;fptr; unsafe {
+11 |         *fptr.0 = 20;
+12 ~     } });
+   |
+
+</code></pre>
+<h3 id="explanation-22"><a class="header" href="#explanation-22">Explanation</a></h3>
+<p>In the above example, only <code>fptr.0</code> is captured in Rust 2021.
+The field is of type <code>*mut i32</code>, which doesn't implement <code>Send</code>,
+making the code invalid as the field cannot be sent between threads safely.</p>
+<h2 id="rust-2021-incompatible-or-patterns"><a class="header" href="#rust-2021-incompatible-or-patterns">rust-2021-incompatible-or-patterns</a></h2>
+<p>The <code>rust_2021_incompatible_or_patterns</code> lint detects usage of old versions of or-patterns.</p>
+<h3 id="example-21"><a class="header" href="#example-21">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail">#![deny(rust_2021_incompatible_or_patterns)]
+
+macro_rules! match_any {
+    ( $expr:expr , $( $( $pat:pat )|+ =&gt; $expr_arm:expr ),+ ) =&gt; {
+        match $expr {
+            $(
+                $( $pat =&gt; $expr_arm, )+
+            )+
+        }
+    };
+}
+
+fn main() {
+    let result: Result&lt;i64, i32&gt; = Err(42);
+    let int: i64 = match_any!(result, Ok(i) | Err(i) =&gt; i.into());
+    assert_eq!(int, 42);
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: the meaning of the `pat` fragment specifier is changing in Rust 2021, which may affect this macro
+ --&gt; lint_example.rs:4:26
+  |
+4 |     ( $expr:expr , $( $( $pat:pat )|+ =&gt; $expr_arm:expr ),+ ) =&gt; {
+  |                          ^^^^^^^^ help: use pat_param to preserve semantics: `$pat:pat_param`
+  |
+  = warning: this is accepted in the current edition (Rust 2018) but is a hard error in Rust 2021!
+  = note: for more information, see &lt;https://doc.rust-lang.org/nightly/edition-guide/rust-2021/or-patterns-macro-rules.html&gt;
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(rust_2021_incompatible_or_patterns)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-23"><a class="header" href="#explanation-23">Explanation</a></h3>
+<p>In Rust 2021, the <code>pat</code> matcher will match additional patterns, which include the <code>|</code> character.</p>
+<h2 id="rust-2021-prefixes-incompatible-syntax"><a class="header" href="#rust-2021-prefixes-incompatible-syntax">rust-2021-prefixes-incompatible-syntax</a></h2>
+<p>The <code>rust_2021_prefixes_incompatible_syntax</code> lint detects identifiers that will be parsed as a
+prefix instead in Rust 2021.</p>
+<h3 id="example-22"><a class="header" href="#example-22">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust edition2018 compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(rust_2021_prefixes_incompatible_syntax)]
+
+<span class="boring">fn main() {
+</span>macro_rules! m {
+    (z $x:expr) =&gt; ();
+}
+
+m!(z&quot;hey&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: prefix `z` is unknown
+ --&gt; lint_example.rs:8:4
+  |
+8 | m!(z&quot;hey&quot;);
+  |    ^ unknown prefix
+  |
+  = warning: this is accepted in the current edition (Rust 2018) but is a hard error in Rust 2021!
+  = note: for more information, see &lt;https://doc.rust-lang.org/nightly/edition-guide/rust-2021/reserving-syntax.html&gt;
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(rust_2021_prefixes_incompatible_syntax)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: insert whitespace here to avoid this being parsed as a prefix in Rust 2021
+  |
+8 | m!(z &quot;hey&quot;);
+  |     +
+
+</code></pre>
+<h3 id="explanation-24"><a class="header" href="#explanation-24">Explanation</a></h3>
+<p>In Rust 2015 and 2018, <code>z&quot;hey&quot;</code> is two tokens: the identifier <code>z</code>
+followed by the string literal <code>&quot;hey&quot;</code>. In Rust 2021, the <code>z</code> is
+considered a prefix for <code>&quot;hey&quot;</code>.</p>
+<p>This lint suggests to add whitespace between the <code>z</code> and <code>&quot;hey&quot;</code> tokens
+to keep them separated in Rust 2021.</p>
+<h2 id="rust-2021-prelude-collisions"><a class="header" href="#rust-2021-prelude-collisions">rust-2021-prelude-collisions</a></h2>
+<p>The <code>rust_2021_prelude_collisions</code> lint detects the usage of trait methods which are ambiguous
+with traits added to the prelude in future editions.</p>
+<h3 id="example-23"><a class="header" href="#example-23">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail">#![deny(rust_2021_prelude_collisions)]
+
+trait Foo {
+    fn try_into(self) -&gt; Result&lt;String, !&gt;;
+}
+
+impl Foo for &amp;str {
+    fn try_into(self) -&gt; Result&lt;String, !&gt; {
+        Ok(String::from(self))
+    }
+}
+
+fn main() {
+    let x: String = &quot;3&quot;.try_into().unwrap();
+    //                  ^^^^^^^^
+    // This call to try_into matches both Foo::try_into and TryInto::try_into as
+    // `TryInto` has been added to the Rust prelude in 2021 edition.
+    println!(&quot;{x}&quot;);
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: trait method `try_into` will become ambiguous in Rust 2021
+  --&gt; lint_example.rs:14:21
+   |
+14 |     let x: String = &quot;3&quot;.try_into().unwrap();
+   |                     ^^^^^^^^^^^^^^ help: disambiguate the associated function: `Foo::try_into(&amp;*&quot;3&quot;)`
+   |
+   = warning: this is accepted in the current edition (Rust 2018) but is a hard error in Rust 2021!
+   = note: for more information, see &lt;https://doc.rust-lang.org/nightly/edition-guide/rust-2021/prelude.html&gt;
+note: the lint level is defined here
+  --&gt; lint_example.rs:1:9
+   |
+1  | #![deny(rust_2021_prelude_collisions)]
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-25"><a class="header" href="#explanation-25">Explanation</a></h3>
+<p>In Rust 2021, one of the important introductions is the <a href="https://blog.rust-lang.org/inside-rust/2021/03/04/planning-rust-2021.html#prelude-changes">prelude changes</a>, which add
+<code>TryFrom</code>, <code>TryInto</code>, and <code>FromIterator</code> into the standard library's prelude. Since this
+results in an ambiguity as to which method/function to call when an existing <code>try_into</code>
+method is called via dot-call syntax or a <code>try_from</code>/<code>from_iter</code> associated function
+is called directly on a type.</p>
+<h2 id="single-use-lifetimes"><a class="header" href="#single-use-lifetimes">single-use-lifetimes</a></h2>
+<p>The <code>single_use_lifetimes</code> lint detects lifetimes that are only used
+once.</p>
+<h3 id="example-24"><a class="header" href="#example-24">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(single_use_lifetimes)]
+
+<span class="boring">fn main() {
+</span>fn foo&lt;'a&gt;(x: &amp;'a u32) {}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: lifetime parameter `'a` only used once
+ --&gt; lint_example.rs:4:8
+  |
+4 | fn foo&lt;'a&gt;(x: &amp;'a u32) {}
+  |        ^^      -- ...is used only here
+  |        |
+  |        this lifetime...
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(single_use_lifetimes)]
+  |         ^^^^^^^^^^^^^^^^^^^^
+help: elide the single-use lifetime
+  |
+4 - fn foo&lt;'a&gt;(x: &amp;'a u32) {}
+4 + fn foo(x: &amp;u32) {}
+  |
+
+</code></pre>
+<h3 id="explanation-26"><a class="header" href="#explanation-26">Explanation</a></h3>
+<p>Specifying an explicit lifetime like <code>'a</code> in a function or <code>impl</code>
+should only be used to link together two things. Otherwise, you should
+just use <code>'_</code> to indicate that the lifetime is not linked to anything,
+or elide the lifetime altogether if possible.</p>
+<p>This lint is &quot;allow&quot; by default because it was introduced at a time
+when <code>'_</code> and elided lifetimes were first being introduced, and this
+lint would be too noisy. Also, there are some known false positives
+that it produces. See <a href="https://github.com/rust-lang/rfcs/blob/master/text/2115-argument-lifetimes.md">RFC 2115</a> for historical context, and <a href="https://github.com/rust-lang/rust/issues/44752">issue
+#44752</a> for more details.</p>
+<h2 id="trivial-casts"><a class="header" href="#trivial-casts">trivial-casts</a></h2>
+<p>The <code>trivial_casts</code> lint detects trivial casts which could be replaced
+with coercion, which may require a temporary variable.</p>
+<h3 id="example-25"><a class="header" href="#example-25">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(trivial_casts)]
+<span class="boring">fn main() {
+</span>let x: &amp;u32 = &amp;42;
+let y = x as *const u32;
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: trivial cast: `&amp;u32` as `*const u32`
+ --&gt; lint_example.rs:4:9
+  |
+4 | let y = x as *const u32;
+  |         ^^^^^^^^^^^^^^^
+  |
+  = help: cast can be replaced by coercion; this might require a temporary variable
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(trivial_casts)]
+  |         ^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-27"><a class="header" href="#explanation-27">Explanation</a></h3>
+<p>A trivial cast is a cast <code>e as T</code> where <code>e</code> has type <code>U</code> and <code>U</code> is a
+subtype of <code>T</code>. This type of cast is usually unnecessary, as it can be
+usually be inferred.</p>
+<p>This lint is &quot;allow&quot; by default because there are situations, such as
+with FFI interfaces or complex type aliases, where it triggers
+incorrectly, or in situations where it will be more difficult to
+clearly express the intent. It may be possible that this will become a
+warning in the future, possibly with an explicit syntax for coercions
+providing a convenient way to work around the current issues.
+See <a href="https://github.com/rust-lang/rfcs/blob/master/text/0401-coercions.md">RFC 401 (coercions)</a>, <a href="https://github.com/rust-lang/rfcs/blob/master/text/0803-type-ascription.md">RFC 803 (type ascription)</a> and
+<a href="https://github.com/rust-lang/rfcs/blob/master/text/3307-de-rfc-type-ascription.md">RFC 3307 (remove type ascription)</a> for historical context.</p>
+<h2 id="trivial-numeric-casts"><a class="header" href="#trivial-numeric-casts">trivial-numeric-casts</a></h2>
+<p>The <code>trivial_numeric_casts</code> lint detects trivial numeric casts of types
+which could be removed.</p>
+<h3 id="example-26"><a class="header" href="#example-26">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(trivial_numeric_casts)]
+<span class="boring">fn main() {
+</span>let x = 42_i32 as i32;
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: trivial numeric cast: `i32` as `i32`
+ --&gt; lint_example.rs:3:9
+  |
+3 | let x = 42_i32 as i32;
+  |         ^^^^^^^^^^^^^
+  |
+  = help: cast can be replaced by coercion; this might require a temporary variable
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(trivial_numeric_casts)]
+  |         ^^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-28"><a class="header" href="#explanation-28">Explanation</a></h3>
+<p>A trivial numeric cast is a cast of a numeric type to the same numeric
+type. This type of cast is usually unnecessary.</p>
+<p>This lint is &quot;allow&quot; by default because there are situations, such as
+with FFI interfaces or complex type aliases, where it triggers
+incorrectly, or in situations where it will be more difficult to
+clearly express the intent. It may be possible that this will become a
+warning in the future, possibly with an explicit syntax for coercions
+providing a convenient way to work around the current issues.
+See <a href="https://github.com/rust-lang/rfcs/blob/master/text/0401-coercions.md">RFC 401 (coercions)</a>, <a href="https://github.com/rust-lang/rfcs/blob/master/text/0803-type-ascription.md">RFC 803 (type ascription)</a> and
+<a href="https://github.com/rust-lang/rfcs/blob/master/text/3307-de-rfc-type-ascription.md">RFC 3307 (remove type ascription)</a> for historical context.</p>
+<h2 id="unreachable-pub"><a class="header" href="#unreachable-pub">unreachable-pub</a></h2>
+<p>The <code>unreachable_pub</code> lint triggers for <code>pub</code> items not reachable from
+the crate root.</p>
+<h3 id="example-27"><a class="header" href="#example-27">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(unreachable_pub)]
+<span class="boring">fn main() {
+</span>mod foo {
+    pub mod bar {
+
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: unreachable `pub` item
+ --&gt; lint_example.rs:4:5
+  |
+4 |     pub mod bar {
+  |     ---^^^^^^^^
+  |     |
+  |     help: consider restricting its visibility: `pub(crate)`
+  |
+  = help: or consider exporting it for use by other crates
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(unreachable_pub)]
+  |         ^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-29"><a class="header" href="#explanation-29">Explanation</a></h3>
+<p>A bare <code>pub</code> visibility may be misleading if the item is not actually
+publicly exported from the crate. The <code>pub(crate)</code> visibility is
+recommended to be used instead, which more clearly expresses the intent
+that the item is only visible within its own crate.</p>
+<p>This lint is &quot;allow&quot; by default because it will trigger for a large
+amount existing Rust code, and has some false-positives. Eventually it
+is desired for this to become warn-by-default.</p>
+<h2 id="unsafe-code"><a class="header" href="#unsafe-code">unsafe-code</a></h2>
+<p>The <code>unsafe_code</code> lint catches usage of <code>unsafe</code> code.</p>
+<h3 id="example-28"><a class="header" href="#example-28">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail">#![deny(unsafe_code)]
+fn main() {
+    unsafe {
+
+    }
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: usage of an `unsafe` block
+ --&gt; lint_example.rs:3:5
+  |
+3 | /     unsafe {
+4 | |
+5 | |     }
+  | |_____^
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(unsafe_code)]
+  |         ^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-30"><a class="header" href="#explanation-30">Explanation</a></h3>
+<p>This lint is intended to restrict the usage of <code>unsafe</code>, which can be
+difficult to use correctly.</p>
+<h2 id="unsafe-op-in-unsafe-fn"><a class="header" href="#unsafe-op-in-unsafe-fn">unsafe-op-in-unsafe-fn</a></h2>
+<p>The <code>unsafe_op_in_unsafe_fn</code> lint detects unsafe operations in unsafe
+functions without an explicit unsafe block.</p>
+<h3 id="example-29"><a class="header" href="#example-29">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail">#![deny(unsafe_op_in_unsafe_fn)]
+
+unsafe fn foo() {}
+
+unsafe fn bar() {
+    foo();
+}
+
+fn main() {}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: call to unsafe function is unsafe and requires unsafe block (error E0133)
+ --&gt; lint_example.rs:6:5
+  |
+6 |     foo();
+  |     ^^^^^ call to unsafe function
+  |
+  = note: consult the function's documentation for information on how to avoid undefined behavior
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(unsafe_op_in_unsafe_fn)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-31"><a class="header" href="#explanation-31">Explanation</a></h3>
+<p>Currently, an <a href="https://doc.rust-lang.org/reference/unsafe-functions.html"><code>unsafe fn</code></a> allows any <a href="https://doc.rust-lang.org/reference/unsafety.html">unsafe</a> operation within its
+body. However, this can increase the surface area of code that needs
+to be scrutinized for proper behavior. The <a href="https://doc.rust-lang.org/reference/expressions/block-expr.html#unsafe-blocks"><code>unsafe</code> block</a> provides a
+convenient way to make it clear exactly which parts of the code are
+performing unsafe operations. In the future, it is desired to change
+it so that unsafe operations cannot be performed in an <code>unsafe fn</code>
+without an <code>unsafe</code> block.</p>
+<p>The fix to this is to wrap the unsafe code in an <code>unsafe</code> block.</p>
+<p>This lint is &quot;allow&quot; by default since this will affect a large amount
+of existing code, and the exact plan for increasing the severity is
+still being considered. See <a href="https://github.com/rust-lang/rfcs/blob/master/text/2585-unsafe-block-in-unsafe-fn.md">RFC #2585</a> and <a href="https://github.com/rust-lang/rust/issues/71668">issue #71668</a> for more
+details.</p>
+<h2 id="unstable-features"><a class="header" href="#unstable-features">unstable-features</a></h2>
+<p>The <code>unstable_features</code> is deprecated and should no longer be used.</p>
+<h2 id="unused-crate-dependencies"><a class="header" href="#unused-crate-dependencies">unused-crate-dependencies</a></h2>
+<p>The <code>unused_crate_dependencies</code> lint detects crate dependencies that
+are never used.</p>
+<h3 id="example-30"><a class="header" href="#example-30">Example</a></h3>
+<pre><code class="language-rust ignore (needs extern crate)">#![deny(unused_crate_dependencies)]</code></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: external crate `regex` unused in `lint_example`: remove the dependency or add `use regex as _;`
+  |
+note: the lint level is defined here
+ --&gt; src/lib.rs:1:9
+  |
+1 | #![deny(unused_crate_dependencies)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+</code></pre>
+<h3 id="explanation-32"><a class="header" href="#explanation-32">Explanation</a></h3>
+<p>After removing the code that uses a dependency, this usually also
+requires removing the dependency from the build configuration.
+However, sometimes that step can be missed, which leads to time wasted
+building dependencies that are no longer used. This lint can be
+enabled to detect dependencies that are never used (more specifically,
+any dependency passed with the <code>--extern</code> command-line flag that is
+never referenced via <a href="https://doc.rust-lang.org/reference/items/use-declarations.html"><code>use</code></a>, <a href="https://doc.rust-lang.org/reference/items/extern-crates.html"><code>extern crate</code></a>, or in any <a href="https://doc.rust-lang.org/reference/paths.html">path</a>).</p>
+<p>This lint is &quot;allow&quot; by default because it can provide false positives
+depending on how the build system is configured. For example, when
+using Cargo, a &quot;package&quot; consists of multiple crates (such as a
+library and a binary), but the dependencies are defined for the
+package as a whole. If there is a dependency that is only used in the
+binary, but not the library, then the lint will be incorrectly issued
+in the library.</p>
+<h2 id="unused-extern-crates"><a class="header" href="#unused-extern-crates">unused-extern-crates</a></h2>
+<p>The <code>unused_extern_crates</code> lint guards against <code>extern crate</code> items
+that are never used.</p>
+<h3 id="example-31"><a class="header" href="#example-31">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(unused_extern_crates)]
+#![deny(warnings)]
+<span class="boring">fn main() {
+</span>extern crate proc_macro;
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: unused extern crate
+ --&gt; lint_example.rs:4:1
+  |
+4 | extern crate proc_macro;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^ help: remove it
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(unused_extern_crates)]
+  |         ^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-33"><a class="header" href="#explanation-33">Explanation</a></h3>
+<p><code>extern crate</code> items that are unused have no effect and should be
+removed. Note that there are some cases where specifying an <code>extern crate</code> is desired for the side effect of ensuring the given crate is
+linked, even though it is not otherwise directly referenced. The lint
+can be silenced by aliasing the crate to an underscore, such as
+<code>extern crate foo as _</code>. Also note that it is no longer idiomatic to
+use <code>extern crate</code> in the <a href="https://doc.rust-lang.org/edition-guide/rust-2018/module-system/path-clarity.html#no-more-extern-crate">2018 edition</a>, as extern crates are now
+automatically added in scope.</p>
+<p>This lint is &quot;allow&quot; by default because it can be noisy, and produce
+false-positives. If a dependency is being removed from a project, it
+is recommended to remove it from the build configuration (such as
+<code>Cargo.toml</code>) to ensure stale build entries aren't left behind.</p>
+<h2 id="unused-import-braces"><a class="header" href="#unused-import-braces">unused-import-braces</a></h2>
+<p>The <code>unused_import_braces</code> lint catches unnecessary braces around an
+imported item.</p>
+<h3 id="example-32"><a class="header" href="#example-32">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail">#![deny(unused_import_braces)]
+use test::{A};
+
+pub mod test {
+    pub struct A;
+}
+<span class="boring">fn main() {}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: braces around A is unnecessary
+ --&gt; lint_example.rs:2:1
+  |
+2 | use test::{A};
+  | ^^^^^^^^^^^^^^
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(unused_import_braces)]
+  |         ^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-34"><a class="header" href="#explanation-34">Explanation</a></h3>
+<p>If there is only a single item, then remove the braces (<code>use test::A;</code>
+for example).</p>
+<p>This lint is &quot;allow&quot; by default because it is only enforcing a
+stylistic choice.</p>
+<h2 id="unused-lifetimes"><a class="header" href="#unused-lifetimes">unused-lifetimes</a></h2>
+<p>The <code>unused_lifetimes</code> lint detects lifetime parameters that are never
+used.</p>
+<h3 id="example-33"><a class="header" href="#example-33">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[deny(unused_lifetimes)]
+
+pub fn foo&lt;'a&gt;() {}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: lifetime parameter `'a` never used
+ --&gt; lint_example.rs:4:12
+  |
+4 | pub fn foo&lt;'a&gt;() {}
+  |           -^^- help: elide the unused lifetime
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:2:8
+  |
+2 | #[deny(unused_lifetimes)]
+  |        ^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-35"><a class="header" href="#explanation-35">Explanation</a></h3>
+<p>Unused lifetime parameters may signal a mistake or unfinished code.
+Consider removing the parameter.</p>
+<h2 id="unused-macro-rules"><a class="header" href="#unused-macro-rules">unused-macro-rules</a></h2>
+<p>The <code>unused_macro_rules</code> lint detects macro rules that were not used.</p>
+<p>Note that the lint is distinct from the <code>unused_macros</code> lint, which
+fires if the entire macro is never called, while this lint fires for
+single unused rules of the macro that is otherwise used.
+<code>unused_macro_rules</code> fires only if <code>unused_macros</code> wouldn't fire.</p>
+<h3 id="example-34"><a class="header" href="#example-34">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust">#[warn(unused_macro_rules)]
+macro_rules! unused_empty {
+    (hello) =&gt; { println!(&quot;Hello, world!&quot;) }; // This rule is unused
+    () =&gt; { println!(&quot;empty&quot;) }; // This rule is used
+}
+
+fn main() {
+    unused_empty!(hello);
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">warning: 2nd rule of macro `unused_empty` is never used
+ --&gt; lint_example.rs:4:5
+  |
+4 |     () =&gt; { println!(&quot;empty&quot;) }; // This rule is used
+  |     ^^
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:8
+  |
+1 | #[warn(unused_macro_rules)]
+  |        ^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-36"><a class="header" href="#explanation-36">Explanation</a></h3>
+<p>Unused macro rules may signal a mistake or unfinished code. Furthermore,
+they slow down compilation. Right now, silencing the warning is not
+supported on a single rule level, so you have to add an allow to the
+entire macro definition.</p>
+<p>If you intended to export the macro to make it
+available outside of the crate, use the <a href="https://doc.rust-lang.org/reference/macros-by-example.html#path-based-scope"><code>macro_export</code> attribute</a>.</p>
+<h2 id="unused-qualifications"><a class="header" href="#unused-qualifications">unused-qualifications</a></h2>
+<p>The <code>unused_qualifications</code> lint detects unnecessarily qualified
+names.</p>
+<h3 id="example-35"><a class="header" href="#example-35">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail">#![deny(unused_qualifications)]
+mod foo {
+    pub fn bar() {}
+}
+
+fn main() {
+    use foo::bar;
+    foo::bar();
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: unnecessary qualification
+ --&gt; lint_example.rs:8:5
+  |
+8 |     foo::bar();
+  |     ^^^^^^^^
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(unused_qualifications)]
+  |         ^^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-37"><a class="header" href="#explanation-37">Explanation</a></h3>
+<p>If an item from another module is already brought into scope, then
+there is no need to qualify it in this case. You can call <code>bar()</code>
+directly, without the <code>foo::</code>.</p>
+<p>This lint is &quot;allow&quot; by default because it is somewhat pedantic, and
+doesn't indicate an actual problem, but rather a stylistic choice, and
+can be noisy when refactoring or moving around code.</p>
+<h2 id="unused-results"><a class="header" href="#unused-results">unused-results</a></h2>
+<p>The <code>unused_results</code> lint checks for the unused result of an
+expression in a statement.</p>
+<h3 id="example-36"><a class="header" href="#example-36">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail">#![deny(unused_results)]
+fn foo&lt;T&gt;() -&gt; T { panic!() }
+
+fn main() {
+    foo::&lt;usize&gt;();
+}</code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: unused result of type `usize`
+ --&gt; lint_example.rs:5:5
+  |
+5 |     foo::&lt;usize&gt;();
+  |     ^^^^^^^^^^^^^^^
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(unused_results)]
+  |         ^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-38"><a class="header" href="#explanation-38">Explanation</a></h3>
+<p>Ignoring the return value of a function may indicate a mistake. In
+cases were it is almost certain that the result should be used, it is
+recommended to annotate the function with the <a href="https://doc.rust-lang.org/reference/attributes/diagnostics.html#the-must_use-attribute"><code>must_use</code> attribute</a>.
+Failure to use such a return value will trigger the <a href="warn-by-default.html#unused-must-use"><code>unused_must_use</code>
+lint</a> which is warn-by-default. The <code>unused_results</code> lint is
+essentially the same, but triggers for <em>all</em> return values.</p>
+<p>This lint is &quot;allow&quot; by default because it can be noisy, and may not be
+an actual problem. For example, calling the <code>remove</code> method of a <code>Vec</code>
+or <code>HashMap</code> returns the previous value, which you may not care about.
+Using this lint would require explicitly ignoring or discarding such
+values.</p>
+<h2 id="unused-tuple-struct-fields"><a class="header" href="#unused-tuple-struct-fields">unused-tuple-struct-fields</a></h2>
+<p>The <code>unused_tuple_struct_fields</code> lint detects fields of tuple structs
+that are never read.</p>
+<h3 id="example-37"><a class="header" href="#example-37">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[warn(unused_tuple_struct_fields)]
+struct S(i32, i32, i32);
+let s = S(1, 2, 3);
+let _ = (s.0, s.2);
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">warning: field `1` is never read
+ --&gt; lint_example.rs:3:15
+  |
+3 | struct S(i32, i32, i32);
+  |        -      ^^^
+  |        |
+  |        field in this struct
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:2:8
+  |
+2 | #[warn(unused_tuple_struct_fields)]
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: consider changing the field to be of unit type to suppress this warning while preserving the field numbering, or remove the field
+  |
+3 | struct S(i32, (), i32);
+  |               ~~
+
+</code></pre>
+<h3 id="explanation-39"><a class="header" href="#explanation-39">Explanation</a></h3>
+<p>Tuple struct fields that are never read anywhere may indicate a
+mistake or unfinished code. To silence this warning, consider
+removing the unused field(s) or, to preserve the numbering of the
+remaining fields, change the unused field(s) to have unit type.</p>
+<h2 id="variant-size-differences"><a class="header" href="#variant-size-differences">variant-size-differences</a></h2>
+<p>The <code>variant_size_differences</code> lint detects enums with widely varying
+variant sizes.</p>
+<h3 id="example-38"><a class="header" href="#example-38">Example</a></h3>
+<pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
+</span>#![deny(variant_size_differences)]
+<span class="boring">fn main() {
+</span>enum En {
+    V0(u8),
+    VBig([u8; 1024]),
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: enum variant is more than three times larger (1024 bytes) than the next largest
+ --&gt; lint_example.rs:5:5
+  |
+5 |     VBig([u8; 1024]),
+  |     ^^^^^^^^^^^^^^^^
+  |
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(variant_size_differences)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^
+
+</code></pre>
+<h3 id="explanation-40"><a class="header" href="#explanation-40">Explanation</a></h3>
+<p>It can be a mistake to add a variant to an enum that is much larger
+than the other variants, bloating the overall size required for all
+variants. This can impact performance and memory usage. This is
+triggered if one variant is more than 3 times larger than the
+second-largest variant.</p>
+<p>Consider placing the large variant's contents on the heap (for example
+via <a href="https://doc.rust-lang.org/std/boxed/index.html"><code>Box</code></a>) to keep the overall size of the enum itself down.</p>
+<p>This lint is &quot;allow&quot; by default because it can be noisy, and may not be
+an actual problem. Decisions about this should be guided with
+profiling and benchmarking.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../lints/listing/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../lints/listing/warn-by-default.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../lints/listing/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../lints/listing/warn-by-default.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

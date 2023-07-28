@@ -1,0 +1,412 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>*-nto-qnx-* - The rustc book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what-is-rustc.html"><strong aria-hidden="true">1.</strong> What is rustc?</a></li><li class="chapter-item expanded "><a href="../command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line Arguments</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../codegen-options/index.html"><strong aria-hidden="true">2.1.</strong> Codegen Options</a></li></ol></li><li class="chapter-item expanded "><a href="../lints/index.html"><strong aria-hidden="true">3.</strong> Lints</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lints/levels.html"><strong aria-hidden="true">3.1.</strong> Lint Levels</a></li><li class="chapter-item expanded "><a href="../lints/groups.html"><strong aria-hidden="true">3.2.</strong> Lint Groups</a></li><li class="chapter-item expanded "><a href="../lints/listing/index.html"><strong aria-hidden="true">3.3.</strong> Lint Listing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lints/listing/allowed-by-default.html"><strong aria-hidden="true">3.3.1.</strong> Allowed-by-default Lints</a></li><li class="chapter-item expanded "><a href="../lints/listing/warn-by-default.html"><strong aria-hidden="true">3.3.2.</strong> Warn-by-default Lints</a></li><li class="chapter-item expanded "><a href="../lints/listing/deny-by-default.html"><strong aria-hidden="true">3.3.3.</strong> Deny-by-default Lints</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../json.html"><strong aria-hidden="true">4.</strong> JSON Output</a></li><li class="chapter-item expanded "><a href="../tests/index.html"><strong aria-hidden="true">5.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../platform-support.html"><strong aria-hidden="true">6.</strong> Platform Support</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../target-tier-policy.html"><strong aria-hidden="true">6.1.</strong> Target Tier Policy</a></li><li class="chapter-item expanded "><a href="../platform-support/TEMPLATE.html"><strong aria-hidden="true">6.2.</strong> Template for Target-specific Documentation</a></li><li class="chapter-item expanded "><a href="../platform-support/aarch64-apple-ios-sim.html"><strong aria-hidden="true">6.3.</strong> aarch64-apple-ios-sim</a></li><li class="chapter-item expanded "><a href="../platform-support/apple-watchos.html"><strong aria-hidden="true">6.4.</strong> *-apple-watchos*</a></li><li class="chapter-item expanded "><a href="../platform-support/aarch64-nintendo-switch-freestanding.html"><strong aria-hidden="true">6.5.</strong> aarch64-nintendo-switch-freestanding</a></li><li class="chapter-item expanded "><a href="../platform-support/armeb-unknown-linux-gnueabi.html"><strong aria-hidden="true">6.6.</strong> armeb-unknown-linux-gnueabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv4t-none-eabi.html"><strong aria-hidden="true">6.7.</strong> armv4t-none-eabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv5te-none-eabi.html"><strong aria-hidden="true">6.8.</strong> armv5te-none-eabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv6k-nintendo-3ds.html"><strong aria-hidden="true">6.9.</strong> armv6k-nintendo-3ds</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-sony-vita-newlibeabihf.html"><strong aria-hidden="true">6.10.</strong> armv7-sony-vita-newlibeabihf</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-unknown-linux-uclibceabi.html"><strong aria-hidden="true">6.11.</strong> armv7-unknown-linux-uclibceabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-unknown-linux-uclibceabihf.html"><strong aria-hidden="true">6.12.</strong> armv7-unknown-linux-uclibceabihf</a></li><li class="chapter-item expanded "><a href="../platform-support/android.html"><strong aria-hidden="true">6.13.</strong> *-android and *-androideabi</a></li><li class="chapter-item expanded "><a href="../platform-support/openharmony.html"><strong aria-hidden="true">6.14.</strong> *-linux-ohos</a></li><li class="chapter-item expanded "><a href="../platform-support/esp-idf.html"><strong aria-hidden="true">6.15.</strong> *-esp-espidf</a></li><li class="chapter-item expanded "><a href="../platform-support/fuchsia.html"><strong aria-hidden="true">6.16.</strong> *-unknown-fuchsia</a></li><li class="chapter-item expanded "><a href="../platform-support/kmc-solid.html"><strong aria-hidden="true">6.17.</strong> *-kmc-solid_*</a></li><li class="chapter-item expanded "><a href="../platform-support/loongarch-linux.html"><strong aria-hidden="true">6.18.</strong> loongarch*-unknown-linux-*</a></li><li class="chapter-item expanded "><a href="../platform-support/m68k-unknown-linux-gnu.html"><strong aria-hidden="true">6.19.</strong> m68k-unknown-linux-gnu</a></li><li class="chapter-item expanded "><a href="../platform-support/mips64-openwrt-linux-musl.html"><strong aria-hidden="true">6.20.</strong> mips64-openwrt-linux-musl</a></li><li class="chapter-item expanded "><a href="../platform-support/mipsel-sony-psx.html"><strong aria-hidden="true">6.21.</strong> mipsel-sony-psx</a></li><li class="chapter-item expanded "><a href="../platform-support/nvptx64-nvidia-cuda.html"><strong aria-hidden="true">6.22.</strong> nvptx64-nvidia-cuda</a></li><li class="chapter-item expanded "><a href="../platform-support/riscv32imac-unknown-xous-elf.html"><strong aria-hidden="true">6.23.</strong> riscv32imac-unknown-xous-elf</a></li><li class="chapter-item expanded "><a href="../platform-support/pc-windows-gnullvm.html"><strong aria-hidden="true">6.24.</strong> *-pc-windows-gnullvm</a></li><li class="chapter-item expanded "><a href="../platform-support/nto-qnx.html" class="active"><strong aria-hidden="true">6.25.</strong> *-nto-qnx-*</a></li><li class="chapter-item expanded "><a href="../platform-support/openbsd.html"><strong aria-hidden="true">6.26.</strong> *-unknown-openbsd</a></li><li class="chapter-item expanded "><a href="../platform-support/unknown-uefi.html"><strong aria-hidden="true">6.27.</strong> *-unknown-uefi</a></li><li class="chapter-item expanded "><a href="../platform-support/wasm64-unknown-unknown.html"><strong aria-hidden="true">6.28.</strong> wasm64-unknown-unknown</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64-fortanix-unknown-sgx.html"><strong aria-hidden="true">6.29.</strong> x86_64-fortanix-unknown-sgx</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64-unknown-none.html"><strong aria-hidden="true">6.30.</strong> x86_64-unknown-none</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64h-apple-darwin.html"><strong aria-hidden="true">6.31.</strong> x86_64h-apple-darwin</a></li></ol></li><li class="chapter-item expanded "><a href="../targets/index.html"><strong aria-hidden="true">7.</strong> Targets</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../targets/built-in.html"><strong aria-hidden="true">7.1.</strong> Built-in Targets</a></li><li class="chapter-item expanded "><a href="../targets/custom.html"><strong aria-hidden="true">7.2.</strong> Custom Targets</a></li><li class="chapter-item expanded "><a href="../targets/known-issues.html"><strong aria-hidden="true">7.3.</strong> Known Issues</a></li></ol></li><li class="chapter-item expanded "><a href="../profile-guided-optimization.html"><strong aria-hidden="true">8.</strong> Profile-guided Optimization</a></li><li class="chapter-item expanded "><a href="../instrument-coverage.html"><strong aria-hidden="true">9.</strong> Instrumentation-based Code Coverage</a></li><li class="chapter-item expanded "><a href="../linker-plugin-lto.html"><strong aria-hidden="true">10.</strong> Linker-plugin-based LTO</a></li><li class="chapter-item expanded "><a href="../exploit-mitigations.html"><strong aria-hidden="true">11.</strong> Exploit Mitigations</a></li><li class="chapter-item expanded "><a href="../contributing.html"><strong aria-hidden="true">12.</strong> Contributing to rustc</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The rustc book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/master/src/doc/rustc" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/edit/master/src/doc/rustc/src/platform-support/nto-qnx.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="nto-qnx"><a class="header" href="#nto-qnx">nto-qnx</a></h1>
+<p><strong>Tier: 3</strong></p>
+<p><a href="https://blackberry.qnx.com">QNX®</a> Neutrino (nto) Real-time operating system.
+The support has been implemented jointly by <a href="https://www.elektrobit.com">Elektrobit Automotive GmbH</a>
+and <a href="https://blackberry.qnx.com">Blackberry QNX</a>.</p>
+<h2 id="target-maintainers"><a class="header" href="#target-maintainers">Target maintainers</a></h2>
+<ul>
+<li>Florian Bartels, <code>Florian.Bartels@elektrobit.com</code>, https://github.com/flba-eb</li>
+<li>Tristan Roach, <code>TRoach@blackberry.com</code>, https://github.com/gh-tr</li>
+</ul>
+<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
+<p>Currently, the following QNX Neutrino versions and compilation targets are supported:</p>
+<div class="table-wrapper"><table><thead><tr><th>QNX Neutrino Version</th><th>Target Architecture</th><th style="text-align: center">Full support</th><th style="text-align: center"><code>no_std</code> support</th></tr></thead><tbody>
+<tr><td>7.1</td><td>AArch64</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td></tr>
+<tr><td>7.1</td><td>x86_64</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td></tr>
+<tr><td>7.0</td><td>x86</td><td style="text-align: center"></td><td style="text-align: center">✓</td></tr>
+</tbody></table>
+</div>
+<p>Adding other architectures that are supported by QNX Neutrino is possible.</p>
+<p>In the table above, 'full support' indicates support for building Rust applications with the full standard library.
+'<code>no_std</code> support' indicates that only <code>core</code> and <code>alloc</code> are available.</p>
+<p>For building or using the Rust toolchain for QNX Neutrino, the
+<a href="https://blackberry.qnx.com/en/products/foundation-software/qnx-software-development-platform">QNX Software Development Platform (SDP)</a>
+must be installed and initialized.
+Initialization is usually done by sourcing <code>qnxsdp-env.sh</code> (this will be installed as part of the SDP, see also installation instruction provided with the SDP).
+Afterwards <a href="https://www.qnx.com/developers/docs/7.1/#com.qnx.doc.neutrino.utilities/topic/q/qcc.html"><code>qcc</code></a> (QNX C/C++ compiler)
+should be available (in the <code>$PATH</code> variable).
+<code>qcc</code> will be called e.g. for linking executables.</p>
+<p>When linking <code>no_std</code> applications, they must link against <code>libc.so</code> (see example). This is
+required because applications always link against the <code>crt</code> library and <code>crt</code> depends on <code>libc.so</code>.
+This is done automatically when using the standard library.</p>
+<h3 id="small-example-application"><a class="header" href="#small-example-application">Small example application</a></h3>
+<p>Small <code>no_std</code> example is shown below. Applications using the standard library work as well.</p>
+<pre><code class="language-rust ignore (platform-specific)">#![no_std]
+#![no_main]
+#![feature(lang_items)]
+
+// We must always link against libc, even if no external functions are used
+// &quot;extern C&quot; - Block can be empty but must be present
+#[link(name = &quot;c&quot;)]
+extern &quot;C&quot; {
+    pub fn printf(format: *const core::ffi::c_char, ...) -&gt; core::ffi::c_int;
+}
+
+#[no_mangle]
+pub extern &quot;C&quot; fn main(_argc: isize, _argv: *const *const u8) -&gt; isize {
+    const HELLO: &amp;'static str = &quot;Hello World, the answer is %d\n\0&quot;;
+    unsafe {
+        printf(HELLO.as_ptr() as *const _, 42);
+    }
+    0
+}
+
+use core::panic::PanicInfo;
+
+#[panic_handler]
+fn panic(_panic: &amp;PanicInfo&lt;'_&gt;) -&gt; ! {
+    loop {}
+}
+
+#[lang = &quot;eh_personality&quot;]
+#[no_mangle]
+pub extern &quot;C&quot; fn rust_eh_personality() {}</code></pre>
+<p>The QNX Neutrino support of Rust has been tested with QNX Neutrino 7.0 and 7.1.</p>
+<p>There are no further known requirements.</p>
+<h2 id="conditional-compilation"><a class="header" href="#conditional-compilation">Conditional compilation</a></h2>
+<p>For conditional compilation, following QNX Neutrino specific attributes are defined:</p>
+<ul>
+<li><code>target_os</code> = <code>&quot;nto&quot;</code></li>
+<li><code>target_env</code> = <code>&quot;nto71&quot;</code> (for QNX Neutrino 7.1)</li>
+<li><code>target_env</code> = <code>&quot;nto70&quot;</code> (for QNX Neutrino 7.0)</li>
+</ul>
+<h2 id="building-the-target"><a class="header" href="#building-the-target">Building the target</a></h2>
+<ol>
+<li>Create a <code>config.toml</code></li>
+</ol>
+<p>Example content:</p>
+<pre><code class="language-toml">profile = &quot;compiler&quot;
+changelog-seen = 2
+</code></pre>
+<ol start="2">
+<li>Compile the Rust toolchain for an <code>x86_64-unknown-linux-gnu</code> host (for both <code>aarch64</code> and <code>x86_64</code> targets)</li>
+</ol>
+<p>Compiling the Rust toolchain requires the same environment variables used for compiling C binaries.
+Refer to the <a href="https://www.qnx.com/developers/docs/7.1/#com.qnx.doc.neutrino.prog/topic/devel_OS_version.html">QNX developer manual</a>.</p>
+<p>To compile for QNX Neutrino (aarch64 and x86_64) and Linux (x86_64):</p>
+<pre><code class="language-bash">export build_env='
+    CC_aarch64-unknown-nto-qnx710=qcc
+    CFLAGS_aarch64-unknown-nto-qnx710=-Vgcc_ntoaarch64le_cxx
+    CXX_aarch64-unknown-nto-qnx710=qcc
+    AR_aarch64_unknown_nto_qnx710=ntoaarch64-ar
+    CC_x86_64-pc-nto-qnx710=qcc
+    CFLAGS_x86_64-pc-nto-qnx710=-Vgcc_ntox86_64_cxx
+    CXX_x86_64-pc-nto-qnx710=qcc
+    AR_x86_64_pc_nto_qnx710=ntox86_64-ar'
+
+env $build_env \
+    ./x.py build \
+        --target aarch64-unknown-nto-qnx710 \
+        --target x86_64-pc-nto-qnx710 \
+        --target x86_64-unknown-linux-gnu \
+        rustc library/core library/alloc
+</code></pre>
+<h2 id="running-the-rust-test-suite"><a class="header" href="#running-the-rust-test-suite">Running the Rust test suite</a></h2>
+<p>The test suites of the Rust compiler and standard library can be executed much like other Rust targets.
+The environment for testing should match the one used during compiler compilation (refer to <code>build_env</code> and <code>qcc</code>/<code>PATH</code> above) with the
+addition of the TEST_DEVICE_ADDR environment variable.
+The TEST_DEVICE_ADDR variable controls the remote runner and should point to the target, despite localhost being shown in the following example.
+Note that some tests are failing which is why they are currently excluded by the target maintainers which can be seen in the following example.</p>
+<p>To run all tests on a x86_64 QNX Neutrino target:</p>
+<pre><code class="language-bash">export TEST_DEVICE_ADDR=&quot;localhost:12345&quot; # must address the test target, can be a SSH tunnel
+export build_env='
+    CC_aarch64-unknown-nto-qnx710=qcc
+    CFLAGS_aarch64-unknown-nto-qnx710=-Vgcc_ntoaarch64le_cxx
+    CXX_aarch64-unknown-nto-qnx710=qcc
+    AR_aarch64_unknown_nto_qnx710=ntoaarch64-ar
+    CC_x86_64-pc-nto-qnx710=qcc
+    CFLAGS_x86_64-pc-nto-qnx710=-Vgcc_ntox86_64_cxx
+    CXX_x86_64-pc-nto-qnx710=qcc
+    AR_x86_64_pc_nto_qnx710=ntox86_64-ar'
+
+# Disable tests that only work on the host or don't make sense for this target.
+# See also:
+# - src/ci/docker/host-x86_64/i686-gnu/Dockerfile
+# - https://rust-lang.zulipchat.com/#narrow/stream/182449-t-compiler.2Fhelp/topic/Running.20tests.20on.20remote.20target
+# - .github/workflows/ci.yml
+export exclude_tests='
+    --exclude src/bootstrap
+    --exclude src/tools/error_index_generator
+    --exclude src/tools/linkchecker
+    --exclude tests/ui-fulldeps
+    --exclude rustc
+    --exclude rustdoc
+    --exclude tests/run-make-fulldeps'
+
+env $build_env \
+    ./x.py test -j 1 \
+        $exclude_tests \
+        --stage 1 \
+        --target x86_64-pc-nto-qnx710
+</code></pre>
+<p>Currently, only one thread can be used when testing due to limitations in <code>libc::fork</code> and <code>libc::posix_spawnp</code>.
+See <a href="https://www.qnx.com/developers/docs/7.1/#com.qnx.doc.neutrino.lib_ref/topic/f/fork.html">fork documentation</a>
+(error section) for more information.
+This can be achieved by using the <code>-j 1</code> parameter in the <code>x.py</code> call.
+This issue is being researched and we will try to allow parallelism in the future.</p>
+<h2 id="building-rust-programs"><a class="header" href="#building-rust-programs">Building Rust programs</a></h2>
+<p>Rust does not yet ship pre-compiled artifacts for this target.
+To compile for this target, you must either build Rust with the target enabled (see &quot;Building the target&quot; above),
+or build your own copy of <code>core</code> by using <code>build-std</code> or similar.</p>
+<h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
+<p>Compiled executables can run directly on QNX Neutrino.</p>
+<h3 id="rust-std-library-test-suite"><a class="header" href="#rust-std-library-test-suite">Rust std library test suite</a></h3>
+<p>The target needs sufficient resources to execute all tests. The commands below assume that a QEMU image
+is used.</p>
+<ul>
+<li>
+<p>Ensure that the temporary directory used by <code>remote-test-server</code> has enough free space and inodes.
+5GB of free space and 40000 inodes are known to be sufficient (the test will create more than 32k files).
+To create a QEMU image in an empty directory, run this command inside the directory:</p>
+<pre><code class="language-bash">mkqnximage --type=qemu --ssh-ident=$HOME/.ssh/id_ed25519.pub --data-size=5000 --data-inodes=40000
+</code></pre>
+<p><code>/data</code> should have enough free resources.
+Set the <code>TMPDIR</code> environment variable accordingly when running <code>remote-test-server</code>, e.g.:</p>
+<pre><code class="language-bash">TMPDIR=/data/tmp/rust remote-test-server --bind 0.0.0.0:12345
+</code></pre>
+</li>
+<li>
+<p>Ensure the TCP stack can handle enough parallel connections (default is 200, should be 300 or higher).
+After creating an image (see above), edit the file <code>output/build/startup.sh</code>:</p>
+<ol>
+<li>Search for <code>io-pkt-v6-hc</code></li>
+<li>Add the parameter <code>-ptcpip threads_max=300</code>, e.g.:
+<pre><code class="language-text">io-pkt-v6-hc -U 33:33 -d e1000 -ptcpip threads_max=300
+</code></pre>
+</li>
+<li>Update the image by running <code>mkqnximage</code> again with the same parameters as above for creating it.</li>
+</ol>
+</li>
+<li>
+<p>Running and stopping the virtual machine</p>
+<p>To start the virtual machine, run inside the directory of the VM:</p>
+<pre><code class="language-bash">mkqnximage --run=-h
+</code></pre>
+<p>To stop the virtual machine, run inside the directory of the VM:</p>
+<pre><code class="language-bash">mkqnximage --stop
+</code></pre>
+</li>
+<li>
+<p>Ensure local networking</p>
+<p>Ensure that 'localhost' is getting resolved to 127.0.0.1. If you can't ping the localhost, some tests may fail.
+Ensure it's appended to /etc/hosts (if first <code>ping</code> command fails).
+Commands have to be executed inside the virtual machine!</p>
+<pre><code class="language-bash">$ ping localhost
+ping: Cannot resolve &quot;localhost&quot; (Host name lookup failure)
+
+$ echo &quot;127.0.0.1 localhost&quot; &gt;&gt; /etc/hosts
+
+$ ping localhost
+PING localhost (127.0.0.1): 56 data bytes
+64 bytes from 127.0.0.1: icmp_seq=0 ttl=255 time=1 ms
+</code></pre>
+</li>
+</ul>
+<h2 id="cross-compilation-toolchains-and-c-code"><a class="header" href="#cross-compilation-toolchains-and-c-code">Cross-compilation toolchains and C code</a></h2>
+<p>Compiling C code requires the same environment variables to be set as compiling the Rust toolchain (see above),
+to ensure <code>qcc</code> is used with proper arguments.
+To ensure compatibility, do not specify any further arguments that for example change calling conventions or memory layout.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../platform-support/pc-windows-gnullvm.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../platform-support/openbsd.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../platform-support/pc-windows-gnullvm.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../platform-support/openbsd.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

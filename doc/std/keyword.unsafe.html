@@ -1,97 +1,164 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="memory safety 不能由类型系统验证的代码或接口。"><meta name="keywords" content="rust, rustlang, rust-lang, unsafe"><title>unsafe - Rust</title><link rel="stylesheet" type="text/css" href="../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../storage1.58.0.js"></script><script src="../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow1.58.0.svg");}</style></head><body class="rustdoc keyword"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../std/index.html'><div class='logo-container rust-logo'><img src='../rust-logo1.58.0.png' alt='logo'></div></a><div class="sidebar-elems"><h2 class="location">Other items in<br><a href="index.html">std</a></h2><div id="sidebar-vars" data-name="unsafe" data-ty="keyword" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Keyword <a class="keyword" href="#">unsafe</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard1.58.0.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/std/keyword_docs.rs.html#2034" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><a href="../book/ch19-01-unsafe-rust.html">memory safety</a> 不能由类型系统验证的代码或接口。</p>
-<p><code>unsafe</code> 关键字有两个用途：声明编译器无法检查的契约的存在 (<code>unsafe fn</code> 和 <code>unsafe trait</code>)，以及声明程序员检查了这些契约是否得到遵守 (<code>unsafe {}</code> 和 <code>unsafe impl</code>，还有 <code>unsafe fn</code> - 见下文)。</p>
-<p>它们并不互斥，如 <code>unsafe fn</code> 所示。</p>
-<h2 id="不安全能力" class="section-header"><a href="#不安全能力">不安全能力</a></h2>
-<p><strong>无论如何，安全 Rust 都不会导致未定义行为</strong>。这称为 <a href="https://rust-lang.github.io/unsafe-code-guidelines/glossary.html#soundness-of-code--of-a-library">可靠性</a>: 类型正确的程序实际上具有所需的属性。<a href="../nomicon/safe-unsafe-meaning.html">Nomicon</a> 对此主题有更详细的说明。</p>
-<p>为了确保安全，Safe Rust 受到足够的限制，可以自动检查。但是，有时出于某些原因，需要编写正确的代码，而这些原因对于编译器来说太聪明了。在这种情况下，您需要使用不安全的 Rust。</p>
-<p>除安全 Rust 之外，以下还有不安全 Rust 所具有的功能：</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="类型系统无法验证其 内存安全 的代码或接口。"><title>unsafe - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../static.files/storage-62ce34ea385b278a.js"></script><script defer src="sidebar-items1.71.0.js"></script><script defer src="../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc keyword"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../std/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../std/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><div class="sidebar-elems"><h2><a href="index.html">In std</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Keyword <a class="keyword" href="#">unsafe</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../src/std/keyword_docs.rs.html#2137">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>类型系统无法验证其 <a href="../book/ch19-01-unsafe-rust.html">内存安全</a> 的代码或接口。</p>
+<p><code>unsafe</code> 关键字有两种用途:</p>
+<ul>
+<li>声明存在编译器无法检查的契约 (<code>unsafe fn</code> 和 <code>unsafe trait</code>)，</li>
+<li>并声明客户端已检查这些合同是否得到维护 (<code> 不安全 {}</code> 和 <code>unsafe impl</code>，还有 <code>unsafe fn</code> - 见下文)。</li>
+</ul>
+<p>它们不是互斥的，正如在 <code>unsafe fn</code> 中可以看到的那样: 默认情况下，<code>unsafe fn</code> 的主体被视为不安全块。可以启用 <code>unsafe_op_in_unsafe_fn</code> lint 来改变它。</p>
+<h2 id="不安全的能力"><a href="#不安全的能力">不安全的能力</a></h2>
+<p><strong>安全 Rust 无论如何都不会导致未定义行为</strong>。这被称为 <a href="https://rust-lang.github.io/unsafe-code-guidelines/glossary.html#soundness-of-code--of-a-library">可靠性</a>: 一个良好类型的程序实际上具有期望的属性。在 <a href="../nomicon/safe-unsafe-meaning.html">Nomicon</a> 中，对此主题有更详细的说明。</p>
+<p>为了确保可靠性，安全 Rust 受到足够的限制，可以自动检查。然而，有时，出于一些聪明得让编译器无法理解的原因，有必要编写正确的代码。在这种情况下，您需要使用不安全的 Rust。</p>
+<p>除安全 Rust 之外，不安全生锈还具有以下功能：</p>
 <ul>
 <li>解引用 <a href="../reference/types/pointer.html">裸指针</a></li>
 <li>实现 <code>unsafe</code> <a href="keyword.trait.html"><code>trait</code></a></li>
 <li>调用 <code>unsafe</code> 函数</li>
-<li>可变的 <a href="keyword.static.html"><code>static</code></a> (包括 <a href="keyword.extern.html"><code>extern</code></a> al 个)</li>
-<li><a href="keyword.union.html"><code>union</code></a> 的访问字段</li>
+<li>可变的 <a href="keyword.static.html"><code>static</code></a> (包括 <a href="keyword.extern.html"><code>extern</code></a>al 的)</li>
+<li><a href="keyword.union.html"><code>union</code></a>s 的访问字段</li>
 </ul>
-<p>但是，这种额外的权力还伴随着额外的责任：现在要确保声音的完整性。<code>unsafe</code> 关键字有助于明确标记需要担心的代码段。</p>
-<h3 id="unsafe-的不同含义" class="section-header"><a href="#unsafe-的不同含义"><code>unsafe</code> 的不同含义</a></h3>
-<p>并非 <code>unsafe</code> 的所有用法都是等效的：这里有些标记是程序员必须检查的契约的存在，而另一些是 “我已经检查了契约，继续做这个吧”。
-以下 <a href="https://internals.rust-lang.org/t/what-does-unsafe-mean/6696">关于 Rust 内部的讨论</a> 对此有更深入的说明，但这是要点的总结：</p>
+<p>但是，这种额外的权力还伴随着额外的责任：现在由你来确保健全性。<code>unsafe</code> 关键字有助于清楚地标记需要担心这一点的代码段。</p>
+<h3 id="unsafe-的不同含义"><a href="#unsafe-的不同含义"><code>unsafe</code> 的不同含义</a></h3>
+<p>并非所有的 <code>unsafe</code> 用法都是等价的：有些用法是为了标记程序员必须检查契约的存在，有些用法是为了表示 “我已经检查了契约，继续并执行此操作吧”。以下 <a href="https://internals.rust-lang.org/t/what-does-unsafe-mean/6696">关于 Rust 内部的讨论</a> 对此有更深入的说明，但这里是要点的总结：</p>
 <ul>
 <li><code>unsafe fn</code>: 调用这个函数意味着遵守编译器无法强制执行的契约。</li>
 <li><code>unsafe trait</code>: 实现 <a href="keyword.trait.html"><code>trait</code></a> 意味着遵守编译器无法强制执行的契约。</li>
-<li><code>unsafe {}</code>: 调用块中的操作所必需的契约，已经通过块的检查，并保证已经遵守。</li>
-<li><code>unsafe impl</code>: 实现 trait 所必需的契约已经过程序员的检查，并保证已经遵守。</li>
+<li><code>unsafe {}</code>: 调用块内操作所必需的契约已经由程序员检查过，并保证得到遵守。</li>
+<li><code>unsafe impl</code>: 实现 trait 所必需的契约已经过程序员的检查，并保证得到遵守。</li>
 </ul>
-<p><code>unsafe fn</code> 在函数内部的代码周围，它的行为也像 <code>unsafe {}</code> 一样。这意味着不仅要向调用者发出信号，而且还应 promises 维护函数内部操作的前提条件。
-混合使用这两种含义可能会造成混淆，并且存在在进行 <code>unsafe</code> 操作时在此类函数中使用 <code>unsafe {}</code> 块的建议。</p>
-<p>有关更多信息，请参见 <a href="../nomicon/index.html">Rustnomicon</a> 和 <a href="../reference/unsafety.html">Reference</a>。</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2><h3 id="标记元素为-unsafe" class="section-header"><a href="#标记元素为-unsafe">标记元素为 <code>unsafe</code></a></h3>
-<p><code>unsafe</code> 可用于函数。请注意，在 <a href="keyword.extern.html"><code>extern</code></a> 块中声明的函数和静态变量被隐式标记为 <code>unsafe</code> (但未被声明为 <code>extern &quot;something&quot; fn ...</code> 的函数)。
-无论在何处声明，可变静态变量始终是不安全的。方法也可以声明为 <code>unsafe</code>：</p>
+<p>默认情况下，<code>unsafe fn</code> 也像函数中的代码周围的 <code>unsafe {}</code> 块一样。这意味着它不仅仅是给调用者的一个信号，而且还保证函数内部操作的先决条件得到支持。
+混合这两种含义可能会令人困惑，因此可以启用 <code>unsafe_op_in_unsafe_fn</code> lint 来警告这一点，并且即使在 <code>unsafe fn</code> 内部也需要明确的不安全块。</p>
+<p>有关详细信息，请参见 <a href="../nomicon/index.html">Rustonomicon</a> 和 <a href="../reference/unsafety.html">Reference</a>。</p>
+<h2 id="examples"><a href="#examples">Examples</a></h2><h3 id="将元素标记为-unsafe"><a href="#将元素标记为-unsafe">将元素标记为 <code>unsafe</code></a></h3>
+<p><code>unsafe</code> 可用在函数上。请注意，在 <a href="keyword.extern.html"><code>extern</code></a> 块中声明的函数和静态变量被隐式标记为 <code>unsafe</code> (而不是声明为 <code>extern &quot;something&quot; fn ...</code> 的函数)。
+无论在何处声明，可变静态变量始终是不安全的。方法也可以被声明为 <code>unsafe</code>：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">static</span> <span class="kw-2">mut</span> <span class="ident">FOO</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;hello&quot;</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">static </span><span class="kw-2">mut </span>FOO: <span class="kw-2">&amp;</span>str = <span class="string">&quot;hello&quot;</span>;
 
-<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">unsafe_fn</span>() {}
+<span class="kw">unsafe fn </span>unsafe_fn() {}
 
-<span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
-    <span class="kw">fn</span> <span class="ident">unsafe_extern_fn</span>();
-    <span class="kw">static</span> <span class="ident">BAR</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u32</span>;
+<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+    <span class="kw">fn </span>unsafe_extern_fn();
+    <span class="kw">static </span>BAR: <span class="kw-2">*mut </span>u32;
 }
 
-<span class="kw">trait</span> <span class="ident">SafeTraitWithUnsafeMethod</span> {
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">unsafe_method</span>(<span class="kw-2">&amp;</span><span class="self">self</span>);
+<span class="kw">trait </span>SafeTraitWithUnsafeMethod {
+    <span class="kw">unsafe fn </span>unsafe_method(<span class="kw-2">&amp;</span><span class="self">self</span>);
 }
 
-<span class="kw">struct</span> <span class="ident">S</span>;
+<span class="kw">struct </span>S;
 
-<span class="kw">impl</span> <span class="ident">S</span> {
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">unsafe_method_on_struct</span>() {}
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(dead_code)%5D%0Afn%20main()%20%7B%0Astatic%20mut%20FOO%3A%20%26str%20%3D%20%22hello%22%3B%0A%0Aunsafe%20fn%20unsafe_fn()%20%7B%7D%0A%0Aextern%20%22C%22%20%7B%0A%20%20%20%20fn%20unsafe_extern_fn()%3B%0A%20%20%20%20static%20BAR%3A%20*mut%20u32%3B%0A%7D%0A%0Atrait%20SafeTraitWithUnsafeMethod%20%7B%0A%20%20%20%20unsafe%20fn%20unsafe_method(%26self)%3B%0A%7D%0A%0Astruct%20S%3B%0A%0Aimpl%20S%20%7B%0A%20%20%20%20unsafe%20fn%20unsafe_method_on_struct()%20%7B%7D%0A%7D%0A%7D&amp;edition=2018">Run</a></div>
-<p>Traits 也可以声明为 <code>unsafe</code>：</p>
+<span class="kw">impl </span>S {
+    <span class="kw">unsafe fn </span>unsafe_method_on_struct() {}
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(dead_code)%5D%0Afn+main()+%7B%0Astatic+mut+FOO:+%26str+=+%22hello%22;%0A%0Aunsafe+fn+unsafe_fn()+%7B%7D%0A%0Aextern+%22C%22+%7B%0A++++fn+unsafe_extern_fn();%0A++++static+BAR:+*mut+u32;%0A%7D%0A%0Atrait+SafeTraitWithUnsafeMethod+%7B%0A++++unsafe+fn+unsafe_method(%26self);%0A%7D%0A%0Astruct+S;%0A%0Aimpl+S+%7B%0A++++unsafe+fn+unsafe_method_on_struct()+%7B%7D%0A%7D%0A%7D&amp;edition=2021">Run</a></div>
+<p>Traits 也可以被声明为 <code>unsafe</code>：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">unsafe</span> <span class="kw">trait</span> <span class="ident">UnsafeTrait</span> {}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Aunsafe%20trait%20UnsafeTrait%20%7B%7D%0A%7D&amp;edition=2018">Run</a></div>
-<p>由于 <code>unsafe fn</code> 和 <code>unsafe trait</code> 表示存在编译器无法强制执行的安全保证，因此对其进行记录很重要。标准库提供了许多示例，例如以下示例，它是 <a href="vec/struct.Vec.html#method.set_len" title="Vec::set_len"><code>Vec::set_len</code></a> 的摘录。
-<code># Safety</code> 部分说明了安全调用函数必须履行的契约。</p>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">unsafe trait </span>UnsafeTrait {}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Aunsafe+trait+UnsafeTrait+%7B%7D%0A%7D&amp;edition=2021">Run</a></div>
+<p>由于 <code>unsafe fn</code> 和 <code>unsafe trait</code> 表示存在编译器无法强制执行的安全保证，因此对其进行记录很重要。标准库提供了许多示例，例如以下示例，它摘录自 <a href="vec/struct.Vec.html#method.set_len" title="method std::vec::Vec::set_len"><code>Vec::set_len</code></a>。
+<code># Safety</code> 部分解释了安全调用函数时必须履行的契约。</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="doccomment">/// 将 vector 的长度强制为 `new_len`。</span>
-<span class="doccomment">/// 这是一个低级操作，不维护该类型的任何正常不变量。</span>
-<span class="doccomment">/// 通常，使用安全操作之一 (例如 `truncate`，`resize`，`extend` 或 `clear`) 来更改 vector 的长度。</span>
-<span class="doccomment">/// # Safety</span>
-<span class="doccomment">/// - `new_len` 必须小于或等于 `capacity()`。</span>
-<span class="doccomment">/// - `old_len..new_len` 上的元素必须初始化。</span>
-<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">set_len</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">new_len</span>: <span class="ident">usize</span>)</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0A%2F%2F%2F%20%E5%B0%86%20vector%20%E7%9A%84%E9%95%BF%E5%BA%A6%E5%BC%BA%E5%88%B6%E4%B8%BA%20%60new_len%60%E3%80%82%0A%2F%2F%2F%20%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E4%BD%8E%E7%BA%A7%E6%93%8D%E4%BD%9C%EF%BC%8C%E4%B8%8D%E7%BB%B4%E6%8A%A4%E8%AF%A5%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BB%BB%E4%BD%95%E6%AD%A3%E5%B8%B8%E4%B8%8D%E5%8F%98%E9%87%8F%E3%80%82%0A%2F%2F%2F%20%E9%80%9A%E5%B8%B8%EF%BC%8C%E4%BD%BF%E7%94%A8%E5%AE%89%E5%85%A8%E6%93%8D%E4%BD%9C%E4%B9%8B%E4%B8%80%20(%E4%BE%8B%E5%A6%82%20%60truncate%60%EF%BC%8C%60resize%60%EF%BC%8C%60extend%60%20%E6%88%96%20%60clear%60)%20%E6%9D%A5%E6%9B%B4%E6%94%B9%20vector%20%E7%9A%84%E9%95%BF%E5%BA%A6%E3%80%82%0A%2F%2F%2F%20%23%20Safety%0A%2F%2F%2F%20-%20%60new_len%60%20%E5%BF%85%E9%A1%BB%E5%B0%8F%E4%BA%8E%E6%88%96%E7%AD%89%E4%BA%8E%20%60capacity()%60%E3%80%82%0A%2F%2F%2F%20-%20%60old_len..new_len%60%20%E4%B8%8A%E7%9A%84%E5%85%83%E7%B4%A0%E5%BF%85%E9%A1%BB%E5%88%9D%E5%A7%8B%E5%8C%96%E3%80%82%0Apub%20unsafe%20fn%20set_len(%26mut%20self%2C%20new_len%3A%20usize)%0A%7D&amp;edition=2018">Run</a></div>
-<h3 id="使用-unsafe--块和-impls" class="section-header"><a href="#使用-unsafe--块和-impls">使用 <code>unsafe {}</code> 块和 <code>impl</code>s</a></h3>
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="doccomment">/// 将 vector 的长度强制为 `new_len`。
+/// 这是一个低级操作，不维护该类型的任何正常不变量。
+/// 通常，使用安全操作之一 (例如 `truncate`，`resize`，`extend` 或 `clear`) 来更改 vector 的长度。
+/// # Safety
+/// - `new_len` 必须小于或等于 `capacity()`。
+/// - `old_len..new_len` 上的元素必须初始化。
+</span><span class="kw">pub unsafe fn </span>set_len(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_len: usize)</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0A///+%E5%B0%86+vector+%E7%9A%84%E9%95%BF%E5%BA%A6%E5%BC%BA%E5%88%B6%E4%B8%BA+%60new_len%60%E3%80%82%0A///+%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E4%BD%8E%E7%BA%A7%E6%93%8D%E4%BD%9C%EF%BC%8C%E4%B8%8D%E7%BB%B4%E6%8A%A4%E8%AF%A5%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BB%BB%E4%BD%95%E6%AD%A3%E5%B8%B8%E4%B8%8D%E5%8F%98%E9%87%8F%E3%80%82%0A///+%E9%80%9A%E5%B8%B8%EF%BC%8C%E4%BD%BF%E7%94%A8%E5%AE%89%E5%85%A8%E6%93%8D%E4%BD%9C%E4%B9%8B%E4%B8%80+(%E4%BE%8B%E5%A6%82+%60truncate%60%EF%BC%8C%60resize%60%EF%BC%8C%60extend%60+%E6%88%96+%60clear%60)+%E6%9D%A5%E6%9B%B4%E6%94%B9+vector+%E7%9A%84%E9%95%BF%E5%BA%A6%E3%80%82%0A///+%23+Safety%0A///+-+%60new_len%60+%E5%BF%85%E9%A1%BB%E5%B0%8F%E4%BA%8E%E6%88%96%E7%AD%89%E4%BA%8E+%60capacity()%60%E3%80%82%0A///+-+%60old_len..new_len%60+%E4%B8%8A%E7%9A%84%E5%85%83%E7%B4%A0%E5%BF%85%E9%A1%BB%E5%88%9D%E5%A7%8B%E5%8C%96%E3%80%82%0Apub+unsafe+fn+set_len(%26mut+self,+new_len:+usize)%0A%7D&amp;edition=2021">Run</a></div>
+<h3 id="使用-unsafe--块和-impls"><a href="#使用-unsafe--块和-impls">使用 <code>unsafe {}</code> 块和 <code>impl</code>s</a></h3>
 <p>执行 <code>unsafe</code> 操作需要一个 <code>unsafe {}</code> 块：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="doccomment">/// 解引用给定的指针。</span>
-<span class="doccomment">/// # Safety</span>
-<span class="doccomment">/// `ptr` 必须对齐，并且不能是悬垂的。</span>
-<span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">deref_unchecked</span>(<span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">i32</span>) -&gt; <span class="ident">i32</span> {
-    <span class="kw-2">*</span><span class="ident">ptr</span>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#![deny(unsafe_op_in_unsafe_fn)]
+
+</span><span class="doccomment">/// 解引用给定的指针。
+/// # Safety
+/// `ptr` 必须对齐，并且不能是悬垂的。
+</span><span class="kw">unsafe fn </span>deref_unchecked(ptr: <span class="kw-2">*const </span>i32) -&gt; i32 {
+    <span class="comment">// SAFETY: 调用者需要确保 `ptr` 对齐且可解引用。
+    </span><span class="kw">unsafe </span>{ <span class="kw-2">*</span>ptr }
 }
 
-<span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="number">3</span>;
-<span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">a</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>;
-<span class="comment">// SAFETY: `a` 尚未丢弃，并且引用始终对齐，因此 `b` 是有效地址。</span>
-<span class="kw">unsafe</span> { <span class="macro">assert_eq!</span>(<span class="kw-2">*</span><span class="ident">b</span>, <span class="ident">deref_unchecked</span>(<span class="ident">b</span>)); };</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(dead_code)%5D%0Afn%20main()%20%7B%0A%2F%2F%2F%20%E8%A7%A3%E5%BC%95%E7%94%A8%E7%BB%99%E5%AE%9A%E7%9A%84%E6%8C%87%E9%92%88%E3%80%82%0A%2F%2F%2F%20%23%20Safety%0A%2F%2F%2F%20%60ptr%60%20%E5%BF%85%E9%A1%BB%E5%AF%B9%E9%BD%90%EF%BC%8C%E5%B9%B6%E4%B8%94%E4%B8%8D%E8%83%BD%E6%98%AF%E6%82%AC%E5%9E%82%E7%9A%84%E3%80%82%0Aunsafe%20fn%20deref_unchecked(ptr%3A%20*const%20i32)%20-%3E%20i32%20%7B%0A%20%20%20%20*ptr%0A%7D%0A%0Alet%20a%20%3D%203%3B%0Alet%20b%20%3D%20%26a%20as%20*const%20_%3B%0A%2F%2F%20SAFETY%3A%20%60a%60%20%E5%B0%9A%E6%9C%AA%E4%B8%A2%E5%BC%83%EF%BC%8C%E5%B9%B6%E4%B8%94%E5%BC%95%E7%94%A8%E5%A7%8B%E7%BB%88%E5%AF%B9%E9%BD%90%EF%BC%8C%E5%9B%A0%E6%AD%A4%20%60b%60%20%E6%98%AF%E6%9C%89%E6%95%88%E5%9C%B0%E5%9D%80%E3%80%82%0Aunsafe%20%7B%20assert_eq!(*b%2C%20deref_unchecked(b))%3B%20%7D%3B%0A%7D&amp;edition=2018">Run</a></div>
-<p>标记为 <code>unsafe</code> 的 Traits 必须使用 <code>unsafe impl</code> 进行复制。这为实现满足 trait 的安全保证的其他 <code>unsafe</code> 代码提供了保证。<a href="marker/trait.Send.html" title="Send">Send</a> 和 <a href="marker/trait.Sync.html" title="Sync">Sync</a> traits 是标准库中此行为的示例。</p>
+<span class="kw">let </span>a = <span class="number">3</span>;
+<span class="kw">let </span>b = <span class="kw-2">&amp;</span>a <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_</span>;
+<span class="comment">// SAFETY: `a` 尚未丢弃，并且引用始终对齐，因此 `b` 是有效地址。
+</span><span class="kw">unsafe </span>{ <span class="macro">assert_eq!</span>(<span class="kw-2">*</span>b, deref_unchecked(b)); };</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(dead_code)%5D%0A%23!%5Bdeny(unsafe_op_in_unsafe_fn)%5D%0A%0Afn+main()+%7B%0A///+%E8%A7%A3%E5%BC%95%E7%94%A8%E7%BB%99%E5%AE%9A%E7%9A%84%E6%8C%87%E9%92%88%E3%80%82%0A///+%23+Safety%0A///+%60ptr%60+%E5%BF%85%E9%A1%BB%E5%AF%B9%E9%BD%90%EF%BC%8C%E5%B9%B6%E4%B8%94%E4%B8%8D%E8%83%BD%E6%98%AF%E6%82%AC%E5%9E%82%E7%9A%84%E3%80%82%0Aunsafe+fn+deref_unchecked(ptr:+*const+i32)+-%3E+i32+%7B%0A++++//+SAFETY:+%E8%B0%83%E7%94%A8%E8%80%85%E9%9C%80%E8%A6%81%E7%A1%AE%E4%BF%9D+%60ptr%60+%E5%AF%B9%E9%BD%90%E4%B8%94%E5%8F%AF%E8%A7%A3%E5%BC%95%E7%94%A8%E3%80%82%0A++++unsafe+%7B+*ptr+%7D%0A%7D%0A%0Alet+a+=+3;%0Alet+b+=+%26a+as+*const+_;%0A//+SAFETY:+%60a%60+%E5%B0%9A%E6%9C%AA%E4%B8%A2%E5%BC%83%EF%BC%8C%E5%B9%B6%E4%B8%94%E5%BC%95%E7%94%A8%E5%A7%8B%E7%BB%88%E5%AF%B9%E9%BD%90%EF%BC%8C%E5%9B%A0%E6%AD%A4+%60b%60+%E6%98%AF%E6%9C%89%E6%95%88%E5%9C%B0%E5%9D%80%E3%80%82%0Aunsafe+%7B+assert_eq!(*b,+deref_unchecked(b));+%7D;%0A%7D&amp;edition=2021">Run</a></div>
+<h3 id="unsafe-和-traits"><a href="#unsafe-和-traits"><code>unsafe</code> 和 traits</a></h3>
+<p><code>unsafe</code> 和 traits 的相互作用可能令人惊讶，所以让我们用两个例子来对比 <code>unsafe trait</code> 中的安全 <code>fn</code> 和安全 trait 中的 <code>unsafe fn</code> 的两种组合:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="doccomment">/// 这个 trait 的实现者必须保证元素始终可以通过索引 3 访问。</span>
-<span class="kw">unsafe</span> <span class="kw">trait</span> <span class="ident">ThreeIndexable</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// 返回 `&amp;self` 中索引为 3 的元素的引用。</span>
-    <span class="kw">fn</span> <span class="ident">three</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">T</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="doccomment">/// # Safety
+/// `make_even` 必须返回一个偶数。
+</span><span class="kw">unsafe trait </span>MakeEven {
+    <span class="kw">fn </span>make_even(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; i32;
 }
 
-<span class="comment">// `[T; 4]` 的 `ThreeIndexable` 实现是 `unsafe`，因为实现者必须遵守编译器无法检查的契约，但作为一名程序员，我们知道在索引 3 处总会有一个有效元素要访问。</span>
-<span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">ThreeIndexable</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> [<span class="ident">T</span>; <span class="number">4</span>] {
-    <span class="kw">fn</span> <span class="ident">three</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">T</span> {
-        <span class="comment">// SAFETY: 实现 trait 意味着总是有一个索引为 3 的元素可以访问。</span>
-        <span class="kw">unsafe</span> { <span class="self">self</span>.<span class="ident">get_unchecked</span>(<span class="number">3</span>) }
+<span class="comment">// SAFETY: 我们的 `make_even` 总是返回一些东西。
+</span><span class="kw">unsafe impl </span>MakeEven <span class="kw">for </span>i32 {
+    <span class="kw">fn </span>make_even(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; i32 {
+        <span class="self">self </span>&lt;&lt; <span class="number">1
+    </span>}
+}
+
+<span class="kw">fn </span>use_make_even(x: <span class="kw">impl </span>MakeEven) {
+    <span class="kw">if </span>x.make_even() % <span class="number">2 </span>== <span class="number">1 </span>{
+        <span class="comment">// SAFETY: 这永远不会发生，因为所有 `MakeEven` 实现都确保 `make_even` 返回一些东西。
+        </span><span class="kw">unsafe </span>{ std::hint::unreachable_unchecked() };
+    }
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0A///+%23+Safety%0A///+%60make_even%60+%E5%BF%85%E9%A1%BB%E8%BF%94%E5%9B%9E%E4%B8%80%E4%B8%AA%E5%81%B6%E6%95%B0%E3%80%82%0Aunsafe+trait+MakeEven+%7B%0A++++fn+make_even(%26self)+-%3E+i32;%0A%7D%0A%0A//+SAFETY:+%E6%88%91%E4%BB%AC%E7%9A%84+%60make_even%60+%E6%80%BB%E6%98%AF%E8%BF%94%E5%9B%9E%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF%E3%80%82%0Aunsafe+impl+MakeEven+for+i32+%7B%0A++++fn+make_even(%26self)+-%3E+i32+%7B%0A++++++++self+%3C%3C+1%0A++++%7D%0A%7D%0A%0Afn+use_make_even(x:+impl+MakeEven)+%7B%0A++++if+x.make_even()+%25+2+==+1+%7B%0A++++++++//+SAFETY:+%E8%BF%99%E6%B0%B8%E8%BF%9C%E4%B8%8D%E4%BC%9A%E5%8F%91%E7%94%9F%EF%BC%8C%E5%9B%A0%E4%B8%BA%E6%89%80%E6%9C%89+%60MakeEven%60+%E5%AE%9E%E7%8E%B0%E9%83%BD%E7%A1%AE%E4%BF%9D+%60make_even%60+%E8%BF%94%E5%9B%9E%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF%E3%80%82%0A++++++++unsafe+%7B+std::hint::unreachable_unchecked()+%7D;%0A++++%7D%0A%7D%0A%7D&amp;edition=2021">Run</a></div>
+<p>注意 trait 的安全保证是如何被实现维护的，它本身是用来维护 <code>use_make_even</code> 调用的不安全函数 <code>unreachable_unchecked</code> 的安全保证。
+<code>make_even</code> 本身是一个安全的函数，因为它的<em>callers</em> 不必担心任何契约，只需要 <code>MakeEven</code> 的<em>implementation</em> 来维护某个契约。
+<code>use_make_even</code> 是安全的，因为它可以使用 <code>MakeEven</code> 实现的 promise 来维护它调用的 <code>unsafe fn unreachable_unchecked</code> 的安全保证。</p>
+<p>也可以在常规安全 <code>trait</code> 中包含 <code>unsafe fn</code>:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#![deny(unsafe_op_in_unsafe_fn)]
+
+</span><span class="kw">trait </span>Indexable {
+    <span class="kw">const </span>LEN: usize;
+
+    <span class="doccomment">/// # Safety
+    /// 调用者必须确保 `idx &lt; LEN`。
+    </span><span class="kw">unsafe fn </span>idx_unchecked(<span class="kw-2">&amp;</span><span class="self">self</span>, idx: usize) -&gt; i32;
+}
+
+<span class="comment">// `i32` 的实现不需要做任何契约推理。
+</span><span class="kw">impl </span>Indexable <span class="kw">for </span>i32 {
+    <span class="kw">const </span>LEN: usize = <span class="number">1</span>;
+
+    <span class="kw">unsafe fn </span>idx_unchecked(<span class="kw-2">&amp;</span><span class="self">self</span>, idx: usize) -&gt; i32 {
+        <span class="macro">debug_assert_eq!</span>(idx, <span class="number">0</span>);
+        <span class="kw-2">*</span><span class="self">self
+    </span>}
+}
+
+<span class="comment">// 数组的实现利用函数契约在切片上使用 `get_unchecked` 并避免运行时检查。
+</span><span class="kw">impl </span>Indexable <span class="kw">for </span>[i32; <span class="number">42</span>] {
+    <span class="kw">const </span>LEN: usize = <span class="number">42</span>;
+
+    <span class="kw">unsafe fn </span>idx_unchecked(<span class="kw-2">&amp;</span><span class="self">self</span>, idx: usize) -&gt; i32 {
+        <span class="comment">// SAFETY: 根据此 trait 的文档，调用者确保 `idx &lt; 42`.
+        </span><span class="kw">unsafe </span>{ <span class="kw-2">*</span><span class="self">self</span>.get_unchecked(idx) }
     }
 }
 
-<span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>];
-<span class="macro">assert_eq!</span>(<span class="ident">a</span>.<span class="ident">three</span>(), <span class="kw-2">&amp;</span><span class="number">8</span>);</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0A%2F%2F%2F%20%E8%BF%99%E4%B8%AA%20trait%20%E7%9A%84%E5%AE%9E%E7%8E%B0%E8%80%85%E5%BF%85%E9%A1%BB%E4%BF%9D%E8%AF%81%E5%85%83%E7%B4%A0%E5%A7%8B%E7%BB%88%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E7%B4%A2%E5%BC%95%203%20%E8%AE%BF%E9%97%AE%E3%80%82%0Aunsafe%20trait%20ThreeIndexable%3CT%3E%20%7B%0A%20%20%20%20%2F%2F%2F%20%E8%BF%94%E5%9B%9E%20%60%26self%60%20%E4%B8%AD%E7%B4%A2%E5%BC%95%E4%B8%BA%203%20%E7%9A%84%E5%85%83%E7%B4%A0%E7%9A%84%E5%BC%95%E7%94%A8%E3%80%82%0A%20%20%20%20fn%20three(%26self)%20-%3E%20%26T%3B%0A%7D%0A%0A%2F%2F%20%60%5BT%3B%204%5D%60%20%E7%9A%84%20%60ThreeIndexable%60%20%E5%AE%9E%E7%8E%B0%E6%98%AF%20%60unsafe%60%EF%BC%8C%E5%9B%A0%E4%B8%BA%E5%AE%9E%E7%8E%B0%E8%80%85%E5%BF%85%E9%A1%BB%E9%81%B5%E5%AE%88%E7%BC%96%E8%AF%91%E5%99%A8%E6%97%A0%E6%B3%95%E6%A3%80%E6%9F%A5%E7%9A%84%E5%A5%91%E7%BA%A6%EF%BC%8C%E4%BD%86%E4%BD%9C%E4%B8%BA%E4%B8%80%E5%90%8D%E7%A8%8B%E5%BA%8F%E5%91%98%EF%BC%8C%E6%88%91%E4%BB%AC%E7%9F%A5%E9%81%93%E5%9C%A8%E7%B4%A2%E5%BC%95%203%20%E5%A4%84%E6%80%BB%E4%BC%9A%E6%9C%89%E4%B8%80%E4%B8%AA%E6%9C%89%E6%95%88%E5%85%83%E7%B4%A0%E8%A6%81%E8%AE%BF%E9%97%AE%E3%80%82%0Aunsafe%20impl%3CT%3E%20ThreeIndexable%3CT%3E%20for%20%5BT%3B%204%5D%20%7B%0A%20%20%20%20fn%20three(%26self)%20-%3E%20%26T%20%7B%0A%20%20%20%20%20%20%20%20%2F%2F%20SAFETY%3A%20%E5%AE%9E%E7%8E%B0%20trait%20%E6%84%8F%E5%91%B3%E7%9D%80%E6%80%BB%E6%98%AF%E6%9C%89%E4%B8%80%E4%B8%AA%E7%B4%A2%E5%BC%95%E4%B8%BA%203%20%E7%9A%84%E5%85%83%E7%B4%A0%E5%8F%AF%E4%BB%A5%E8%AE%BF%E9%97%AE%E3%80%82%0A%20%20%20%20%20%20%20%20unsafe%20%7B%20self.get_unchecked(3)%20%7D%0A%20%20%20%20%7D%0A%7D%0A%0Alet%20a%20%3D%20%5B1%2C%202%2C%204%2C%208%5D%3B%0Aassert_eq!(a.three()%2C%20%268)%3B%0A%7D&amp;edition=2018">Run</a></div>
-</div></details></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="std" data-search-index-js="../search-index1.58.0.js" data-search-js="../search1.58.0.js"></div>
-    <script src="../main1.58.0.js"></script>
-</body></html>
+<span class="comment">// never type 的实现声明长度为 0，这意味着永远不能调用 `idx_unchecked`。
+</span><span class="kw">impl </span>Indexable <span class="kw">for </span>! {
+    <span class="kw">const </span>LEN: usize = <span class="number">0</span>;
+
+    <span class="kw">unsafe fn </span>idx_unchecked(<span class="kw-2">&amp;</span><span class="self">self</span>, idx: usize) -&gt; i32 {
+        <span class="comment">// SAFETY: 根据这个 trait 的文档，调用者确保 `idx &lt; 0`，这是不可能的，所以这是死代码。
+        </span><span class="kw">unsafe </span>{ std::hint::unreachable_unchecked() }
+    }
+}
+
+<span class="kw">fn </span>use_indexable&lt;I: Indexable&gt;(x: I, idx: usize) -&gt; i32 {
+    <span class="kw">if </span>idx &lt; I::LEN {
+        <span class="comment">// SAFETY: 我们已经检查了 `idx &lt; I::LEN`。
+        </span><span class="kw">unsafe </span>{ x.idx_unchecked(idx) }
+    } <span class="kw">else </span>{
+        <span class="macro">panic!</span>(<span class="string">&quot;index out-of-bounds&quot;</span>)
+    }
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Bfeature(never_type)%5D%0A%23!%5Bdeny(unsafe_op_in_unsafe_fn)%5D%0A%0Afn+main()+%7B%0Atrait+Indexable+%7B%0A++++const+LEN:+usize;%0A%0A++++///+%23+Safety%0A++++///+%E8%B0%83%E7%94%A8%E8%80%85%E5%BF%85%E9%A1%BB%E7%A1%AE%E4%BF%9D+%60idx+%3C+LEN%60%E3%80%82%0A++++unsafe+fn+idx_unchecked(%26self,+idx:+usize)+-%3E+i32;%0A%7D%0A%0A//+%60i32%60+%E7%9A%84%E5%AE%9E%E7%8E%B0%E4%B8%8D%E9%9C%80%E8%A6%81%E5%81%9A%E4%BB%BB%E4%BD%95%E5%A5%91%E7%BA%A6%E6%8E%A8%E7%90%86%E3%80%82%0Aimpl+Indexable+for+i32+%7B%0A++++const+LEN:+usize+=+1;%0A%0A++++unsafe+fn+idx_unchecked(%26self,+idx:+usize)+-%3E+i32+%7B%0A++++++++debug_assert_eq!(idx,+0);%0A++++++++*self%0A++++%7D%0A%7D%0A%0A//+%E6%95%B0%E7%BB%84%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%88%A9%E7%94%A8%E5%87%BD%E6%95%B0%E5%A5%91%E7%BA%A6%E5%9C%A8%E5%88%87%E7%89%87%E4%B8%8A%E4%BD%BF%E7%94%A8+%60get_unchecked%60+%E5%B9%B6%E9%81%BF%E5%85%8D%E8%BF%90%E8%A1%8C%E6%97%B6%E6%A3%80%E6%9F%A5%E3%80%82%0Aimpl+Indexable+for+%5Bi32;+42%5D+%7B%0A++++const+LEN:+usize+=+42;%0A%0A++++unsafe+fn+idx_unchecked(%26self,+idx:+usize)+-%3E+i32+%7B%0A++++++++//+SAFETY:+%E6%A0%B9%E6%8D%AE%E6%AD%A4+trait+%E7%9A%84%E6%96%87%E6%A1%A3%EF%BC%8C%E8%B0%83%E7%94%A8%E8%80%85%E7%A1%AE%E4%BF%9D+%60idx+%3C+42%60.%0A++++++++unsafe+%7B+*self.get_unchecked(idx)+%7D%0A++++%7D%0A%7D%0A%0A//+never+type+%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%A3%B0%E6%98%8E%E9%95%BF%E5%BA%A6%E4%B8%BA+0%EF%BC%8C%E8%BF%99%E6%84%8F%E5%91%B3%E7%9D%80%E6%B0%B8%E8%BF%9C%E4%B8%8D%E8%83%BD%E8%B0%83%E7%94%A8+%60idx_unchecked%60%E3%80%82%0Aimpl+Indexable+for+!+%7B%0A++++const+LEN:+usize+=+0;%0A%0A++++unsafe+fn+idx_unchecked(%26self,+idx:+usize)+-%3E+i32+%7B%0A++++++++//+SAFETY:+%E6%A0%B9%E6%8D%AE%E8%BF%99%E4%B8%AA+trait+%E7%9A%84%E6%96%87%E6%A1%A3%EF%BC%8C%E8%B0%83%E7%94%A8%E8%80%85%E7%A1%AE%E4%BF%9D+%60idx+%3C+0%60%EF%BC%8C%E8%BF%99%E6%98%AF%E4%B8%8D%E5%8F%AF%E8%83%BD%E7%9A%84%EF%BC%8C%E6%89%80%E4%BB%A5%E8%BF%99%E6%98%AF%E6%AD%BB%E4%BB%A3%E7%A0%81%E3%80%82%0A++++++++unsafe+%7B+std::hint::unreachable_unchecked()+%7D%0A++++%7D%0A%7D%0A%0Afn+use_indexable%3CI:+Indexable%3E(x:+I,+idx:+usize)+-%3E+i32+%7B%0A++++if+idx+%3C+I::LEN+%7B%0A++++++++//+SAFETY:+%E6%88%91%E4%BB%AC%E5%B7%B2%E7%BB%8F%E6%A3%80%E6%9F%A5%E4%BA%86+%60idx+%3C+I::LEN%60%E3%80%82%0A++++++++unsafe+%7B+x.idx_unchecked(idx)+%7D%0A++++%7D+else+%7B%0A++++++++panic!(%22index+out-of-bounds%22)%0A++++%7D%0A%7D%0A%7D&amp;version=nightly&amp;edition=2021">Run</a></div>
+<p>这一次，<code>use_indexable</code> 是安全的，因为它使用运行时检查来解除 <code>idx_unchecked</code> 的安全保证。
+实现 <code>Indexable</code> 是安全的，因为在编写 <code>idx_unchecked</code> 时，我们不必担心: 我们的<em>callers</em> 需要履行证明义务 (就像 <code>use_indexable</code> 一样)，但 <code>get_unchecked</code> 的*实现 * 没有证明义务可抗衡。
+当然，<code>Indexable</code> 的实现可以选择调用其他不安全的操作，然后它需要一个 <code>unsafe</code> <em>block</em> 来表明它已经解除了被调用者的证明义务。
+(我们启用了 <code>unsafe_op_in_unsafe_fn</code>，因此 <code>idx_unchecked</code> 的主体并不是隐含的不安全块。) 为此，它可以使用所有调用者必须支持的契约 –<code>idx &lt; LEN</code>.</p>
+<p>正式地说，trait 中的 <code>unsafe fn</code> 是一个具有<em>preconditions</em> 的函数，它超出了参数类型 (例如 <code>idx &lt; LEN</code>) 编码的那些，而 <code>unsafe trait</code> 可以声明它的某些函数具有<em>postconditions</em> 超出那些编码在返回类型 (例如返回偶数)。</p>
+<p>如果 trait 需要一个具有额外前置条件和额外后置条件的函数，那么它需要一个 <code>unsafe trait</code> 中的 <code>unsafe fn</code>。</p>
+</div></details></section></div></main></body></html>

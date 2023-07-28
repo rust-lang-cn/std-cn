@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <title>Conditional Compilation</title>
+
+    <link rel="stylesheet" href="../rust.css">
+    <meta name="robots" content="noindex,follow">
+<link rel="icon" href="https://www.rust-lang.org/favicon.ico">
+
+
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    <div id="versioninfo">
+  <img src="https://www.rust-lang.org/logos/rust-logo-32x32-blk.png" width="32" height="32" alt="Rust logo"><br>
+  <span class="white-sticker"><a href="https://www.rust-lang.org">Rust</a> 1.71.0-dev</span><br>
+  <a href="https://github.com/rust-lang/rust/commit/"
+    class="hash white-sticker"></a>
+</div>
+
+
+    <h1 class="title">Conditional Compilation</h1>
+    <p><small>There is a new edition of the book and this is an old link.</small></p>
+<blockquote>
+<p>Sometimes one wants to have different compiler outputs from the same code, depending on build target, such as targeted operating system, or to enable release builds.
+Configuration options are either provided by the compiler or passed in on the command line using.
+Rust code then checks for their presence using the <code>#[cfg(...)]</code> attribute</p>
+</blockquote>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="comment">// The function is only included in the build when compiling for macOS
+</span><span class="attr">#[cfg(target_os = <span class="string">&quot;macos&quot;</span>)]
+</span><span class="kw">fn </span>macos_only() {
+  <span class="comment">// ...
+</span>}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A//+The+function+is+only+included+in+the+build+when+compiling+for+macOS%0Afn+main()+%7B%0A%23%5Bcfg(target_os+=+%22macos%22)%5D%0Afn+macos_only()+%7B%0A++//+...%0A%7D%0A%7D&amp;edition=2015">Run</a></div>
+<hr />
+<p>This particular chapter does not exist in <a href="index.html">the second edition</a>.
+The best place to learn about it is <a href="../reference/conditional-compilation.html">the Rust Reference</a>.</p>
+<ul>
+<li><strong><a href="../reference/conditional-compilation.html">In the Rust Reference: Ch 5 — Conditional Compilation</a></strong></li>
+<li><small><a href="https://doc.rust-lang.org/1.30.0/book/first-edition/conditional-compilation.html">In the first edition: Ch 4.3 — Conditional Compilation</a></small></li>
+</ul>
+
+    <!-- REUSE-IgnoreStart -->
+<footer><p>
+Copyright &copy; 2011 The Rust Project Developers. Licensed under the
+<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>
+or the <a href="https://opensource.org/licenses/MIT">MIT license</a>, at your option.
+</p><p>
+This file may not be copied, modified, or distributed except according to those terms.
+</p></footer>
+<!-- REUSE-IgnoreEnd -->
+
+
+</body>
+</html>

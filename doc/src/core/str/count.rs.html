@@ -1,0 +1,273 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/core/src/str/count.rs`."><title>count.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../source-files1.71.0.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../core/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<a href="#2" id="2">2</a>
+<a href="#3" id="3">3</a>
+<a href="#4" id="4">4</a>
+<a href="#5" id="5">5</a>
+<a href="#6" id="6">6</a>
+<a href="#7" id="7">7</a>
+<a href="#8" id="8">8</a>
+<a href="#9" id="9">9</a>
+<a href="#10" id="10">10</a>
+<a href="#11" id="11">11</a>
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
+<a href="#48" id="48">48</a>
+<a href="#49" id="49">49</a>
+<a href="#50" id="50">50</a>
+<a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! 用于有效计算 UTF-8 编码字符串中的 `char` 数量的代码。
+//!
+//! 广义上讲，UTF-8 将 `char` 编码为一个 &quot;leading&quot; 字节，它以 `char` 开头，后跟一些 (可能为 0) 的连续字节。
+//!
+//! 前导字节可以有多个位模式 (特定的模式指示后面有多少个延续字节)，但连续字节的格式始终为 `0b10XX_XXXX` 格式 (其中 `X` 可以取任何值)。
+//! 也就是说，设置了最高有效位，未设置第二个最高有效位。
+//!
+//! 为了计算字符的数量，我们可以只计算字符串中非连续字节的字节数，这可以很容易地一次计算多个字节。
+//!
+//! Note: 因为术语 &quot;leading byte&quot; 有时可能是模棱两可的 (例如，它也可以指切片的第一个字节)，所以我们经常使用术语 &quot;non-continuation byte&quot; 来指代代码中的这些字节。
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+</span><span class="kw">use </span>core::intrinsics::unlikely;
+
+<span class="kw">const </span>USIZE_SIZE: usize = core::mem::size_of::&lt;usize&gt;();
+<span class="kw">const </span>UNROLL_INNER: usize = <span class="number">4</span>;
+
+<span class="attr">#[inline]
+</span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>count_chars(s: <span class="kw-2">&amp;</span>str) -&gt; usize {
+    <span class="kw">if </span>s.len() &lt; USIZE_SIZE * UNROLL_INNER {
+        <span class="comment">// 避免输入字符串的优化实现，因为差异可能无关紧要，或者可能会更慢。
+        //
+        // 也就是说，除了 &quot;这个值似乎有意义&quot; 之外，没有花太多心思在这个特定的门槛上。
+        //
+        </span>char_count_general_case(s.as_bytes())
+    } <span class="kw">else </span>{
+        do_count_chars(s)
+    }
+}
+
+<span class="kw">fn </span>do_count_chars(s: <span class="kw-2">&amp;</span>str) -&gt; usize {
+    <span class="comment">// 为了正确起见，`CHUNK_SIZE` 必须是:
+    //
+    // - 小于或等于 255，否则我们将在 `counts` 中溢出字节。
+    // - `UNROLL_INNER` 的倍数，否则我们在 `body.chunks(CHUNK_SIZE)` 循环里面的 `break` 是不正确的。
+    //
+    //
+    // 对于性能，`CHUNK_SIZE` 应该是:
+    // - 相对于 `/` 来说相对便宜 (所以一些简单的 2 次方之和)。
+    // - 足够大，可以避免过于频繁地支付 `sum_bytes_in_usize` 的费用。
+    //
+    </span><span class="kw">const </span>CHUNK_SIZE: usize = <span class="number">192</span>;
+
+    <span class="comment">// 检查正确性所需的 `CHUNK_SIZE` 和 `UNROLL_INNER` 的属性。
+    //
+    </span><span class="kw">const _</span>: () = <span class="macro">assert!</span>(CHUNK_SIZE &lt; <span class="number">256</span>);
+    <span class="kw">const _</span>: () = <span class="macro">assert!</span>(CHUNK_SIZE % UNROLL_INNER == <span class="number">0</span>);
+
+    <span class="comment">// SAFETY: 将 `[u8]` 转换为 `[usize]` 是安全的，但 `align_to` 处理的大小差异除外。
+    //
+    </span><span class="kw">let </span>(head, body, tail) = <span class="kw">unsafe </span>{ s.as_bytes().align_to::&lt;usize&gt;() };
+
+    <span class="comment">// 这应该是非常罕见的，并且基本上存在处理 align_to 失败的退化情况 (以及符号对齐模式下的 miri )。
+    //
+    // `unlikely` 有助于阻止 LLVM 内联主体，这很好，因为我们宁愿不将 `char_count_general_case` 函数标记为冷。
+    //
+    //
+    //
+    //
+    </span><span class="kw">if </span>unlikely(body.is_empty() || head.len() &gt; USIZE_SIZE || tail.len() &gt; USIZE_SIZE) {
+        <span class="kw">return </span>char_count_general_case(s.as_bytes());
+    }
+
+    <span class="kw">let </span><span class="kw-2">mut </span>total = char_count_general_case(head) + char_count_general_case(tail);
+    <span class="comment">// 将 `body` 拆分为 `CHUNK_SIZE` 块以减少调用 `sum_bytes_in_usize` 的频率。
+    //
+    </span><span class="kw">for </span>chunk <span class="kw">in </span>body.chunks(CHUNK_SIZE) {
+        <span class="comment">// 我们在 `counts` 中累积中间和，其中每个字节包含这个块的总和的子集，就像 `[u8; size_of::&lt;usize&gt;()]`。
+        //
+        </span><span class="kw">let </span><span class="kw-2">mut </span>counts = <span class="number">0</span>;
+
+        <span class="kw">let </span>(unrolled_chunks, remainder) = chunk.as_chunks::&lt;UNROLL_INNER&gt;();
+        <span class="kw">for </span>unrolled <span class="kw">in </span>unrolled_chunks {
+            <span class="kw">for </span><span class="kw-2">&amp;</span>word <span class="kw">in </span>unrolled {
+                <span class="comment">// 因为 `CHUNK_SIZE` &lt; 256，所以这个加法不会导致任何字节中的计数溢出到后续字节中。
+                //
+                </span>counts += contains_non_continuation_byte(word);
+            }
+        }
+
+        <span class="comment">// 对 `counts` 中的值求和 (同样，它在概念上是一个 `[u8;
+        // size_of::&lt;usize&gt;()]`)，并将结果累加到 `total` 中。
+        </span>total += sum_bytes_in_usize(counts);
+
+        <span class="comment">// 如果 `remainder` 中有数据，则进行处理。
+        // 这只会发生在 `body.chunks()` 中的最后一个 `chunk` 上 (因为 `CHUNK_SIZE` 可以被 `UNROLL_INNER` 整除)，所以我们在最后显式中断 (这似乎有助于 LLVM)。
+        //
+        //
+        </span><span class="kw">if </span>!remainder.is_empty() {
+            <span class="comment">// 将余数中的所有数据累加。
+            </span><span class="kw">let </span><span class="kw-2">mut </span>counts = <span class="number">0</span>;
+            <span class="kw">for </span><span class="kw-2">&amp;</span>word <span class="kw">in </span>remainder {
+                counts += contains_non_continuation_byte(word);
+            }
+            total += sum_bytes_in_usize(counts);
+            <span class="kw">break</span>;
+        }
+    }
+    total
+}
+
+<span class="comment">// 检查 `w` 的每个字节以查看它是否包含 UTF-8 序列中的第一个字节。
+// `w` 中作为连续字节的字节保留为 `0x00` (例如
+// false)，非连续字节的字节保留为 `0x01` (例如 true)
+//
+</span><span class="attr">#[inline]
+</span><span class="kw">fn </span>contains_non_continuation_byte(w: usize) -&gt; usize {
+    <span class="kw">const </span>LSB: usize = usize::repeat_u8(<span class="number">0x01</span>);
+    ((!w &gt;&gt; <span class="number">7</span>) | (w &gt;&gt; <span class="number">6</span>)) &amp; LSB
+}
+
+<span class="comment">// 道德上相当于 `values.to_ne_bytes().into_iter().sum::&lt;usize&gt;()`，但效率更高。
+//
+</span><span class="attr">#[inline]
+</span><span class="kw">fn </span>sum_bytes_in_usize(values: usize) -&gt; usize {
+    <span class="kw">const </span>LSB_SHORTS: usize = usize::repeat_u16(<span class="number">0x0001</span>);
+    <span class="kw">const </span>SKIP_BYTES: usize = usize::repeat_u16(<span class="number">0x00ff</span>);
+
+    <span class="kw">let </span>pair_sum: usize = (values &amp; SKIP_BYTES) + ((values &gt;&gt; <span class="number">8</span>) &amp; SKIP_BYTES);
+    pair_sum.wrapping_mul(LSB_SHORTS) &gt;&gt; ((USIZE_SIZE - <span class="number">2</span>) * <span class="number">8</span>)
+}
+
+<span class="comment">// 这是 &quot;count the number of bytes in the string which are not continuation bytes&quot; 概念最直接的实现，用于输入字符串的首尾 (`slice::align_to` 返回的元组中的第一个和最后一个项)。
+//
+//
+//
+</span><span class="kw">fn </span>char_count_general_case(s: <span class="kw-2">&amp;</span>[u8]) -&gt; usize {
+    s.iter().filter(|&amp;&amp;byte| !<span class="kw">super</span>::validations::utf8_is_cont_byte(byte)).count()
+}
+</code></pre></div></section></main></body></html>

@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Lazy","在首次访问时初始化的值。"],["OnceCell","一个 cell 只能写入一次。"],["SyncLazy","在首次访问时初始化的值。"],["SyncOnceCell","只能写入一次的同步原语。"]]});

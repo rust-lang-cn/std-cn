@@ -1,0 +1,342 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Macro Expansions - Clippy Documentation</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="../configuration.html"><strong aria-hidden="true">3.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lint_configuration.html"><strong aria-hidden="true">3.1.</strong> Lint Configuration</a></li></ol></li><li class="chapter-item expanded "><a href="../lints.html"><strong aria-hidden="true">4.</strong> Clippy's Lints</a></li><li class="chapter-item expanded "><a href="../continuous_integration/index.html"><strong aria-hidden="true">5.</strong> Continuous Integration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../continuous_integration/github_actions.html"><strong aria-hidden="true">5.1.</strong> GitHub Actions</a></li><li class="chapter-item expanded "><a href="../continuous_integration/travis.html"><strong aria-hidden="true">5.2.</strong> Travis CI</a></li></ol></li><li class="chapter-item expanded "><a href="../development/index.html"><strong aria-hidden="true">6.</strong> Development</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../development/basics.html"><strong aria-hidden="true">6.1.</strong> Basics</a></li><li class="chapter-item expanded "><a href="../development/adding_lints.html"><strong aria-hidden="true">6.2.</strong> Adding Lints</a></li><li class="chapter-item expanded "><a href="../development/lint_passes.html"><strong aria-hidden="true">6.3.</strong> Lint Passes</a></li><li class="chapter-item expanded "><a href="../development/type_checking.html"><strong aria-hidden="true">6.4.</strong> Type Checking</a></li><li class="chapter-item expanded "><a href="../development/macro_expansions.html" class="active"><strong aria-hidden="true">6.5.</strong> Macro Expansions</a></li><li class="chapter-item expanded "><a href="../development/common_tools_writing_lints.html"><strong aria-hidden="true">6.6.</strong> Common Tools</a></li><li class="chapter-item expanded "><a href="../development/infrastructure/index.html"><strong aria-hidden="true">6.7.</strong> Infrastructure</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../development/infrastructure/sync.html"><strong aria-hidden="true">6.7.1.</strong> Syncing changes between Clippy and rust-lang/rust</a></li><li class="chapter-item expanded "><a href="../development/infrastructure/backport.html"><strong aria-hidden="true">6.7.2.</strong> Backporting Changes</a></li><li class="chapter-item expanded "><a href="../development/infrastructure/changelog_update.html"><strong aria-hidden="true">6.7.3.</strong> Updating the Changelog</a></li><li class="chapter-item expanded "><a href="../development/infrastructure/release.html"><strong aria-hidden="true">6.7.4.</strong> Release a New Version</a></li><li class="chapter-item expanded "><a href="../development/infrastructure/book.html"><strong aria-hidden="true">6.7.5.</strong> The Clippy Book</a></li></ol></li><li class="chapter-item expanded "><a href="../development/proposals/index.html"><strong aria-hidden="true">6.8.</strong> Proposals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../development/proposals/roadmap-2021.html"><strong aria-hidden="true">6.8.1.</strong> Roadmap 2021</a></li><li class="chapter-item expanded "><a href="../development/proposals/syntax-tree-patterns.html"><strong aria-hidden="true">6.8.2.</strong> Syntax Tree Patterns</a></li></ol></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Clippy Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust-clippy/tree/master/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust-clippy/edit/master/book/src/development/macro_expansions.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="dealing-with-macros-and-expansions"><a class="header" href="#dealing-with-macros-and-expansions">Dealing with macros and expansions</a></h1>
+<p>Sometimes we might encounter Rust macro expansions while working with Clippy.
+While macro expansions are not as dramatic and profound as the expansion
+of our universe, they can certainly bring chaos to the orderly world
+of code and logic.</p>
+<p>The general rule of thumb is that we should ignore code with macro
+expansions when working with Clippy because the code can be dynamic
+in ways that are difficult or impossible for us to foresee.</p>
+<h2 id="false-positives"><a class="header" href="#false-positives">False Positives</a></h2>
+<p>What exactly do we mean by <em>dynamic in ways that are difficult to foresee</em>?</p>
+<p>Macros are <a href="https://rustc-dev-guide.rust-lang.org/macro-expansion.html#expansion-and-ast-integration">expanded</a> in the <code>EarlyLintPass</code> level,
+so the Abstract Syntax Tree (AST) is generated in place of macros.
+This means the code which we work with in Clippy is already expanded.</p>
+<p>If we wrote a new lint, there is a possibility that the lint is
+triggered in macro-generated code. Since this expanded macro code
+is not written by the macro's user but really by the macro's author,
+the user cannot and should not be responsible for fixing the issue
+that triggers the lint.</p>
+<p>Besides, a <a href="https://doc.rust-lang.org/stable/nightly-rustc/rustc_span/struct.Span.html">Span</a> in a macro can be changed by the macro author.
+Therefore, any lint check related to lines or columns should be
+avoided since they might be changed at any time and become unreliable
+or incorrect information.</p>
+<p>Because of these unforeseeable or unstable behaviors, macro expansion
+should often not be regarded as a part of the stable API.
+This is also why most lints check if they are inside a macro or not
+before emitting suggestions to the end user to avoid false positives.</p>
+<h2 id="how-to-work-with-macros"><a class="header" href="#how-to-work-with-macros">How to Work with Macros</a></h2>
+<p>Several functions are available for working with macros.</p>
+<h3 id="the-spanfrom_expansion-method"><a class="header" href="#the-spanfrom_expansion-method">The <code>Span.from_expansion</code> method</a></h3>
+<p>We could utilize a <code>span</code>'s <a href="https://doc.rust-lang.org/stable/nightly-rustc/rustc_span/struct.Span.html#method.from_expansion"><code>from_expansion</code></a> method, which
+detects if the <code>span</code> is from a macro expansion / desugaring.
+This is a very common first step in a lint:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if expr.span.from_expansion() {
+    // We most likely want to ignore it.
+    return;
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="spanctxt-method"><a class="header" href="#spanctxt-method"><code>Span.ctxt</code> method</a></h3>
+<p>The <code>span</code>'s context, given by the method <a href="https://doc.rust-lang.org/stable/nightly-rustc/rustc_span/struct.Span.html#method.ctxt"><code>ctxt</code></a> and returning <a href="https://doc.rust-lang.org/stable/nightly-rustc/rustc_span/hygiene/struct.SyntaxContext.html">SpanContext</a>,
+represents if the span is from a macro expansion and, if it is, which
+macro call expanded this span.</p>
+<p>Sometimes, it is useful to check if the context of two spans are equal.
+For instance, suppose we have the following line of code that would
+expand into <code>1 + 0</code>:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// The following code expands to `1 + 0` for both `EarlyLintPass` and `LateLintPass`
+1 + mac!()
+<span class="boring">}</span></code></pre></pre>
+<p>Assuming that we'd collect the <code>1</code> expression as a variable <code>left</code> and the
+<code>0</code>/<code>mac!()</code> expression as a variable <code>right</code>, we can simply compare their
+contexts. If the context is different, then we most likely are dealing with a
+macro expansion and should just ignore it:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if left.span.ctxt() != right.span.ctxt() {
+    // The code author most likely cannot modify this expression
+    return;
+}
+<span class="boring">}</span></code></pre></pre>
+<blockquote>
+<p><strong>Note</strong>: Code that is not from expansion is in the &quot;root&quot; context.
+So any spans whose <code>from_expansion</code> returns <code>false</code> can be assumed
+to have the same context. Because of this, using <code>span.from_expansion()</code>
+is often sufficient.</p>
+</blockquote>
+<p>Going a bit deeper, in a simple expression such as <code>a == b</code>,
+<code>a</code> and <code>b</code> have the same context.
+However, in a <code>macro_rules!</code> with <code>a == $b</code>, <code>$b</code> is expanded to
+an expression that contains a different context from <code>a</code>.</p>
+<p>Take a look at the following macro <code>m</code>:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! m {
+    ($a:expr, $b:expr) =&gt; {
+        if $a.is_some() {
+            $b;
+        }
+    }
+}
+
+let x: Option&lt;u32&gt; = Some(42);
+m!(x, x.unwrap());
+<span class="boring">}</span></code></pre></pre>
+<p>If the <code>m!(x, x.unwrapp());</code> line is expanded, we would get two expanded
+expressions:</p>
+<ul>
+<li><code>x.is_some()</code> (from the <code>$a.is_some()</code> line in the <code>m</code> macro)</li>
+<li><code>x.unwrap()</code> (corresponding to <code>$b</code> in the <code>m</code> macro)</li>
+</ul>
+<p>Suppose <code>x.is_some()</code> expression's span is associated with the <code>x_is_some_span</code> variable
+and <code>x.unwrap()</code> expression's span is associated with <code>x_unwrap_span</code> variable,
+we could assume that these two spans do not share the same context:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// x.is_some() is from inside the macro
+// x.unwrap() is from outside the macro
+assert_ne!(x_is_some_span.ctxt(), x_unwrap_span.ctxt());
+<span class="boring">}</span></code></pre></pre>
+<h3 id="the-in_external_macro-function"><a class="header" href="#the-in_external_macro-function">The <code>in_external_macro</code> function</a></h3>
+<p><code>rustc_middle::lint</code> provides a function (<a href="https://doc.rust-lang.org/stable/nightly-rustc/rustc_middle/lint/fn.in_external_macro.html"><code>in_external_macro</code></a>) that can
+detect if the given span is from a macro defined in a foreign crate.</p>
+<p>Therefore, if we really want a new lint to work with macro-generated code,
+this is the next line of defense to avoid macros not defined inside
+the current crate since it is unfair to the user if Clippy lints code
+which the user cannot change.</p>
+<p>For example, assume we have the following code that is being examined
+by Clippy:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[macro_use]
+extern crate a_foreign_crate_with_macros;
+
+// `foo` macro is defined in `a_foreign_crate_with_macros`
+foo!(&quot;bar&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p>Also assume that we get the corresponding variable <code>foo_span</code> for the
+<code>foo</code> macro call, we could decide not to lint if <code>in_external_macro</code>
+results in <code>true</code> (note that <code>cx</code> can be <code>EarlyContext</code> or <code>LateContext</code>):</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if in_external_macro(cx.sess(), foo_span) {
+    // We should ignore macro from a foreign crate.
+    return;
+}
+<span class="boring">}</span></code></pre></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../development/type_checking.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../development/common_tools_writing_lints.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../development/type_checking.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../development/common_tools_writing_lints.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace.js"></script>
+        <script src="../editor.js"></script>
+        <script src="../mode-rust.js"></script>
+        <script src="../theme-dawn.js"></script>
+        <script src="../theme-tomorrow_night.js"></script>
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

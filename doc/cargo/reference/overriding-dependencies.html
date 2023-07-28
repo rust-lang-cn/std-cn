@@ -1,0 +1,496 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Overriding Dependencies - The Cargo Book</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+            dd {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/first-steps.html"><strong aria-hidden="true">1.2.</strong> First Steps with Cargo</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Cargo Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-cargo-exists.html"><strong aria-hidden="true">2.1.</strong> Why Cargo Exists</a></li><li class="chapter-item expanded "><a href="../guide/creating-a-new-project.html"><strong aria-hidden="true">2.2.</strong> Creating a New Package</a></li><li class="chapter-item expanded "><a href="../guide/working-on-an-existing-project.html"><strong aria-hidden="true">2.3.</strong> Working on an Existing Package</a></li><li class="chapter-item expanded "><a href="../guide/dependencies.html"><strong aria-hidden="true">2.4.</strong> Dependencies</a></li><li class="chapter-item expanded "><a href="../guide/project-layout.html"><strong aria-hidden="true">2.5.</strong> Package Layout</a></li><li class="chapter-item expanded "><a href="../guide/cargo-toml-vs-cargo-lock.html"><strong aria-hidden="true">2.6.</strong> Cargo.toml vs Cargo.lock</a></li><li class="chapter-item expanded "><a href="../guide/tests.html"><strong aria-hidden="true">2.7.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../guide/continuous-integration.html"><strong aria-hidden="true">2.8.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../guide/cargo-home.html"><strong aria-hidden="true">2.9.</strong> Cargo Home</a></li><li class="chapter-item expanded "><a href="../guide/build-cache.html"><strong aria-hidden="true">2.10.</strong> Build Cache</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">3.</strong> Cargo Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/specifying-dependencies.html"><strong aria-hidden="true">3.1.</strong> Specifying Dependencies</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/overriding-dependencies.html" class="active"><strong aria-hidden="true">3.1.1.</strong> Overriding Dependencies</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/manifest.html"><strong aria-hidden="true">3.2.</strong> The Manifest Format</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/cargo-targets.html"><strong aria-hidden="true">3.2.1.</strong> Cargo Targets</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/workspaces.html"><strong aria-hidden="true">3.3.</strong> Workspaces</a></li><li class="chapter-item expanded "><a href="../reference/features.html"><strong aria-hidden="true">3.4.</strong> Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/features-examples.html"><strong aria-hidden="true">3.4.1.</strong> Features Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/profiles.html"><strong aria-hidden="true">3.5.</strong> Profiles</a></li><li class="chapter-item expanded "><a href="../reference/config.html"><strong aria-hidden="true">3.6.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../reference/environment-variables.html"><strong aria-hidden="true">3.7.</strong> Environment Variables</a></li><li class="chapter-item expanded "><a href="../reference/build-scripts.html"><strong aria-hidden="true">3.8.</strong> Build Scripts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/build-script-examples.html"><strong aria-hidden="true">3.8.1.</strong> Build Script Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/publishing.html"><strong aria-hidden="true">3.9.</strong> Publishing on crates.io</a></li><li class="chapter-item expanded "><a href="../reference/pkgid-spec.html"><strong aria-hidden="true">3.10.</strong> Package ID Specifications</a></li><li class="chapter-item expanded "><a href="../reference/source-replacement.html"><strong aria-hidden="true">3.11.</strong> Source Replacement</a></li><li class="chapter-item expanded "><a href="../reference/external-tools.html"><strong aria-hidden="true">3.12.</strong> External Tools</a></li><li class="chapter-item expanded "><a href="../reference/registries.html"><strong aria-hidden="true">3.13.</strong> Registries</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/running-a-registry.html"><strong aria-hidden="true">3.13.1.</strong> Running a Registry</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/registry-index.html"><strong aria-hidden="true">3.13.1.1.</strong> Registry Index</a></li><li class="chapter-item expanded "><a href="../reference/registry-web-api.html"><strong aria-hidden="true">3.13.1.2.</strong> Registry Web API</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../reference/resolver.html"><strong aria-hidden="true">3.14.</strong> Dependency Resolution</a></li><li class="chapter-item expanded "><a href="../reference/semver.html"><strong aria-hidden="true">3.15.</strong> SemVer Compatibility</a></li><li class="chapter-item expanded "><a href="../reference/future-incompat-report.html"><strong aria-hidden="true">3.16.</strong> Future incompat report</a></li><li class="chapter-item expanded "><a href="../reference/timings.html"><strong aria-hidden="true">3.17.</strong> Reporting build timings</a></li><li class="chapter-item expanded "><a href="../reference/unstable.html"><strong aria-hidden="true">3.18.</strong> Unstable Features</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/index.html"><strong aria-hidden="true">4.</strong> Cargo Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/general-commands.html"><strong aria-hidden="true">4.1.</strong> General Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo.html"><strong aria-hidden="true">4.1.1.</strong> cargo</a></li><li class="chapter-item expanded "><a href="../commands/cargo-help.html"><strong aria-hidden="true">4.1.2.</strong> cargo help</a></li><li class="chapter-item expanded "><a href="../commands/cargo-version.html"><strong aria-hidden="true">4.1.3.</strong> cargo version</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/build-commands.html"><strong aria-hidden="true">4.2.</strong> Build Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-bench.html"><strong aria-hidden="true">4.2.1.</strong> cargo bench</a></li><li class="chapter-item expanded "><a href="../commands/cargo-build.html"><strong aria-hidden="true">4.2.2.</strong> cargo build</a></li><li class="chapter-item expanded "><a href="../commands/cargo-check.html"><strong aria-hidden="true">4.2.3.</strong> cargo check</a></li><li class="chapter-item expanded "><a href="../commands/cargo-clean.html"><strong aria-hidden="true">4.2.4.</strong> cargo clean</a></li><li class="chapter-item expanded "><a href="../commands/cargo-doc.html"><strong aria-hidden="true">4.2.5.</strong> cargo doc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fetch.html"><strong aria-hidden="true">4.2.6.</strong> cargo fetch</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fix.html"><strong aria-hidden="true">4.2.7.</strong> cargo fix</a></li><li class="chapter-item expanded "><a href="../commands/cargo-run.html"><strong aria-hidden="true">4.2.8.</strong> cargo run</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustc.html"><strong aria-hidden="true">4.2.9.</strong> cargo rustc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustdoc.html"><strong aria-hidden="true">4.2.10.</strong> cargo rustdoc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-test.html"><strong aria-hidden="true">4.2.11.</strong> cargo test</a></li><li class="chapter-item expanded "><a href="../commands/cargo-report.html"><strong aria-hidden="true">4.2.12.</strong> cargo report</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/manifest-commands.html"><strong aria-hidden="true">4.3.</strong> Manifest Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-add.html"><strong aria-hidden="true">4.3.1.</strong> cargo add</a></li><li class="chapter-item expanded "><a href="../commands/cargo-generate-lockfile.html"><strong aria-hidden="true">4.3.2.</strong> cargo generate-lockfile</a></li><li class="chapter-item expanded "><a href="../commands/cargo-locate-project.html"><strong aria-hidden="true">4.3.3.</strong> cargo locate-project</a></li><li class="chapter-item expanded "><a href="../commands/cargo-metadata.html"><strong aria-hidden="true">4.3.4.</strong> cargo metadata</a></li><li class="chapter-item expanded "><a href="../commands/cargo-pkgid.html"><strong aria-hidden="true">4.3.5.</strong> cargo pkgid</a></li><li class="chapter-item expanded "><a href="../commands/cargo-remove.html"><strong aria-hidden="true">4.3.6.</strong> cargo remove</a></li><li class="chapter-item expanded "><a href="../commands/cargo-tree.html"><strong aria-hidden="true">4.3.7.</strong> cargo tree</a></li><li class="chapter-item expanded "><a href="../commands/cargo-update.html"><strong aria-hidden="true">4.3.8.</strong> cargo update</a></li><li class="chapter-item expanded "><a href="../commands/cargo-vendor.html"><strong aria-hidden="true">4.3.9.</strong> cargo vendor</a></li><li class="chapter-item expanded "><a href="../commands/cargo-verify-project.html"><strong aria-hidden="true">4.3.10.</strong> cargo verify-project</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/package-commands.html"><strong aria-hidden="true">4.4.</strong> Package Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-init.html"><strong aria-hidden="true">4.4.1.</strong> cargo init</a></li><li class="chapter-item expanded "><a href="../commands/cargo-install.html"><strong aria-hidden="true">4.4.2.</strong> cargo install</a></li><li class="chapter-item expanded "><a href="../commands/cargo-new.html"><strong aria-hidden="true">4.4.3.</strong> cargo new</a></li><li class="chapter-item expanded "><a href="../commands/cargo-search.html"><strong aria-hidden="true">4.4.4.</strong> cargo search</a></li><li class="chapter-item expanded "><a href="../commands/cargo-uninstall.html"><strong aria-hidden="true">4.4.5.</strong> cargo uninstall</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/publishing-commands.html"><strong aria-hidden="true">4.5.</strong> Publishing Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-login.html"><strong aria-hidden="true">4.5.1.</strong> cargo login</a></li><li class="chapter-item expanded "><a href="../commands/cargo-logout.html"><strong aria-hidden="true">4.5.2.</strong> cargo logout</a></li><li class="chapter-item expanded "><a href="../commands/cargo-owner.html"><strong aria-hidden="true">4.5.3.</strong> cargo owner</a></li><li class="chapter-item expanded "><a href="../commands/cargo-package.html"><strong aria-hidden="true">4.5.4.</strong> cargo package</a></li><li class="chapter-item expanded "><a href="../commands/cargo-publish.html"><strong aria-hidden="true">4.5.5.</strong> cargo publish</a></li><li class="chapter-item expanded "><a href="../commands/cargo-yank.html"><strong aria-hidden="true">4.5.6.</strong> cargo yank</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">5.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">6.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/git-authentication.html"><strong aria-hidden="true">7.</strong> Appendix: Git Authentication</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Cargo Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/tree/master/src/doc/src" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/edit/master/src/doc/src/reference/overriding-dependencies.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="overriding-dependencies"><a class="header" href="#overriding-dependencies">Overriding Dependencies</a></h2>
+<p>The desire to override a dependency can arise through a number of scenarios.
+Most of them, however, boil down to the ability to work with a crate before
+it’s been published to <a href="https://crates.io/">crates.io</a>. For example:</p>
+<ul>
+<li>A crate you’re working on is also used in a much larger application you’re
+working on, and you’d like to test a bug fix to the library inside of the
+larger application.</li>
+<li>An upstream crate you don’t work on has a new feature or a bug fix on the
+master branch of its git repository which you’d like to test out.</li>
+<li>You’re about to publish a new major version of your crate, but you’d like to
+do integration testing across an entire package to ensure the new major
+version works.</li>
+<li>You’ve submitted a fix to an upstream crate for a bug you found, but you’d
+like to immediately have your application start depending on the fixed
+version of the crate to avoid blocking on the bug fix getting merged.</li>
+</ul>
+<p>These scenarios can be solved with the <a href="#the-patch-section"><code>[patch]</code> manifest
+section</a>.</p>
+<p>This chapter walks through a few different use cases, and includes details
+on the different ways to override a dependency.</p>
+<ul>
+<li>Example use cases
+<ul>
+<li><a href="#testing-a-bugfix">Testing a bugfix</a></li>
+<li><a href="#working-with-an-unpublished-minor-version">Working with an unpublished minor version</a>
+<ul>
+<li><a href="#overriding-repository-url">Overriding repository URL</a></li>
+</ul>
+</li>
+<li><a href="#prepublishing-a-breaking-change">Prepublishing a breaking change</a></li>
+<li><a href="#using-patch-with-multiple-versions">Using <code>[patch]</code> with multiple versions</a></li>
+</ul>
+</li>
+<li>Reference
+<ul>
+<li><a href="#the-patch-section">The <code>[patch]</code> section</a></li>
+<li><a href="#the-replace-section">The <code>[replace]</code> section</a></li>
+<li><a href="#paths-overrides"><code>paths</code> overrides</a></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>Note</strong>: See also specifying a dependency with <a href="specifying-dependencies.html#multiple-locations">multiple locations</a>, which
+can be used to override the source for a single dependency declaration in a
+local package.</p>
+</blockquote>
+<h3 id="testing-a-bugfix"><a class="header" href="#testing-a-bugfix">Testing a bugfix</a></h3>
+<p>Let’s say you’re working with the <a href="https://crates.io/crates/uuid"><code>uuid</code> crate</a> but while you’re working on it
+you discover a bug. You are, however, quite enterprising so you decide to also
+try to fix the bug! Originally your manifest will look like:</p>
+<pre><code class="language-toml">[package]
+name = &quot;my-library&quot;
+version = &quot;0.1.0&quot;
+
+[dependencies]
+uuid = &quot;1.0&quot;
+</code></pre>
+<p>First thing we’ll do is to clone the <a href="https://github.com/uuid-rs/uuid"><code>uuid</code> repository</a>
+locally via:</p>
+<pre><code class="language-console">$ git clone https://github.com/uuid-rs/uuid.git
+</code></pre>
+<p>Next we’ll edit the manifest of <code>my-library</code> to contain:</p>
+<pre><code class="language-toml">[patch.crates-io]
+uuid = { path = &quot;../path/to/uuid&quot; }
+</code></pre>
+<p>Here we declare that we’re <em>patching</em> the source <code>crates-io</code> with a new
+dependency. This will effectively add the local checked out version of <code>uuid</code> to
+the crates.io registry for our local package.</p>
+<p>Next up we need to ensure that our lock file is updated to use this new version
+of <code>uuid</code> so our package uses the locally checked out copy instead of one from
+crates.io. The way <code>[patch]</code> works is that it’ll load the dependency at
+<code>../path/to/uuid</code> and then whenever crates.io is queried for versions of <code>uuid</code>
+it’ll <em>also</em> return the local version.</p>
+<p>This means that the version number of the local checkout is significant and will
+affect whether the patch is used. Our manifest declared <code>uuid = &quot;1.0&quot;</code> which
+means we’ll only resolve to <code>&gt;= 1.0.0, &lt; 2.0.0</code>, and Cargo’s greedy resolution
+algorithm also means that we’ll resolve to the maximum version within that
+range. Typically this doesn’t matter as the version of the git repository will
+already be greater or match the maximum version published on crates.io, but it’s
+important to keep this in mind!</p>
+<p>In any case, typically all you need to do now is:</p>
+<pre><code class="language-console">$ cargo build
+   Compiling uuid v1.0.0 (.../uuid)
+   Compiling my-library v0.1.0 (.../my-library)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
+</code></pre>
+<p>And that’s it! You’re now building with the local version of <code>uuid</code> (note the
+path in parentheses in the build output). If you don’t see the local path version getting
+built then you may need to run <code>cargo update -p uuid --precise $version</code> where
+<code>$version</code> is the version of the locally checked out copy of <code>uuid</code>.</p>
+<p>Once you’ve fixed the bug you originally found the next thing you’ll want to do
+is to likely submit that as a pull request to the <code>uuid</code> crate itself. Once
+you’ve done this then you can also update the <code>[patch]</code> section. The listing
+inside of <code>[patch]</code> is just like the <code>[dependencies]</code> section, so once your pull
+request is merged you could change your <code>path</code> dependency to:</p>
+<pre><code class="language-toml">[patch.crates-io]
+uuid = { git = 'https://github.com/uuid-rs/uuid.git' }
+</code></pre>
+<h3 id="working-with-an-unpublished-minor-version"><a class="header" href="#working-with-an-unpublished-minor-version">Working with an unpublished minor version</a></h3>
+<p>Let’s now shift gears a bit from bug fixes to adding features. While working on
+<code>my-library</code> you discover that a whole new feature is needed in the <code>uuid</code>
+crate. You’ve implemented this feature, tested it locally above with <code>[patch]</code>,
+and submitted a pull request. Let’s go over how you continue to use and test it
+before it’s actually published.</p>
+<p>Let’s also say that the current version of <code>uuid</code> on crates.io is <code>1.0.0</code>, but
+since then the master branch of the git repository has updated to <code>1.0.1</code>. This
+branch includes your new feature you submitted previously. To use this
+repository we’ll edit our <code>Cargo.toml</code> to look like</p>
+<pre><code class="language-toml">[package]
+name = &quot;my-library&quot;
+version = &quot;0.1.0&quot;
+
+[dependencies]
+uuid = &quot;1.0.1&quot;
+
+[patch.crates-io]
+uuid = { git = 'https://github.com/uuid-rs/uuid.git' }
+</code></pre>
+<p>Note that our local dependency on <code>uuid</code> has been updated to <code>1.0.1</code> as it’s
+what we’ll actually require once the crate is published. This version doesn’t
+exist on crates.io, though, so we provide it with the <code>[patch]</code> section of the
+manifest.</p>
+<p>Now when our library is built it’ll fetch <code>uuid</code> from the git repository and
+resolve to 1.0.1 inside the repository instead of trying to download a version
+from crates.io. Once 1.0.1 is published on crates.io the <code>[patch]</code> section can
+be deleted.</p>
+<p>It’s also worth noting that <code>[patch]</code> applies <em>transitively</em>. Let’s say you use
+<code>my-library</code> in a larger package, such as:</p>
+<pre><code class="language-toml">[package]
+name = &quot;my-binary&quot;
+version = &quot;0.1.0&quot;
+
+[dependencies]
+my-library = { git = 'https://example.com/git/my-library' }
+uuid = &quot;1.0&quot;
+
+[patch.crates-io]
+uuid = { git = 'https://github.com/uuid-rs/uuid.git' }
+</code></pre>
+<p>Remember that <code>[patch]</code> is applicable <em>transitively</em> but can only be defined at
+the <em>top level</em> so we consumers of <code>my-library</code> have to repeat the <code>[patch]</code> section
+if necessary. Here, though, the new <code>uuid</code> crate applies to <em>both</em> our dependency on
+<code>uuid</code> and the <code>my-library -&gt; uuid</code> dependency. The <code>uuid</code> crate will be resolved to
+one version for this entire crate graph, 1.0.1, and it’ll be pulled from the git
+repository.</p>
+<h4 id="overriding-repository-url"><a class="header" href="#overriding-repository-url">Overriding repository URL</a></h4>
+<p>In case the dependency you want to override isn’t loaded from <code>crates.io</code>,
+you’ll have to change a bit how you use <code>[patch]</code>. For example, if the
+dependency is a git dependency, you can override it to a local path with:</p>
+<pre><code class="language-toml">[patch.&quot;https://github.com/your/repository&quot;]
+my-library = { path = &quot;../my-library/path&quot; }
+</code></pre>
+<p>And that’s it!</p>
+<h3 id="prepublishing-a-breaking-change"><a class="header" href="#prepublishing-a-breaking-change">Prepublishing a breaking change</a></h3>
+<p>Let’s take a look at working with a new major version of a crate, typically
+accompanied with breaking changes. Sticking with our previous crates, this
+means that we’re going to be creating version 2.0.0 of the <code>uuid</code> crate. After
+we’ve submitted all changes upstream we can update our manifest for
+<code>my-library</code> to look like:</p>
+<pre><code class="language-toml">[dependencies]
+uuid = &quot;2.0&quot;
+
+[patch.crates-io]
+uuid = { git = &quot;https://github.com/uuid-rs/uuid.git&quot;, branch = &quot;2.0.0&quot; }
+</code></pre>
+<p>And that’s it! Like with the previous example the 2.0.0 version doesn’t actually
+exist on crates.io but we can still put it in through a git dependency through
+the usage of the <code>[patch]</code> section. As a thought exercise let’s take another
+look at the <code>my-binary</code> manifest from above again as well:</p>
+<pre><code class="language-toml">[package]
+name = &quot;my-binary&quot;
+version = &quot;0.1.0&quot;
+
+[dependencies]
+my-library = { git = 'https://example.com/git/my-library' }
+uuid = &quot;1.0&quot;
+
+[patch.crates-io]
+uuid = { git = 'https://github.com/uuid-rs/uuid.git', branch = '2.0.0' }
+</code></pre>
+<p>Note that this will actually resolve to two versions of the <code>uuid</code> crate. The
+<code>my-binary</code> crate will continue to use the 1.x.y series of the <code>uuid</code> crate but
+the <code>my-library</code> crate will use the <code>2.0.0</code> version of <code>uuid</code>. This will allow you
+to gradually roll out breaking changes to a crate through a dependency graph
+without being forced to update everything all at once.</p>
+<h3 id="using-patch-with-multiple-versions"><a class="header" href="#using-patch-with-multiple-versions">Using <code>[patch]</code> with multiple versions</a></h3>
+<p>You can patch in multiple versions of the same crate with the <code>package</code> key
+used to rename dependencies. For example let’s say that the <code>serde</code> crate has
+a bugfix that we’d like to use to its <code>1.*</code> series but we’d also like to
+prototype using a <code>2.0.0</code> version of serde we have in our git repository. To
+configure this we’d do:</p>
+<pre><code class="language-toml">[patch.crates-io]
+serde = { git = 'https://github.com/serde-rs/serde.git' }
+serde2 = { git = 'https://github.com/example/serde.git', package = 'serde', branch = 'v2' }
+</code></pre>
+<p>The first <code>serde = ...</code> directive indicates that serde <code>1.*</code> should be used
+from the git repository (pulling in the bugfix we need) and the second <code>serde2 = ...</code> directive indicates that the <code>serde</code> package should also be pulled from
+the <code>v2</code> branch of <code>https://github.com/example/serde</code>. We’re assuming here
+that <code>Cargo.toml</code> on that branch mentions version <code>2.0.0</code>.</p>
+<p>Note that when using the <code>package</code> key the <code>serde2</code> identifier here is actually
+ignored. We simply need a unique name which doesn’t conflict with other patched
+crates.</p>
+<h3 id="the-patch-section"><a class="header" href="#the-patch-section">The <code>[patch]</code> section</a></h3>
+<p>The <code>[patch]</code> section of <code>Cargo.toml</code> can be used to override dependencies
+with other copies. The syntax is similar to the
+<a href="specifying-dependencies.html"><code>[dependencies]</code></a> section:</p>
+<pre><code class="language-toml">[patch.crates-io]
+foo = { git = 'https://github.com/example/foo.git' }
+bar = { path = 'my/local/bar' }
+
+[dependencies.baz]
+git = 'https://github.com/example/baz.git'
+
+[patch.'https://github.com/example/baz']
+baz = { git = 'https://github.com/example/patched-baz.git', branch = 'my-branch' }
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: The <code>[patch]</code> table can also be specified as a <a href="config.html">configuration
+option</a>, such as in a <code>.cargo/config.toml</code> file or a CLI option
+like <code>--config 'patch.crates-io.rand.path=&quot;rand&quot;'</code>. This can be useful for
+local-only changes that you don’t want to commit, or temporarily testing a
+patch.</p>
+</blockquote>
+<p>The <code>[patch]</code> table is made of dependency-like sub-tables. Each key after
+<code>[patch]</code> is a URL of the source that is being patched, or the name of a
+registry. The name <code>crates-io</code> may be used to override the default registry
+<a href="https://crates.io/">crates.io</a>. The first <code>[patch]</code> in the example above demonstrates overriding
+<a href="https://crates.io/">crates.io</a>, and the second <code>[patch]</code> demonstrates overriding a git source.</p>
+<p>Each entry in these tables is a normal dependency specification, the same as
+found in the <code>[dependencies]</code> section of the manifest. The dependencies listed
+in the <code>[patch]</code> section are resolved and used to patch the source at the
+URL specified. The above manifest snippet patches the <code>crates-io</code> source (e.g.
+crates.io itself) with the <code>foo</code> crate and <code>bar</code> crate. It also
+patches the <code>https://github.com/example/baz</code> source with a <code>my-branch</code> that
+comes from elsewhere.</p>
+<p>Sources can be patched with versions of crates that do not exist, and they can
+also be patched with versions of crates that already exist. If a source is
+patched with a crate version that already exists in the source, then the
+source’s original crate is replaced.</p>
+<p>Cargo only looks at the patch settings in the <code>Cargo.toml</code> manifest at the
+root of the workspace. Patch settings defined in dependencies will be
+ignored.</p>
+<h3 id="the-replace-section"><a class="header" href="#the-replace-section">The <code>[replace]</code> section</a></h3>
+<blockquote>
+<p><strong>Note</strong>: <code>[replace]</code> is deprecated. You should use the
+<a href="#the-patch-section"><code>[patch]</code></a> table instead.</p>
+</blockquote>
+<p>This section of Cargo.toml can be used to override dependencies with other
+copies. The syntax is similar to the <code>[dependencies]</code> section:</p>
+<pre><code class="language-toml">[replace]
+&quot;foo:0.1.0&quot; = { git = 'https://github.com/example/foo.git' }
+&quot;bar:1.0.2&quot; = { path = 'my/local/bar' }
+</code></pre>
+<p>Each key in the <code>[replace]</code> table is a <a href="pkgid-spec.html">package ID
+specification</a>, which allows arbitrarily choosing a node in the
+dependency graph to override (the 3-part version number is required). The
+value of each key is the same as the <code>[dependencies]</code> syntax for specifying
+dependencies, except that you can’t specify features. Note that when a crate
+is overridden the copy it’s overridden with must have both the same name and
+version, but it can come from a different source (e.g., git or a local path).</p>
+<p>Cargo only looks at the replace settings in the <code>Cargo.toml</code> manifest at the
+root of the workspace. Replace settings defined in dependencies will be
+ignored.</p>
+<h3 id="paths-overrides"><a class="header" href="#paths-overrides"><code>paths</code> overrides</a></h3>
+<p>Sometimes you’re only temporarily working on a crate and you don’t want to have
+to modify <code>Cargo.toml</code> like with the <code>[patch]</code> section above. For this use
+case Cargo offers a much more limited version of overrides called <strong>path
+overrides</strong>.</p>
+<p>Path overrides are specified through <a href="config.html"><code>.cargo/config.toml</code></a> instead of
+<code>Cargo.toml</code>. Inside of <code>.cargo/config.toml</code> you’ll specify a key called <code>paths</code>:</p>
+<pre><code class="language-toml">paths = [&quot;/path/to/uuid&quot;]
+</code></pre>
+<p>This array should be filled with directories that contain a <code>Cargo.toml</code>. In
+this instance, we’re just adding <code>uuid</code>, so it will be the only one that’s
+overridden. This path can be either absolute or relative to the directory that
+contains the <code>.cargo</code> folder.</p>
+<p>Path overrides are more restricted than the <code>[patch]</code> section, however, in
+that they cannot change the structure of the dependency graph. When a
+path replacement is used then the previous set of dependencies
+must all match exactly to the new <code>Cargo.toml</code> specification. For example this
+means that path overrides cannot be used to test out adding a dependency to a
+crate, instead <code>[patch]</code> must be used in that situation. As a result usage of a
+path override is typically isolated to quick bug fixes rather than larger
+changes.</p>
+<p>Note: using a local configuration to override paths will only work for crates
+that have been published to <a href="https://crates.io/">crates.io</a>. You cannot use this feature to tell
+Cargo how to find local unpublished crates.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/specifying-dependencies.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../reference/manifest.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/specifying-dependencies.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../reference/manifest.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

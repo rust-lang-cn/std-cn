@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="可组合的异步迭代。"><title>std::async_iter - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../std/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../std/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Module async_iter</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">std</a>::<wbr><a class="mod" href="#">async_iter</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../../src/core/lib.rs.html#352">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><span class="item-info"><div class="stab unstable"><span class="emoji">🔬</span><span>This is a nightly-only experimental API. (<code>async_iterator</code>&nbsp;<a href="https://github.com/rust-lang/rust/issues/79024">#79024</a>)</span></div></span><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>可组合的异步迭代。</p>
+<p>如果您发现自己使用某种异步集合，并且需要对所述集合的元素执行操作，您将很快遇到异步迭代器。
+异步迭代器在惯用的异步 Rust 代码中大量使用，因此熟悉它们是值得的。</p>
+<p>在解释更多内容之前，让我们讨论一下该模块的结构：</p>
+<h2 id="organization"><a href="#organization">Organization</a></h2>
+<p>该模块主要是按类型来组织的：</p>
+<ul>
+<li><a href="#traits">Traits</a> 是核心部分：这些 traits 定义了存在什么样的异步迭代器以及您可以用它们做什么。这些 traits 的方法值得投入一些额外的学习时间。</li>
+<li>函数提供了一些有用的方法来创建一些基本的异步迭代器。</li>
+<li>结构体通常是该模块的 traits 上各种方法的返回类型。通常，您将需要查看创建 <code>struct</code> 的方法，而不是 <code>struct</code> 本身。
+有关原因的更多详细信息，请参见 <a href="#implementing-async-iterator">实现异步迭代器</a>。</li>
+</ul>
+<p>就是这样！ 让我们深入研究异步迭代器。</p>
+<h2 id="异步迭代器"><a href="#异步迭代器">异步迭代器</a></h2>
+<p>这个模块的核心和灵魂是 <a href="trait.AsyncIterator.html" title="trait std::async_iter::AsyncIterator"><code>AsyncIterator</code></a> trait。<a href="trait.AsyncIterator.html" title="trait std::async_iter::AsyncIterator"><code>AsyncIterator</code></a> 的核心是这样的:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">trait </span>AsyncIterator {
+    <span class="kw">type </span>Item;
+    <span class="kw">fn </span>poll_next(<span class="self">self</span>: Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;, cx: <span class="kw-2">&amp;mut </span>Context&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; Poll&lt;<span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt;&gt;;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Ause+core::task::%7BContext,+Poll%7D;%0Ause+core::pin::Pin;%0Atrait+AsyncIterator+%7B%0A++++type+Item;%0A++++fn+poll_next(self:+Pin%3C%26mut+Self%3E,+cx:+%26mut+Context%3C'_%3E)+-%3E+Poll%3COption%3CSelf::Item%3E%3E;%0A%7D%0A%7D&amp;edition=2021">Run</a></div>
+<p>与 <code>Iterator</code> 不同，<code>AsyncIterator</code> 区分了实现 <code>AsyncIterator</code> 时使用的 <a href="trait.AsyncIterator.html#tymethod.poll_next" title="method std::async_iter::AsyncIterator::poll_next"><code>poll_next</code></a> 方法和使用异步迭代器时使用的 (to-be-implemented) <code>next</code> 方法。</p>
+<p><code>AsyncIterator</code> 的消费者只需要考虑 <code>next</code>，它在调用时会返回一个 future，它产生 <code>Option&lt;AsyncIterator::Item&gt;</code>。</p>
+<p>只要有元素，<code>next</code> 返回的 future 就会产生 <code>Some(Item)</code>，一旦所有元素用完，就会产生 <code>None</code> 来指示迭代已完成。
+如果我们正在等待异步解决问题，future 将等待异步迭代器再次准备好再次 yield。</p>
+<p>单个异步迭代器可能会选择恢复迭代，因此再次调用 <code>next</code> 最终可能会或可能不会最终在某个时候再次产生 <code>Some(Item)</code>。</p>
+<p><a href="trait.AsyncIterator.html" title="trait std::async_iter::AsyncIterator"><code>AsyncIterator</code></a> 的完整定义还包括许多其他方法，但它们是默认方法，建立在 <a href="trait.AsyncIterator.html#tymethod.poll_next" title="method std::async_iter::AsyncIterator::poll_next"><code>poll_next</code></a> 之上，因此您可以免费获得它们。</p>
+<h2 id="实现异步迭代器"><a href="#实现异步迭代器">实现异步迭代器</a></h2>
+<p>创建自己的异步迭代器涉及两个步骤：创建一个 <code>struct</code> 来保存异步迭代器的状态，然后为该 <code>struct</code> 实现 <a href="trait.AsyncIterator.html" title="trait std::async_iter::AsyncIterator"><code>AsyncIterator</code></a>。</p>
+<p>让我们创建一个名为 <code>Counter</code> 的异步迭代器，它从 <code>1</code> 计数到 <code>5</code>:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#![feature(async_iterator)]
+
+</span><span class="comment">// 首先，结构体：
+
+</span><span class="doccomment">/// 一个从 1 计数到 5 的异步迭代器
+</span><span class="kw">struct </span>Counter {
+    count: usize,
+}
+
+<span class="comment">// 我们希望计数从一开始，所以让我们添加一个 new() 方法来提供帮助。
+// 这不是严格必要的，但很方便。
+// 请注意，我们将 `count` 从零开始，我们将在下面的 `poll_next () ` 的实现中看到其原因。
+</span><span class="kw">impl </span>Counter {
+    <span class="kw">fn </span>new() -&gt; Counter {
+        Counter { count: <span class="number">0 </span>}
+    }
+}
+
+<span class="comment">// 然后，我们为我们的 `Counter` 实现 `AsyncIterator`:
+
+</span><span class="kw">impl </span>AsyncIterator <span class="kw">for </span>Counter {
+    <span class="comment">// 我们将使用 usize 进行计数
+    </span><span class="kw">type </span>Item = usize;
+
+    <span class="comment">// poll_next() 是唯一需要的方法
+    </span><span class="kw">fn </span>poll_next(<span class="kw-2">mut </span><span class="self">self</span>: Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;, cx: <span class="kw-2">&amp;mut </span>Context&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; Poll&lt;<span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt;&gt; {
+        <span class="comment">// 增加我们的数量。这就是为什么我们从零开始。
+        </span><span class="self">self</span>.count += <span class="number">1</span>;
+
+        <span class="comment">// 检查我们是否已经完成计数。
+        </span><span class="kw">if </span><span class="self">self</span>.count &lt; <span class="number">6 </span>{
+            Poll::Ready(<span class="prelude-val">Some</span>(<span class="self">self</span>.count))
+        } <span class="kw">else </span>{
+            Poll::Ready(<span class="prelude-val">None</span>)
+        }
+    }
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Bfeature(async_iterator)%5D%0Afn+main()+%7B%0Ause+core::async_iter::AsyncIterator;%0Ause+core::task::%7BContext,+Poll%7D;%0Ause+core::pin::Pin;%0A%0A//+%E9%A6%96%E5%85%88%EF%BC%8C%E7%BB%93%E6%9E%84%E4%BD%93%EF%BC%9A%0A%0A///+%E4%B8%80%E4%B8%AA%E4%BB%8E+1+%E8%AE%A1%E6%95%B0%E5%88%B0+5+%E7%9A%84%E5%BC%82%E6%AD%A5%E8%BF%AD%E4%BB%A3%E5%99%A8%0Astruct+Counter+%7B%0A++++count:+usize,%0A%7D%0A%0A//+%E6%88%91%E4%BB%AC%E5%B8%8C%E6%9C%9B%E8%AE%A1%E6%95%B0%E4%BB%8E%E4%B8%80%E5%BC%80%E5%A7%8B%EF%BC%8C%E6%89%80%E4%BB%A5%E8%AE%A9%E6%88%91%E4%BB%AC%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AA+new()+%E6%96%B9%E6%B3%95%E6%9D%A5%E6%8F%90%E4%BE%9B%E5%B8%AE%E5%8A%A9%E3%80%82%0A//+%E8%BF%99%E4%B8%8D%E6%98%AF%E4%B8%A5%E6%A0%BC%E5%BF%85%E8%A6%81%E7%9A%84%EF%BC%8C%E4%BD%86%E5%BE%88%E6%96%B9%E4%BE%BF%E3%80%82%0A//+%E8%AF%B7%E6%B3%A8%E6%84%8F%EF%BC%8C%E6%88%91%E4%BB%AC%E5%B0%86+%60count%60+%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%EF%BC%8C%E6%88%91%E4%BB%AC%E5%B0%86%E5%9C%A8%E4%B8%8B%E9%9D%A2%E7%9A%84+%60poll_next+()+%60+%E7%9A%84%E5%AE%9E%E7%8E%B0%E4%B8%AD%E7%9C%8B%E5%88%B0%E5%85%B6%E5%8E%9F%E5%9B%A0%E3%80%82%0Aimpl+Counter+%7B%0A++++fn+new()+-%3E+Counter+%7B%0A++++++++Counter+%7B+count:+0+%7D%0A++++%7D%0A%7D%0A%0A//+%E7%84%B6%E5%90%8E%EF%BC%8C%E6%88%91%E4%BB%AC%E4%B8%BA%E6%88%91%E4%BB%AC%E7%9A%84+%60Counter%60+%E5%AE%9E%E7%8E%B0+%60AsyncIterator%60:%0A%0Aimpl+AsyncIterator+for+Counter+%7B%0A++++//+%E6%88%91%E4%BB%AC%E5%B0%86%E4%BD%BF%E7%94%A8+usize+%E8%BF%9B%E8%A1%8C%E8%AE%A1%E6%95%B0%0A++++type+Item+=+usize;%0A%0A++++//+poll_next()+%E6%98%AF%E5%94%AF%E4%B8%80%E9%9C%80%E8%A6%81%E7%9A%84%E6%96%B9%E6%B3%95%0A++++fn+poll_next(mut+self:+Pin%3C%26mut+Self%3E,+cx:+%26mut+Context%3C'_%3E)+-%3E+Poll%3COption%3CSelf::Item%3E%3E+%7B%0A++++++++//+%E5%A2%9E%E5%8A%A0%E6%88%91%E4%BB%AC%E7%9A%84%E6%95%B0%E9%87%8F%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E4%BB%AC%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E3%80%82%0A++++++++self.count+%2B=+1;%0A%0A++++++++//+%E6%A3%80%E6%9F%A5%E6%88%91%E4%BB%AC%E6%98%AF%E5%90%A6%E5%B7%B2%E7%BB%8F%E5%AE%8C%E6%88%90%E8%AE%A1%E6%95%B0%E3%80%82%0A++++++++if+self.count+%3C+6+%7B%0A++++++++++++Poll::Ready(Some(self.count))%0A++++++++%7D+else+%7B%0A++++++++++++Poll::Ready(None)%0A++++++++%7D%0A++++%7D%0A%7D%0A%7D&amp;version=nightly&amp;edition=2021">Run</a></div>
+<h2 id="laziness"><a href="#laziness">Laziness</a></h2>
+<p>异步迭代器是惰性的。这意味着仅仅创建一个异步迭代器并不能做很多事情。在您调用 <code>poll_next</code> 之前，什么都不会发生。
+当创建一个异步迭代器仅仅为了它的副作用时，这有时是一个混乱的根源。
+编译器将警告我们这种行为：</p>
+<div class="example-wrap"><pre class="language-text"><code>warning: unused result that must be used: async iterators do nothing unless polled
+</code></pre></div></div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.FromIter.html" title="struct std::async_iter::FromIter">FromIter</a><span class="stab unstable" title="">Experimental</span></div><div class="desc docblock-short">从迭代器创建的异步迭代器。</div></li></ul><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.AsyncIterator.html" title="trait std::async_iter::AsyncIterator">AsyncIterator</a><span class="stab unstable" title="">Experimental</span></div><div class="desc docblock-short">用于处理异步迭代器的 trait。</div></li></ul><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.from_iter.html" title="fn std::async_iter::from_iter">from_iter</a><span class="stab unstable" title="">Experimental</span></div><div class="desc docblock-short">将迭代器转换为异步迭代器。</div></li></ul></section></div></main></body></html>

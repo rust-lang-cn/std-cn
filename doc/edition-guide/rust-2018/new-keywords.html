@@ -1,0 +1,248 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>New keywords - The Rust Edition Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../editions/index.html"><strong aria-hidden="true">1.</strong> What are editions?</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editions/creating-a-new-project.html"><strong aria-hidden="true">1.1.</strong> Creating a new project</a></li><li class="chapter-item expanded "><a href="../editions/transitioning-an-existing-project-to-a-new-edition.html"><strong aria-hidden="true">1.2.</strong> Transitioning an existing project to a new edition</a></li><li class="chapter-item expanded "><a href="../editions/advanced-migrations.html"><strong aria-hidden="true">1.3.</strong> Advanced migrations</a></li></ol></li><li class="chapter-item expanded "><a href="../rust-2015/index.html"><strong aria-hidden="true">2.</strong> Rust 2015</a></li><li class="chapter-item expanded "><a href="../rust-2018/index.html"><strong aria-hidden="true">3.</strong> Rust 2018</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rust-2018/path-changes.html"><strong aria-hidden="true">3.1.</strong> Path and module system changes</a></li><li class="chapter-item expanded "><a href="../rust-2018/trait-fn-parameters.html"><strong aria-hidden="true">3.2.</strong> Anonymous trait function parameters deprecated</a></li><li class="chapter-item expanded "><a href="../rust-2018/new-keywords.html" class="active"><strong aria-hidden="true">3.3.</strong> New keywords</a></li><li class="chapter-item expanded "><a href="../rust-2018/tyvar-behind-raw-pointer.html"><strong aria-hidden="true">3.4.</strong> Method dispatch for raw pointers to inference variables</a></li><li class="chapter-item expanded "><a href="../rust-2018/cargo.html"><strong aria-hidden="true">3.5.</strong> Cargo changes</a></li></ol></li><li class="chapter-item expanded "><a href="../rust-2021/index.html"><strong aria-hidden="true">4.</strong> Rust 2021</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rust-2021/prelude.html"><strong aria-hidden="true">4.1.</strong> Additions to the prelude</a></li><li class="chapter-item expanded "><a href="../rust-2021/default-cargo-resolver.html"><strong aria-hidden="true">4.2.</strong> Default Cargo feature resolver</a></li><li class="chapter-item expanded "><a href="../rust-2021/IntoIterator-for-arrays.html"><strong aria-hidden="true">4.3.</strong> IntoIterator for arrays</a></li><li class="chapter-item expanded "><a href="../rust-2021/disjoint-capture-in-closures.html"><strong aria-hidden="true">4.4.</strong> Disjoint capture in closures</a></li><li class="chapter-item expanded "><a href="../rust-2021/panic-macro-consistency.html"><strong aria-hidden="true">4.5.</strong> Panic macro consistency</a></li><li class="chapter-item expanded "><a href="../rust-2021/reserving-syntax.html"><strong aria-hidden="true">4.6.</strong> Reserving syntax</a></li><li class="chapter-item expanded "><a href="../rust-2021/warnings-promoted-to-error.html"><strong aria-hidden="true">4.7.</strong> Warnings promoted to errors</a></li><li class="chapter-item expanded "><a href="../rust-2021/or-patterns-macro-rules.html"><strong aria-hidden="true">4.8.</strong> Or patterns in macro-rules</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Edition Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/edition-guide" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="new-keywords"><a class="header" href="#new-keywords">New keywords</a></h1>
+<p><img src="https://img.shields.io/badge/Minimum%20Rust%20Version-1.27-brightgreen.svg" alt="Minimum Rust version: 1.27" /></p>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<ul>
+<li><code>dyn</code> is a <a href="https://doc.rust-lang.org/reference/keywords.html#strict-keywords">strict keyword</a>, in 2015 it is a <a href="https://doc.rust-lang.org/reference/keywords.html#weak-keywords">weak keyword</a>.</li>
+<li><code>async</code> and <code>await</code> are <a href="https://doc.rust-lang.org/reference/keywords.html#strict-keywords">strict keywords</a>.</li>
+<li><code>try</code> is a <a href="https://doc.rust-lang.org/reference/keywords.html#reserved-keywords">reserved keyword</a>.</li>
+</ul>
+<h2 id="motivation"><a class="header" href="#motivation">Motivation</a></h2>
+<h3 id="dyn-trait-for-trait-objects"><a class="header" href="#dyn-trait-for-trait-objects"><code>dyn Trait</code> for trait objects</a></h3>
+<p>The <code>dyn Trait</code> feature is the new syntax for using trait objects. In short:</p>
+<ul>
+<li><code>Box&lt;Trait&gt;</code> becomes <code>Box&lt;dyn Trait&gt;</code></li>
+<li><code>&amp;Trait</code> and <code>&amp;mut Trait</code> become <code>&amp;dyn Trait</code> and <code>&amp;mut dyn Trait</code></li>
+</ul>
+<p>And so on. In code:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait Trait {}
+
+impl Trait for i32 {}
+
+// old
+fn function1() -&gt; Box&lt;Trait&gt; {
+<span class="boring">unimplemented!()
+</span>}
+
+// new
+fn function2() -&gt; Box&lt;dyn Trait&gt; {
+<span class="boring">unimplemented!()
+</span>}
+<span class="boring">}</span></code></pre></pre>
+<p>That's it!</p>
+<h4 id="why"><a class="header" href="#why">Why?</a></h4>
+<p>Using just the trait name for trait objects turned out to be a bad decision.
+The current syntax is often ambiguous and confusing, even to veterans,
+and favors a feature that is not more frequently used than its alternatives,
+is sometimes slower, and often cannot be used at all when its alternatives can.</p>
+<p>Furthermore, with <code>impl Trait</code> arriving, &quot;<code>impl Trait</code> vs <code>dyn Trait</code>&quot; is much
+more symmetric, and therefore a bit nicer, than &quot;<code>impl Trait</code> vs <code>Trait</code>&quot;.
+<code>impl Trait</code> is explained <a href="../../rust-by-example/trait/impl_trait.html">here</a>.</p>
+<p>In the new edition, you should therefore prefer <code>dyn Trait</code> to just <code>Trait</code>
+where you need a trait object.</p>
+<h3 id="async-and-await"><a class="header" href="#async-and-await"><code>async</code> and <code>await</code></a></h3>
+<p>These keywords are reserved to implement the async-await feature of Rust, which was ultimately <a href="https://blog.rust-lang.org/2019/11/07/Async-await-stable.html">released to stable in 1.39.0</a>.</p>
+<h3 id="try-keyword"><a class="header" href="#try-keyword"><code>try</code> keyword</a></h3>
+<p>The <code>try</code> keyword is reserved for use in <code>try</code> blocks, which have not (as of this writing) been stabilized (<a href="https://github.com/rust-lang/rust/issues/31436">tracking issue</a>)</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../rust-2018/trait-fn-parameters.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../rust-2018/tyvar-behind-raw-pointer.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../rust-2018/trait-fn-parameters.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../rust-2018/tyvar-behind-raw-pointer.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

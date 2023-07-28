@@ -1,0 +1,722 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Codegen Options - The rustc book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what-is-rustc.html"><strong aria-hidden="true">1.</strong> What is rustc?</a></li><li class="chapter-item expanded "><a href="../command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line Arguments</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../codegen-options/index.html" class="active"><strong aria-hidden="true">2.1.</strong> Codegen Options</a></li></ol></li><li class="chapter-item expanded "><a href="../lints/index.html"><strong aria-hidden="true">3.</strong> Lints</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lints/levels.html"><strong aria-hidden="true">3.1.</strong> Lint Levels</a></li><li class="chapter-item expanded "><a href="../lints/groups.html"><strong aria-hidden="true">3.2.</strong> Lint Groups</a></li><li class="chapter-item expanded "><a href="../lints/listing/index.html"><strong aria-hidden="true">3.3.</strong> Lint Listing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lints/listing/allowed-by-default.html"><strong aria-hidden="true">3.3.1.</strong> Allowed-by-default Lints</a></li><li class="chapter-item expanded "><a href="../lints/listing/warn-by-default.html"><strong aria-hidden="true">3.3.2.</strong> Warn-by-default Lints</a></li><li class="chapter-item expanded "><a href="../lints/listing/deny-by-default.html"><strong aria-hidden="true">3.3.3.</strong> Deny-by-default Lints</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../json.html"><strong aria-hidden="true">4.</strong> JSON Output</a></li><li class="chapter-item expanded "><a href="../tests/index.html"><strong aria-hidden="true">5.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../platform-support.html"><strong aria-hidden="true">6.</strong> Platform Support</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../target-tier-policy.html"><strong aria-hidden="true">6.1.</strong> Target Tier Policy</a></li><li class="chapter-item expanded "><a href="../platform-support/TEMPLATE.html"><strong aria-hidden="true">6.2.</strong> Template for Target-specific Documentation</a></li><li class="chapter-item expanded "><a href="../platform-support/aarch64-apple-ios-sim.html"><strong aria-hidden="true">6.3.</strong> aarch64-apple-ios-sim</a></li><li class="chapter-item expanded "><a href="../platform-support/apple-watchos.html"><strong aria-hidden="true">6.4.</strong> *-apple-watchos*</a></li><li class="chapter-item expanded "><a href="../platform-support/aarch64-nintendo-switch-freestanding.html"><strong aria-hidden="true">6.5.</strong> aarch64-nintendo-switch-freestanding</a></li><li class="chapter-item expanded "><a href="../platform-support/armeb-unknown-linux-gnueabi.html"><strong aria-hidden="true">6.6.</strong> armeb-unknown-linux-gnueabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv4t-none-eabi.html"><strong aria-hidden="true">6.7.</strong> armv4t-none-eabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv5te-none-eabi.html"><strong aria-hidden="true">6.8.</strong> armv5te-none-eabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv6k-nintendo-3ds.html"><strong aria-hidden="true">6.9.</strong> armv6k-nintendo-3ds</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-sony-vita-newlibeabihf.html"><strong aria-hidden="true">6.10.</strong> armv7-sony-vita-newlibeabihf</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-unknown-linux-uclibceabi.html"><strong aria-hidden="true">6.11.</strong> armv7-unknown-linux-uclibceabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-unknown-linux-uclibceabihf.html"><strong aria-hidden="true">6.12.</strong> armv7-unknown-linux-uclibceabihf</a></li><li class="chapter-item expanded "><a href="../platform-support/android.html"><strong aria-hidden="true">6.13.</strong> *-android and *-androideabi</a></li><li class="chapter-item expanded "><a href="../platform-support/openharmony.html"><strong aria-hidden="true">6.14.</strong> *-linux-ohos</a></li><li class="chapter-item expanded "><a href="../platform-support/esp-idf.html"><strong aria-hidden="true">6.15.</strong> *-esp-espidf</a></li><li class="chapter-item expanded "><a href="../platform-support/fuchsia.html"><strong aria-hidden="true">6.16.</strong> *-unknown-fuchsia</a></li><li class="chapter-item expanded "><a href="../platform-support/kmc-solid.html"><strong aria-hidden="true">6.17.</strong> *-kmc-solid_*</a></li><li class="chapter-item expanded "><a href="../platform-support/loongarch-linux.html"><strong aria-hidden="true">6.18.</strong> loongarch*-unknown-linux-*</a></li><li class="chapter-item expanded "><a href="../platform-support/m68k-unknown-linux-gnu.html"><strong aria-hidden="true">6.19.</strong> m68k-unknown-linux-gnu</a></li><li class="chapter-item expanded "><a href="../platform-support/mips64-openwrt-linux-musl.html"><strong aria-hidden="true">6.20.</strong> mips64-openwrt-linux-musl</a></li><li class="chapter-item expanded "><a href="../platform-support/mipsel-sony-psx.html"><strong aria-hidden="true">6.21.</strong> mipsel-sony-psx</a></li><li class="chapter-item expanded "><a href="../platform-support/nvptx64-nvidia-cuda.html"><strong aria-hidden="true">6.22.</strong> nvptx64-nvidia-cuda</a></li><li class="chapter-item expanded "><a href="../platform-support/riscv32imac-unknown-xous-elf.html"><strong aria-hidden="true">6.23.</strong> riscv32imac-unknown-xous-elf</a></li><li class="chapter-item expanded "><a href="../platform-support/pc-windows-gnullvm.html"><strong aria-hidden="true">6.24.</strong> *-pc-windows-gnullvm</a></li><li class="chapter-item expanded "><a href="../platform-support/nto-qnx.html"><strong aria-hidden="true">6.25.</strong> *-nto-qnx-*</a></li><li class="chapter-item expanded "><a href="../platform-support/openbsd.html"><strong aria-hidden="true">6.26.</strong> *-unknown-openbsd</a></li><li class="chapter-item expanded "><a href="../platform-support/unknown-uefi.html"><strong aria-hidden="true">6.27.</strong> *-unknown-uefi</a></li><li class="chapter-item expanded "><a href="../platform-support/wasm64-unknown-unknown.html"><strong aria-hidden="true">6.28.</strong> wasm64-unknown-unknown</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64-fortanix-unknown-sgx.html"><strong aria-hidden="true">6.29.</strong> x86_64-fortanix-unknown-sgx</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64-unknown-none.html"><strong aria-hidden="true">6.30.</strong> x86_64-unknown-none</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64h-apple-darwin.html"><strong aria-hidden="true">6.31.</strong> x86_64h-apple-darwin</a></li></ol></li><li class="chapter-item expanded "><a href="../targets/index.html"><strong aria-hidden="true">7.</strong> Targets</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../targets/built-in.html"><strong aria-hidden="true">7.1.</strong> Built-in Targets</a></li><li class="chapter-item expanded "><a href="../targets/custom.html"><strong aria-hidden="true">7.2.</strong> Custom Targets</a></li><li class="chapter-item expanded "><a href="../targets/known-issues.html"><strong aria-hidden="true">7.3.</strong> Known Issues</a></li></ol></li><li class="chapter-item expanded "><a href="../profile-guided-optimization.html"><strong aria-hidden="true">8.</strong> Profile-guided Optimization</a></li><li class="chapter-item expanded "><a href="../instrument-coverage.html"><strong aria-hidden="true">9.</strong> Instrumentation-based Code Coverage</a></li><li class="chapter-item expanded "><a href="../linker-plugin-lto.html"><strong aria-hidden="true">10.</strong> Linker-plugin-based LTO</a></li><li class="chapter-item expanded "><a href="../exploit-mitigations.html"><strong aria-hidden="true">11.</strong> Exploit Mitigations</a></li><li class="chapter-item expanded "><a href="../contributing.html"><strong aria-hidden="true">12.</strong> Contributing to rustc</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The rustc book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/master/src/doc/rustc" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/edit/master/src/doc/rustc/src/codegen-options/index.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="codegen-options"><a class="header" href="#codegen-options">Codegen Options</a></h1>
+<p>All of these options are passed to <code>rustc</code> via the <code>-C</code> flag, short for &quot;codegen.&quot; You can see
+a version of this list for your exact compiler by running <code>rustc -C help</code>.</p>
+<h2 id="ar"><a class="header" href="#ar">ar</a></h2>
+<p>This option is deprecated and does nothing.</p>
+<h2 id="code-model"><a class="header" href="#code-model">code-model</a></h2>
+<p>This option lets you choose which code model to use. <br />
+Code models put constraints on address ranges that the program and its symbols may use. <br />
+With smaller address ranges machine instructions
+may be able to use more compact addressing modes.</p>
+<p>The specific ranges depend on target architectures and addressing modes available to them. <br />
+For x86 more detailed description of its code models can be found in
+<a href="https://github.com/hjl-tools/x86-psABI/wiki/x86-64-psABI-1.0.pdf">System V Application Binary Interface</a>
+specification.</p>
+<p>Supported values for this option are:</p>
+<ul>
+<li><code>tiny</code> - Tiny code model.</li>
+<li><code>small</code> - Small code model. This is the default model for majority of supported targets.</li>
+<li><code>kernel</code> - Kernel code model.</li>
+<li><code>medium</code> - Medium code model.</li>
+<li><code>large</code> - Large code model.</li>
+</ul>
+<p>Supported values can also be discovered by running <code>rustc --print code-models</code>.</p>
+<h2 id="codegen-units"><a class="header" href="#codegen-units">codegen-units</a></h2>
+<p>This flag controls how many code generation units the crate is split into. It
+takes an integer greater than 0.</p>
+<p>When a crate is split into multiple codegen units, LLVM is able to process
+them in parallel. Increasing parallelism may speed up compile times, but may
+also produce slower code. Setting this to 1 may improve the performance of
+generated code, but may be slower to compile.</p>
+<p>The default value, if not specified, is 16 for non-incremental builds. For
+incremental builds the default is 256 which allows caching to be more granular.</p>
+<h2 id="control-flow-guard"><a class="header" href="#control-flow-guard">control-flow-guard</a></h2>
+<p>This flag controls whether LLVM enables the Windows <a href="https://docs.microsoft.com/en-us/windows/win32/secbp/control-flow-guard">Control Flow
+Guard</a>
+platform security feature. This flag is currently ignored for non-Windows targets.
+It takes one of the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code>, <code>checks</code>, or no value: enable Control Flow Guard.</li>
+<li><code>nochecks</code>: emit Control Flow Guard metadata without runtime enforcement checks (this
+should only be used for testing purposes as it does not provide security enforcement).</li>
+<li><code>n</code>, <code>no</code>, <code>off</code>, <code>false</code>: do not enable Control Flow Guard (the default).</li>
+</ul>
+<h2 id="debug-assertions"><a class="header" href="#debug-assertions">debug-assertions</a></h2>
+<p>This flag lets you turn <code>cfg(debug_assertions)</code> <a href="../../reference/conditional-compilation.html#debug_assertions">conditional
+compilation</a> on
+or off. It takes one of the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code>, or no value: enable debug-assertions.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: disable debug-assertions.</li>
+</ul>
+<p>If not specified, debug assertions are automatically enabled only if the
+<a href="#opt-level">opt-level</a> is 0.</p>
+<h2 id="debuginfo"><a class="header" href="#debuginfo">debuginfo</a></h2>
+<p>This flag controls the generation of debug information. It takes one of the
+following values:</p>
+<ul>
+<li><code>0</code> or <code>none</code>: no debug info at all (the default).</li>
+<li><code>line-directives-only</code>: line info directives only. For the nvptx* targets this enables <a href="https://reviews.llvm.org/D46061">profiling</a>. For other use cases, <code>line-tables-only</code> is the better, more compatible choice.</li>
+<li><code>line-tables-only</code>: line tables only. Generates the minimal amount of debug info for backtraces with filename/line number info, but not anything else, i.e. no variable or function parameter info.</li>
+<li><code>1</code> or <code>limited</code>: debug info without type or variable-level information.</li>
+<li><code>2</code> or <code>full</code>: full debug info.</li>
+</ul>
+<p>Note: The <a href="../command-line-arguments.html#option-g-debug"><code>-g</code> flag</a> is an alias for <code>-C debuginfo=2</code>.</p>
+<h2 id="default-linker-libraries"><a class="header" href="#default-linker-libraries">default-linker-libraries</a></h2>
+<p>This flag controls whether or not the linker includes its default libraries.
+It takes one of the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code>: include default libraries.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code> or no value: exclude default libraries (the default).</li>
+</ul>
+<p>For example, for gcc flavor linkers, this issues the <code>-nodefaultlibs</code> flag to
+the linker.</p>
+<h2 id="dlltool"><a class="header" href="#dlltool">dlltool</a></h2>
+<p>On <code>windows-gnu</code> targets, this flag controls which dlltool <code>rustc</code> invokes to
+generate import libraries when using the <a href="../../reference/items/external-blocks.html#the-link-attribute"><code>raw-dylib</code> link kind</a>.
+It takes a path to <a href="https://sourceware.org/binutils/docs/binutils/dlltool.html">the dlltool executable</a>.
+If this flag is not specified, a dlltool executable will be inferred based on
+the host environment and target.</p>
+<h2 id="embed-bitcode"><a class="header" href="#embed-bitcode">embed-bitcode</a></h2>
+<p>This flag controls whether or not the compiler embeds LLVM bitcode into object
+files. It takes one of the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code> or no value: put bitcode in rlibs (the default).</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: omit bitcode from rlibs.</li>
+</ul>
+<p>LLVM bitcode is required when rustc is performing link-time optimization (LTO).
+It is also required on some targets like iOS ones where vendors look for LLVM
+bitcode. Embedded bitcode will appear in rustc-generated object files inside of
+a section whose name is defined by the target platform. Most of the time this is
+<code>.llvmbc</code>.</p>
+<p>The use of <code>-C embed-bitcode=no</code> can significantly improve compile times and
+reduce generated file sizes if your compilation does not actually need bitcode
+(e.g. if you're not compiling for iOS or you're not performing LTO). For these
+reasons, Cargo uses <code>-C embed-bitcode=no</code> whenever possible. Likewise, if you
+are building directly with <code>rustc</code> we recommend using <code>-C embed-bitcode=no</code>
+whenever you are not using LTO.</p>
+<p>If combined with <code>-C lto</code>, <code>-C embed-bitcode=no</code> will cause <code>rustc</code> to abort
+at start-up, because the combination is invalid.</p>
+<blockquote>
+<p><strong>Note</strong>: if you're building Rust code with LTO then you probably don't even
+need the <code>embed-bitcode</code> option turned on. You'll likely want to use
+<code>-Clinker-plugin-lto</code> instead which skips generating object files entirely and
+simply replaces object files with LLVM bitcode. The only purpose for
+<code>-Cembed-bitcode</code> is when you're generating an rlib that is both being used
+with and without LTO. For example Rust's standard library ships with embedded
+bitcode since users link to it both with and without LTO.</p>
+<p>This also may make you wonder why the default is <code>yes</code> for this option. The
+reason for that is that it's how it was for rustc 1.44 and prior. In 1.45 this
+option was added to turn off what had always been the default.</p>
+</blockquote>
+<h2 id="extra-filename"><a class="header" href="#extra-filename">extra-filename</a></h2>
+<p>This option allows you to put extra data in each output filename. It takes a
+string to add as a suffix to the filename. See the <a href="../command-line-arguments.html#option-emit"><code>--emit</code>
+flag</a> for more information.</p>
+<h2 id="force-frame-pointers"><a class="header" href="#force-frame-pointers">force-frame-pointers</a></h2>
+<p>This flag forces the use of frame pointers. It takes one of the following
+values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code> or no value: force-enable frame pointers.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: do not force-enable frame pointers. This does
+not necessarily mean frame pointers will be removed.</li>
+</ul>
+<p>The default behaviour, if frame pointers are not force-enabled, depends on the
+target.</p>
+<h2 id="force-unwind-tables"><a class="header" href="#force-unwind-tables">force-unwind-tables</a></h2>
+<p>This flag forces the generation of unwind tables. It takes one of the following
+values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code> or no value: Unwind tables are forced to be generated.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: Unwind tables are not forced to be generated. If unwind
+tables are required by the target an error will be emitted.</li>
+</ul>
+<p>The default if not specified depends on the target.</p>
+<h2 id="incremental"><a class="header" href="#incremental">incremental</a></h2>
+<p>This flag allows you to enable incremental compilation, which allows <code>rustc</code>
+to save information after compiling a crate to be reused when recompiling the
+crate, improving re-compile times. This takes a path to a directory where
+incremental files will be stored.</p>
+<h2 id="inline-threshold"><a class="header" href="#inline-threshold">inline-threshold</a></h2>
+<p>This option lets you set the default threshold for inlining a function. It
+takes an unsigned integer as a value. Inlining is based on a cost model, where
+a higher threshold will allow more inlining.</p>
+<p>The default depends on the <a href="#opt-level">opt-level</a>:</p>
+<div class="table-wrapper"><table><thead><tr><th>opt-level</th><th>Threshold</th></tr></thead><tbody>
+<tr><td>0</td><td>N/A, only inlines always-inline functions</td></tr>
+<tr><td>1</td><td>N/A, only inlines always-inline functions and LLVM lifetime intrinsics</td></tr>
+<tr><td>2</td><td>225</td></tr>
+<tr><td>3</td><td>275</td></tr>
+<tr><td>s</td><td>75</td></tr>
+<tr><td>z</td><td>25</td></tr>
+</tbody></table>
+</div>
+<h2 id="instrument-coverage"><a class="header" href="#instrument-coverage">instrument-coverage</a></h2>
+<p>This option enables instrumentation-based code coverage support. See the
+chapter on <a href="../instrument-coverage.html">instrumentation-based code coverage</a> for more information.</p>
+<p>Note that while the <code>-C instrument-coverage</code> option is stable, the profile data
+format produced by the resulting instrumentation may change, and may not work
+with coverage tools other than those built and shipped with the compiler.</p>
+<h2 id="link-arg"><a class="header" href="#link-arg">link-arg</a></h2>
+<p>This flag lets you append a single extra argument to the linker invocation.</p>
+<p>&quot;Append&quot; is significant; you can pass this flag multiple times to add multiple arguments.</p>
+<h2 id="link-args"><a class="header" href="#link-args">link-args</a></h2>
+<p>This flag lets you append multiple extra arguments to the linker invocation. The
+options should be separated by spaces.</p>
+<h2 id="link-dead-code"><a class="header" href="#link-dead-code">link-dead-code</a></h2>
+<p>This flag controls whether the linker will keep dead code. It takes one of
+the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code> or no value: keep dead code.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: remove dead code (the default).</li>
+</ul>
+<p>An example of when this flag might be useful is when trying to construct code coverage
+metrics.</p>
+<h2 id="link-self-contained"><a class="header" href="#link-self-contained">link-self-contained</a></h2>
+<p>On <code>windows-gnu</code>, <code>linux-musl</code>, and <code>wasi</code> targets, this flag controls whether the
+linker will use libraries and objects shipped with Rust instead or those in the system.
+It takes one of the following values:</p>
+<ul>
+<li>no value: rustc will use heuristic to disable self-contained mode if system has necessary tools.</li>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code>: use only libraries/objects shipped with Rust.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: rely on the user or the linker to provide non-Rust libraries/objects.</li>
+</ul>
+<p>This allows overriding cases when detection fails or user wants to use shipped libraries.</p>
+<h2 id="linker"><a class="header" href="#linker">linker</a></h2>
+<p>This flag controls which linker <code>rustc</code> invokes to link your code. It takes a
+path to the linker executable. If this flag is not specified, the linker will
+be inferred based on the target. See also the <a href="#linker-flavor">linker-flavor</a>
+flag for another way to specify the linker.</p>
+<h2 id="linker-flavor"><a class="header" href="#linker-flavor">linker-flavor</a></h2>
+<p>This flag controls the linker flavor used by <code>rustc</code>. If a linker is given with
+the <a href="#linker"><code>-C linker</code> flag</a>, then the linker flavor is inferred from the
+value provided. If no linker is given then the linker flavor is used to
+determine the linker to use. Every <code>rustc</code> target defaults to some linker
+flavor. Valid options are:</p>
+<ul>
+<li><code>em</code>: use <a href="https://emscripten.org/docs/tools_reference/emcc.html">Emscripten <code>emcc</code></a>.</li>
+<li><code>gcc</code>: use the <code>cc</code> executable, which is typically gcc or clang on many systems.</li>
+<li><code>ld</code>: use the <code>ld</code> executable.</li>
+<li><code>msvc</code>: use the <code>link.exe</code> executable from Microsoft Visual Studio MSVC.</li>
+<li><code>ptx-linker</code>: use
+<a href="https://github.com/denzp/rust-ptx-linker"><code>rust-ptx-linker</code></a> for Nvidia
+NVPTX GPGPU support.</li>
+<li><code>bpf-linker</code>: use
+<a href="https://github.com/alessandrod/bpf-linker"><code>bpf-linker</code></a> for eBPF support.</li>
+<li><code>wasm-ld</code>: use the <a href="https://lld.llvm.org/WebAssembly.html"><code>wasm-ld</code></a>
+executable, a port of LLVM <code>lld</code> for WebAssembly.</li>
+<li><code>ld64.lld</code>: use the LLVM <code>lld</code> executable with the <a href="https://lld.llvm.org/Driver.html"><code>-flavor darwin</code>
+flag</a> for Apple's <code>ld</code>.</li>
+<li><code>ld.lld</code>: use the LLVM <code>lld</code> executable with the <a href="https://lld.llvm.org/Driver.html"><code>-flavor gnu</code>
+flag</a> for GNU binutils' <code>ld</code>.</li>
+<li><code>lld-link</code>: use the LLVM <code>lld</code> executable with the <a href="https://lld.llvm.org/Driver.html"><code>-flavor link</code>
+flag</a> for Microsoft's <code>link.exe</code>.</li>
+</ul>
+<h2 id="linker-plugin-lto"><a class="header" href="#linker-plugin-lto">linker-plugin-lto</a></h2>
+<p>This flag defers LTO optimizations to the linker. See
+<a href="../linker-plugin-lto.html">linker-plugin-LTO</a> for more details. It takes one of
+the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code> or no value: enable linker plugin LTO.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: disable linker plugin LTO (the default).</li>
+<li>A path to the linker plugin.</li>
+</ul>
+<p>More specifically this flag will cause the compiler to replace its typical
+object file output with LLVM bitcode files. For example an rlib produced with
+<code>-Clinker-plugin-lto</code> will still have <code>*.o</code> files in it, but they'll all be LLVM
+bitcode instead of actual machine code. It is expected that the native platform
+linker is capable of loading these LLVM bitcode files and generating code at
+link time (typically after performing optimizations).</p>
+<p>Note that rustc can also read its own object files produced with
+<code>-Clinker-plugin-lto</code>. If an rlib is only ever going to get used later with a
+<code>-Clto</code> compilation then you can pass <code>-Clinker-plugin-lto</code> to speed up
+compilation and avoid generating object files that aren't used.</p>
+<h2 id="llvm-args"><a class="header" href="#llvm-args">llvm-args</a></h2>
+<p>This flag can be used to pass a list of arguments directly to LLVM.</p>
+<p>The list must be separated by spaces.</p>
+<p>Pass <code>--help</code> to see a list of options.</p>
+<h2 id="lto"><a class="header" href="#lto">lto</a></h2>
+<p>This flag controls whether LLVM uses <a href="https://llvm.org/docs/LinkTimeOptimization.html">link time
+optimizations</a> to produce
+better optimized code, using whole-program analysis, at the cost of longer
+linking time. It takes one of the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code>, <code>fat</code>, or no value: perform &quot;fat&quot; LTO which attempts to
+perform optimizations across all crates within the dependency graph.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code>, <code>false</code>: disables LTO.</li>
+<li><code>thin</code>: perform <a href="http://blog.llvm.org/2016/06/thinlto-scalable-and-incremental-lto.html">&quot;thin&quot;
+LTO</a>.
+This is similar to &quot;fat&quot;, but takes substantially less time to run while
+still achieving performance gains similar to &quot;fat&quot;.</li>
+</ul>
+<p>If <code>-C lto</code> is not specified, then the compiler will attempt to perform &quot;thin
+local LTO&quot; which performs &quot;thin&quot; LTO on the local crate only across its
+<a href="#codegen-units">codegen units</a>. When <code>-C lto</code> is not specified, LTO is
+disabled if codegen units is 1 or optimizations are disabled (<a href="#opt-level"><code>-C opt-level=0</code></a>). That is:</p>
+<ul>
+<li>When <code>-C lto</code> is not specified:
+<ul>
+<li><code>codegen-units=1</code>: disable LTO.</li>
+<li><code>opt-level=0</code>: disable LTO.</li>
+</ul>
+</li>
+<li>When <code>-C lto</code> is specified:
+<ul>
+<li><code>lto</code>: 16 codegen units, perform fat LTO across crates.</li>
+<li><code>codegen-units=1</code> + <code>lto</code>: 1 codegen unit, fat LTO across crates.</li>
+</ul>
+</li>
+</ul>
+<p>See also <a href="#linker-plugin-lto">linker-plugin-lto</a> for cross-language LTO.</p>
+<h2 id="metadata"><a class="header" href="#metadata">metadata</a></h2>
+<p>This option allows you to control the metadata used for symbol mangling. This
+takes a space-separated list of strings. Mangled symbols will incorporate a
+hash of the metadata. This may be used, for example, to differentiate symbols
+between two different versions of the same crate being linked.</p>
+<h2 id="no-prepopulate-passes"><a class="header" href="#no-prepopulate-passes">no-prepopulate-passes</a></h2>
+<p>This flag tells the pass manager to use an empty list of passes, instead of the
+usual pre-populated list of passes.</p>
+<h2 id="no-redzone"><a class="header" href="#no-redzone">no-redzone</a></h2>
+<p>This flag allows you to disable <a href="https://en.wikipedia.org/wiki/Red_zone_(computing)">the
+red zone</a>. It takes one
+of the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code> or no value: disable the red zone.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: enable the red zone.</li>
+</ul>
+<p>The default behaviour, if the flag is not specified, depends on the target.</p>
+<h2 id="no-stack-check"><a class="header" href="#no-stack-check">no-stack-check</a></h2>
+<p>This option is deprecated and does nothing.</p>
+<h2 id="no-vectorize-loops"><a class="header" href="#no-vectorize-loops">no-vectorize-loops</a></h2>
+<p>This flag disables <a href="https://llvm.org/docs/Vectorizers.html#the-loop-vectorizer">loop
+vectorization</a>.</p>
+<h2 id="no-vectorize-slp"><a class="header" href="#no-vectorize-slp">no-vectorize-slp</a></h2>
+<p>This flag disables vectorization using
+<a href="https://llvm.org/docs/Vectorizers.html#the-slp-vectorizer">superword-level
+parallelism</a>.</p>
+<h2 id="opt-level"><a class="header" href="#opt-level">opt-level</a></h2>
+<p>This flag controls the optimization level.</p>
+<ul>
+<li><code>0</code>: no optimizations, also turns on
+<a href="#debug-assertions"><code>cfg(debug_assertions)</code></a> (the default).</li>
+<li><code>1</code>: basic optimizations.</li>
+<li><code>2</code>: some optimizations.</li>
+<li><code>3</code>: all optimizations.</li>
+<li><code>s</code>: optimize for binary size.</li>
+<li><code>z</code>: optimize for binary size, but also turn off loop vectorization.</li>
+</ul>
+<p>Note: The <a href="../command-line-arguments.html#option-o-optimize"><code>-O</code> flag</a> is an alias for <code>-C opt-level=2</code>.</p>
+<p>The default is <code>0</code>.</p>
+<h2 id="overflow-checks"><a class="header" href="#overflow-checks">overflow-checks</a></h2>
+<p>This flag allows you to control the behavior of <a href="../../reference/expressions/operator-expr.html#overflow">runtime integer
+overflow</a>. When
+overflow-checks are enabled, a panic will occur on overflow. This flag takes
+one of the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code> or no value: enable overflow checks.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: disable overflow checks.</li>
+</ul>
+<p>If not specified, overflow checks are enabled if
+<a href="#debug-assertions">debug-assertions</a> are enabled, disabled otherwise.</p>
+<h2 id="panic"><a class="header" href="#panic">panic</a></h2>
+<p>This option lets you control what happens when the code panics.</p>
+<ul>
+<li><code>abort</code>: terminate the process upon panic</li>
+<li><code>unwind</code>: unwind the stack upon panic</li>
+</ul>
+<p>If not specified, the default depends on the target.</p>
+<h2 id="passes"><a class="header" href="#passes">passes</a></h2>
+<p>This flag can be used to add extra <a href="http://llvm.org/docs/Passes.html">LLVM
+passes</a> to the compilation.</p>
+<p>The list must be separated by spaces.</p>
+<p>See also the <a href="#no-prepopulate-passes"><code>no-prepopulate-passes</code></a> flag.</p>
+<h2 id="prefer-dynamic"><a class="header" href="#prefer-dynamic">prefer-dynamic</a></h2>
+<p>By default, <code>rustc</code> prefers to statically link dependencies. This option will
+indicate that dynamic linking should be used if possible if both a static and
+dynamic versions of a library are available. There is an internal algorithm
+for determining whether or not it is possible to statically or dynamically
+link with a dependency. For example, <code>cdylib</code> crate types may only use static
+linkage. This flag takes one of the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code> or no value: use dynamic linking.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: use static linking (the default).</li>
+</ul>
+<h2 id="profile-generate"><a class="header" href="#profile-generate">profile-generate</a></h2>
+<p>This flag allows for creating instrumented binaries that will collect
+profiling data for use with profile-guided optimization (PGO). The flag takes
+an optional argument which is the path to a directory into which the
+instrumented binary will emit the collected data. See the chapter on
+<a href="../profile-guided-optimization.html">profile-guided optimization</a> for more information.</p>
+<h2 id="profile-use"><a class="header" href="#profile-use">profile-use</a></h2>
+<p>This flag specifies the profiling data file to be used for profile-guided
+optimization (PGO). The flag takes a mandatory argument which is the path
+to a valid <code>.profdata</code> file. See the chapter on
+<a href="../profile-guided-optimization.html">profile-guided optimization</a> for more information.</p>
+<h2 id="relocation-model"><a class="header" href="#relocation-model">relocation-model</a></h2>
+<p>This option controls generation of
+<a href="https://en.wikipedia.org/wiki/Position-independent_code">position-independent code (PIC)</a>.</p>
+<p>Supported values for this option are:</p>
+<h4 id="primary-relocation-models"><a class="header" href="#primary-relocation-models">Primary relocation models</a></h4>
+<ul>
+<li>
+<p><code>static</code> - non-relocatable code, machine instructions may use absolute addressing modes.</p>
+</li>
+<li>
+<p><code>pic</code> - fully relocatable position independent code,
+machine instructions need to use relative addressing modes.  <br />
+Equivalent to the &quot;uppercase&quot; <code>-fPIC</code> or <code>-fPIE</code> options in other compilers,
+depending on the produced crate types.  <br />
+This is the default model for majority of supported targets.</p>
+</li>
+<li>
+<p><code>pie</code> - position independent executable, relocatable code but without support for symbol
+interpositioning (replacing symbols by name using <code>LD_PRELOAD</code> and similar). Equivalent to the &quot;uppercase&quot; <code>-fPIE</code> option in other compilers. <code>pie</code>
+code cannot be linked into shared libraries (you'll get a linking error on attempt to do this).</p>
+</li>
+</ul>
+<h4 id="special-relocation-models"><a class="header" href="#special-relocation-models">Special relocation models</a></h4>
+<ul>
+<li><code>dynamic-no-pic</code> - relocatable external references, non-relocatable code.  <br />
+Only makes sense on Darwin and is rarely used.  <br />
+If StackOverflow tells you to use this as an opt-out of PIC or PIE, don't believe it,
+use <code>-C relocation-model=static</code> instead.</li>
+<li><code>ropi</code>, <code>rwpi</code> and <code>ropi-rwpi</code> - relocatable code and read-only data, relocatable read-write data,
+and combination of both, respectively.  <br />
+Only makes sense for certain embedded ARM targets.</li>
+<li><code>default</code> - relocation model default to the current target.  <br />
+Only makes sense as an override for some other explicitly specified relocation model
+previously set on the command line.</li>
+</ul>
+<p>Supported values can also be discovered by running <code>rustc --print relocation-models</code>.</p>
+<h4 id="linking-effects"><a class="header" href="#linking-effects">Linking effects</a></h4>
+<p>In addition to codegen effects, <code>relocation-model</code> has effects during linking.</p>
+<p>If the relocation model is <code>pic</code> and the current target supports position-independent executables
+(PIE), the linker will be instructed (<code>-pie</code>) to produce one.  <br />
+If the target doesn't support both position-independent and statically linked executables,
+then <code>-C target-feature=+crt-static</code> &quot;wins&quot; over <code>-C relocation-model=pic</code>,
+and the linker is instructed (<code>-static</code>) to produce a statically linked
+but not position-independent executable.</p>
+<h2 id="remark"><a class="header" href="#remark">remark</a></h2>
+<p>This flag lets you print remarks for optimization passes.</p>
+<p>The list of passes should be separated by spaces.</p>
+<p><code>all</code> will remark on every pass.</p>
+<h2 id="rpath"><a class="header" href="#rpath">rpath</a></h2>
+<p>This flag controls whether <a href="https://en.wikipedia.org/wiki/Rpath"><code>rpath</code></a> is
+enabled. It takes one of the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code> or no value: enable rpath.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: disable rpath (the default).</li>
+</ul>
+<h2 id="save-temps"><a class="header" href="#save-temps">save-temps</a></h2>
+<p>This flag controls whether temporary files generated during compilation are
+deleted once compilation finishes. It takes one of the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code> or no value: save temporary files.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: delete temporary files (the default).</li>
+</ul>
+<h2 id="soft-float"><a class="header" href="#soft-float">soft-float</a></h2>
+<p>This option controls whether <code>rustc</code> generates code that emulates floating
+point instructions in software. It takes one of the following values:</p>
+<ul>
+<li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code> or no value: use soft floats.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code> or <code>false</code>: use hardware floats (the default).</li>
+</ul>
+<h2 id="split-debuginfo"><a class="header" href="#split-debuginfo">split-debuginfo</a></h2>
+<p>This option controls the emission of &quot;split debuginfo&quot; for debug information
+that <code>rustc</code> generates. The default behavior of this option is
+platform-specific, and not all possible values for this option work on all
+platforms. Possible values are:</p>
+<ul>
+<li>
+<p><code>off</code> - This is the default for platforms with ELF binaries and windows-gnu
+(not Windows MSVC and not macOS). This typically means that DWARF debug
+information can be found in the final artifact in sections of the executable.
+This option is not supported on Windows MSVC. On macOS this options prevents
+the final execution of <code>dsymutil</code> to generate debuginfo.</p>
+</li>
+<li>
+<p><code>packed</code> - This is the default for Windows MSVC and macOS. The term
+&quot;packed&quot; here means that all the debug information is packed into a separate
+file from the main executable. On Windows MSVC this is a <code>*.pdb</code> file, on
+macOS this is a <code>*.dSYM</code> folder, and on other platforms this is a <code>*.dwp</code>
+file.</p>
+</li>
+<li>
+<p><code>unpacked</code> - This means that debug information will be found in separate
+files for each compilation unit (object file). This is not supported on
+Windows MSVC. On macOS this means the original object files will contain
+debug information. On other Unix platforms this means that <code>*.dwo</code> files will
+contain debug information.</p>
+</li>
+</ul>
+<p>Note that all three options are supported on Linux and Apple platforms,
+<code>packed</code> is supported on Windows-MSVC, and all other platforms support <code>off</code>.
+Attempting to use an unsupported option requires using the nightly channel
+with the <code>-Z unstable-options</code> flag.</p>
+<h2 id="strip"><a class="header" href="#strip">strip</a></h2>
+<p>The option <code>-C strip=val</code> controls stripping of debuginfo and similar auxiliary
+data from binaries during linking.</p>
+<p>Supported values for this option are:</p>
+<ul>
+<li><code>none</code> - debuginfo and symbols (if they exist) are copied to the produced
+binary or separate files depending on the target (e.g. <code>.pdb</code> files in case
+of MSVC).</li>
+<li><code>debuginfo</code> - debuginfo sections and debuginfo symbols from the symbol table
+section are stripped at link time and are not copied to the produced binary
+or separate files.</li>
+<li><code>symbols</code> - same as <code>debuginfo</code>, but the rest of the symbol table section is
+stripped as well if the linker supports it.</li>
+</ul>
+<h2 id="symbol-mangling-version"><a class="header" href="#symbol-mangling-version">symbol-mangling-version</a></h2>
+<p>This option controls the <a href="https://en.wikipedia.org/wiki/Name_mangling">name mangling</a> format for encoding Rust item names
+for the purpose of generating object code and linking.</p>
+<p>Supported values for this option are:</p>
+<ul>
+<li><code>v0</code> — The &quot;v0&quot; mangling scheme. The specific format is not specified at
+this time.</li>
+</ul>
+<p>The default, if not specified, will use a compiler-chosen default which may
+change in the future.</p>
+<h2 id="target-cpu"><a class="header" href="#target-cpu">target-cpu</a></h2>
+<p>This instructs <code>rustc</code> to generate code specifically for a particular processor.</p>
+<p>You can run <code>rustc --print target-cpus</code> to see the valid options to pass
+and the default target CPU for the current buid target.
+Each target has a default base CPU. Special values include:</p>
+<ul>
+<li><code>native</code> can be passed to use the processor of the host machine.</li>
+<li><code>generic</code> refers to an LLVM target with minimal features but modern tuning.</li>
+</ul>
+<h2 id="target-feature"><a class="header" href="#target-feature">target-feature</a></h2>
+<p>Individual targets will support different features; this flag lets you control
+enabling or disabling a feature. Each feature should be prefixed with a <code>+</code> to
+enable it or <code>-</code> to disable it.</p>
+<p>Features from multiple <code>-C target-feature</code> options are combined. <br />
+Multiple features can be specified in a single option by separating them
+with commas - <code>-C target-feature=+x,-y</code>. <br />
+If some feature is specified more than once with both <code>+</code> and <code>-</code>,
+then values passed later override values passed earlier. <br />
+For example, <code>-C target-feature=+x,-y,+z -Ctarget-feature=-x,+y</code>
+is equivalent to <code>-C target-feature=-x,+y,+z</code>.</p>
+<p>To see the valid options and an example of use, run <code>rustc --print target-features</code>.</p>
+<p>Using this flag is unsafe and might result in <a href="../targets/known-issues.html">undefined runtime
+behavior</a>.</p>
+<p>See also the <a href="../../reference/attributes/codegen.html#the-target_feature-attribute"><code>target_feature</code>
+attribute</a>
+for controlling features per-function.</p>
+<p>This also supports the feature <code>+crt-static</code> and <code>-crt-static</code> to control
+<a href="../../reference/linkage.html#static-and-dynamic-c-runtimes">static C runtime linkage</a>.</p>
+<p>Each target and <a href="#target-cpu"><code>target-cpu</code></a> has a default set of enabled
+features.</p>
+<h2 id="tune-cpu"><a class="header" href="#tune-cpu">tune-cpu</a></h2>
+<p>This instructs <code>rustc</code> to schedule code specifically for a particular
+processor. This does not affect the compatibility (instruction sets or ABI),
+but should make your code slightly more efficient on the selected CPU.</p>
+<p>The valid options are the same as those for <a href="#target-cpu"><code>target-cpu</code></a>.
+The default is <code>None</code>, which LLVM translates as the <code>target-cpu</code>.</p>
+<p>This is an unstable option. Use <code>-Z tune-cpu=machine</code> to specify a value.</p>
+<p>Due to limitations in LLVM (12.0.0-git9218f92), this option is currently
+effective only for x86 targets.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../command-line-arguments.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../lints/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../command-line-arguments.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../lints/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

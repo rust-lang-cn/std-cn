@@ -1,0 +1,411 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>FAQ - The Cargo Book</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+            dd {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="getting-started/index.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="getting-started/first-steps.html"><strong aria-hidden="true">1.2.</strong> First Steps with Cargo</a></li></ol></li><li class="chapter-item expanded "><a href="guide/index.html"><strong aria-hidden="true">2.</strong> Cargo Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="guide/why-cargo-exists.html"><strong aria-hidden="true">2.1.</strong> Why Cargo Exists</a></li><li class="chapter-item expanded "><a href="guide/creating-a-new-project.html"><strong aria-hidden="true">2.2.</strong> Creating a New Package</a></li><li class="chapter-item expanded "><a href="guide/working-on-an-existing-project.html"><strong aria-hidden="true">2.3.</strong> Working on an Existing Package</a></li><li class="chapter-item expanded "><a href="guide/dependencies.html"><strong aria-hidden="true">2.4.</strong> Dependencies</a></li><li class="chapter-item expanded "><a href="guide/project-layout.html"><strong aria-hidden="true">2.5.</strong> Package Layout</a></li><li class="chapter-item expanded "><a href="guide/cargo-toml-vs-cargo-lock.html"><strong aria-hidden="true">2.6.</strong> Cargo.toml vs Cargo.lock</a></li><li class="chapter-item expanded "><a href="guide/tests.html"><strong aria-hidden="true">2.7.</strong> Tests</a></li><li class="chapter-item expanded "><a href="guide/continuous-integration.html"><strong aria-hidden="true">2.8.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="guide/cargo-home.html"><strong aria-hidden="true">2.9.</strong> Cargo Home</a></li><li class="chapter-item expanded "><a href="guide/build-cache.html"><strong aria-hidden="true">2.10.</strong> Build Cache</a></li></ol></li><li class="chapter-item expanded "><a href="reference/index.html"><strong aria-hidden="true">3.</strong> Cargo Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="reference/specifying-dependencies.html"><strong aria-hidden="true">3.1.</strong> Specifying Dependencies</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="reference/overriding-dependencies.html"><strong aria-hidden="true">3.1.1.</strong> Overriding Dependencies</a></li></ol></li><li class="chapter-item expanded "><a href="reference/manifest.html"><strong aria-hidden="true">3.2.</strong> The Manifest Format</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="reference/cargo-targets.html"><strong aria-hidden="true">3.2.1.</strong> Cargo Targets</a></li></ol></li><li class="chapter-item expanded "><a href="reference/workspaces.html"><strong aria-hidden="true">3.3.</strong> Workspaces</a></li><li class="chapter-item expanded "><a href="reference/features.html"><strong aria-hidden="true">3.4.</strong> Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="reference/features-examples.html"><strong aria-hidden="true">3.4.1.</strong> Features Examples</a></li></ol></li><li class="chapter-item expanded "><a href="reference/profiles.html"><strong aria-hidden="true">3.5.</strong> Profiles</a></li><li class="chapter-item expanded "><a href="reference/config.html"><strong aria-hidden="true">3.6.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="reference/environment-variables.html"><strong aria-hidden="true">3.7.</strong> Environment Variables</a></li><li class="chapter-item expanded "><a href="reference/build-scripts.html"><strong aria-hidden="true">3.8.</strong> Build Scripts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="reference/build-script-examples.html"><strong aria-hidden="true">3.8.1.</strong> Build Script Examples</a></li></ol></li><li class="chapter-item expanded "><a href="reference/publishing.html"><strong aria-hidden="true">3.9.</strong> Publishing on crates.io</a></li><li class="chapter-item expanded "><a href="reference/pkgid-spec.html"><strong aria-hidden="true">3.10.</strong> Package ID Specifications</a></li><li class="chapter-item expanded "><a href="reference/source-replacement.html"><strong aria-hidden="true">3.11.</strong> Source Replacement</a></li><li class="chapter-item expanded "><a href="reference/external-tools.html"><strong aria-hidden="true">3.12.</strong> External Tools</a></li><li class="chapter-item expanded "><a href="reference/registries.html"><strong aria-hidden="true">3.13.</strong> Registries</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="reference/running-a-registry.html"><strong aria-hidden="true">3.13.1.</strong> Running a Registry</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="reference/registry-index.html"><strong aria-hidden="true">3.13.1.1.</strong> Registry Index</a></li><li class="chapter-item expanded "><a href="reference/registry-web-api.html"><strong aria-hidden="true">3.13.1.2.</strong> Registry Web API</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="reference/resolver.html"><strong aria-hidden="true">3.14.</strong> Dependency Resolution</a></li><li class="chapter-item expanded "><a href="reference/semver.html"><strong aria-hidden="true">3.15.</strong> SemVer Compatibility</a></li><li class="chapter-item expanded "><a href="reference/future-incompat-report.html"><strong aria-hidden="true">3.16.</strong> Future incompat report</a></li><li class="chapter-item expanded "><a href="reference/timings.html"><strong aria-hidden="true">3.17.</strong> Reporting build timings</a></li><li class="chapter-item expanded "><a href="reference/unstable.html"><strong aria-hidden="true">3.18.</strong> Unstable Features</a></li></ol></li><li class="chapter-item expanded "><a href="commands/index.html"><strong aria-hidden="true">4.</strong> Cargo Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands/general-commands.html"><strong aria-hidden="true">4.1.</strong> General Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands/cargo.html"><strong aria-hidden="true">4.1.1.</strong> cargo</a></li><li class="chapter-item expanded "><a href="commands/cargo-help.html"><strong aria-hidden="true">4.1.2.</strong> cargo help</a></li><li class="chapter-item expanded "><a href="commands/cargo-version.html"><strong aria-hidden="true">4.1.3.</strong> cargo version</a></li></ol></li><li class="chapter-item expanded "><a href="commands/build-commands.html"><strong aria-hidden="true">4.2.</strong> Build Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands/cargo-bench.html"><strong aria-hidden="true">4.2.1.</strong> cargo bench</a></li><li class="chapter-item expanded "><a href="commands/cargo-build.html"><strong aria-hidden="true">4.2.2.</strong> cargo build</a></li><li class="chapter-item expanded "><a href="commands/cargo-check.html"><strong aria-hidden="true">4.2.3.</strong> cargo check</a></li><li class="chapter-item expanded "><a href="commands/cargo-clean.html"><strong aria-hidden="true">4.2.4.</strong> cargo clean</a></li><li class="chapter-item expanded "><a href="commands/cargo-doc.html"><strong aria-hidden="true">4.2.5.</strong> cargo doc</a></li><li class="chapter-item expanded "><a href="commands/cargo-fetch.html"><strong aria-hidden="true">4.2.6.</strong> cargo fetch</a></li><li class="chapter-item expanded "><a href="commands/cargo-fix.html"><strong aria-hidden="true">4.2.7.</strong> cargo fix</a></li><li class="chapter-item expanded "><a href="commands/cargo-run.html"><strong aria-hidden="true">4.2.8.</strong> cargo run</a></li><li class="chapter-item expanded "><a href="commands/cargo-rustc.html"><strong aria-hidden="true">4.2.9.</strong> cargo rustc</a></li><li class="chapter-item expanded "><a href="commands/cargo-rustdoc.html"><strong aria-hidden="true">4.2.10.</strong> cargo rustdoc</a></li><li class="chapter-item expanded "><a href="commands/cargo-test.html"><strong aria-hidden="true">4.2.11.</strong> cargo test</a></li><li class="chapter-item expanded "><a href="commands/cargo-report.html"><strong aria-hidden="true">4.2.12.</strong> cargo report</a></li></ol></li><li class="chapter-item expanded "><a href="commands/manifest-commands.html"><strong aria-hidden="true">4.3.</strong> Manifest Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands/cargo-add.html"><strong aria-hidden="true">4.3.1.</strong> cargo add</a></li><li class="chapter-item expanded "><a href="commands/cargo-generate-lockfile.html"><strong aria-hidden="true">4.3.2.</strong> cargo generate-lockfile</a></li><li class="chapter-item expanded "><a href="commands/cargo-locate-project.html"><strong aria-hidden="true">4.3.3.</strong> cargo locate-project</a></li><li class="chapter-item expanded "><a href="commands/cargo-metadata.html"><strong aria-hidden="true">4.3.4.</strong> cargo metadata</a></li><li class="chapter-item expanded "><a href="commands/cargo-pkgid.html"><strong aria-hidden="true">4.3.5.</strong> cargo pkgid</a></li><li class="chapter-item expanded "><a href="commands/cargo-remove.html"><strong aria-hidden="true">4.3.6.</strong> cargo remove</a></li><li class="chapter-item expanded "><a href="commands/cargo-tree.html"><strong aria-hidden="true">4.3.7.</strong> cargo tree</a></li><li class="chapter-item expanded "><a href="commands/cargo-update.html"><strong aria-hidden="true">4.3.8.</strong> cargo update</a></li><li class="chapter-item expanded "><a href="commands/cargo-vendor.html"><strong aria-hidden="true">4.3.9.</strong> cargo vendor</a></li><li class="chapter-item expanded "><a href="commands/cargo-verify-project.html"><strong aria-hidden="true">4.3.10.</strong> cargo verify-project</a></li></ol></li><li class="chapter-item expanded "><a href="commands/package-commands.html"><strong aria-hidden="true">4.4.</strong> Package Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands/cargo-init.html"><strong aria-hidden="true">4.4.1.</strong> cargo init</a></li><li class="chapter-item expanded "><a href="commands/cargo-install.html"><strong aria-hidden="true">4.4.2.</strong> cargo install</a></li><li class="chapter-item expanded "><a href="commands/cargo-new.html"><strong aria-hidden="true">4.4.3.</strong> cargo new</a></li><li class="chapter-item expanded "><a href="commands/cargo-search.html"><strong aria-hidden="true">4.4.4.</strong> cargo search</a></li><li class="chapter-item expanded "><a href="commands/cargo-uninstall.html"><strong aria-hidden="true">4.4.5.</strong> cargo uninstall</a></li></ol></li><li class="chapter-item expanded "><a href="commands/publishing-commands.html"><strong aria-hidden="true">4.5.</strong> Publishing Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands/cargo-login.html"><strong aria-hidden="true">4.5.1.</strong> cargo login</a></li><li class="chapter-item expanded "><a href="commands/cargo-logout.html"><strong aria-hidden="true">4.5.2.</strong> cargo logout</a></li><li class="chapter-item expanded "><a href="commands/cargo-owner.html"><strong aria-hidden="true">4.5.3.</strong> cargo owner</a></li><li class="chapter-item expanded "><a href="commands/cargo-package.html"><strong aria-hidden="true">4.5.4.</strong> cargo package</a></li><li class="chapter-item expanded "><a href="commands/cargo-publish.html"><strong aria-hidden="true">4.5.5.</strong> cargo publish</a></li><li class="chapter-item expanded "><a href="commands/cargo-yank.html"><strong aria-hidden="true">4.5.6.</strong> cargo yank</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="faq.html" class="active"><strong aria-hidden="true">5.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="appendix/glossary.html"><strong aria-hidden="true">6.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="appendix/git-authentication.html"><strong aria-hidden="true">7.</strong> Appendix: Git Authentication</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Cargo Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/tree/master/src/doc/src" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/edit/master/src/doc/src/faq.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h2>
+<h3 id="is-the-plan-to-use-github-as-a-package-repository"><a class="header" href="#is-the-plan-to-use-github-as-a-package-repository">Is the plan to use GitHub as a package repository?</a></h3>
+<p>No. The plan for Cargo is to use <a href="https://crates.io/">crates.io</a>, like npm or Rubygems do with
+<a href="https://www.npmjs.com">npmjs.com</a> and <a href="https://rubygems.org">rubygems.org</a>.</p>
+<p>We plan to support git repositories as a source of packages forever,
+because they can be used for early development and temporary patches,
+even when people use the registry as the primary source of packages.</p>
+<h3 id="why-build-cratesio-rather-than-use-github-as-a-registry"><a class="header" href="#why-build-cratesio-rather-than-use-github-as-a-registry">Why build crates.io rather than use GitHub as a registry?</a></h3>
+<p>We think that it’s very important to support multiple ways to download
+packages, including downloading from GitHub and copying packages into
+your package itself.</p>
+<p>That said, we think that <a href="https://crates.io/">crates.io</a> offers a number of important benefits, and
+will likely become the primary way that people download packages in Cargo.</p>
+<p>For precedent, both Node.js’s <a href="https://www.npmjs.com">npm</a> and Ruby’s <a href="https://bundler.io">bundler</a> support both a
+central registry model as well as a Git-based model, and most packages
+are downloaded through the registry in those ecosystems, with an
+important minority of packages making use of git-based packages.</p>
+<p>Some of the advantages that make a central registry popular in other
+languages include:</p>
+<ul>
+<li><strong>Discoverability</strong>. A central registry provides an easy place to look
+for existing packages. Combined with tagging, this also makes it
+possible for a registry to provide ecosystem-wide information, such as a
+list of the most popular or most-depended-on packages.</li>
+<li><strong>Speed</strong>. A central registry makes it possible to easily fetch just
+the metadata for packages quickly and efficiently, and then to
+efficiently download just the published package, and not other bloat
+that happens to exist in the repository. This adds up to a significant
+improvement in the speed of dependency resolution and fetching. As
+dependency graphs scale up, downloading all of the git repositories bogs
+down fast. Also remember that not everybody has a high-speed,
+low-latency Internet connection.</li>
+</ul>
+<h3 id="will-cargo-work-with-c-code-or-other-languages"><a class="header" href="#will-cargo-work-with-c-code-or-other-languages">Will Cargo work with C code (or other languages)?</a></h3>
+<p>Yes!</p>
+<p>Cargo handles compiling Rust code, but we know that many Rust packages
+link against C code. We also know that there are decades of tooling
+built up around compiling languages other than Rust.</p>
+<p>Our solution: Cargo allows a package to <a href="reference/build-scripts.html">specify a script</a>
+(written in Rust) to run before invoking <code>rustc</code>. Rust is leveraged to
+implement platform-specific configuration and refactor out common build
+functionality among packages.</p>
+<h3 id="can-cargo-be-used-inside-of-make-or-ninja-or-"><a class="header" href="#can-cargo-be-used-inside-of-make-or-ninja-or-">Can Cargo be used inside of <code>make</code> (or <code>ninja</code>, or …)</a></h3>
+<p>Indeed. While we intend Cargo to be useful as a standalone way to
+compile Rust packages at the top-level, we know that some people will
+want to invoke Cargo from other build tools.</p>
+<p>We have designed Cargo to work well in those contexts, paying attention
+to things like error codes and machine-readable output modes. We still
+have some work to do on those fronts, but using Cargo in the context of
+conventional scripts is something we designed for from the beginning and
+will continue to prioritize.</p>
+<h3 id="does-cargo-handle-multi-platform-packages-or-cross-compilation"><a class="header" href="#does-cargo-handle-multi-platform-packages-or-cross-compilation">Does Cargo handle multi-platform packages or cross-compilation?</a></h3>
+<p>Rust itself provides facilities for configuring sections of code based
+on the platform. Cargo also supports <a href="reference/specifying-dependencies.html#platform-specific-dependencies">platform-specific
+dependencies</a>, and we plan to support more per-platform
+configuration in <code>Cargo.toml</code> in the future.</p>
+<p>In the longer-term, we’re looking at ways to conveniently cross-compile
+packages using Cargo.</p>
+<h3 id="does-cargo-support-environments-like-production-or-test"><a class="header" href="#does-cargo-support-environments-like-production-or-test">Does Cargo support environments, like <code>production</code> or <code>test</code>?</a></h3>
+<p>We support environments through the use of <a href="reference/profiles.html">profiles</a> to support:</p>
+<ul>
+<li>environment-specific flags (like <code>-g --opt-level=0</code> for development
+and <code>--opt-level=3</code> for production).</li>
+<li>environment-specific dependencies (like <code>hamcrest</code> for test assertions).</li>
+<li>environment-specific <code>#[cfg]</code></li>
+<li>a <code>cargo test</code> command</li>
+</ul>
+<h3 id="does-cargo-work-on-windows"><a class="header" href="#does-cargo-work-on-windows">Does Cargo work on Windows?</a></h3>
+<p>Yes!</p>
+<p>All commits to Cargo are required to pass the local test suite on Windows.
+If you encounter an issue while running on Windows, we consider it a bug, so <a href="https://github.com/rust-lang/cargo/issues">please file an
+issue</a>.</p>
+<h3 id="why-do-binaries-have-cargolock-in-version-control-but-not-libraries"><a class="header" href="#why-do-binaries-have-cargolock-in-version-control-but-not-libraries">Why do binaries have <code>Cargo.lock</code> in version control, but not libraries?</a></h3>
+<p>The purpose of a <code>Cargo.lock</code> lockfile is to describe the state of the world at
+the time of a successful build. Cargo uses the lockfile to provide
+deterministic builds on different times and different systems, by ensuring that
+the exact same dependencies and versions are used as when the <code>Cargo.lock</code> file
+was originally generated.</p>
+<p>This property is most desirable from applications and packages which are at the
+very end of the dependency chain (binaries). As a result, it is recommended that
+all binaries check in their <code>Cargo.lock</code>.</p>
+<p>For libraries the situation is somewhat different. A library is not only used by
+the library developers, but also any downstream consumers of the library. Users
+dependent on the library will not inspect the library’s <code>Cargo.lock</code> (even if it
+exists). This is precisely because a library should <strong>not</strong> be deterministically
+recompiled for all users of the library.</p>
+<p>If a library ends up being used transitively by several dependencies, it’s
+likely that just a single copy of the library is desired (based on semver
+compatibility). If Cargo used all of the dependencies’ <code>Cargo.lock</code> files,
+then multiple copies of the library could be used, and perhaps even a version
+conflict.</p>
+<p>In other words, libraries specify SemVer requirements for their dependencies but
+cannot see the full picture. Only end products like binaries have a full
+picture to decide what versions of dependencies should be used.</p>
+<h3 id="can-libraries-use--as-a-version-for-their-dependencies"><a class="header" href="#can-libraries-use--as-a-version-for-their-dependencies">Can libraries use <code>*</code> as a version for their dependencies?</a></h3>
+<p><strong>As of January 22nd, 2016, <a href="https://crates.io/">crates.io</a> rejects all packages (not just libraries)
+with wildcard dependency constraints.</strong></p>
+<p>While libraries <em>can</em>, strictly speaking, they should not. A version requirement
+of <code>*</code> says “This will work with every version ever”, which is never going
+to be true. Libraries should always specify the range that they do work with,
+even if it’s something as general as “every 1.x.y version”.</p>
+<h3 id="why-cargotoml"><a class="header" href="#why-cargotoml">Why <code>Cargo.toml</code>?</a></h3>
+<p>As one of the most frequent interactions with Cargo, the question of why the
+configuration file is named <code>Cargo.toml</code> arises from time to time. The leading
+capital-<code>C</code> was chosen to ensure that the manifest was grouped with other
+similar configuration files in directory listings. Sorting files often puts
+capital letters before lowercase letters, ensuring files like <code>Makefile</code> and
+<code>Cargo.toml</code> are placed together. The trailing <code>.toml</code> was chosen to emphasize
+the fact that the file is in the <a href="https://toml.io/">TOML configuration
+format</a>.</p>
+<p>Cargo does not allow other names such as <code>cargo.toml</code> or <code>Cargofile</code> to
+emphasize the ease of how a Cargo repository can be identified. An option of
+many possible names has historically led to confusion where one case was handled
+but others were accidentally forgotten.</p>
+<h3 id="how-can-cargo-work-offline"><a class="header" href="#how-can-cargo-work-offline">How can Cargo work offline?</a></h3>
+<p>Cargo is often used in situations with limited or no network access such as
+airplanes, CI environments, or embedded in large production deployments. Users
+are often surprised when Cargo attempts to fetch resources from the network, and
+hence the request for Cargo to work offline comes up frequently.</p>
+<p>Cargo, at its heart, will not attempt to access the network unless told to do
+so. That is, if no crates come from crates.io, a git repository, or some other
+network location, Cargo will never attempt to make a network connection. As a
+result, if Cargo attempts to touch the network, then it’s because it needs to
+fetch a required resource.</p>
+<p>Cargo is also quite aggressive about caching information to minimize the amount
+of network activity. It will guarantee, for example, that if <code>cargo build</code> (or
+an equivalent) is run to completion then the next <code>cargo build</code> is guaranteed to
+not touch the network so long as <code>Cargo.toml</code> has not been modified in the
+meantime. This avoidance of the network boils down to a <code>Cargo.lock</code> existing
+and a populated cache of the crates reflected in the lock file. If either of
+these components are missing, then they’re required for the build to succeed and
+must be fetched remotely.</p>
+<p>As of Rust 1.11.0, Cargo understands a new flag, <code>--frozen</code>, which is an
+assertion that it shouldn’t touch the network. When passed, Cargo will
+immediately return an error if it would otherwise attempt a network request.
+The error should include contextual information about why the network request is
+being made in the first place to help debug as well. Note that this flag <em>does
+not change the behavior of Cargo</em>, it simply asserts that Cargo shouldn’t touch
+the network as a previous command has been run to ensure that network activity
+shouldn’t be necessary.</p>
+<p>The <code>--offline</code> flag was added in Rust 1.36.0. This flag tells Cargo to not
+access the network, and try to proceed with available cached data if possible.
+You can use <a href="commands/cargo-fetch.html"><code>cargo fetch</code></a> in one project to download dependencies before
+going offline, and then use those same dependencies in another project with
+the <code>--offline</code> flag (or <a href="reference/config.html#netoffline">configuration value</a>).</p>
+<p>For more information about vendoring, see documentation on <a href="reference/source-replacement.html">source
+replacement</a>.</p>
+<h3 id="why-is-cargo-rebuilding-my-code"><a class="header" href="#why-is-cargo-rebuilding-my-code">Why is Cargo rebuilding my code?</a></h3>
+<p>Cargo is responsible for incrementally compiling crates in your project. This
+means that if you type <code>cargo build</code> twice the second one shouldn’t rebuild your
+crates.io dependencies, for example. Nevertheless bugs arise and Cargo can
+sometimes rebuild code when you’re not expecting it!</p>
+<p>We’ve long <a href="https://github.com/rust-lang/cargo/issues/2904">wanted to provide better diagnostics about
+this</a> but unfortunately haven’t
+been able to make progress on that issue in quite some time. In the meantime,
+however, you can debug a rebuild at least a little by setting the <code>CARGO_LOG</code>
+environment variable:</p>
+<pre><code class="language-sh">$ CARGO_LOG=cargo::core::compiler::fingerprint=info cargo build
+</code></pre>
+<p>This will cause Cargo to print out a lot of information about diagnostics and
+rebuilding. This can often contain clues as to why your project is getting
+rebuilt, although you’ll often need to connect some dots yourself since this
+output isn’t super easy to read just yet. Note that the <code>CARGO_LOG</code> needs to be
+set for the command that rebuilds when you think it should not. Unfortunately
+Cargo has no way right now of after-the-fact debugging “why was that rebuilt?”</p>
+<p>Some issues we’ve seen historically which can cause crates to get rebuilt are:</p>
+<ul>
+<li>
+<p>A build script prints <code>cargo:rerun-if-changed=foo</code> where <code>foo</code> is a file that
+doesn’t exist and nothing generates it. In this case Cargo will keep running
+the build script thinking it will generate the file but nothing ever does. The
+fix is to avoid printing <code>rerun-if-changed</code> in this scenario.</p>
+</li>
+<li>
+<p>Two successive Cargo builds may differ in the set of features enabled for some
+dependencies. For example if the first build command builds the whole
+workspace and the second command builds only one crate, this may cause a
+dependency on crates.io to have a different set of features enabled, causing
+it and everything that depends on it to get rebuilt. There’s unfortunately not
+really a great fix for this, although if possible it’s best to have the set of
+features enabled on a crate constant regardless of what you’re building in
+your workspace.</p>
+</li>
+<li>
+<p>Some filesystems exhibit unusual behavior around timestamps. Cargo primarily
+uses timestamps on files to govern whether rebuilding needs to happen, but if
+you’re using a nonstandard filesystem it may be affecting the timestamps
+somehow (e.g. truncating them, causing them to drift, etc). In this scenario,
+feel free to open an issue and we can see if we can accommodate the filesystem
+somehow.</p>
+</li>
+<li>
+<p>A concurrent build process is either deleting artifacts or modifying files.
+Sometimes you might have a background process that either tries to build or
+check your project. These background processes might surprisingly delete some
+build artifacts or touch files (or maybe just by accident), which can cause
+rebuilds to look spurious! The best fix here would be to wrangle the
+background process to avoid clashing with your work.</p>
+</li>
+</ul>
+<p>If after trying to debug your issue, however, you’re still running into problems
+then feel free to <a href="https://github.com/rust-lang/cargo/issues/new">open an
+issue</a>!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="commands/cargo-yank.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="appendix/glossary.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="commands/cargo-yank.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="appendix/glossary.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

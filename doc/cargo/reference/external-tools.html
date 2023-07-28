@@ -1,0 +1,465 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>External Tools - The Cargo Book</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+            dd {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/first-steps.html"><strong aria-hidden="true">1.2.</strong> First Steps with Cargo</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Cargo Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-cargo-exists.html"><strong aria-hidden="true">2.1.</strong> Why Cargo Exists</a></li><li class="chapter-item expanded "><a href="../guide/creating-a-new-project.html"><strong aria-hidden="true">2.2.</strong> Creating a New Package</a></li><li class="chapter-item expanded "><a href="../guide/working-on-an-existing-project.html"><strong aria-hidden="true">2.3.</strong> Working on an Existing Package</a></li><li class="chapter-item expanded "><a href="../guide/dependencies.html"><strong aria-hidden="true">2.4.</strong> Dependencies</a></li><li class="chapter-item expanded "><a href="../guide/project-layout.html"><strong aria-hidden="true">2.5.</strong> Package Layout</a></li><li class="chapter-item expanded "><a href="../guide/cargo-toml-vs-cargo-lock.html"><strong aria-hidden="true">2.6.</strong> Cargo.toml vs Cargo.lock</a></li><li class="chapter-item expanded "><a href="../guide/tests.html"><strong aria-hidden="true">2.7.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../guide/continuous-integration.html"><strong aria-hidden="true">2.8.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../guide/cargo-home.html"><strong aria-hidden="true">2.9.</strong> Cargo Home</a></li><li class="chapter-item expanded "><a href="../guide/build-cache.html"><strong aria-hidden="true">2.10.</strong> Build Cache</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">3.</strong> Cargo Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/specifying-dependencies.html"><strong aria-hidden="true">3.1.</strong> Specifying Dependencies</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/overriding-dependencies.html"><strong aria-hidden="true">3.1.1.</strong> Overriding Dependencies</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/manifest.html"><strong aria-hidden="true">3.2.</strong> The Manifest Format</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/cargo-targets.html"><strong aria-hidden="true">3.2.1.</strong> Cargo Targets</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/workspaces.html"><strong aria-hidden="true">3.3.</strong> Workspaces</a></li><li class="chapter-item expanded "><a href="../reference/features.html"><strong aria-hidden="true">3.4.</strong> Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/features-examples.html"><strong aria-hidden="true">3.4.1.</strong> Features Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/profiles.html"><strong aria-hidden="true">3.5.</strong> Profiles</a></li><li class="chapter-item expanded "><a href="../reference/config.html"><strong aria-hidden="true">3.6.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../reference/environment-variables.html"><strong aria-hidden="true">3.7.</strong> Environment Variables</a></li><li class="chapter-item expanded "><a href="../reference/build-scripts.html"><strong aria-hidden="true">3.8.</strong> Build Scripts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/build-script-examples.html"><strong aria-hidden="true">3.8.1.</strong> Build Script Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/publishing.html"><strong aria-hidden="true">3.9.</strong> Publishing on crates.io</a></li><li class="chapter-item expanded "><a href="../reference/pkgid-spec.html"><strong aria-hidden="true">3.10.</strong> Package ID Specifications</a></li><li class="chapter-item expanded "><a href="../reference/source-replacement.html"><strong aria-hidden="true">3.11.</strong> Source Replacement</a></li><li class="chapter-item expanded "><a href="../reference/external-tools.html" class="active"><strong aria-hidden="true">3.12.</strong> External Tools</a></li><li class="chapter-item expanded "><a href="../reference/registries.html"><strong aria-hidden="true">3.13.</strong> Registries</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/running-a-registry.html"><strong aria-hidden="true">3.13.1.</strong> Running a Registry</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/registry-index.html"><strong aria-hidden="true">3.13.1.1.</strong> Registry Index</a></li><li class="chapter-item expanded "><a href="../reference/registry-web-api.html"><strong aria-hidden="true">3.13.1.2.</strong> Registry Web API</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../reference/resolver.html"><strong aria-hidden="true">3.14.</strong> Dependency Resolution</a></li><li class="chapter-item expanded "><a href="../reference/semver.html"><strong aria-hidden="true">3.15.</strong> SemVer Compatibility</a></li><li class="chapter-item expanded "><a href="../reference/future-incompat-report.html"><strong aria-hidden="true">3.16.</strong> Future incompat report</a></li><li class="chapter-item expanded "><a href="../reference/timings.html"><strong aria-hidden="true">3.17.</strong> Reporting build timings</a></li><li class="chapter-item expanded "><a href="../reference/unstable.html"><strong aria-hidden="true">3.18.</strong> Unstable Features</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/index.html"><strong aria-hidden="true">4.</strong> Cargo Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/general-commands.html"><strong aria-hidden="true">4.1.</strong> General Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo.html"><strong aria-hidden="true">4.1.1.</strong> cargo</a></li><li class="chapter-item expanded "><a href="../commands/cargo-help.html"><strong aria-hidden="true">4.1.2.</strong> cargo help</a></li><li class="chapter-item expanded "><a href="../commands/cargo-version.html"><strong aria-hidden="true">4.1.3.</strong> cargo version</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/build-commands.html"><strong aria-hidden="true">4.2.</strong> Build Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-bench.html"><strong aria-hidden="true">4.2.1.</strong> cargo bench</a></li><li class="chapter-item expanded "><a href="../commands/cargo-build.html"><strong aria-hidden="true">4.2.2.</strong> cargo build</a></li><li class="chapter-item expanded "><a href="../commands/cargo-check.html"><strong aria-hidden="true">4.2.3.</strong> cargo check</a></li><li class="chapter-item expanded "><a href="../commands/cargo-clean.html"><strong aria-hidden="true">4.2.4.</strong> cargo clean</a></li><li class="chapter-item expanded "><a href="../commands/cargo-doc.html"><strong aria-hidden="true">4.2.5.</strong> cargo doc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fetch.html"><strong aria-hidden="true">4.2.6.</strong> cargo fetch</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fix.html"><strong aria-hidden="true">4.2.7.</strong> cargo fix</a></li><li class="chapter-item expanded "><a href="../commands/cargo-run.html"><strong aria-hidden="true">4.2.8.</strong> cargo run</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustc.html"><strong aria-hidden="true">4.2.9.</strong> cargo rustc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustdoc.html"><strong aria-hidden="true">4.2.10.</strong> cargo rustdoc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-test.html"><strong aria-hidden="true">4.2.11.</strong> cargo test</a></li><li class="chapter-item expanded "><a href="../commands/cargo-report.html"><strong aria-hidden="true">4.2.12.</strong> cargo report</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/manifest-commands.html"><strong aria-hidden="true">4.3.</strong> Manifest Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-add.html"><strong aria-hidden="true">4.3.1.</strong> cargo add</a></li><li class="chapter-item expanded "><a href="../commands/cargo-generate-lockfile.html"><strong aria-hidden="true">4.3.2.</strong> cargo generate-lockfile</a></li><li class="chapter-item expanded "><a href="../commands/cargo-locate-project.html"><strong aria-hidden="true">4.3.3.</strong> cargo locate-project</a></li><li class="chapter-item expanded "><a href="../commands/cargo-metadata.html"><strong aria-hidden="true">4.3.4.</strong> cargo metadata</a></li><li class="chapter-item expanded "><a href="../commands/cargo-pkgid.html"><strong aria-hidden="true">4.3.5.</strong> cargo pkgid</a></li><li class="chapter-item expanded "><a href="../commands/cargo-remove.html"><strong aria-hidden="true">4.3.6.</strong> cargo remove</a></li><li class="chapter-item expanded "><a href="../commands/cargo-tree.html"><strong aria-hidden="true">4.3.7.</strong> cargo tree</a></li><li class="chapter-item expanded "><a href="../commands/cargo-update.html"><strong aria-hidden="true">4.3.8.</strong> cargo update</a></li><li class="chapter-item expanded "><a href="../commands/cargo-vendor.html"><strong aria-hidden="true">4.3.9.</strong> cargo vendor</a></li><li class="chapter-item expanded "><a href="../commands/cargo-verify-project.html"><strong aria-hidden="true">4.3.10.</strong> cargo verify-project</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/package-commands.html"><strong aria-hidden="true">4.4.</strong> Package Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-init.html"><strong aria-hidden="true">4.4.1.</strong> cargo init</a></li><li class="chapter-item expanded "><a href="../commands/cargo-install.html"><strong aria-hidden="true">4.4.2.</strong> cargo install</a></li><li class="chapter-item expanded "><a href="../commands/cargo-new.html"><strong aria-hidden="true">4.4.3.</strong> cargo new</a></li><li class="chapter-item expanded "><a href="../commands/cargo-search.html"><strong aria-hidden="true">4.4.4.</strong> cargo search</a></li><li class="chapter-item expanded "><a href="../commands/cargo-uninstall.html"><strong aria-hidden="true">4.4.5.</strong> cargo uninstall</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/publishing-commands.html"><strong aria-hidden="true">4.5.</strong> Publishing Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-login.html"><strong aria-hidden="true">4.5.1.</strong> cargo login</a></li><li class="chapter-item expanded "><a href="../commands/cargo-logout.html"><strong aria-hidden="true">4.5.2.</strong> cargo logout</a></li><li class="chapter-item expanded "><a href="../commands/cargo-owner.html"><strong aria-hidden="true">4.5.3.</strong> cargo owner</a></li><li class="chapter-item expanded "><a href="../commands/cargo-package.html"><strong aria-hidden="true">4.5.4.</strong> cargo package</a></li><li class="chapter-item expanded "><a href="../commands/cargo-publish.html"><strong aria-hidden="true">4.5.5.</strong> cargo publish</a></li><li class="chapter-item expanded "><a href="../commands/cargo-yank.html"><strong aria-hidden="true">4.5.6.</strong> cargo yank</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">5.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">6.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/git-authentication.html"><strong aria-hidden="true">7.</strong> Appendix: Git Authentication</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Cargo Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/tree/master/src/doc/src" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/edit/master/src/doc/src/reference/external-tools.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="external-tools"><a class="header" href="#external-tools">External tools</a></h2>
+<p>One of the goals of Cargo is simple integration with third-party tools, like
+IDEs and other build systems. To make integration easier, Cargo has several
+facilities:</p>
+<ul>
+<li>
+<p>a <a href="../commands/cargo-metadata.html"><code>cargo metadata</code></a> command, which outputs package structure and dependencies
+information in JSON,</p>
+</li>
+<li>
+<p>a <code>--message-format</code> flag, which outputs information about a particular build,
+and</p>
+</li>
+<li>
+<p>support for custom subcommands.</p>
+</li>
+</ul>
+<h3 id="information-about-package-structure"><a class="header" href="#information-about-package-structure">Information about package structure</a></h3>
+<p>You can use <a href="../commands/cargo-metadata.html"><code>cargo metadata</code></a> command to get information about package
+structure and dependencies. See the <a href="../commands/cargo-metadata.html"><code>cargo metadata</code></a> documentation
+for details on the format of the output.</p>
+<p>The format is stable and versioned. When calling <code>cargo metadata</code>, you should
+pass <code>--format-version</code> flag explicitly to avoid forward incompatibility
+hazard.</p>
+<p>If you are using Rust, the <a href="https://crates.io/crates/cargo_metadata">cargo_metadata</a> crate can be used to parse the
+output.</p>
+<h3 id="json-messages"><a class="header" href="#json-messages">JSON messages</a></h3>
+<p>When passing <code>--message-format=json</code>, Cargo will output the following
+information during the build:</p>
+<ul>
+<li>
+<p>compiler errors and warnings,</p>
+</li>
+<li>
+<p>produced artifacts,</p>
+</li>
+<li>
+<p>results of the build scripts (for example, native dependencies).</p>
+</li>
+</ul>
+<p>The output goes to stdout in the JSON object per line format. The <code>reason</code> field
+distinguishes different kinds of messages.</p>
+<p>The <code>--message-format</code> option can also take additional formatting values which
+alter the way the JSON messages are computed and rendered. See the description
+of the <code>--message-format</code> option in the <a href="../commands/cargo-build.html">build command documentation</a> for more
+details.</p>
+<p>If you are using Rust, the <a href="https://crates.io/crates/cargo_metadata">cargo_metadata</a> crate can be used to parse these
+messages.</p>
+<h4 id="compiler-messages"><a class="header" href="#compiler-messages">Compiler messages</a></h4>
+<p>The “compiler-message” message includes output from the compiler, such as
+warnings and errors. See the <a href="../../rustc/json.html">rustc JSON chapter</a> for
+details on <code>rustc</code>’s message format, which is embedded in the following
+structure:</p>
+<pre><code class="language-javascript">{
+    /* The &quot;reason&quot; indicates the kind of message. */
+    &quot;reason&quot;: &quot;compiler-message&quot;,
+    /* The Package ID, a unique identifier for referring to the package. */
+    &quot;package_id&quot;: &quot;my-package 0.1.0 (path+file:///path/to/my-package)&quot;,
+    /* Absolute path to the package manifest. */
+    &quot;manifest_path&quot;: &quot;/path/to/my-package/Cargo.toml&quot;,
+    /* The Cargo target (lib, bin, example, etc.) that generated the message. */
+    &quot;target&quot;: {
+        /* Array of target kinds.
+           - lib targets list the `crate-type` values from the
+             manifest such as &quot;lib&quot;, &quot;rlib&quot;, &quot;dylib&quot;,
+             &quot;proc-macro&quot;, etc. (default [&quot;lib&quot;])
+           - binary is [&quot;bin&quot;]
+           - example is [&quot;example&quot;]
+           - integration test is [&quot;test&quot;]
+           - benchmark is [&quot;bench&quot;]
+           - build script is [&quot;custom-build&quot;]
+        */
+        &quot;kind&quot;: [
+            &quot;lib&quot;
+        ],
+        /* Array of crate types.
+           - lib and example libraries list the `crate-type` values
+             from the manifest such as &quot;lib&quot;, &quot;rlib&quot;, &quot;dylib&quot;,
+             &quot;proc-macro&quot;, etc. (default [&quot;lib&quot;])
+           - all other target kinds are [&quot;bin&quot;]
+        */
+        &quot;crate_types&quot;: [
+            &quot;lib&quot;
+        ],
+        /* The name of the target. */
+        &quot;name&quot;: &quot;my-package&quot;,
+        /* Absolute path to the root source file of the target. */
+        &quot;src_path&quot;: &quot;/path/to/my-package/src/lib.rs&quot;,
+        /* The Rust edition of the target.
+           Defaults to the package edition.
+        */
+        &quot;edition&quot;: &quot;2018&quot;,
+        /* Array of required features.
+           This property is not included if no required features are set.
+        */
+        &quot;required-features&quot;: [&quot;feat1&quot;],
+        /* Whether the target should be documented by `cargo doc`. */
+        &quot;doc&quot;: true,
+        /* Whether or not this target has doc tests enabled, and
+           the target is compatible with doc testing.
+        */
+        &quot;doctest&quot;: true
+        /* Whether or not this target should be built and run with `--test`
+        */
+        &quot;test&quot;: true
+    },
+    /* The message emitted by the compiler.
+
+    See https://doc.rust-lang.org/rustc/json.html for details.
+    */
+    &quot;message&quot;: {
+        /* ... */
+    }
+}
+</code></pre>
+<h4 id="artifact-messages"><a class="header" href="#artifact-messages">Artifact messages</a></h4>
+<p>For every compilation step, a “compiler-artifact” message is emitted with the
+following structure:</p>
+<pre><code class="language-javascript">{
+    /* The &quot;reason&quot; indicates the kind of message. */
+    &quot;reason&quot;: &quot;compiler-artifact&quot;,
+    /* The Package ID, a unique identifier for referring to the package. */
+    &quot;package_id&quot;: &quot;my-package 0.1.0 (path+file:///path/to/my-package)&quot;,
+    /* Absolute path to the package manifest. */
+    &quot;manifest_path&quot;: &quot;/path/to/my-package/Cargo.toml&quot;,
+    /* The Cargo target (lib, bin, example, etc.) that generated the artifacts.
+       See the definition above for `compiler-message` for details.
+    */
+    &quot;target&quot;: {
+        &quot;kind&quot;: [
+            &quot;lib&quot;
+        ],
+        &quot;crate_types&quot;: [
+            &quot;lib&quot;
+        ],
+        &quot;name&quot;: &quot;my-package&quot;,
+        &quot;src_path&quot;: &quot;/path/to/my-package/src/lib.rs&quot;,
+        &quot;edition&quot;: &quot;2018&quot;,
+        &quot;doc&quot;: true,
+        &quot;doctest&quot;: true,
+        &quot;test&quot;: true
+    },
+    /* The profile indicates which compiler settings were used. */
+    &quot;profile&quot;: {
+        /* The optimization level. */
+        &quot;opt_level&quot;: &quot;0&quot;,
+        /* The debug level, an integer of 0, 1, or 2. If `null`, it implies
+           rustc's default of 0.
+        */
+        &quot;debuginfo&quot;: 2,
+        /* Whether or not debug assertions are enabled. */
+        &quot;debug_assertions&quot;: true,
+        /* Whether or not overflow checks are enabled. */
+        &quot;overflow_checks&quot;: true,
+        /* Whether or not the `--test` flag is used. */
+        &quot;test&quot;: false
+    },
+    /* Array of features enabled. */
+    &quot;features&quot;: [&quot;feat1&quot;, &quot;feat2&quot;],
+    /* Array of files generated by this step. */
+    &quot;filenames&quot;: [
+        &quot;/path/to/my-package/target/debug/libmy_package.rlib&quot;,
+        &quot;/path/to/my-package/target/debug/deps/libmy_package-be9f3faac0a26ef0.rmeta&quot;
+    ],
+    /* A string of the path to the executable that was created, or null if
+       this step did not generate an executable.
+    */
+    &quot;executable&quot;: null,
+    /* Whether or not this step was actually executed.
+       When `true`, this means that the pre-existing artifacts were
+       up-to-date, and `rustc` was not executed. When `false`, this means that
+       `rustc` was run to generate the artifacts.
+    */
+    &quot;fresh&quot;: true
+}
+
+</code></pre>
+<h4 id="build-script-output"><a class="header" href="#build-script-output">Build script output</a></h4>
+<p>The “build-script-executed” message includes the parsed output of a build
+script. Note that this is emitted even if the build script is not run; it will
+display the previously cached value. More details about build script output
+may be found in <a href="build-scripts.html">the chapter on build scripts</a>.</p>
+<pre><code class="language-javascript">{
+    /* The &quot;reason&quot; indicates the kind of message. */
+    &quot;reason&quot;: &quot;build-script-executed&quot;,
+    /* The Package ID, a unique identifier for referring to the package. */
+    &quot;package_id&quot;: &quot;my-package 0.1.0 (path+file:///path/to/my-package)&quot;,
+    /* Array of libraries to link, as indicated by the `cargo:rustc-link-lib`
+       instruction. Note that this may include a &quot;KIND=&quot; prefix in the string
+       where KIND is the library kind.
+    */
+    &quot;linked_libs&quot;: [&quot;foo&quot;, &quot;static=bar&quot;],
+    /* Array of paths to include in the library search path, as indicated by
+       the `cargo:rustc-link-search` instruction. Note that this may include a
+       &quot;KIND=&quot; prefix in the string where KIND is the library kind.
+    */
+    &quot;linked_paths&quot;: [&quot;/some/path&quot;, &quot;native=/another/path&quot;],
+    /* Array of cfg values to enable, as indicated by the `cargo:rustc-cfg`
+       instruction.
+    */
+    &quot;cfgs&quot;: [&quot;cfg1&quot;, &quot;cfg2=\&quot;string\&quot;&quot;],
+    /* Array of [KEY, VALUE] arrays of environment variables to set, as
+       indicated by the `cargo:rustc-env` instruction.
+    */
+    &quot;env&quot;: [
+        [&quot;SOME_KEY&quot;, &quot;some value&quot;],
+        [&quot;ANOTHER_KEY&quot;, &quot;another value&quot;]
+    ],
+    /* An absolute path which is used as a value of `OUT_DIR` environmental
+       variable when compiling current package.
+    */
+    &quot;out_dir&quot;: &quot;/some/path/in/target/dir&quot;
+}
+</code></pre>
+<h4 id="build-finished"><a class="header" href="#build-finished">Build finished</a></h4>
+<p>The “build-finished” message is emitted at the end of the build.</p>
+<pre><code class="language-javascript">{
+    /* The &quot;reason&quot; indicates the kind of message. */
+    &quot;reason&quot;: &quot;build-finished&quot;,
+    /* Whether or not the build finished successfully. */
+    &quot;success&quot;: true,
+}
+</code></pre>
+<p>This message can be helpful for tools to know when to stop reading JSON
+messages. Commands such as <code>cargo test</code> or <code>cargo run</code> can produce additional
+output after the build has finished. This message lets a tool know that Cargo
+will not produce additional JSON messages, but there may be additional output
+that may be generated afterwards (such as the output generated by the program
+executed by <code>cargo run</code>).</p>
+<blockquote>
+<p>Note: There is experimental nightly-only support for JSON output for tests,
+so additional test-specific JSON messages may begin arriving after the
+“build-finished” message if that is enabled.</p>
+</blockquote>
+<h3 id="custom-subcommands"><a class="header" href="#custom-subcommands">Custom subcommands</a></h3>
+<p>Cargo is designed to be extensible with new subcommands without having to modify
+Cargo itself. This is achieved by translating a cargo invocation of the form
+cargo <code>(?&lt;command&gt;[^ ]+)</code> into an invocation of an external tool
+<code>cargo-${command}</code>. The external tool must be present in one of the user’s
+<code>$PATH</code> directories.</p>
+<p>When Cargo invokes a custom subcommand, the first argument to the subcommand
+will be the filename of the custom subcommand, as usual. The second argument
+will be the subcommand name itself. For example, the second argument would be
+<code>${command}</code> when invoking <code>cargo-${command}</code>. Any additional arguments on the
+command line will be forwarded unchanged.</p>
+<p>Cargo can also display the help output of a custom subcommand with <code>cargo help ${command}</code>. Cargo assumes that the subcommand will print a help message if its
+third argument is <code>--help</code>. So, <code>cargo help ${command}</code> would invoke
+<code>cargo-${command} ${command} --help</code>.</p>
+<p>Custom subcommands may use the <code>CARGO</code> environment variable to call back to
+Cargo. Alternatively, it can link to <code>cargo</code> crate as a library, but this
+approach has drawbacks:</p>
+<ul>
+<li>Cargo as a library is unstable: the  API may change without deprecation</li>
+<li>versions of the linked Cargo library may be different from the Cargo binary</li>
+</ul>
+<p>Instead, it is encouraged to use the CLI interface to drive Cargo. The <a href="../commands/cargo-metadata.html"><code>cargo metadata</code></a> command can be used to obtain information about the current project
+(the <a href="https://crates.io/crates/cargo_metadata"><code>cargo_metadata</code></a> crate provides a Rust interface to this command).</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/source-replacement.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../reference/registries.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/source-replacement.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../reference/registries.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

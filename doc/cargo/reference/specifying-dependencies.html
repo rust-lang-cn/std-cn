@@ -1,0 +1,589 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Specifying Dependencies - The Cargo Book</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+            dd {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/first-steps.html"><strong aria-hidden="true">1.2.</strong> First Steps with Cargo</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Cargo Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-cargo-exists.html"><strong aria-hidden="true">2.1.</strong> Why Cargo Exists</a></li><li class="chapter-item expanded "><a href="../guide/creating-a-new-project.html"><strong aria-hidden="true">2.2.</strong> Creating a New Package</a></li><li class="chapter-item expanded "><a href="../guide/working-on-an-existing-project.html"><strong aria-hidden="true">2.3.</strong> Working on an Existing Package</a></li><li class="chapter-item expanded "><a href="../guide/dependencies.html"><strong aria-hidden="true">2.4.</strong> Dependencies</a></li><li class="chapter-item expanded "><a href="../guide/project-layout.html"><strong aria-hidden="true">2.5.</strong> Package Layout</a></li><li class="chapter-item expanded "><a href="../guide/cargo-toml-vs-cargo-lock.html"><strong aria-hidden="true">2.6.</strong> Cargo.toml vs Cargo.lock</a></li><li class="chapter-item expanded "><a href="../guide/tests.html"><strong aria-hidden="true">2.7.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../guide/continuous-integration.html"><strong aria-hidden="true">2.8.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../guide/cargo-home.html"><strong aria-hidden="true">2.9.</strong> Cargo Home</a></li><li class="chapter-item expanded "><a href="../guide/build-cache.html"><strong aria-hidden="true">2.10.</strong> Build Cache</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">3.</strong> Cargo Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/specifying-dependencies.html" class="active"><strong aria-hidden="true">3.1.</strong> Specifying Dependencies</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/overriding-dependencies.html"><strong aria-hidden="true">3.1.1.</strong> Overriding Dependencies</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/manifest.html"><strong aria-hidden="true">3.2.</strong> The Manifest Format</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/cargo-targets.html"><strong aria-hidden="true">3.2.1.</strong> Cargo Targets</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/workspaces.html"><strong aria-hidden="true">3.3.</strong> Workspaces</a></li><li class="chapter-item expanded "><a href="../reference/features.html"><strong aria-hidden="true">3.4.</strong> Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/features-examples.html"><strong aria-hidden="true">3.4.1.</strong> Features Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/profiles.html"><strong aria-hidden="true">3.5.</strong> Profiles</a></li><li class="chapter-item expanded "><a href="../reference/config.html"><strong aria-hidden="true">3.6.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../reference/environment-variables.html"><strong aria-hidden="true">3.7.</strong> Environment Variables</a></li><li class="chapter-item expanded "><a href="../reference/build-scripts.html"><strong aria-hidden="true">3.8.</strong> Build Scripts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/build-script-examples.html"><strong aria-hidden="true">3.8.1.</strong> Build Script Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/publishing.html"><strong aria-hidden="true">3.9.</strong> Publishing on crates.io</a></li><li class="chapter-item expanded "><a href="../reference/pkgid-spec.html"><strong aria-hidden="true">3.10.</strong> Package ID Specifications</a></li><li class="chapter-item expanded "><a href="../reference/source-replacement.html"><strong aria-hidden="true">3.11.</strong> Source Replacement</a></li><li class="chapter-item expanded "><a href="../reference/external-tools.html"><strong aria-hidden="true">3.12.</strong> External Tools</a></li><li class="chapter-item expanded "><a href="../reference/registries.html"><strong aria-hidden="true">3.13.</strong> Registries</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/running-a-registry.html"><strong aria-hidden="true">3.13.1.</strong> Running a Registry</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/registry-index.html"><strong aria-hidden="true">3.13.1.1.</strong> Registry Index</a></li><li class="chapter-item expanded "><a href="../reference/registry-web-api.html"><strong aria-hidden="true">3.13.1.2.</strong> Registry Web API</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../reference/resolver.html"><strong aria-hidden="true">3.14.</strong> Dependency Resolution</a></li><li class="chapter-item expanded "><a href="../reference/semver.html"><strong aria-hidden="true">3.15.</strong> SemVer Compatibility</a></li><li class="chapter-item expanded "><a href="../reference/future-incompat-report.html"><strong aria-hidden="true">3.16.</strong> Future incompat report</a></li><li class="chapter-item expanded "><a href="../reference/timings.html"><strong aria-hidden="true">3.17.</strong> Reporting build timings</a></li><li class="chapter-item expanded "><a href="../reference/unstable.html"><strong aria-hidden="true">3.18.</strong> Unstable Features</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/index.html"><strong aria-hidden="true">4.</strong> Cargo Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/general-commands.html"><strong aria-hidden="true">4.1.</strong> General Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo.html"><strong aria-hidden="true">4.1.1.</strong> cargo</a></li><li class="chapter-item expanded "><a href="../commands/cargo-help.html"><strong aria-hidden="true">4.1.2.</strong> cargo help</a></li><li class="chapter-item expanded "><a href="../commands/cargo-version.html"><strong aria-hidden="true">4.1.3.</strong> cargo version</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/build-commands.html"><strong aria-hidden="true">4.2.</strong> Build Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-bench.html"><strong aria-hidden="true">4.2.1.</strong> cargo bench</a></li><li class="chapter-item expanded "><a href="../commands/cargo-build.html"><strong aria-hidden="true">4.2.2.</strong> cargo build</a></li><li class="chapter-item expanded "><a href="../commands/cargo-check.html"><strong aria-hidden="true">4.2.3.</strong> cargo check</a></li><li class="chapter-item expanded "><a href="../commands/cargo-clean.html"><strong aria-hidden="true">4.2.4.</strong> cargo clean</a></li><li class="chapter-item expanded "><a href="../commands/cargo-doc.html"><strong aria-hidden="true">4.2.5.</strong> cargo doc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fetch.html"><strong aria-hidden="true">4.2.6.</strong> cargo fetch</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fix.html"><strong aria-hidden="true">4.2.7.</strong> cargo fix</a></li><li class="chapter-item expanded "><a href="../commands/cargo-run.html"><strong aria-hidden="true">4.2.8.</strong> cargo run</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustc.html"><strong aria-hidden="true">4.2.9.</strong> cargo rustc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustdoc.html"><strong aria-hidden="true">4.2.10.</strong> cargo rustdoc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-test.html"><strong aria-hidden="true">4.2.11.</strong> cargo test</a></li><li class="chapter-item expanded "><a href="../commands/cargo-report.html"><strong aria-hidden="true">4.2.12.</strong> cargo report</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/manifest-commands.html"><strong aria-hidden="true">4.3.</strong> Manifest Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-add.html"><strong aria-hidden="true">4.3.1.</strong> cargo add</a></li><li class="chapter-item expanded "><a href="../commands/cargo-generate-lockfile.html"><strong aria-hidden="true">4.3.2.</strong> cargo generate-lockfile</a></li><li class="chapter-item expanded "><a href="../commands/cargo-locate-project.html"><strong aria-hidden="true">4.3.3.</strong> cargo locate-project</a></li><li class="chapter-item expanded "><a href="../commands/cargo-metadata.html"><strong aria-hidden="true">4.3.4.</strong> cargo metadata</a></li><li class="chapter-item expanded "><a href="../commands/cargo-pkgid.html"><strong aria-hidden="true">4.3.5.</strong> cargo pkgid</a></li><li class="chapter-item expanded "><a href="../commands/cargo-remove.html"><strong aria-hidden="true">4.3.6.</strong> cargo remove</a></li><li class="chapter-item expanded "><a href="../commands/cargo-tree.html"><strong aria-hidden="true">4.3.7.</strong> cargo tree</a></li><li class="chapter-item expanded "><a href="../commands/cargo-update.html"><strong aria-hidden="true">4.3.8.</strong> cargo update</a></li><li class="chapter-item expanded "><a href="../commands/cargo-vendor.html"><strong aria-hidden="true">4.3.9.</strong> cargo vendor</a></li><li class="chapter-item expanded "><a href="../commands/cargo-verify-project.html"><strong aria-hidden="true">4.3.10.</strong> cargo verify-project</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/package-commands.html"><strong aria-hidden="true">4.4.</strong> Package Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-init.html"><strong aria-hidden="true">4.4.1.</strong> cargo init</a></li><li class="chapter-item expanded "><a href="../commands/cargo-install.html"><strong aria-hidden="true">4.4.2.</strong> cargo install</a></li><li class="chapter-item expanded "><a href="../commands/cargo-new.html"><strong aria-hidden="true">4.4.3.</strong> cargo new</a></li><li class="chapter-item expanded "><a href="../commands/cargo-search.html"><strong aria-hidden="true">4.4.4.</strong> cargo search</a></li><li class="chapter-item expanded "><a href="../commands/cargo-uninstall.html"><strong aria-hidden="true">4.4.5.</strong> cargo uninstall</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/publishing-commands.html"><strong aria-hidden="true">4.5.</strong> Publishing Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-login.html"><strong aria-hidden="true">4.5.1.</strong> cargo login</a></li><li class="chapter-item expanded "><a href="../commands/cargo-logout.html"><strong aria-hidden="true">4.5.2.</strong> cargo logout</a></li><li class="chapter-item expanded "><a href="../commands/cargo-owner.html"><strong aria-hidden="true">4.5.3.</strong> cargo owner</a></li><li class="chapter-item expanded "><a href="../commands/cargo-package.html"><strong aria-hidden="true">4.5.4.</strong> cargo package</a></li><li class="chapter-item expanded "><a href="../commands/cargo-publish.html"><strong aria-hidden="true">4.5.5.</strong> cargo publish</a></li><li class="chapter-item expanded "><a href="../commands/cargo-yank.html"><strong aria-hidden="true">4.5.6.</strong> cargo yank</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">5.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">6.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/git-authentication.html"><strong aria-hidden="true">7.</strong> Appendix: Git Authentication</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Cargo Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/tree/master/src/doc/src" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/edit/master/src/doc/src/reference/specifying-dependencies.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="specifying-dependencies"><a class="header" href="#specifying-dependencies">Specifying Dependencies</a></h2>
+<p>Your crates can depend on other libraries from <a href="https://crates.io/">crates.io</a> or other
+registries, <code>git</code> repositories, or subdirectories on your local file system.
+You can also temporarily override the location of a dependency — for example,
+to be able to test out a bug fix in the dependency that you are working on
+locally. You can have different dependencies for different platforms, and
+dependencies that are only used during development. Let’s take a look at how
+to do each of these.</p>
+<h3 id="specifying-dependencies-from-cratesio"><a class="header" href="#specifying-dependencies-from-cratesio">Specifying dependencies from crates.io</a></h3>
+<p>Cargo is configured to look for dependencies on <a href="https://crates.io/">crates.io</a> by default. Only
+the name and a version string are required in this case. In <a href="../guide/index.html">the cargo
+guide</a>, we specified a dependency on the <code>time</code> crate:</p>
+<pre><code class="language-toml">[dependencies]
+time = &quot;0.1.12&quot;
+</code></pre>
+<p>The string <code>&quot;0.1.12&quot;</code> is a version requirement. Although it looks like a
+specific <em>version</em> of the <code>time</code> crate, it actually specifies a <em>range</em> of
+versions and allows <a href="https://semver.org">SemVer</a> compatible updates. An update is allowed if the new
+version number does not modify the left-most non-zero digit in the major, minor,
+patch grouping. In this case, if we ran <code>cargo update -p time</code>, cargo should
+update us to version <code>0.1.13</code> if it is the latest <code>0.1.z</code> release, but would not
+update us to <code>0.2.0</code>. If instead we had specified the version string as <code>1.0</code>,
+cargo should update to <code>1.1</code> if it is the latest <code>1.y</code> release, but not <code>2.0</code>.
+The version <code>0.0.x</code> is not considered compatible with any other version.</p>
+<p>Here are some more examples of version requirements and the versions that would
+be allowed with them:</p>
+<pre><code class="language-notrust">1.2.3  :=  &gt;=1.2.3, &lt;2.0.0
+1.2    :=  &gt;=1.2.0, &lt;2.0.0
+1      :=  &gt;=1.0.0, &lt;2.0.0
+0.2.3  :=  &gt;=0.2.3, &lt;0.3.0
+0.2    :=  &gt;=0.2.0, &lt;0.3.0
+0.0.3  :=  &gt;=0.0.3, &lt;0.0.4
+0.0    :=  &gt;=0.0.0, &lt;0.1.0
+0      :=  &gt;=0.0.0, &lt;1.0.0
+</code></pre>
+<p>This compatibility convention is different from SemVer in the way it treats
+versions before 1.0.0. While SemVer says there is no compatibility before
+1.0.0, Cargo considers <code>0.x.y</code> to be compatible with <code>0.x.z</code>, where <code>y ≥ z</code>
+and <code>x &gt; 0</code>.</p>
+<p>It is possible to further tweak the logic for selecting compatible versions
+using special operators, though it shouldn’t be necessary most of the time.</p>
+<h3 id="caret-requirements"><a class="header" href="#caret-requirements">Caret requirements</a></h3>
+<p><strong>Caret requirements</strong> are an alternative syntax for the default strategy,
+<code>^1.2.3</code> is exactly equivalent to <code>1.2.3</code>.</p>
+<h3 id="tilde-requirements"><a class="header" href="#tilde-requirements">Tilde requirements</a></h3>
+<p><strong>Tilde requirements</strong> specify a minimal version with some ability to update.
+If you specify a major, minor, and patch version or only a major and minor
+version, only patch-level changes are allowed. If you only specify a major
+version, then minor- and patch-level changes are allowed.</p>
+<p><code>~1.2.3</code> is an example of a tilde requirement.</p>
+<pre><code class="language-notrust">~1.2.3  := &gt;=1.2.3, &lt;1.3.0
+~1.2    := &gt;=1.2.0, &lt;1.3.0
+~1      := &gt;=1.0.0, &lt;2.0.0
+</code></pre>
+<h3 id="wildcard-requirements"><a class="header" href="#wildcard-requirements">Wildcard requirements</a></h3>
+<p><strong>Wildcard requirements</strong> allow for any version where the wildcard is
+positioned.</p>
+<p><code>*</code>, <code>1.*</code> and <code>1.2.*</code> are examples of wildcard requirements.</p>
+<pre><code class="language-notrust">*     := &gt;=0.0.0
+1.*   := &gt;=1.0.0, &lt;2.0.0
+1.2.* := &gt;=1.2.0, &lt;1.3.0
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: <a href="https://crates.io/">crates.io</a> does not allow bare <code>*</code> versions.</p>
+</blockquote>
+<h3 id="comparison-requirements"><a class="header" href="#comparison-requirements">Comparison requirements</a></h3>
+<p><strong>Comparison requirements</strong> allow manually specifying a version range or an
+exact version to depend on.</p>
+<p>Here are some examples of comparison requirements:</p>
+<pre><code class="language-notrust">&gt;= 1.2.0
+&gt; 1
+&lt; 2
+= 1.2.3
+</code></pre>
+<h3 id="multiple-requirements"><a class="header" href="#multiple-requirements">Multiple requirements</a></h3>
+<p>As shown in the examples above, multiple version requirements can be
+separated with a comma, e.g., <code>&gt;= 1.2, &lt; 1.5</code>.</p>
+<h3 id="specifying-dependencies-from-other-registries"><a class="header" href="#specifying-dependencies-from-other-registries">Specifying dependencies from other registries</a></h3>
+<p>To specify a dependency from a registry other than <a href="https://crates.io/">crates.io</a>, first the
+registry must be configured in a <code>.cargo/config.toml</code> file. See the <a href="registries.html">registries
+documentation</a> for more information. In the dependency, set the <code>registry</code> key
+to the name of the registry to use.</p>
+<pre><code class="language-toml">[dependencies]
+some-crate = { version = &quot;1.0&quot;, registry = &quot;my-registry&quot; }
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: <a href="https://crates.io/">crates.io</a> does not allow packages to be published with
+dependencies on other registries.</p>
+</blockquote>
+<h3 id="specifying-dependencies-from-git-repositories"><a class="header" href="#specifying-dependencies-from-git-repositories">Specifying dependencies from <code>git</code> repositories</a></h3>
+<p>To depend on a library located in a <code>git</code> repository, the minimum information
+you need to specify is the location of the repository with the <code>git</code> key:</p>
+<pre><code class="language-toml">[dependencies]
+regex = { git = &quot;https://github.com/rust-lang/regex.git&quot; }
+</code></pre>
+<p>Cargo will fetch the <code>git</code> repository at this location then look for a
+<code>Cargo.toml</code> for the requested crate anywhere inside the <code>git</code> repository
+(not necessarily at the root — for example, specifying a member crate name
+of a workspace and setting <code>git</code> to the repository containing the workspace).</p>
+<p>Since we haven’t specified any other information, Cargo assumes that
+we intend to use the latest commit on the main branch to build our package.
+You can combine the <code>git</code> key with the <code>rev</code>, <code>tag</code>, or <code>branch</code> keys to
+specify something else. Here’s an example of specifying that you want to use
+the latest commit on a branch named <code>next</code>:</p>
+<pre><code class="language-toml">[dependencies]
+regex = { git = &quot;https://github.com/rust-lang/regex.git&quot;, branch = &quot;next&quot; }
+</code></pre>
+<p>Anything that is not a branch or tag falls under <code>rev</code>. This can be a commit
+hash like <code>rev = &quot;4c59b707&quot;</code>, or a named reference exposed by the remote
+repository such as <code>rev = &quot;refs/pull/493/head&quot;</code>. What references are available
+varies by where the repo is hosted; GitHub in particular exposes a reference to
+the most recent commit of every pull request as shown, but other git hosts often
+provide something equivalent, possibly under a different naming scheme.</p>
+<p>Once a <code>git</code> dependency has been added, Cargo will lock that dependency to the
+latest commit at the time. New commits will not be pulled down automatically
+once the lock is in place. However, they can be pulled down manually with
+<code>cargo update</code>.</p>
+<p>See <a href="../appendix/git-authentication.html">Git Authentication</a> for help with git authentication for private repos.</p>
+<blockquote>
+<p><strong>Note</strong>: <a href="https://crates.io/">crates.io</a> does not allow packages to be published with <code>git</code>
+dependencies (<code>git</code> <a href="#development-dependencies">dev-dependencies</a> are ignored). See the <a href="#multiple-locations">Multiple
+locations</a> section for a fallback alternative.</p>
+</blockquote>
+<h3 id="specifying-path-dependencies"><a class="header" href="#specifying-path-dependencies">Specifying path dependencies</a></h3>
+<p>Over time, our <code>hello_world</code> package from <a href="../guide/index.html">the guide</a> has
+grown significantly in size! It’s gotten to the point that we probably want to
+split out a separate crate for others to use. To do this Cargo supports <strong>path
+dependencies</strong> which are typically sub-crates that live within one repository.
+Let’s start off by making a new crate inside of our <code>hello_world</code> package:</p>
+<pre><code class="language-console"># inside of hello_world/
+$ cargo new hello_utils
+</code></pre>
+<p>This will create a new folder <code>hello_utils</code> inside of which a <code>Cargo.toml</code> and
+<code>src</code> folder are ready to be configured. In order to tell Cargo about this, open
+up <code>hello_world/Cargo.toml</code> and add <code>hello_utils</code> to your dependencies:</p>
+<pre><code class="language-toml">[dependencies]
+hello_utils = { path = &quot;hello_utils&quot; }
+</code></pre>
+<p>This tells Cargo that we depend on a crate called <code>hello_utils</code> which is found
+in the <code>hello_utils</code> folder (relative to the <code>Cargo.toml</code> it’s written in).</p>
+<p>And that’s it! The next <code>cargo build</code> will automatically build <code>hello_utils</code> and
+all of its own dependencies, and others can also start using the crate as well.
+However, crates that use dependencies specified with only a path are not
+permitted on <a href="https://crates.io/">crates.io</a>. If we wanted to publish our <code>hello_world</code> crate, we
+would need to publish a version of <code>hello_utils</code> to <a href="https://crates.io/">crates.io</a>
+and specify its version in the dependencies line as well:</p>
+<pre><code class="language-toml">[dependencies]
+hello_utils = { path = &quot;hello_utils&quot;, version = &quot;0.1.0&quot; }
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: <a href="https://crates.io/">crates.io</a> does not allow packages to be published with <code>path</code>
+dependencies (<code>path</code> <a href="#development-dependencies">dev-dependencies</a> are ignored). See the <a href="#multiple-locations">Multiple
+locations</a> section for a fallback alternative.</p>
+</blockquote>
+<h3 id="multiple-locations"><a class="header" href="#multiple-locations">Multiple locations</a></h3>
+<p>It is possible to specify both a registry version and a <code>git</code> or <code>path</code>
+location. The <code>git</code> or <code>path</code> dependency will be used locally (in which case
+the <code>version</code> is checked against the local copy), and when published to a
+registry like <a href="https://crates.io/">crates.io</a>, it will use the registry version. Other
+combinations are not allowed. Examples:</p>
+<pre><code class="language-toml">[dependencies]
+# Uses `my-bitflags` when used locally, and uses
+# version 1.0 from crates.io when published.
+bitflags = { path = &quot;my-bitflags&quot;, version = &quot;1.0&quot; }
+
+# Uses the given git repo when used locally, and uses
+# version 1.0 from crates.io when published.
+smallvec = { git = &quot;https://github.com/servo/rust-smallvec.git&quot;, version = &quot;1.0&quot; }
+
+# N.B. that if a version doesn't match, Cargo will fail to compile!
+</code></pre>
+<p>One example where this can be useful is when you have split up a library into
+multiple packages within the same workspace. You can then use <code>path</code>
+dependencies to point to the local packages within the workspace to use the
+local version during development, and then use the <a href="https://crates.io/">crates.io</a> version once it
+is published. This is similar to specifying an
+<a href="overriding-dependencies.html">override</a>, but only applies to this one
+dependency declaration.</p>
+<h3 id="platform-specific-dependencies"><a class="header" href="#platform-specific-dependencies">Platform specific dependencies</a></h3>
+<p>Platform-specific dependencies take the same format, but are listed under a
+<code>target</code> section. Normally Rust-like <a href="../../reference/conditional-compilation.html"><code>#[cfg]</code>
+syntax</a> will be used to define
+these sections:</p>
+<pre><code class="language-toml">[target.'cfg(windows)'.dependencies]
+winhttp = &quot;0.4.0&quot;
+
+[target.'cfg(unix)'.dependencies]
+openssl = &quot;1.0.1&quot;
+
+[target.'cfg(target_arch = &quot;x86&quot;)'.dependencies]
+native-i686 = { path = &quot;native/i686&quot; }
+
+[target.'cfg(target_arch = &quot;x86_64&quot;)'.dependencies]
+native-x86_64 = { path = &quot;native/x86_64&quot; }
+</code></pre>
+<p>Like with Rust, the syntax here supports the <code>not</code>, <code>any</code>, and <code>all</code> operators
+to combine various cfg name/value pairs.</p>
+<p>If you want to know which cfg targets are available on your platform, run
+<code>rustc --print=cfg</code> from the command line. If you want to know which <code>cfg</code>
+targets are available for another platform, such as 64-bit Windows,
+run <code>rustc --print=cfg --target=x86_64-pc-windows-msvc</code>.</p>
+<p>Unlike in your Rust source code, you cannot use
+<code>[target.'cfg(feature = &quot;fancy-feature&quot;)'.dependencies]</code> to add dependencies
+based on optional features. Use <a href="features.html">the <code>[features]</code> section</a>
+instead:</p>
+<pre><code class="language-toml">[dependencies]
+foo = { version = &quot;1.0&quot;, optional = true }
+bar = { version = &quot;1.0&quot;, optional = true }
+
+[features]
+fancy-feature = [&quot;foo&quot;, &quot;bar&quot;]
+</code></pre>
+<p>The same applies to <code>cfg(debug_assertions)</code>, <code>cfg(test)</code> and <code>cfg(proc_macro)</code>.
+These values will not work as expected and will always have the default value
+returned by <code>rustc --print=cfg</code>.
+There is currently no way to add dependencies based on these configuration values.</p>
+<p>In addition to <code>#[cfg]</code> syntax, Cargo also supports listing out the full target
+the dependencies would apply to:</p>
+<pre><code class="language-toml">[target.x86_64-pc-windows-gnu.dependencies]
+winhttp = &quot;0.4.0&quot;
+
+[target.i686-unknown-linux-gnu.dependencies]
+openssl = &quot;1.0.1&quot;
+</code></pre>
+<h4 id="custom-target-specifications"><a class="header" href="#custom-target-specifications">Custom target specifications</a></h4>
+<p>If you’re using a custom target specification (such as <code>--target foo/bar.json</code>), use the base filename without the <code>.json</code> extension:</p>
+<pre><code class="language-toml">[target.bar.dependencies]
+winhttp = &quot;0.4.0&quot;
+
+[target.my-special-i686-platform.dependencies]
+openssl = &quot;1.0.1&quot;
+native = { path = &quot;native/i686&quot; }
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: Custom target specifications are not usable on the stable channel.</p>
+</blockquote>
+<h3 id="development-dependencies"><a class="header" href="#development-dependencies">Development dependencies</a></h3>
+<p>You can add a <code>[dev-dependencies]</code> section to your <code>Cargo.toml</code> whose format
+is equivalent to <code>[dependencies]</code>:</p>
+<pre><code class="language-toml">[dev-dependencies]
+tempdir = &quot;0.3&quot;
+</code></pre>
+<p>Dev-dependencies are not used when compiling
+a package for building, but are used for compiling tests, examples, and
+benchmarks.</p>
+<p>These dependencies are <em>not</em> propagated to other packages which depend on this
+package.</p>
+<p>You can also have target-specific development dependencies by using
+<code>dev-dependencies</code> in the target section header instead of <code>dependencies</code>. For
+example:</p>
+<pre><code class="language-toml">[target.'cfg(unix)'.dev-dependencies]
+mio = &quot;0.0.1&quot;
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: When a package is published, only dev-dependencies that specify a
+<code>version</code> will be included in the published crate. For most use cases,
+dev-dependencies are not needed when published, though some users (like OS
+packagers) may want to run tests within a crate, so providing a <code>version</code> if
+possible can still be beneficial.</p>
+</blockquote>
+<h3 id="build-dependencies"><a class="header" href="#build-dependencies">Build dependencies</a></h3>
+<p>You can depend on other Cargo-based crates for use in your build scripts.
+Dependencies are declared through the <code>build-dependencies</code> section of the
+manifest:</p>
+<pre><code class="language-toml">[build-dependencies]
+cc = &quot;1.0.3&quot;
+</code></pre>
+<p>You can also have target-specific build dependencies by using
+<code>build-dependencies</code> in the target section header instead of <code>dependencies</code>. For
+example:</p>
+<pre><code class="language-toml">[target.'cfg(unix)'.build-dependencies]
+cc = &quot;1.0.3&quot;
+</code></pre>
+<p>In this case, the dependency will only be built when the host platform matches the
+specified target.</p>
+<p>The build script <strong>does not</strong> have access to the dependencies listed
+in the <code>dependencies</code> or <code>dev-dependencies</code> section. Build
+dependencies will likewise not be available to the package itself
+unless listed under the <code>dependencies</code> section as well. A package
+itself and its build script are built separately, so their
+dependencies need not coincide. Cargo is kept simpler and cleaner by
+using independent dependencies for independent purposes.</p>
+<h3 id="choosing-features"><a class="header" href="#choosing-features">Choosing features</a></h3>
+<p>If a package you depend on offers conditional features, you can
+specify which to use:</p>
+<pre><code class="language-toml">[dependencies.awesome]
+version = &quot;1.3.5&quot;
+default-features = false # do not include the default features, and optionally
+                         # cherry-pick individual features
+features = [&quot;secure-password&quot;, &quot;civet&quot;]
+</code></pre>
+<p>More information about features can be found in the <a href="features.html#dependency-features">features
+chapter</a>.</p>
+<h3 id="renaming-dependencies-in-cargotoml"><a class="header" href="#renaming-dependencies-in-cargotoml">Renaming dependencies in <code>Cargo.toml</code></a></h3>
+<p>When writing a <code>[dependencies]</code> section in <code>Cargo.toml</code> the key you write for a
+dependency typically matches up to the name of the crate you import from in the
+code. For some projects, though, you may wish to reference the crate with a
+different name in the code regardless of how it’s published on crates.io. For
+example you may wish to:</p>
+<ul>
+<li>Avoid the need to  <code>use foo as bar</code> in Rust source.</li>
+<li>Depend on multiple versions of a crate.</li>
+<li>Depend on crates with the same name from different registries.</li>
+</ul>
+<p>To support this Cargo supports a <code>package</code> key in the <code>[dependencies]</code> section
+of which package should be depended on:</p>
+<pre><code class="language-toml">[package]
+name = &quot;mypackage&quot;
+version = &quot;0.0.1&quot;
+
+[dependencies]
+foo = &quot;0.1&quot;
+bar = { git = &quot;https://github.com/example/project.git&quot;, package = &quot;foo&quot; }
+baz = { version = &quot;0.1&quot;, registry = &quot;custom&quot;, package = &quot;foo&quot; }
+</code></pre>
+<p>In this example, three crates are now available in your Rust code:</p>
+<pre><code class="language-rust ignore">extern crate foo; // crates.io
+extern crate bar; // git repository
+extern crate baz; // registry `custom`</code></pre>
+<p>All three of these crates have the package name of <code>foo</code> in their own
+<code>Cargo.toml</code>, so we’re explicitly using the <code>package</code> key to inform Cargo that
+we want the <code>foo</code> package even though we’re calling it something else locally.
+The <code>package</code> key, if not specified, defaults to the name of the dependency
+being requested.</p>
+<p>Note that if you have an optional dependency like:</p>
+<pre><code class="language-toml">[dependencies]
+bar = { version = &quot;0.1&quot;, package = 'foo', optional = true }
+</code></pre>
+<p>you’re depending on the crate <code>foo</code> from crates.io, but your crate has a <code>bar</code>
+feature instead of a <code>foo</code> feature. That is, names of features take after the
+name of the dependency, not the package name, when renamed.</p>
+<p>Enabling transitive dependencies works similarly, for example we could add the
+following to the above manifest:</p>
+<pre><code class="language-toml">[features]
+log-debug = ['bar/log-debug'] # using 'foo/log-debug' would be an error!
+</code></pre>
+<h3 id="inheriting-a-dependency-from-a-workspace"><a class="header" href="#inheriting-a-dependency-from-a-workspace">Inheriting a dependency from a workspace</a></h3>
+<p>Dependencies can be inherited from a workspace by specifying the
+dependency in the workspace’s <a href="workspaces.html#the-dependencies-table"><code>[workspace.dependencies]</code></a> table.
+After that, add it to the <code>[dependencies]</code> table with <code>workspace = true</code>.</p>
+<p>Along with the <code>workspace</code> key, dependencies can also include these keys:</p>
+<ul>
+<li><a href="features.html#optional-dependencies"><code>optional</code></a>: Note that the<code>[workspace.dependencies]</code> table is not allowed to specify <code>optional</code>.</li>
+<li><a href="features.html"><code>features</code></a>: These are additive with the features declared in the <code>[workspace.dependencies]</code></li>
+</ul>
+<p>Other than <code>optional</code> and <code>features</code>, inherited dependencies cannot use any other
+dependency key (such as <code>version</code> or <code>default-features</code>).</p>
+<p>Dependencies in the <code>[dependencies]</code>, <code>[dev-dependencies]</code>, <code>[build-dependencies]</code>, and
+<code>[target.&quot;...&quot;.dependencies]</code> sections support the ability to reference the
+<code>[workspace.dependencies]</code> definition of dependencies.</p>
+<pre><code class="language-toml">[package]
+name = &quot;bar&quot;
+version = &quot;0.2.0&quot;
+
+[dependencies]
+regex = { workspace = true, features = [&quot;unicode&quot;] }
+
+[build-dependencies]
+cc.workspace = true
+
+[dev-dependencies]
+rand = { workspace = true, optional = true }
+</code></pre>
+<script>
+(function() {
+    var fragments = {
+        "#overriding-dependencies": "overriding-dependencies.html",
+        "#testing-a-bugfix": "overriding-dependencies.html#testing-a-bugfix",
+        "#working-with-an-unpublished-minor-version": "overriding-dependencies.html#working-with-an-unpublished-minor-version",
+        "#overriding-repository-url": "overriding-dependencies.html#overriding-repository-url",
+        "#prepublishing-a-breaking-change": "overriding-dependencies.html#prepublishing-a-breaking-change",
+        "#overriding-with-local-dependencies": "overriding-dependencies.html#paths-overrides",
+    };
+    var target = fragments[window.location.hash];
+    if (target) {
+        var url = window.location.toString();
+        var base = url.substring(0, url.lastIndexOf('/'));
+        window.location.replace(base + "/" + target);
+    }
+})();
+</script>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../reference/overriding-dependencies.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../reference/overriding-dependencies.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

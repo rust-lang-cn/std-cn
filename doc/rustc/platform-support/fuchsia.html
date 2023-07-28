@@ -1,0 +1,919 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>*-unknown-fuchsia - The rustc book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../what-is-rustc.html"><strong aria-hidden="true">1.</strong> What is rustc?</a></li><li class="chapter-item expanded "><a href="../command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line Arguments</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../codegen-options/index.html"><strong aria-hidden="true">2.1.</strong> Codegen Options</a></li></ol></li><li class="chapter-item expanded "><a href="../lints/index.html"><strong aria-hidden="true">3.</strong> Lints</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lints/levels.html"><strong aria-hidden="true">3.1.</strong> Lint Levels</a></li><li class="chapter-item expanded "><a href="../lints/groups.html"><strong aria-hidden="true">3.2.</strong> Lint Groups</a></li><li class="chapter-item expanded "><a href="../lints/listing/index.html"><strong aria-hidden="true">3.3.</strong> Lint Listing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lints/listing/allowed-by-default.html"><strong aria-hidden="true">3.3.1.</strong> Allowed-by-default Lints</a></li><li class="chapter-item expanded "><a href="../lints/listing/warn-by-default.html"><strong aria-hidden="true">3.3.2.</strong> Warn-by-default Lints</a></li><li class="chapter-item expanded "><a href="../lints/listing/deny-by-default.html"><strong aria-hidden="true">3.3.3.</strong> Deny-by-default Lints</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../json.html"><strong aria-hidden="true">4.</strong> JSON Output</a></li><li class="chapter-item expanded "><a href="../tests/index.html"><strong aria-hidden="true">5.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../platform-support.html"><strong aria-hidden="true">6.</strong> Platform Support</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../target-tier-policy.html"><strong aria-hidden="true">6.1.</strong> Target Tier Policy</a></li><li class="chapter-item expanded "><a href="../platform-support/TEMPLATE.html"><strong aria-hidden="true">6.2.</strong> Template for Target-specific Documentation</a></li><li class="chapter-item expanded "><a href="../platform-support/aarch64-apple-ios-sim.html"><strong aria-hidden="true">6.3.</strong> aarch64-apple-ios-sim</a></li><li class="chapter-item expanded "><a href="../platform-support/apple-watchos.html"><strong aria-hidden="true">6.4.</strong> *-apple-watchos*</a></li><li class="chapter-item expanded "><a href="../platform-support/aarch64-nintendo-switch-freestanding.html"><strong aria-hidden="true">6.5.</strong> aarch64-nintendo-switch-freestanding</a></li><li class="chapter-item expanded "><a href="../platform-support/armeb-unknown-linux-gnueabi.html"><strong aria-hidden="true">6.6.</strong> armeb-unknown-linux-gnueabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv4t-none-eabi.html"><strong aria-hidden="true">6.7.</strong> armv4t-none-eabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv5te-none-eabi.html"><strong aria-hidden="true">6.8.</strong> armv5te-none-eabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv6k-nintendo-3ds.html"><strong aria-hidden="true">6.9.</strong> armv6k-nintendo-3ds</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-sony-vita-newlibeabihf.html"><strong aria-hidden="true">6.10.</strong> armv7-sony-vita-newlibeabihf</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-unknown-linux-uclibceabi.html"><strong aria-hidden="true">6.11.</strong> armv7-unknown-linux-uclibceabi</a></li><li class="chapter-item expanded "><a href="../platform-support/armv7-unknown-linux-uclibceabihf.html"><strong aria-hidden="true">6.12.</strong> armv7-unknown-linux-uclibceabihf</a></li><li class="chapter-item expanded "><a href="../platform-support/android.html"><strong aria-hidden="true">6.13.</strong> *-android and *-androideabi</a></li><li class="chapter-item expanded "><a href="../platform-support/openharmony.html"><strong aria-hidden="true">6.14.</strong> *-linux-ohos</a></li><li class="chapter-item expanded "><a href="../platform-support/esp-idf.html"><strong aria-hidden="true">6.15.</strong> *-esp-espidf</a></li><li class="chapter-item expanded "><a href="../platform-support/fuchsia.html" class="active"><strong aria-hidden="true">6.16.</strong> *-unknown-fuchsia</a></li><li class="chapter-item expanded "><a href="../platform-support/kmc-solid.html"><strong aria-hidden="true">6.17.</strong> *-kmc-solid_*</a></li><li class="chapter-item expanded "><a href="../platform-support/loongarch-linux.html"><strong aria-hidden="true">6.18.</strong> loongarch*-unknown-linux-*</a></li><li class="chapter-item expanded "><a href="../platform-support/m68k-unknown-linux-gnu.html"><strong aria-hidden="true">6.19.</strong> m68k-unknown-linux-gnu</a></li><li class="chapter-item expanded "><a href="../platform-support/mips64-openwrt-linux-musl.html"><strong aria-hidden="true">6.20.</strong> mips64-openwrt-linux-musl</a></li><li class="chapter-item expanded "><a href="../platform-support/mipsel-sony-psx.html"><strong aria-hidden="true">6.21.</strong> mipsel-sony-psx</a></li><li class="chapter-item expanded "><a href="../platform-support/nvptx64-nvidia-cuda.html"><strong aria-hidden="true">6.22.</strong> nvptx64-nvidia-cuda</a></li><li class="chapter-item expanded "><a href="../platform-support/riscv32imac-unknown-xous-elf.html"><strong aria-hidden="true">6.23.</strong> riscv32imac-unknown-xous-elf</a></li><li class="chapter-item expanded "><a href="../platform-support/pc-windows-gnullvm.html"><strong aria-hidden="true">6.24.</strong> *-pc-windows-gnullvm</a></li><li class="chapter-item expanded "><a href="../platform-support/nto-qnx.html"><strong aria-hidden="true">6.25.</strong> *-nto-qnx-*</a></li><li class="chapter-item expanded "><a href="../platform-support/openbsd.html"><strong aria-hidden="true">6.26.</strong> *-unknown-openbsd</a></li><li class="chapter-item expanded "><a href="../platform-support/unknown-uefi.html"><strong aria-hidden="true">6.27.</strong> *-unknown-uefi</a></li><li class="chapter-item expanded "><a href="../platform-support/wasm64-unknown-unknown.html"><strong aria-hidden="true">6.28.</strong> wasm64-unknown-unknown</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64-fortanix-unknown-sgx.html"><strong aria-hidden="true">6.29.</strong> x86_64-fortanix-unknown-sgx</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64-unknown-none.html"><strong aria-hidden="true">6.30.</strong> x86_64-unknown-none</a></li><li class="chapter-item expanded "><a href="../platform-support/x86_64h-apple-darwin.html"><strong aria-hidden="true">6.31.</strong> x86_64h-apple-darwin</a></li></ol></li><li class="chapter-item expanded "><a href="../targets/index.html"><strong aria-hidden="true">7.</strong> Targets</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../targets/built-in.html"><strong aria-hidden="true">7.1.</strong> Built-in Targets</a></li><li class="chapter-item expanded "><a href="../targets/custom.html"><strong aria-hidden="true">7.2.</strong> Custom Targets</a></li><li class="chapter-item expanded "><a href="../targets/known-issues.html"><strong aria-hidden="true">7.3.</strong> Known Issues</a></li></ol></li><li class="chapter-item expanded "><a href="../profile-guided-optimization.html"><strong aria-hidden="true">8.</strong> Profile-guided Optimization</a></li><li class="chapter-item expanded "><a href="../instrument-coverage.html"><strong aria-hidden="true">9.</strong> Instrumentation-based Code Coverage</a></li><li class="chapter-item expanded "><a href="../linker-plugin-lto.html"><strong aria-hidden="true">10.</strong> Linker-plugin-based LTO</a></li><li class="chapter-item expanded "><a href="../exploit-mitigations.html"><strong aria-hidden="true">11.</strong> Exploit Mitigations</a></li><li class="chapter-item expanded "><a href="../contributing.html"><strong aria-hidden="true">12.</strong> Contributing to rustc</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The rustc book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/master/src/doc/rustc" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/edit/master/src/doc/rustc/src/platform-support/fuchsia.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="aarch64-unknown-fuchsia-and-x86_64-unknown-fuchsia"><a class="header" href="#aarch64-unknown-fuchsia-and-x86_64-unknown-fuchsia"><code>aarch64-unknown-fuchsia</code> and <code>x86_64-unknown-fuchsia</code></a></h1>
+<p><strong>Tier: 2</strong></p>
+<p><a href="https://fuchsia.dev/">Fuchsia</a> is a modern open source operating system that's simple, secure,
+updatable, and performant.</p>
+<h2 id="target-maintainers"><a class="header" href="#target-maintainers">Target maintainers</a></h2>
+<p>The <a href="https://team-api.infra.rust-lang.org/v1/teams/fuchsia.json">Fuchsia team</a>:</p>
+<ul>
+<li>Tyler Mandry (<a href="https://github.com/tmandry">@tmandry</a>)</li>
+<li>Dan Johnson (<a href="https://github.com/computerdruid">@computerdruid</a>)</li>
+<li>David Koloski (<a href="https://github.com/djkoloski">@djkoloski</a>)</li>
+<li>Joseph Ryan (<a href="https://github.com/P1n3appl3">@P1n3appl3</a>)</li>
+</ul>
+<p>As the team evolves over time, the specific members listed here may differ from
+the members reported by the API. The API should be considered to be
+authoritative if this occurs. Instead of pinging individual members, use
+<code>@rustbot ping fuchsia</code> to contact the team on GitHub.</p>
+<h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of contents</a></h2>
+<ol>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#walkthrough-structure">Walkthrough structure</a></li>
+<li><a href="#compiling-a-rust-binary-targeting-fuchsia">Compiling a Rust binary targeting Fuchsia</a>
+<ol>
+<li><a href="#targeting-fuchsia-with-rustup-and-cargo">Targeting Fuchsia with rustup and cargo</a></li>
+<li><a href="#targeting-fuchsia-with-a-compiler-built-from-source">Targeting Fuchsia with a compiler built from source</a></li>
+</ol>
+</li>
+<li><a href="#creating-a-fuchsia-package">Creating a Fuchsia package</a>
+<ol>
+<li><a href="#creating-a-fuchsia-component">Creating a Fuchsia component</a></li>
+<li><a href="#building-a-fuchsia-package">Building a Fuchsia package</a></li>
+</ol>
+</li>
+<li><a href="#publishing-a-fuchsia-package">Publishing a Fuchsia package</a>
+<ol>
+<li><a href="#creating-a-fuchsia-package-repository">Creating a Fuchsia package repository</a></li>
+<li><a href="#publishing-fuchsia-package-to-repository">Publishing Fuchsia package to repository</a></li>
+</ol>
+</li>
+<li><a href="#running-a-fuchsia-component-on-an-emulator">Running a Fuchsia component on an emulator</a>
+<ol>
+<li><a href="#starting-the-fuchsia-emulator">Starting the Fuchsia emulator</a></li>
+<li><a href="#watching-emulator-logs">Watching emulator logs</a></li>
+<li><a href="#serving-a-fuchsia-package">Serving a Fuchsia package</a></li>
+<li><a href="#running-a-fuchsia-component">Running a Fuchsia component</a></li>
+</ol>
+</li>
+<li><a href="#gitignore-extensions"><code>.gitignore</code> extensions</a></li>
+<li><a href="#testing">Testing</a>
+<ol>
+<li><a href="#running-unit-tests">Running unit tests</a></li>
+<li><a href="#running-the-compiler-test-suite">Running the compiler test suite</a></li>
+</ol>
+</li>
+<li><a href="#debugging">Debugging</a>
+<ol>
+<li><a href="#zxdb"><code>zxdb</code></a></li>
+<li><a href="#attaching-zxdb">Attaching <code>zxdb</code></a></li>
+<li><a href="#using-zxdb">Using <code>zxdb</code></a></li>
+<li><a href="#displaying-source-code-in-zxdb">Displaying source code in <code>zxdb</code></a></li>
+</ol>
+</li>
+</ol>
+<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
+<p>This target is cross-compiled from a host environment. You will need a recent
+copy of the <a href="https://chrome-infra-packages.appspot.com/p/fuchsia/sdk/core">Fuchsia SDK</a>, which provides the tools, libraries, and binaries
+required to build and link programs for Fuchsia.</p>
+<p>Development may also be done from the <a href="https://fuchsia.dev/fuchsia-src/get-started/learn/build">source tree</a>.</p>
+<p>Fuchsia targets support <code>std</code> and follow the <code>sysv64</code> calling convention on
+x86_64. Fuchsia binaries use the ELF file format.</p>
+<h2 id="walkthrough-structure"><a class="header" href="#walkthrough-structure">Walkthrough structure</a></h2>
+<p>This walkthrough will cover:</p>
+<ol>
+<li>Compiling a Rust binary targeting Fuchsia.</li>
+<li>Building a Fuchsia package.</li>
+<li>Publishing and running a Fuchsia package to a Fuchsia emulator.</li>
+</ol>
+<p>For the purposes of this walkthrough, we will only target <code>x86_64-unknown-fuchsia</code>.</p>
+<h2 id="compiling-a-rust-binary-targeting-fuchsia"><a class="header" href="#compiling-a-rust-binary-targeting-fuchsia">Compiling a Rust binary targeting Fuchsia</a></h2>
+<p>Today, there are two main ways to build a Rust binary targeting Fuchsia
+using the Fuchsia SDK:</p>
+<ol>
+<li>Allow <a href="https://rustup.rs/">rustup</a> to handle the installation of Fuchsia targets for you.</li>
+<li>Build a toolchain locally that can target Fuchsia.</li>
+</ol>
+<h3 id="targeting-fuchsia-with-rustup-and-cargo"><a class="header" href="#targeting-fuchsia-with-rustup-and-cargo">Targeting Fuchsia with rustup and cargo</a></h3>
+<p>The easiest way to build a Rust binary targeting Fuchsia is by allowing <a href="https://rustup.rs/">rustup</a>
+to handle the installation of Fuchsia targets for you. This can be done by issuing
+the following commands:</p>
+<pre><code class="language-sh">rustup target add x86_64-unknown-fuchsia
+rustup target add aarch64-unknown-fuchsia
+</code></pre>
+<p>After installing our Fuchsia targets, we can now compile a Rust binary that targets
+Fuchsia.</p>
+<p>To create our Rust project, we can use <a href="../../cargo/index.html"><code>cargo</code></a> as follows:</p>
+<p><strong>From base working directory</strong></p>
+<pre><code class="language-sh">cargo new hello_fuchsia
+</code></pre>
+<p>The rest of this walkthrough will take place from <code>hello_fuchsia</code>, so we can
+change into that directory now:</p>
+<pre><code class="language-sh">cd hello_fuchsia
+</code></pre>
+<p><em>Note: From this point onwards, all commands will be issued from the <code>hello_fuchsia/</code>
+directory, and all <code>hello_fuchsia/</code> prefixes will be removed from references for sake of brevity.</em></p>
+<p>We can edit our <code>src/main.rs</code> to include a test as follows:</p>
+<p><strong><code>src/main.rs</code></strong></p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    println!(&quot;Hello Fuchsia!&quot;);
+}
+
+#[test]
+fn it_works() {
+    assert_eq!(2 + 2, 4);
+}</code></pre></pre>
+<p>In addition to the standard workspace created, we will want to create a
+<code>.cargo/config.toml</code> file to link necessary libraries
+during compilation:</p>
+<p><strong><code>.cargo/config.toml</code></strong></p>
+<pre><code class="language-txt">[target.x86_64-unknown-fuchsia]
+
+rustflags = [
+    &quot;-Lnative=&lt;SDK_PATH&gt;/arch/x64/lib&quot;,
+    &quot;-Lnative=&lt;SDK_PATH&gt;/arch/x64/sysroot/lib&quot;
+]
+</code></pre>
+<p><em>Note: Make sure to fill out <code>&lt;SDK_PATH&gt;</code> with the path to the downloaded <a href="https://chrome-infra-packages.appspot.com/p/fuchsia/sdk/core">Fuchsia SDK</a>.</em></p>
+<p>These options configure the following:</p>
+<ul>
+<li><code>-Lnative=${SDK_PATH}/arch/${ARCH}/lib</code>: Link against Fuchsia libraries from
+the SDK</li>
+<li><code>-Lnative=${SDK_PATH}/arch/${ARCH}/sysroot/lib</code>: Link against Fuchsia sysroot
+libraries from the SDK</li>
+</ul>
+<p>In total, our new project will look like:</p>
+<p><strong>Current directory structure</strong></p>
+<pre><code class="language-txt">hello_fuchsia/
+┣━ src/
+┃  ┗━ main.rs
+┣━ Cargo.toml
+┗━ .cargo/
+   ┗━ config.toml
+</code></pre>
+<p>Finally, we can build our rust binary as:</p>
+<pre><code class="language-sh">cargo build --target x86_64-unknown-fuchsia
+</code></pre>
+<p>Now we have a Rust binary at <code>target/x86_64-unknown-fuchsia/debug/hello_fuchsia</code>,
+targeting our desired Fuchsia target.</p>
+<p><strong>Current directory structure</strong></p>
+<pre><code class="language-txt">hello_fuchsia/
+┣━ src/
+┃  ┗━ main.rs
+┣━ target/
+┃  ┗━ x86_64-unknown-fuchsia/
+┃     ┗━ debug/
+┃        ┗━ hello_fuchsia
+┣━ Cargo.toml
+┗━ .cargo/
+   ┗━ config.toml
+</code></pre>
+<h3 id="targeting-fuchsia-with-a-compiler-built-from-source"><a class="header" href="#targeting-fuchsia-with-a-compiler-built-from-source">Targeting Fuchsia with a compiler built from source</a></h3>
+<p>An alternative to the first workflow is to target Fuchsia by using
+<code>rustc</code> built from source.</p>
+<p>Before building Rust for Fuchsia, you'll need a clang toolchain that supports
+Fuchsia as well. A recent version (14+) of clang should be sufficient to compile
+Rust for Fuchsia.</p>
+<p>x86-64 and AArch64 Fuchsia targets can be enabled using the following
+configuration in <code>config.toml</code>:</p>
+<pre><code class="language-toml">[build]
+target = [&quot;&lt;host_platform&gt;&quot;, &quot;aarch64-unknown-fuchsia&quot;, &quot;x86_64-unknown-fuchsia&quot;]
+
+[rust]
+lld = true
+
+[llvm]
+download-ci-llvm = false
+
+[target.x86_64-unknown-fuchsia]
+cc = &quot;clang&quot;
+cxx = &quot;clang++&quot;
+
+[target.aarch64-unknown-fuchsia]
+cc = &quot;clang&quot;
+cxx = &quot;clang++&quot;
+</code></pre>
+<p>Though not strictly required, you may also want to use <code>clang</code> for your host
+target as well:</p>
+<pre><code class="language-toml">[target.&lt;host_platform&gt;]
+cc = &quot;clang&quot;
+cxx = &quot;clang++&quot;
+</code></pre>
+<p>By default, the Rust compiler installs itself to <code>/usr/local</code> on most UNIX
+systems. You may want to install it to another location (e.g. a local <code>install</code>
+directory) by setting a custom prefix in <code>config.toml</code>:</p>
+<pre><code class="language-toml">[install]
+# Make sure to use the absolute path to your install directory
+prefix = &quot;&lt;RUST_SRC_PATH&gt;/install&quot;
+</code></pre>
+<p>Next, the following environment variables must be configured. For example, using
+a script we name <code>config-env.sh</code>:</p>
+<pre><code class="language-sh"># Configure this environment variable to be the path to the downloaded SDK
+export SDK_PATH=&quot;&lt;SDK path goes here&gt;&quot;
+
+export CFLAGS_aarch64_unknown_fuchsia=&quot;--target=aarch64-unknown-fuchsia --sysroot=${SDK_PATH}/arch/arm64/sysroot -I${SDK_PATH}/pkg/fdio/include&quot;
+export CXXFLAGS_aarch64_unknown_fuchsia=&quot;--target=aarch64-unknown-fuchsia --sysroot=${SDK_PATH}/arch/arm64/sysroot -I${SDK_PATH}/pkg/fdio/include&quot;
+export LDFLAGS_aarch64_unknown_fuchsia=&quot;--target=aarch64-unknown-fuchsia --sysroot=${SDK_PATH}/arch/arm64/sysroot -L${SDK_PATH}/arch/arm64/lib&quot;
+export CARGO_TARGET_AARCH64_UNKNOWN_FUCHSIA_RUSTFLAGS=&quot;-C link-arg=--sysroot=${SDK_PATH}/arch/arm64/sysroot -Lnative=${SDK_PATH}/arch/arm64/sysroot/lib -Lnative=${SDK_PATH}/arch/arm64/lib&quot;
+export CFLAGS_x86_64_unknown_fuchsia=&quot;--target=x86_64-unknown-fuchsia --sysroot=${SDK_PATH}/arch/x64/sysroot -I${SDK_PATH}/pkg/fdio/include&quot;
+export CXXFLAGS_x86_64_unknown_fuchsia=&quot;--target=x86_64-unknown-fuchsia --sysroot=${SDK_PATH}/arch/x64/sysroot -I${SDK_PATH}/pkg/fdio/include&quot;
+export LDFLAGS_x86_64_unknown_fuchsia=&quot;--target=x86_64-unknown-fuchsia --sysroot=${SDK_PATH}/arch/x64/sysroot -L${SDK_PATH}/arch/x64/lib&quot;
+export CARGO_TARGET_X86_64_UNKNOWN_FUCHSIA_RUSTFLAGS=&quot;-C link-arg=--sysroot=${SDK_PATH}/arch/x64/sysroot -Lnative=${SDK_PATH}/arch/x64/sysroot/lib -Lnative=${SDK_PATH}/arch/x64/lib&quot;
+</code></pre>
+<p>Finally, the Rust compiler can be built and installed:</p>
+<pre><code class="language-sh">(source config-env.sh &amp;&amp; ./x.py install)
+</code></pre>
+<p>Once <code>rustc</code> is installed, we can create a new working directory to work from,
+<code>hello_fuchsia</code> along with <code>hello_fuchsia/src</code>:</p>
+<pre><code class="language-sh">mkdir hello_fuchsia
+cd hello_fuchsia
+mkdir src
+</code></pre>
+<p><em>Note: From this point onwards, all commands will be issued from the <code>hello_fuchsia/</code>
+directory, and all <code>hello_fuchsia/</code> prefixes will be removed from references for sake of brevity.</em></p>
+<p>There, we can create a new file named <code>src/hello_fuchsia.rs</code>:</p>
+<p><strong><code>src/hello_fuchsia.rs</code></strong></p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    println!(&quot;Hello Fuchsia!&quot;);
+}
+
+#[test]
+fn it_works() {
+    assert_eq!(2 + 2, 4);
+}</code></pre></pre>
+<p><strong>Current directory structure</strong></p>
+<pre><code class="language-txt">hello_fuchsia/
+┗━ src/
+    ┗━ hello_fuchsia.rs
+</code></pre>
+<p>Using your freshly installed <code>rustc</code>, you can compile a binary for Fuchsia using
+the following options:</p>
+<ul>
+<li><code>--target x86_64-unknown-fuchsia</code>/<code>--target aarch64-unknown-fuchsia</code>: Targets the Fuchsia
+platform of your choice</li>
+<li><code>-Lnative ${SDK_PATH}/arch/${ARCH}/lib</code>: Link against Fuchsia libraries from
+the SDK</li>
+<li><code>-Lnative ${SDK_PATH}/arch/${ARCH}/sysroot/lib</code>: Link against Fuchsia sysroot
+libraries from the SDK</li>
+</ul>
+<p>Putting it all together:</p>
+<pre><code class="language-sh"># Configure these for the Fuchsia target of your choice
+TARGET_ARCH=&quot;&lt;x86_64-unknown-fuchsia|aarch64-unknown-fuchsia&gt;&quot;
+ARCH=&quot;&lt;x64|aarch64&gt;&quot;
+
+rustc \
+    --target ${TARGET_ARCH} \
+    -Lnative=${SDK_PATH}/arch/${ARCH}/lib \
+    -Lnative=${SDK_PATH}/arch/${ARCH}/sysroot/lib \
+    --out-dir bin src/hello_fuchsia.rs
+</code></pre>
+<p><strong>Current directory structure</strong></p>
+<pre><code class="language-txt">hello_fuchsia/
+┣━ src/
+┃   ┗━ hello_fuchsia.rs
+┗━ bin/
+   ┗━ hello_fuchsia
+</code></pre>
+<h2 id="creating-a-fuchsia-package"><a class="header" href="#creating-a-fuchsia-package">Creating a Fuchsia package</a></h2>
+<p>Before moving on, double check your directory structure:</p>
+<p><strong>Current directory structure</strong></p>
+<pre><code class="language-txt">hello_fuchsia/
+┣━ src/                         (if using rustc)
+┃   ┗━ hello_fuchsia.rs         ...
+┣━ bin/                         ...
+┃  ┗━ hello_fuchsia             ...
+┣━ src/                         (if using cargo)
+┃  ┗━ main.rs                   ...
+┗━ target/                      ...
+   ┗━ x86_64-unknown-fuchsia/   ...
+      ┗━ debug/                 ...
+         ┗━ hello_fuchsia       ...
+</code></pre>
+<p>With our Rust binary built, we can move to creating a Fuchsia package.
+On Fuchsia, a package is the unit of distribution for software. We'll need to
+create a new package directory where we will place files like our finished
+binary and any data it may need.</p>
+<p>To start, make the <code>pkg</code>, and <code>pkg/meta</code> directories:</p>
+<pre><code class="language-sh">mkdir pkg
+mkdir pkg/meta
+</code></pre>
+<p><strong>Current directory structure</strong></p>
+<pre><code class="language-txt">hello_fuchsia/
+┗━ pkg/
+   ┗━ meta/
+</code></pre>
+<p>Now, create the following files inside:</p>
+<p><strong><code>pkg/meta/package</code></strong></p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;hello_fuchsia&quot;,
+  &quot;version&quot;: &quot;0&quot;
+}
+</code></pre>
+<p>The <code>package</code> file describes our package's name and version number. Every
+package must contain one.</p>
+<p><strong><code>pkg/hello_fuchsia.manifest</code> if using cargo</strong></p>
+<pre><code class="language-txt">bin/hello_fuchsia=target/x86_64-unknown-fuchsia/debug/hello_fuchsia
+lib/ld.so.1=&lt;SDK_PATH&gt;/arch/x64/sysroot/dist/lib/ld.so.1
+lib/libfdio.so=&lt;SDK_PATH&gt;/arch/x64/dist/libfdio.so
+meta/package=pkg/meta/package
+meta/hello_fuchsia.cm=pkg/meta/hello_fuchsia.cm
+</code></pre>
+<p><strong><code>pkg/hello_fuchsia.manifest</code> if using rustc</strong></p>
+<pre><code class="language-txt">bin/hello_fuchsia=bin/hello_fuchsia
+lib/ld.so.1=&lt;SDK_PATH&gt;/arch/x64/sysroot/dist/lib/ld.so.1
+lib/libfdio.so=&lt;SDK_PATH&gt;/arch/x64/dist/libfdio.so
+meta/package=pkg/meta/package
+meta/hello_fuchsia.cm=pkg/meta/hello_fuchsia.cm
+</code></pre>
+<p><em>Note: Relative manifest paths are resolved starting from the working directory
+of <code>pm</code>. Make sure to fill out <code>&lt;SDK_PATH&gt;</code> with the path to the downloaded
+SDK.</em></p>
+<p>The <code>.manifest</code> file will be used to describe the contents of the package by
+relating their location when installed to their location on the file system. The
+<code>bin/hello_fuchsia=</code> entry will be different depending on how your Rust binary
+was built, so choose accordingly.</p>
+<p><strong>Current directory structure</strong></p>
+<pre><code class="language-txt">hello_fuchsia/
+┗━ pkg/
+   ┣━ meta/
+   ┃  ┗━ package
+   ┗━ hello_fuchsia.manifest
+</code></pre>
+<h3 id="creating-a-fuchsia-component"><a class="header" href="#creating-a-fuchsia-component">Creating a Fuchsia component</a></h3>
+<p>On Fuchsia, components require a component manifest written in Fuchsia's markup
+language called CML. The Fuchsia devsite contains an <a href="https://fuchsia.dev/fuchsia-src/concepts/components/v2/component_manifests">overview of CML</a> and a
+<a href="https://fuchsia.dev/reference/cml">reference for the file format</a>. Here's a basic one that can run our single binary:</p>
+<p><strong><code>pkg/hello_fuchsia.cml</code></strong></p>
+<pre><code class="language-txt">{
+    include: [ &quot;syslog/client.shard.cml&quot; ],
+    program: {
+        runner: &quot;elf&quot;,
+        binary: &quot;bin/hello_fuchsia&quot;,
+    },
+}
+</code></pre>
+<p><strong>Current directory structure</strong></p>
+<pre><code class="language-txt">hello_fuchsia/
+┗━ pkg/
+   ┣━ meta/
+   ┃  ┗━ package
+   ┣━ hello_fuchsia.manifest
+   ┗━ hello_fuchsia.cml
+</code></pre>
+<p>Now we can compile that CML into a component manifest:</p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/cmc compile \
+    pkg/hello_fuchsia.cml \
+    --includepath ${SDK_PATH}/pkg \
+    -o pkg/meta/hello_fuchsia.cm
+</code></pre>
+<p><em>Note: <code>--includepath</code> tells the compiler where to look for <code>include</code>s from our CML.
+In our case, we're only using <code>syslog/client.shard.cml</code>.</em></p>
+<p><strong>Current directory structure</strong></p>
+<pre><code class="language-txt">hello_fuchsia/
+┗━ pkg/
+   ┣━ meta/
+   ┃  ┣━ package
+   ┃  ┗━ hello_fuchsia.cm
+   ┣━ hello_fuchsia.manifest
+   ┗━ hello_fuchsia.cml
+</code></pre>
+<h3 id="building-a-fuchsia-package"><a class="header" href="#building-a-fuchsia-package">Building a Fuchsia package</a></h3>
+<p>Next, we'll build a package manifest as defined by our manifest:</p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/pm \
+    -api-level $(${SDK_PATH}/tools/${ARCH}/ffx version -v | grep &quot;api-level&quot; | head -1 |  awk -F ' ' '{print $2}') \
+    -o pkg/hello_fuchsia_manifest \
+    -m pkg/hello_fuchsia.manifest \
+    build \
+    -output-package-manifest pkg/hello_fuchsia_package_manifest
+</code></pre>
+<p>This will produce <code>pkg/hello_fuchsia_manifest/</code> which is a package manifest we can
+publish directly to a repository.</p>
+<p><strong>Current directory structure</strong></p>
+<pre><code class="language-txt">hello_fuchsia/
+┗━ pkg/
+   ┣━ meta/
+   ┃  ┣━ package
+   ┃  ┗━ hello_fuchsia.cm
+   ┣━ hello_fuchsia_manifest/
+   ┃  ┗━ ...
+   ┣━ hello_fuchsia.manifest
+   ┣━ hello_fuchsia.cml
+   ┗━ hello_fuchsia_package_manifest
+</code></pre>
+<p>We are now ready to publish the package.</p>
+<h2 id="publishing-a-fuchsia-package"><a class="header" href="#publishing-a-fuchsia-package">Publishing a Fuchsia package</a></h2>
+<p>With our package and component manifests setup,
+we can now publish our package. The first step will
+be to create a Fuchsia package repository to publish
+to.</p>
+<h3 id="creating-a-fuchsia-package-repository"><a class="header" href="#creating-a-fuchsia-package-repository">Creating a Fuchsia package repository</a></h3>
+<p>We can set up our repository with:</p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/pm newrepo \
+    -repo pkg/repo
+</code></pre>
+<p><strong>Current directory structure</strong></p>
+<pre><code class="language-txt">hello_fuchsia/
+┗━ pkg/
+   ┣━ meta/
+   ┃  ┣━ package
+   ┃  ┗━ hello_fuchsia.cm
+   ┣━ hello_fuchsia_manifest/
+   ┃  ┗━ ...
+   ┣━ repo/
+   ┃  ┗━ ...
+   ┣━ hello_fuchsia.manifest
+   ┣━ hello_fuchsia.cml
+   ┗━ hello_fuchsia_package_manifest
+</code></pre>
+<h2 id="publishing-fuchsia-package-to-repository"><a class="header" href="#publishing-fuchsia-package-to-repository">Publishing Fuchsia package to repository</a></h2>
+<p>We can publish our new package to that repository with:</p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/pm publish \
+    -repo pkg/repo \
+    -lp -f &lt;(echo &quot;pkg/hello_fuchsia_package_manifest&quot;)
+</code></pre>
+<p>Then we can add the repository to <code>ffx</code>'s package server as <code>hello-fuchsia</code> using:</p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/ffx repository add-from-pm \
+    pkg/repo \
+    -r hello-fuchsia
+</code></pre>
+<h2 id="running-a-fuchsia-component-on-an-emulator"><a class="header" href="#running-a-fuchsia-component-on-an-emulator">Running a Fuchsia component on an emulator</a></h2>
+<p>At this point, we are ready to run our Fuchsia
+component. For reference, our final directory
+structure will look like:</p>
+<p><strong>Final directory structure</strong></p>
+<pre><code class="language-txt">hello_fuchsia/
+┣━ src/                         (if using rustc)
+┃   ┗━ hello_fuchsia.rs         ...
+┣━ bin/                         ...
+┃  ┗━ hello_fuchsia             ...
+┣━ src/                         (if using cargo)
+┃  ┗━ main.rs                   ...
+┣━ target/                      ...
+┃  ┗━ x86_64-unknown-fuchsia/   ...
+┃     ┗━ debug/                 ...
+┃        ┗━ hello_fuchsia       ...
+┗━ pkg/
+   ┣━ meta/
+   ┃  ┣━ package
+   ┃  ┗━ hello_fuchsia.cm
+   ┣━ hello_fuchsia_manifest/
+   ┃  ┗━ ...
+   ┣━ repo/
+   ┃  ┗━ ...
+   ┣━ hello_fuchsia.manifest
+   ┣━ hello_fuchsia.cml
+   ┗━ hello_fuchsia_package_manifest
+</code></pre>
+<h3 id="starting-the-fuchsia-emulator"><a class="header" href="#starting-the-fuchsia-emulator">Starting the Fuchsia emulator</a></h3>
+<p>Start a Fuchsia emulator in a new terminal using:</p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/ffx product-bundle get workstation_eng.qemu-${ARCH}
+${SDK_PATH}/tools/${ARCH}/ffx emu start workstation_eng.qemu-${ARCH} --headless
+</code></pre>
+<h3 id="watching-emulator-logs"><a class="header" href="#watching-emulator-logs">Watching emulator logs</a></h3>
+<p>Once the emulator is running, open a separate terminal to watch the emulator logs:</p>
+<p><strong>In separate terminal</strong></p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/ffx log \
+    --since now
+</code></pre>
+<h3 id="serving-a-fuchsia-package"><a class="header" href="#serving-a-fuchsia-package">Serving a Fuchsia package</a></h3>
+<p>Now, start a package repository server to serve our
+package to the emulator:</p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/ffx repository server start
+</code></pre>
+<p>Once the repository server is up and running, register it with the target Fuchsia system running in the emulator:</p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/ffx target repository register \
+    --repository hello-fuchsia
+</code></pre>
+<h3 id="running-a-fuchsia-component"><a class="header" href="#running-a-fuchsia-component">Running a Fuchsia component</a></h3>
+<p>Finally, run the component:</p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/ffx component run \
+    /core/ffx-laboratory:hello_fuchsia \
+    fuchsia-pkg://hello-fuchsia/hello_fuchsia_manifest#meta/hello_fuchsia.cm
+</code></pre>
+<p>On reruns of the component, the <code>--recreate</code> argument may also need to be
+passed.</p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/ffx component run \
+    --recreate \
+    /core/ffx-laboratory:hello_fuchsia \
+    fuchsia-pkg://hello-fuchsia/hello_fuchsia_manifest#meta/hello_fuchsia.cm
+</code></pre>
+<h2 id="gitignore-extensions"><a class="header" href="#gitignore-extensions"><code>.gitignore</code> extensions</a></h2>
+<p>Optionally, we can create/extend our <code>.gitignore</code> file to ignore files and
+directories that are not helpful to track:</p>
+<pre><code class="language-txt">pkg/repo
+pkg/meta/hello_fuchsia.cm
+pkg/hello_fuchsia_manifest
+pkg/hello_fuchsia_package_manifest
+</code></pre>
+<h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
+<h3 id="running-unit-tests"><a class="header" href="#running-unit-tests">Running unit tests</a></h3>
+<p>Tests can be run in the same way as a regular binary.</p>
+<ul>
+<li>
+<p>If using <code>cargo</code>, you can simply pass <code>test --no-run</code>
+to the <code>cargo</code> invocation and then repackage and rerun the Fuchsia package. From our previous example,
+this would look like <code>cargo test --target x86_64-unknown-fuchsia --no-run</code>, and moving the executable
+binary path found from the line <code>Executable unittests src/main.rs (target/x86_64-unknown-fuchsia/debug/deps/hello_fuchsia-&lt;HASH&gt;)</code>
+into <code>pkg/hello_fuchsia.manifest</code>.</p>
+</li>
+<li>
+<p>If using the compiled <code>rustc</code>, you can simply pass <code>--test</code>
+to the <code>rustc</code> invocation and then repackage and rerun the Fuchsia package.</p>
+</li>
+</ul>
+<p>The test harness will run the applicable unit tests.</p>
+<p>Often when testing, you may want to pass additional command line arguments to
+your binary. Additional arguments can be set in the component manifest:</p>
+<p><strong><code>pkg/hello_fuchsia.cml</code></strong></p>
+<pre><code class="language-txt">{
+    include: [ &quot;syslog/client.shard.cml&quot; ],
+    program: {
+        runner: &quot;elf&quot;,
+        binary: &quot;bin/hello_fuchsia&quot;,
+        args: [&quot;it_works&quot;],
+    },
+}
+</code></pre>
+<p>This will pass the argument <code>it_works</code> to the binary, filtering the tests to
+only those tests that match the pattern. There are many more configuration
+options available in CML including environment variables. More documentation is
+available on the <a href="https://fuchsia.dev/reference/cml">Fuchsia devsite</a>.</p>
+<h3 id="running-the-compiler-test-suite"><a class="header" href="#running-the-compiler-test-suite">Running the compiler test suite</a></h3>
+<p>The commands in this section assume that they are being run from inside your
+local Rust source checkout:</p>
+<pre><code class="language-sh">cd ${RUST_SRC_PATH}
+</code></pre>
+<p>To run the Rust test suite on an emulated Fuchsia device, you must install the
+Rust compiler locally. See &quot;<a href="#targeting-fuchsia-with-a-compiler-built-from-source">Targeting Fuchsia with a compiler built from source</a>&quot;
+for the steps to build locally.</p>
+<p>You'll also need to download a copy of the Fuchsia SDK. The current minimum
+supported SDK version is <a href="https://chrome-infra-packages.appspot.com/p/fuchsia/sdk/core/linux-amd64/+/version:10.20221207.2.89">10.20221207.2.89</a>.</p>
+<p>Fuchsia's test runner interacts with the Fuchsia emulator and is located at
+<code>src/ci/docker/scripts/fuchsia-test-runner.py</code>. We can use it to start our
+test environment with:</p>
+<pre><code class="language-sh">src/ci/docker/scripts/fuchsia-test-runner.py start
+    --rust ${RUST_SRC_PATH}/install
+    --sdk ${SDK_PATH}
+    --target {x86_64-unknown-fuchsia|aarch64-unknown-fuchsia}
+</code></pre>
+<p>Where <code>${RUST_SRC_PATH}/install</code> is the <code>prefix</code> set in <code>config.toml</code> and
+<code>${SDK_PATH}</code> is the path to the downloaded and unzipped SDK.</p>
+<p>Once our environment is started, we can run our tests using <code>x.py</code> as usual. The
+test runner script will run the compiled tests on an emulated Fuchsia device. To
+run the full <code>tests/ui</code> test suite:</p>
+<pre><code class="language-sh">( \
+    source config-env.sh &amp;&amp;                                                   \
+    ./x.py                                                                    \
+    --config config.toml                                                      \
+    --stage=2                                                                 \
+    test tests/ui                                                             \
+    --target x86_64-unknown-fuchsia                                           \
+    --run=always                                                              \
+    --test-args --target-rustcflags                                           \
+    --test-args -Lnative=${SDK_PATH}/arch/{x64|arm64}/sysroot/lib             \
+    --test-args --target-rustcflags                                           \
+    --test-args -Lnative=${SDK_PATH}/arch/{x64|arm64}/lib                     \
+    --test-args --target-rustcflags                                           \
+    --test-args -Clink-arg=--undefined-version                                \
+    --test-args --remote-test-client                                          \
+    --test-args src/ci/docker/scripts/fuchsia-test-runner.py                  \
+)
+</code></pre>
+<p>By default, <code>x.py</code> compiles test binaries with <code>panic=unwind</code>. If you built your
+Rust toolchain with <code>-Cpanic=abort</code>, you need to tell <code>x.py</code> to compile test
+binaries with <code>panic=abort</code> as well:</p>
+<pre><code class="language-sh">    --test-args --target-rustcflags                                           \
+    --test-args -Cpanic=abort                                                 \
+    --test-args --target-rustcflags                                           \
+    --test-args -Zpanic_abort_tests                                           \
+</code></pre>
+<p>When finished testing, the test runner can be used to stop the test environment:</p>
+<pre><code class="language-sh">src/ci/docker/scripts/fuchsia-test-runner.py stop
+</code></pre>
+<h2 id="debugging"><a class="header" href="#debugging">Debugging</a></h2>
+<h3 id="zxdb"><a class="header" href="#zxdb"><code>zxdb</code></a></h3>
+<p>Debugging components running on a Fuchsia emulator can be done using the
+console-mode debugger: <a href="https://fuchsia.dev/fuchsia-src/development/debugger">zxdb</a>. We will demonstrate attaching necessary symbol
+paths to debug our <code>hello-fuchsia</code> component.</p>
+<h3 id="attaching-zxdb"><a class="header" href="#attaching-zxdb">Attaching <code>zxdb</code></a></h3>
+<p>In a separate terminal, issue the following command from our <code>hello_fuchsia</code>
+directory to launch <code>zxdb</code>:</p>
+<p><strong>In separate terminal</strong></p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/ffx debug connect -- \
+    --symbol-path target/x86_64-unknown-fuchsia/debug
+</code></pre>
+<ul>
+<li><code>--symbol-path</code> gets required symbol paths, which are
+necessary for stepping through your program.</li>
+</ul>
+<p>The &quot;<a href="#displaying-source-code-in-zxdb">displaying source code in <code>zxdb</code></a>&quot;
+section describes how you can display Rust and/or Fuchsia source code in your
+debugging session.</p>
+<h3 id="using-zxdb"><a class="header" href="#using-zxdb">Using <code>zxdb</code></a></h3>
+<p>Once launched, you will be presented with the window:</p>
+<pre><code class="language-sh">Connecting (use &quot;disconnect&quot; to cancel)...
+Connected successfully.
+👉 To get started, try &quot;status&quot; or &quot;help&quot;.
+[zxdb]
+</code></pre>
+<p>To attach to our program, we can run:</p>
+<pre><code class="language-sh">[zxdb] attach hello_fuchsia
+</code></pre>
+<p><strong>Expected output</strong></p>
+<pre><code class="language-sh">Waiting for process matching &quot;hello_fuchsia&quot;.
+Type &quot;filter&quot; to see the current filters.
+</code></pre>
+<p>Next, we can create a breakpoint at main using &quot;b main&quot;:</p>
+<pre><code class="language-sh">[zxdb] b main
+</code></pre>
+<p><strong>Expected output</strong></p>
+<pre><code class="language-sh">Created Breakpoint 1 @ main
+</code></pre>
+<p>Finally, we can re-run the &quot;hello_fuchsia&quot; component from our original
+terminal:</p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/ffx component run \
+    --recreate \
+    fuchsia-pkg://hello-fuchsia/hello_fuchsia_manifest#meta/hello_fuchsia.cm
+</code></pre>
+<p>Once our component is running, our <code>zxdb</code> window will stop execution
+in our main as desired:</p>
+<p><strong>Expected output</strong></p>
+<pre><code class="language-txt">Breakpoint 1 now matching 1 addrs for main
+🛑 on bp 1 hello_fuchsia::main() • main.rs:2
+   1 fn main() {
+ ▶ 2     println!(&quot;Hello Fuchsia!&quot;);
+   3 }
+   4
+[zxdb]
+</code></pre>
+<p><code>zxdb</code> has similar commands to other debuggers like <a href="https://www.sourceware.org/gdb/">gdb</a>.
+To list the available commands, run &quot;help&quot; in the
+<code>zxdb</code> window or visit <a href="https://fuchsia.dev/fuchsia-src/development/debugger">the zxdb documentation</a>.</p>
+<pre><code class="language-sh">[zxdb] help
+</code></pre>
+<p><strong>Expected output</strong></p>
+<pre><code class="language-sh">Help!
+
+  Type &quot;help &lt;command&gt;&quot; for command-specific help.
+
+Other help topics (see &quot;help &lt;topic&gt;&quot;)
+...
+</code></pre>
+<h3 id="displaying-source-code-in-zxdb"><a class="header" href="#displaying-source-code-in-zxdb">Displaying source code in <code>zxdb</code></a></h3>
+<p>By default, the debugger will not be able to display
+source code while debugging. For our user code, we displayed
+source code by pointing our debugger to our debug binary via
+the <code>--symbol-path</code> arg. To display library source code in
+the debugger, you must provide paths to the source using
+<code>--build-dir</code>. For example, to display the Rust and Fuchsia
+source code:</p>
+<pre><code class="language-sh">${SDK_PATH}/tools/${ARCH}/ffx debug connect -- \
+    --symbol-path target/x86_64-unknown-fuchsia/debug \
+    --build-dir ${RUST_SRC_PATH}/rust \
+    --build-dir ${FUCHSIA_SRC_PATH}/fuchsia/out/default
+</code></pre>
+<ul>
+<li><code>--build-dir</code> links against source code paths, which
+are not strictly necessary for debugging, but is a nice-to-have
+for displaying source code in <code>zxdb</code>.</li>
+</ul>
+<p>Linking to a Fuchsia checkout can help with debugging Fuchsia libraries,
+such as <a href="https://cs.opensource.google/fuchsia/fuchsia/+/main:sdk/lib/fdio/">fdio</a>.</p>
+<h3 id="debugging-the-compiler-test-suite"><a class="header" href="#debugging-the-compiler-test-suite">Debugging the compiler test suite</a></h3>
+<p>Debugging the compiler test suite requires some special configuration:</p>
+<p>First, we have to properly configure zxdb so it will be able to find debug
+symbols and source information for our test. The test runner can do this for us
+with:</p>
+<pre><code class="language-sh">src/ci/docker/scripts/fuchsia-test-runner.py debug                            \
+    --rust-src ${RUST_SRC_PATH}                                               \
+    --fuchsia-src ${FUCHSIA_SRC_PATH}                                         \
+    --test ${TEST}
+</code></pre>
+<p>where <code>${TEST}</code> is relative to Rust's <code>tests</code> directory (e.g. <code>ui/abi/...</code>).</p>
+<p>This will start a zxdb session that is properly configured for the specific test
+being run. All three arguments are optional, so you can omit <code>--fuchsia-src</code> if
+you don't have it downloaded. Now is a good time to set any desired breakpoints,
+like <code>b main</code>.</p>
+<p>Next, we have to tell <code>x.py</code> not to optimize or strip debug symbols from our
+test suite binaries. We can do this by passing some new arguments to <code>rustc</code>
+through our <code>x.py</code> invocation. The full invocation is:</p>
+<pre><code class="language-sh">( \
+    source config-env.sh &amp;&amp;                                                   \
+    ./x.py                                                                    \
+    --config config.toml                                                      \
+    --stage=2                                                                 \
+    test tests/${TEST}                                                        \
+    --target x86_64-unknown-fuchsia                                           \
+    --run=always                                                              \
+    --test-args --target-rustcflags                                           \
+    --test-args -Lnative=${SDK_PATH}/arch/{x64|arm64}/sysroot/lib             \
+    --test-args --target-rustcflags                                           \
+    --test-args -Lnative=${SDK_PATH}/arch/{x64|arm64}/lib                     \
+    --test-args --target-rustcflags                                           \
+    --test-args -Clink-arg=--undefined-version                                \
+    --test-args --target-rustcflags                                           \
+    --test-args -Cdebuginfo=2                                                 \
+    --test-args --target-rustcflags                                           \
+    --test-args -Copt-level=0                                                 \
+    --test-args --target-rustcflags                                           \
+    --test-args -Cstrip=none                                                  \
+    --test-args --remote-test-client                                          \
+    --test-args src/ci/docker/scripts/fuchsia-test-runner.py                  \
+)
+</code></pre>
+<p><em>If you built your Rust toolchain with <code>panic=abort</code>, make sure to include the
+previous flags so your test binaries are also compiled with <code>panic=abort</code>.</em></p>
+<p>Upon running this command, the test suite binary will be run and zxdb will
+attach and load any relevant debug symbols.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../platform-support/esp-idf.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../platform-support/kmc-solid.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../platform-support/esp-idf.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../platform-support/kmc-solid.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

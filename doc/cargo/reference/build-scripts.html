@@ -1,0 +1,566 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Build Scripts - The Cargo Book</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+            dd {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/first-steps.html"><strong aria-hidden="true">1.2.</strong> First Steps with Cargo</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Cargo Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-cargo-exists.html"><strong aria-hidden="true">2.1.</strong> Why Cargo Exists</a></li><li class="chapter-item expanded "><a href="../guide/creating-a-new-project.html"><strong aria-hidden="true">2.2.</strong> Creating a New Package</a></li><li class="chapter-item expanded "><a href="../guide/working-on-an-existing-project.html"><strong aria-hidden="true">2.3.</strong> Working on an Existing Package</a></li><li class="chapter-item expanded "><a href="../guide/dependencies.html"><strong aria-hidden="true">2.4.</strong> Dependencies</a></li><li class="chapter-item expanded "><a href="../guide/project-layout.html"><strong aria-hidden="true">2.5.</strong> Package Layout</a></li><li class="chapter-item expanded "><a href="../guide/cargo-toml-vs-cargo-lock.html"><strong aria-hidden="true">2.6.</strong> Cargo.toml vs Cargo.lock</a></li><li class="chapter-item expanded "><a href="../guide/tests.html"><strong aria-hidden="true">2.7.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../guide/continuous-integration.html"><strong aria-hidden="true">2.8.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../guide/cargo-home.html"><strong aria-hidden="true">2.9.</strong> Cargo Home</a></li><li class="chapter-item expanded "><a href="../guide/build-cache.html"><strong aria-hidden="true">2.10.</strong> Build Cache</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">3.</strong> Cargo Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/specifying-dependencies.html"><strong aria-hidden="true">3.1.</strong> Specifying Dependencies</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/overriding-dependencies.html"><strong aria-hidden="true">3.1.1.</strong> Overriding Dependencies</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/manifest.html"><strong aria-hidden="true">3.2.</strong> The Manifest Format</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/cargo-targets.html"><strong aria-hidden="true">3.2.1.</strong> Cargo Targets</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/workspaces.html"><strong aria-hidden="true">3.3.</strong> Workspaces</a></li><li class="chapter-item expanded "><a href="../reference/features.html"><strong aria-hidden="true">3.4.</strong> Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/features-examples.html"><strong aria-hidden="true">3.4.1.</strong> Features Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/profiles.html"><strong aria-hidden="true">3.5.</strong> Profiles</a></li><li class="chapter-item expanded "><a href="../reference/config.html"><strong aria-hidden="true">3.6.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../reference/environment-variables.html"><strong aria-hidden="true">3.7.</strong> Environment Variables</a></li><li class="chapter-item expanded "><a href="../reference/build-scripts.html" class="active"><strong aria-hidden="true">3.8.</strong> Build Scripts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/build-script-examples.html"><strong aria-hidden="true">3.8.1.</strong> Build Script Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/publishing.html"><strong aria-hidden="true">3.9.</strong> Publishing on crates.io</a></li><li class="chapter-item expanded "><a href="../reference/pkgid-spec.html"><strong aria-hidden="true">3.10.</strong> Package ID Specifications</a></li><li class="chapter-item expanded "><a href="../reference/source-replacement.html"><strong aria-hidden="true">3.11.</strong> Source Replacement</a></li><li class="chapter-item expanded "><a href="../reference/external-tools.html"><strong aria-hidden="true">3.12.</strong> External Tools</a></li><li class="chapter-item expanded "><a href="../reference/registries.html"><strong aria-hidden="true">3.13.</strong> Registries</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/running-a-registry.html"><strong aria-hidden="true">3.13.1.</strong> Running a Registry</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/registry-index.html"><strong aria-hidden="true">3.13.1.1.</strong> Registry Index</a></li><li class="chapter-item expanded "><a href="../reference/registry-web-api.html"><strong aria-hidden="true">3.13.1.2.</strong> Registry Web API</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../reference/resolver.html"><strong aria-hidden="true">3.14.</strong> Dependency Resolution</a></li><li class="chapter-item expanded "><a href="../reference/semver.html"><strong aria-hidden="true">3.15.</strong> SemVer Compatibility</a></li><li class="chapter-item expanded "><a href="../reference/future-incompat-report.html"><strong aria-hidden="true">3.16.</strong> Future incompat report</a></li><li class="chapter-item expanded "><a href="../reference/timings.html"><strong aria-hidden="true">3.17.</strong> Reporting build timings</a></li><li class="chapter-item expanded "><a href="../reference/unstable.html"><strong aria-hidden="true">3.18.</strong> Unstable Features</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/index.html"><strong aria-hidden="true">4.</strong> Cargo Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/general-commands.html"><strong aria-hidden="true">4.1.</strong> General Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo.html"><strong aria-hidden="true">4.1.1.</strong> cargo</a></li><li class="chapter-item expanded "><a href="../commands/cargo-help.html"><strong aria-hidden="true">4.1.2.</strong> cargo help</a></li><li class="chapter-item expanded "><a href="../commands/cargo-version.html"><strong aria-hidden="true">4.1.3.</strong> cargo version</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/build-commands.html"><strong aria-hidden="true">4.2.</strong> Build Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-bench.html"><strong aria-hidden="true">4.2.1.</strong> cargo bench</a></li><li class="chapter-item expanded "><a href="../commands/cargo-build.html"><strong aria-hidden="true">4.2.2.</strong> cargo build</a></li><li class="chapter-item expanded "><a href="../commands/cargo-check.html"><strong aria-hidden="true">4.2.3.</strong> cargo check</a></li><li class="chapter-item expanded "><a href="../commands/cargo-clean.html"><strong aria-hidden="true">4.2.4.</strong> cargo clean</a></li><li class="chapter-item expanded "><a href="../commands/cargo-doc.html"><strong aria-hidden="true">4.2.5.</strong> cargo doc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fetch.html"><strong aria-hidden="true">4.2.6.</strong> cargo fetch</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fix.html"><strong aria-hidden="true">4.2.7.</strong> cargo fix</a></li><li class="chapter-item expanded "><a href="../commands/cargo-run.html"><strong aria-hidden="true">4.2.8.</strong> cargo run</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustc.html"><strong aria-hidden="true">4.2.9.</strong> cargo rustc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustdoc.html"><strong aria-hidden="true">4.2.10.</strong> cargo rustdoc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-test.html"><strong aria-hidden="true">4.2.11.</strong> cargo test</a></li><li class="chapter-item expanded "><a href="../commands/cargo-report.html"><strong aria-hidden="true">4.2.12.</strong> cargo report</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/manifest-commands.html"><strong aria-hidden="true">4.3.</strong> Manifest Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-add.html"><strong aria-hidden="true">4.3.1.</strong> cargo add</a></li><li class="chapter-item expanded "><a href="../commands/cargo-generate-lockfile.html"><strong aria-hidden="true">4.3.2.</strong> cargo generate-lockfile</a></li><li class="chapter-item expanded "><a href="../commands/cargo-locate-project.html"><strong aria-hidden="true">4.3.3.</strong> cargo locate-project</a></li><li class="chapter-item expanded "><a href="../commands/cargo-metadata.html"><strong aria-hidden="true">4.3.4.</strong> cargo metadata</a></li><li class="chapter-item expanded "><a href="../commands/cargo-pkgid.html"><strong aria-hidden="true">4.3.5.</strong> cargo pkgid</a></li><li class="chapter-item expanded "><a href="../commands/cargo-remove.html"><strong aria-hidden="true">4.3.6.</strong> cargo remove</a></li><li class="chapter-item expanded "><a href="../commands/cargo-tree.html"><strong aria-hidden="true">4.3.7.</strong> cargo tree</a></li><li class="chapter-item expanded "><a href="../commands/cargo-update.html"><strong aria-hidden="true">4.3.8.</strong> cargo update</a></li><li class="chapter-item expanded "><a href="../commands/cargo-vendor.html"><strong aria-hidden="true">4.3.9.</strong> cargo vendor</a></li><li class="chapter-item expanded "><a href="../commands/cargo-verify-project.html"><strong aria-hidden="true">4.3.10.</strong> cargo verify-project</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/package-commands.html"><strong aria-hidden="true">4.4.</strong> Package Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-init.html"><strong aria-hidden="true">4.4.1.</strong> cargo init</a></li><li class="chapter-item expanded "><a href="../commands/cargo-install.html"><strong aria-hidden="true">4.4.2.</strong> cargo install</a></li><li class="chapter-item expanded "><a href="../commands/cargo-new.html"><strong aria-hidden="true">4.4.3.</strong> cargo new</a></li><li class="chapter-item expanded "><a href="../commands/cargo-search.html"><strong aria-hidden="true">4.4.4.</strong> cargo search</a></li><li class="chapter-item expanded "><a href="../commands/cargo-uninstall.html"><strong aria-hidden="true">4.4.5.</strong> cargo uninstall</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/publishing-commands.html"><strong aria-hidden="true">4.5.</strong> Publishing Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-login.html"><strong aria-hidden="true">4.5.1.</strong> cargo login</a></li><li class="chapter-item expanded "><a href="../commands/cargo-logout.html"><strong aria-hidden="true">4.5.2.</strong> cargo logout</a></li><li class="chapter-item expanded "><a href="../commands/cargo-owner.html"><strong aria-hidden="true">4.5.3.</strong> cargo owner</a></li><li class="chapter-item expanded "><a href="../commands/cargo-package.html"><strong aria-hidden="true">4.5.4.</strong> cargo package</a></li><li class="chapter-item expanded "><a href="../commands/cargo-publish.html"><strong aria-hidden="true">4.5.5.</strong> cargo publish</a></li><li class="chapter-item expanded "><a href="../commands/cargo-yank.html"><strong aria-hidden="true">4.5.6.</strong> cargo yank</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">5.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">6.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/git-authentication.html"><strong aria-hidden="true">7.</strong> Appendix: Git Authentication</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Cargo Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/tree/master/src/doc/src" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/edit/master/src/doc/src/reference/build-scripts.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="build-scripts"><a class="header" href="#build-scripts">Build Scripts</a></h2>
+<p>Some packages need to compile third-party non-Rust code, for example C
+libraries. Other packages need to link to C libraries which can either be
+located on the system or possibly need to be built from source. Others still
+need facilities for functionality such as code generation before building (think
+parser generators).</p>
+<p>Cargo does not aim to replace other tools that are well-optimized for these
+tasks, but it does integrate with them with custom build scripts. Placing a
+file named <code>build.rs</code> in the root of a package will cause Cargo to compile
+that script and execute it just before building the package.</p>
+<pre><code class="language-rust ignore">// Example custom build script.
+fn main() {
+    // Tell Cargo that if the given file changes, to rerun this build script.
+    println!(&quot;cargo:rerun-if-changed=src/hello.c&quot;);
+    // Use the `cc` crate to build a C file and statically link it.
+    cc::Build::new()
+        .file(&quot;src/hello.c&quot;)
+        .compile(&quot;hello&quot;);
+}</code></pre>
+<p>Some example use cases of build scripts are:</p>
+<ul>
+<li>Building a bundled C library.</li>
+<li>Finding a C library on the host system.</li>
+<li>Generating a Rust module from a specification.</li>
+<li>Performing any platform-specific configuration needed for the crate.</li>
+</ul>
+<p>The sections below describe how build scripts work, and the <a href="build-script-examples.html">examples
+chapter</a> shows a variety of examples on how to write
+scripts.</p>
+<blockquote>
+<p>Note: The <a href="manifest.html#package-build"><code>package.build</code> manifest key</a> can be
+used to change the name of the build script, or disable it entirely.</p>
+</blockquote>
+<h3 id="life-cycle-of-a-build-script"><a class="header" href="#life-cycle-of-a-build-script">Life Cycle of a Build Script</a></h3>
+<p>Just before a package is built, Cargo will compile a build script into an
+executable (if it has not already been built). It will then run the script,
+which may perform any number of tasks. The script may communicate with Cargo
+by printing specially formatted commands prefixed with <code>cargo:</code> to stdout.</p>
+<p>The build script will be rebuilt if any of its source files or dependencies
+change.</p>
+<p>By default, Cargo will re-run the build script if any of the files in the
+package changes. Typically it is best to use the <code>rerun-if</code> commands,
+described in the <a href="#change-detection">change detection</a> section below, to
+narrow the focus of what triggers a build script to run again.</p>
+<p>Once the build script successfully finishes executing, the rest of the package
+will be compiled. Scripts should exit with a non-zero exit code to halt the
+build if there is an error, in which case the build script’s output will be
+displayed on the terminal.</p>
+<h3 id="inputs-to-the-build-script"><a class="header" href="#inputs-to-the-build-script">Inputs to the Build Script</a></h3>
+<p>When the build script is run, there are a number of inputs to the build script,
+all passed in the form of <a href="environment-variables.html#environment-variables-cargo-sets-for-build-scripts">environment variables</a>.</p>
+<p>In addition to environment variables, the build script’s current directory is
+the source directory of the build script’s package.</p>
+<h3 id="outputs-of-the-build-script"><a class="header" href="#outputs-of-the-build-script">Outputs of the Build Script</a></h3>
+<p>Build scripts may save any output files or intermediate artifacts in the
+directory specified in the <a href="environment-variables.html#environment-variables-cargo-sets-for-build-scripts"><code>OUT_DIR</code> environment variable</a>. Scripts
+should not modify any files outside of that directory.</p>
+<p>Build scripts communicate with Cargo by printing to stdout. Cargo will
+interpret each line that starts with <code>cargo:</code> as an instruction that will
+influence compilation of the package. All other lines are ignored.</p>
+<blockquote>
+<p>Note: The order of <code>cargo:</code> instructions printed by the build script <em>may</em>
+affect the order of arguments that <code>cargo</code> passes to <code>rustc</code>. In turn, the
+order of arguments passed to <code>rustc</code> may affect the order of arguments passed
+to the linker. Therefore, you will want to pay attention to the order of the
+build script’s instructions. For example, if object <code>foo</code> needs to link against
+library <code>bar</code>, you may want to make sure that library <code>bar</code>’s
+<a href="#rustc-link-lib"><code>cargo:rustc-link-lib</code></a> instruction appears <em>after</em>
+instructions to link object <code>foo</code>.</p>
+</blockquote>
+<p>The output of the script is hidden from the terminal during normal
+compilation. If you would like to see the output directly in your terminal,
+invoke Cargo as “very verbose” with the <code>-vv</code> flag. This only happens when the
+build script is run. If Cargo determines nothing has changed, it will not
+re-run the script, see <a href="#change-detection">change detection</a> below for more.</p>
+<p>All the lines printed to stdout by a build script are written to a file like
+<code>target/debug/build/&lt;pkg&gt;/output</code> (the precise location may depend on your
+configuration). The stderr output is also saved in that same directory.</p>
+<p>The following is a summary of the instructions that Cargo recognizes, with each
+one detailed below.</p>
+<ul>
+<li><a href="#rerun-if-changed"><code>cargo:rerun-if-changed=PATH</code></a> — Tells Cargo when to
+re-run the script.</li>
+<li><a href="#rerun-if-env-changed"><code>cargo:rerun-if-env-changed=VAR</code></a> — Tells Cargo when
+to re-run the script.</li>
+<li><a href="#rustc-link-arg"><code>cargo:rustc-link-arg=FLAG</code></a> — Passes custom flags to a
+linker for benchmarks, binaries, <code>cdylib</code> crates, examples, and tests.</li>
+<li><a href="#rustc-link-arg-bin"><code>cargo:rustc-link-arg-bin=BIN=FLAG</code></a> — Passes custom
+flags to a linker for the binary <code>BIN</code>.</li>
+<li><a href="#rustc-link-arg-bins"><code>cargo:rustc-link-arg-bins=FLAG</code></a> — Passes custom
+flags to a linker for binaries.</li>
+<li><a href="#rustc-link-arg-tests"><code>cargo:rustc-link-arg-tests=FLAG</code></a> — Passes custom
+flags to a linker for tests.</li>
+<li><a href="#rustc-link-arg-examples"><code>cargo:rustc-link-arg-examples=FLAG</code></a> — Passes custom
+flags to a linker for examples.</li>
+<li><a href="#rustc-link-arg-benches"><code>cargo:rustc-link-arg-benches=FLAG</code></a> — Passes custom
+flags to a linker for benchmarks.</li>
+<li><a href="#rustc-link-lib"><code>cargo:rustc-link-lib=LIB</code></a> — Adds a library to
+link.</li>
+<li><a href="#rustc-link-search"><code>cargo:rustc-link-search=[KIND=]PATH</code></a> — Adds to the
+library search path.</li>
+<li><a href="#rustc-flags"><code>cargo:rustc-flags=FLAGS</code></a> — Passes certain flags to the
+compiler.</li>
+<li><a href="#rustc-cfg"><code>cargo:rustc-cfg=KEY[=&quot;VALUE&quot;]</code></a> — Enables compile-time <code>cfg</code>
+settings.</li>
+<li><a href="#rustc-env"><code>cargo:rustc-env=VAR=VALUE</code></a> — Sets an environment variable.</li>
+<li><a href="#rustc-cdylib-link-arg"><code>cargo:rustc-cdylib-link-arg=FLAG</code></a> — Passes custom
+flags to a linker for cdylib crates.</li>
+<li><a href="#cargo-warning"><code>cargo:warning=MESSAGE</code></a> — Displays a warning on the
+terminal.</li>
+<li><a href="#the-links-manifest-key"><code>cargo:KEY=VALUE</code></a> — Metadata, used by <code>links</code>
+scripts.</li>
+</ul>
+<p><a id="rustc-link-arg"></a></p>
+<h4 id="cargorustc-link-argflag"><a class="header" href="#cargorustc-link-argflag"><code>cargo:rustc-link-arg=FLAG</code></a></h4>
+<p>The <code>rustc-link-arg</code> instruction tells Cargo to pass the <a href="../../rustc/codegen-options/index.html#link-arg"><code>-C link-arg=FLAG</code>
+option</a> to the compiler, but only when building supported targets
+(benchmarks, binaries, <code>cdylib</code> crates, examples, and tests). Its usage is
+highly platform specific. It is useful to set the shared library version or
+linker script.</p>
+<p><a id="rustc-link-arg-bin"></a></p>
+<h4 id="cargorustc-link-arg-binbinflag"><a class="header" href="#cargorustc-link-arg-binbinflag"><code>cargo:rustc-link-arg-bin=BIN=FLAG</code></a></h4>
+<p>The <code>rustc-link-arg-bin</code> instruction tells Cargo to pass the <a href="../../rustc/codegen-options/index.html#link-arg"><code>-C link-arg=FLAG</code> option</a> to the compiler, but only when building
+the binary target with name <code>BIN</code>. Its usage is highly platform specific. It is useful
+to set a linker script or other linker options.</p>
+<p><a id="rustc-link-arg-bins"></a></p>
+<h4 id="cargorustc-link-arg-binsflag"><a class="header" href="#cargorustc-link-arg-binsflag"><code>cargo:rustc-link-arg-bins=FLAG</code></a></h4>
+<p>The <code>rustc-link-arg-bins</code> instruction tells Cargo to pass the <a href="../../rustc/codegen-options/index.html#link-arg"><code>-C link-arg=FLAG</code> option</a> to the compiler, but only when building a
+binary target. Its usage is highly platform specific. It is useful
+to set a linker script or other linker options.</p>
+<p><a id="rustc-link-lib"></a></p>
+<h4 id="cargorustc-link-liblib"><a class="header" href="#cargorustc-link-liblib"><code>cargo:rustc-link-lib=LIB</code></a></h4>
+<p>The <code>rustc-link-lib</code> instruction tells Cargo to link the given library using
+the compiler’s <a href="../../rustc/command-line-arguments.html#option-l-link-lib"><code>-l</code> flag</a>. This is typically used to link a
+native library using <a href="../../nomicon/ffi.html">FFI</a>.</p>
+<p>The <code>LIB</code> string is passed directly to rustc, so it supports any syntax that
+<code>-l</code> does. <br />
+Currently the full supported syntax for <code>LIB</code> is <code>[KIND[:MODIFIERS]=]NAME[:RENAME]</code>.</p>
+<p>The <code>-l</code> flag is only passed to the library target of the package, unless
+there is no library target, in which case it is passed to all targets. This is
+done because all other targets have an implicit dependency on the library
+target, and the given library to link should only be included once. This means
+that if a package has both a library and a binary target, the <em>library</em> has
+access to the symbols from the given lib, and the binary should access them
+through the library target’s public API.</p>
+<p>The optional <code>KIND</code> may be one of <code>dylib</code>, <code>static</code>, or <code>framework</code>. See the
+<a href="../../rustc/command-line-arguments.html#option-l-link-lib">rustc book</a> for more detail.</p>
+<p><a id="rustc-link-arg-tests"></a></p>
+<h4 id="cargorustc-link-arg-testsflag"><a class="header" href="#cargorustc-link-arg-testsflag"><code>cargo:rustc-link-arg-tests=FLAG</code></a></h4>
+<p>The <code>rustc-link-arg-tests</code> instruction tells Cargo to pass the <a href="../../rustc/codegen-options/index.html#link-arg"><code>-C link-arg=FLAG</code> option</a> to the compiler, but only when building a
+tests target.</p>
+<p><a id="rustc-link-arg-examples"></a></p>
+<h4 id="cargorustc-link-arg-examplesflag"><a class="header" href="#cargorustc-link-arg-examplesflag"><code>cargo:rustc-link-arg-examples=FLAG</code></a></h4>
+<p>The <code>rustc-link-arg-examples</code> instruction tells Cargo to pass the <a href="../../rustc/codegen-options/index.html#link-arg"><code>-C link-arg=FLAG</code> option</a> to the compiler, but only when building an examples
+target.</p>
+<p><a id="rustc-link-arg-benches"></a></p>
+<h4 id="cargorustc-link-arg-benchesflag"><a class="header" href="#cargorustc-link-arg-benchesflag"><code>cargo:rustc-link-arg-benches=FLAG</code></a></h4>
+<p>The <code>rustc-link-arg-benches</code> instruction tells Cargo to pass the <a href="../../rustc/codegen-options/index.html#link-arg"><code>-C link-arg=FLAG</code> option</a> to the compiler, but only when building a benchmark
+target.</p>
+<p><a id="rustc-link-search"></a></p>
+<h4 id="cargorustc-link-searchkindpath"><a class="header" href="#cargorustc-link-searchkindpath"><code>cargo:rustc-link-search=[KIND=]PATH</code></a></h4>
+<p>The <code>rustc-link-search</code> instruction tells Cargo to pass the <a href="../../rustc/command-line-arguments.html#option-l-search-path"><code>-L</code>
+flag</a> to the compiler to add a directory to the library search
+path.</p>
+<p>The optional <code>KIND</code> may be one of <code>dependency</code>, <code>crate</code>, <code>native</code>,
+<code>framework</code>, or <code>all</code>. See the <a href="../../rustc/command-line-arguments.html#option-l-search-path">rustc book</a> for more detail.</p>
+<p>These paths are also added to the <a href="environment-variables.html#dynamic-library-paths">dynamic library search path environment
+variable</a> if they are within
+the <code>OUT_DIR</code>. Depending on this behavior is discouraged since this makes it
+difficult to use the resulting binary. In general, it is best to avoid
+creating dynamic libraries in a build script (using existing system libraries
+is fine).</p>
+<p><a id="rustc-flags"></a></p>
+<h4 id="cargorustc-flagsflags"><a class="header" href="#cargorustc-flagsflags"><code>cargo:rustc-flags=FLAGS</code></a></h4>
+<p>The <code>rustc-flags</code> instruction tells Cargo to pass the given space-separated
+flags to the compiler. This only allows the <code>-l</code> and <code>-L</code> flags, and is
+equivalent to using <a href="#rustc-link-lib"><code>rustc-link-lib</code></a> and
+<a href="#rustc-link-search"><code>rustc-link-search</code></a>.</p>
+<p><a id="rustc-cfg"></a></p>
+<h4 id="cargorustc-cfgkeyvalue"><a class="header" href="#cargorustc-cfgkeyvalue"><code>cargo:rustc-cfg=KEY[=&quot;VALUE&quot;]</code></a></h4>
+<p>The <code>rustc-cfg</code> instruction tells Cargo to pass the given value to the
+<a href="../../rustc/command-line-arguments.html#option-cfg"><code>--cfg</code> flag</a> to the compiler. This may be used for compile-time
+detection of features to enable <a href="../../reference/conditional-compilation.html">conditional compilation</a>.</p>
+<p>Note that this does <em>not</em> affect Cargo’s dependency resolution. This cannot be
+used to enable an optional dependency, or enable other Cargo features.</p>
+<p>Be aware that <a href="features.html">Cargo features</a> use the form <code>feature=&quot;foo&quot;</code>. <code>cfg</code> values
+passed with this flag are not restricted to that form, and may provide just a
+single identifier, or any arbitrary key/value pair. For example, emitting
+<code>cargo:rustc-cfg=abc</code> will then allow code to use <code>#[cfg(abc)]</code> (note the lack
+of <code>feature=</code>). Or an arbitrary key/value pair may be used with an <code>=</code> symbol
+like <code>cargo:rustc-cfg=my_component=&quot;foo&quot;</code>. The key should be a Rust
+identifier, the value should be a string.</p>
+<p><a id="rustc-env"></a></p>
+<h4 id="cargorustc-envvarvalue"><a class="header" href="#cargorustc-envvarvalue"><code>cargo:rustc-env=VAR=VALUE</code></a></h4>
+<p>The <code>rustc-env</code> instruction tells Cargo to set the given environment variable
+when compiling the package. The value can be then retrieved by the <a href="../../std/macro.env.html"><code>env!</code>
+macro</a> in the compiled crate. This is useful for embedding
+additional metadata in crate’s code, such as the hash of git HEAD or the
+unique identifier of a continuous integration server.</p>
+<p>See also the <a href="environment-variables.html#environment-variables-cargo-sets-for-crates">environment variables automatically included by
+Cargo</a>.</p>
+<blockquote>
+<p><strong>Note</strong>: These environment variables are also set when running an
+executable with <code>cargo run</code> or <code>cargo test</code>. However, this usage is
+discouraged since it ties the executable to Cargo’s execution environment.
+Normally, these environment variables should only be checked at compile-time
+with the <code>env!</code> macro.</p>
+</blockquote>
+<p><a id="rustc-cdylib-link-arg"></a></p>
+<h4 id="cargorustc-cdylib-link-argflag"><a class="header" href="#cargorustc-cdylib-link-argflag"><code>cargo:rustc-cdylib-link-arg=FLAG</code></a></h4>
+<p>The <code>rustc-cdylib-link-arg</code> instruction tells Cargo to pass the <a href="../../rustc/codegen-options/index.html#link-arg"><code>-C link-arg=FLAG</code> option</a> to the compiler, but only when building a
+<code>cdylib</code> library target. Its usage is highly platform specific. It is useful
+to set the shared library version or the runtime-path.</p>
+<p><a id="cargo-warning"></a></p>
+<h4 id="cargowarningmessage"><a class="header" href="#cargowarningmessage"><code>cargo:warning=MESSAGE</code></a></h4>
+<p>The <code>warning</code> instruction tells Cargo to display a warning after the build
+script has finished running. Warnings are only shown for <code>path</code> dependencies
+(that is, those you’re working on locally), so for example warnings printed
+out in <a href="https://crates.io/">crates.io</a> crates are not emitted by default. The <code>-vv</code> “very verbose”
+flag may be used to have Cargo display warnings for all crates.</p>
+<h3 id="build-dependencies"><a class="header" href="#build-dependencies">Build Dependencies</a></h3>
+<p>Build scripts are also allowed to have dependencies on other Cargo-based crates.
+Dependencies are declared through the <code>build-dependencies</code> section of the
+manifest.</p>
+<pre><code class="language-toml">[build-dependencies]
+cc = &quot;1.0.46&quot;
+</code></pre>
+<p>The build script <strong>does not</strong> have access to the dependencies listed in the
+<code>dependencies</code> or <code>dev-dependencies</code> section (they’re not built yet!). Also,
+build dependencies are not available to the package itself unless also
+explicitly added in the <code>[dependencies]</code> table.</p>
+<p>It is recommended to carefully consider each dependency you add, weighing
+against the impact on compile time, licensing, maintenance, etc. Cargo will
+attempt to reuse a dependency if it is shared between build dependencies and
+normal dependencies. However, this is not always possible, for example when
+cross-compiling, so keep that in consideration of the impact on compile time.</p>
+<h3 id="change-detection"><a class="header" href="#change-detection">Change Detection</a></h3>
+<p>When rebuilding a package, Cargo does not necessarily know if the build script
+needs to be run again. By default, it takes a conservative approach of always
+re-running the build script if any file within the package is changed (or the
+list of files controlled by the <a href="manifest.html#the-exclude-and-include-fields"><code>exclude</code> and <code>include</code> fields</a>). For most
+cases, this is not a good choice, so it is recommended that every build script
+emit at least one of the <code>rerun-if</code> instructions (described below). If these
+are emitted, then Cargo will only re-run the script if the given value has
+changed. If Cargo is re-running the build scripts of your own crate or a
+dependency and you don’t know why, see <a href="../faq.html#why-is-cargo-rebuilding-my-code">“Why is Cargo rebuilding my code?” in the
+FAQ</a>.</p>
+<p><a id="rerun-if-changed"></a></p>
+<h4 id="cargorerun-if-changedpath"><a class="header" href="#cargorerun-if-changedpath"><code>cargo:rerun-if-changed=PATH</code></a></h4>
+<p>The <code>rerun-if-changed</code> instruction tells Cargo to re-run the build script if
+the file at the given path has changed. Currently, Cargo only uses the
+filesystem last-modified “mtime” timestamp to determine if the file has
+changed. It compares against an internal cached timestamp of when the build
+script last ran.</p>
+<p>If the path points to a directory, it will scan the entire directory for
+any modifications.</p>
+<p>If the build script inherently does not need to re-run under any circumstance,
+then emitting <code>cargo:rerun-if-changed=build.rs</code> is a simple way to prevent it
+from being re-run (otherwise, the default if no <code>rerun-if</code> instructions are
+emitted is to scan the entire package directory for changes). Cargo
+automatically handles whether or not the script itself needs to be recompiled,
+and of course the script will be re-run after it has been recompiled.
+Otherwise, specifying <code>build.rs</code> is redundant and unnecessary.</p>
+<p><a id="rerun-if-env-changed"></a></p>
+<h4 id="cargorerun-if-env-changedname"><a class="header" href="#cargorerun-if-env-changedname"><code>cargo:rerun-if-env-changed=NAME</code></a></h4>
+<p>The <code>rerun-if-env-changed</code> instruction tells Cargo to re-run the build script
+if the value of an environment variable of the given name has changed.</p>
+<p>Note that the environment variables here are intended for global environment
+variables like <code>CC</code> and such, it is not necessary to use this for environment
+variables like <code>TARGET</code> that Cargo sets.</p>
+<h3 id="the-links-manifest-key"><a class="header" href="#the-links-manifest-key">The <code>links</code> Manifest Key</a></h3>
+<p>The <code>package.links</code> key may be set in the <code>Cargo.toml</code> manifest to declare
+that the package links with the given native library. The purpose of this
+manifest key is to give Cargo an understanding about the set of native
+dependencies that a package has, as well as providing a principled system of
+passing metadata between package build scripts.</p>
+<pre><code class="language-toml">[package]
+# ...
+links = &quot;foo&quot;
+</code></pre>
+<p>This manifest states that the package links to the <code>libfoo</code> native library.
+When using the <code>links</code> key, the package must have a build script, and the
+build script should use the <a href="#rustc-link-lib"><code>rustc-link-lib</code> instruction</a> to
+link the library.</p>
+<p>Primarily, Cargo requires that there is at most one package per <code>links</code> value.
+In other words, it is forbidden to have two packages link to the same native
+library. This helps prevent duplicate symbols between crates. Note, however,
+that there are <a href="#-sys-packages">conventions in place</a> to alleviate this.</p>
+<p>As mentioned above in the output format, each build script can generate an
+arbitrary set of metadata in the form of key-value pairs. This metadata is
+passed to the build scripts of <strong>dependent</strong> packages. For example, if the
+package <code>bar</code> depends on <code>foo</code>, then if <code>foo</code> generates <code>key=value</code> as part of
+its build script metadata, then the build script of <code>bar</code> will have the
+environment variables <code>DEP_FOO_KEY=value</code>. See the <a href="build-script-examples.html#using-another-sys-crate">“Using another <code>sys</code>
+crate”</a> for an example of
+how this can be used.</p>
+<p>Note that metadata is only passed to immediate dependents, not transitive
+dependents.</p>
+<h3 id="-sys-packages"><a class="header" href="#-sys-packages"><code>*-sys</code> Packages</a></h3>
+<p>Some Cargo packages that link to system libraries have a naming convention of
+having a <code>-sys</code> suffix. Any package named <code>foo-sys</code> should provide two major
+pieces of functionality:</p>
+<ul>
+<li>The library crate should link to the native library <code>libfoo</code>. This will often
+probe the current system for <code>libfoo</code> before resorting to building from
+source.</li>
+<li>The library crate should provide <strong>declarations</strong> for types and functions in
+<code>libfoo</code>, but <strong>not</strong> higher-level abstractions.</li>
+</ul>
+<p>The set of <code>*-sys</code> packages provides a common set of dependencies for linking
+to native libraries. There are a number of benefits earned from having this
+convention of native-library-related packages:</p>
+<ul>
+<li>Common dependencies on <code>foo-sys</code> alleviates the rule about one package per
+value of <code>links</code>.</li>
+<li>Other <code>-sys</code> packages can take advantage of the <code>DEP_NAME_KEY=value</code>
+environment variables to better integrate with other packages. See the
+<a href="build-script-examples.html#using-another-sys-crate">“Using another <code>sys</code> crate”</a> example.</li>
+<li>A common dependency allows centralizing logic on discovering <code>libfoo</code> itself
+(or building it from source).</li>
+<li>These dependencies are easily <a href="#overriding-build-scripts">overridable</a>.</li>
+</ul>
+<p>It is common to have a companion package without the <code>-sys</code> suffix that
+provides a safe, high-level abstractions on top of the sys package. For
+example, the <a href="https://crates.io/crates/git2"><code>git2</code> crate</a> provides a high-level interface to the
+<a href="https://crates.io/crates/libgit2-sys"><code>libgit2-sys</code> crate</a>.</p>
+<h3 id="overriding-build-scripts"><a class="header" href="#overriding-build-scripts">Overriding Build Scripts</a></h3>
+<p>If a manifest contains a <code>links</code> key, then Cargo supports overriding the build
+script specified with a custom library. The purpose of this functionality is to
+prevent running the build script in question altogether and instead supply the
+metadata ahead of time.</p>
+<p>To override a build script, place the following configuration in any acceptable <a href="config.html"><code>config.toml</code></a> file.</p>
+<pre><code class="language-toml">[target.x86_64-unknown-linux-gnu.foo]
+rustc-link-lib = [&quot;foo&quot;]
+rustc-link-search = [&quot;/path/to/foo&quot;]
+rustc-flags = &quot;-L /some/path&quot;
+rustc-cfg = ['key=&quot;value&quot;']
+rustc-env = {key = &quot;value&quot;}
+rustc-cdylib-link-arg = [&quot;…&quot;]
+metadata_key1 = &quot;value&quot;
+metadata_key2 = &quot;value&quot;
+</code></pre>
+<p>With this configuration, if a package declares that it links to <code>foo</code> then the
+build script will <strong>not</strong> be compiled or run, and the metadata specified will
+be used instead.</p>
+<p>The <code>warning</code>, <code>rerun-if-changed</code>, and <code>rerun-if-env-changed</code> keys should not
+be used and will be ignored.</p>
+<h3 id="jobserver"><a class="header" href="#jobserver">Jobserver</a></h3>
+<p>Cargo and <code>rustc</code> use the <a href="http://make.mad-scientist.net/papers/jobserver-implementation/">jobserver protocol</a>, developed for GNU make, to
+coordinate concurrency across processes. It is essentially a semaphore that
+controls the number of jobs running concurrently. The concurrency may be set
+with the <code>--jobs</code> flag, which defaults to the number of logical CPUs.</p>
+<p>Each build script inherits one job slot from Cargo, and should endeavor to
+only use one CPU while it runs. If the script wants to use more CPUs in
+parallel, it should use the <a href="https://crates.io/crates/jobserver"><code>jobserver</code> crate</a> to coordinate with Cargo.</p>
+<p>As an example, the <a href="https://crates.io/crates/cc"><code>cc</code> crate</a> may enable the optional <code>parallel</code> feature
+which will use the jobserver protocol to attempt to build multiple C files
+at the same time.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/environment-variables.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../reference/build-script-examples.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/environment-variables.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../reference/build-script-examples.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

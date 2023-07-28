@@ -1,1132 +1,661 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library&#x2F;std&#x2F;src&#x2F;sync&#x2F;once.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>once.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../../../storage1.58.0.js"></script><script src="../../../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../../../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../../../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../../../down-arrow1.58.0.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../std/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo1.58.0.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
-<span id="100">100</span>
-<span id="101">101</span>
-<span id="102">102</span>
-<span id="103">103</span>
-<span id="104">104</span>
-<span id="105">105</span>
-<span id="106">106</span>
-<span id="107">107</span>
-<span id="108">108</span>
-<span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
-<span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
-<span id="124">124</span>
-<span id="125">125</span>
-<span id="126">126</span>
-<span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
-<span id="130">130</span>
-<span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
-<span id="181">181</span>
-<span id="182">182</span>
-<span id="183">183</span>
-<span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
-<span id="190">190</span>
-<span id="191">191</span>
-<span id="192">192</span>
-<span id="193">193</span>
-<span id="194">194</span>
-<span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
-<span id="214">214</span>
-<span id="215">215</span>
-<span id="216">216</span>
-<span id="217">217</span>
-<span id="218">218</span>
-<span id="219">219</span>
-<span id="220">220</span>
-<span id="221">221</span>
-<span id="222">222</span>
-<span id="223">223</span>
-<span id="224">224</span>
-<span id="225">225</span>
-<span id="226">226</span>
-<span id="227">227</span>
-<span id="228">228</span>
-<span id="229">229</span>
-<span id="230">230</span>
-<span id="231">231</span>
-<span id="232">232</span>
-<span id="233">233</span>
-<span id="234">234</span>
-<span id="235">235</span>
-<span id="236">236</span>
-<span id="237">237</span>
-<span id="238">238</span>
-<span id="239">239</span>
-<span id="240">240</span>
-<span id="241">241</span>
-<span id="242">242</span>
-<span id="243">243</span>
-<span id="244">244</span>
-<span id="245">245</span>
-<span id="246">246</span>
-<span id="247">247</span>
-<span id="248">248</span>
-<span id="249">249</span>
-<span id="250">250</span>
-<span id="251">251</span>
-<span id="252">252</span>
-<span id="253">253</span>
-<span id="254">254</span>
-<span id="255">255</span>
-<span id="256">256</span>
-<span id="257">257</span>
-<span id="258">258</span>
-<span id="259">259</span>
-<span id="260">260</span>
-<span id="261">261</span>
-<span id="262">262</span>
-<span id="263">263</span>
-<span id="264">264</span>
-<span id="265">265</span>
-<span id="266">266</span>
-<span id="267">267</span>
-<span id="268">268</span>
-<span id="269">269</span>
-<span id="270">270</span>
-<span id="271">271</span>
-<span id="272">272</span>
-<span id="273">273</span>
-<span id="274">274</span>
-<span id="275">275</span>
-<span id="276">276</span>
-<span id="277">277</span>
-<span id="278">278</span>
-<span id="279">279</span>
-<span id="280">280</span>
-<span id="281">281</span>
-<span id="282">282</span>
-<span id="283">283</span>
-<span id="284">284</span>
-<span id="285">285</span>
-<span id="286">286</span>
-<span id="287">287</span>
-<span id="288">288</span>
-<span id="289">289</span>
-<span id="290">290</span>
-<span id="291">291</span>
-<span id="292">292</span>
-<span id="293">293</span>
-<span id="294">294</span>
-<span id="295">295</span>
-<span id="296">296</span>
-<span id="297">297</span>
-<span id="298">298</span>
-<span id="299">299</span>
-<span id="300">300</span>
-<span id="301">301</span>
-<span id="302">302</span>
-<span id="303">303</span>
-<span id="304">304</span>
-<span id="305">305</span>
-<span id="306">306</span>
-<span id="307">307</span>
-<span id="308">308</span>
-<span id="309">309</span>
-<span id="310">310</span>
-<span id="311">311</span>
-<span id="312">312</span>
-<span id="313">313</span>
-<span id="314">314</span>
-<span id="315">315</span>
-<span id="316">316</span>
-<span id="317">317</span>
-<span id="318">318</span>
-<span id="319">319</span>
-<span id="320">320</span>
-<span id="321">321</span>
-<span id="322">322</span>
-<span id="323">323</span>
-<span id="324">324</span>
-<span id="325">325</span>
-<span id="326">326</span>
-<span id="327">327</span>
-<span id="328">328</span>
-<span id="329">329</span>
-<span id="330">330</span>
-<span id="331">331</span>
-<span id="332">332</span>
-<span id="333">333</span>
-<span id="334">334</span>
-<span id="335">335</span>
-<span id="336">336</span>
-<span id="337">337</span>
-<span id="338">338</span>
-<span id="339">339</span>
-<span id="340">340</span>
-<span id="341">341</span>
-<span id="342">342</span>
-<span id="343">343</span>
-<span id="344">344</span>
-<span id="345">345</span>
-<span id="346">346</span>
-<span id="347">347</span>
-<span id="348">348</span>
-<span id="349">349</span>
-<span id="350">350</span>
-<span id="351">351</span>
-<span id="352">352</span>
-<span id="353">353</span>
-<span id="354">354</span>
-<span id="355">355</span>
-<span id="356">356</span>
-<span id="357">357</span>
-<span id="358">358</span>
-<span id="359">359</span>
-<span id="360">360</span>
-<span id="361">361</span>
-<span id="362">362</span>
-<span id="363">363</span>
-<span id="364">364</span>
-<span id="365">365</span>
-<span id="366">366</span>
-<span id="367">367</span>
-<span id="368">368</span>
-<span id="369">369</span>
-<span id="370">370</span>
-<span id="371">371</span>
-<span id="372">372</span>
-<span id="373">373</span>
-<span id="374">374</span>
-<span id="375">375</span>
-<span id="376">376</span>
-<span id="377">377</span>
-<span id="378">378</span>
-<span id="379">379</span>
-<span id="380">380</span>
-<span id="381">381</span>
-<span id="382">382</span>
-<span id="383">383</span>
-<span id="384">384</span>
-<span id="385">385</span>
-<span id="386">386</span>
-<span id="387">387</span>
-<span id="388">388</span>
-<span id="389">389</span>
-<span id="390">390</span>
-<span id="391">391</span>
-<span id="392">392</span>
-<span id="393">393</span>
-<span id="394">394</span>
-<span id="395">395</span>
-<span id="396">396</span>
-<span id="397">397</span>
-<span id="398">398</span>
-<span id="399">399</span>
-<span id="400">400</span>
-<span id="401">401</span>
-<span id="402">402</span>
-<span id="403">403</span>
-<span id="404">404</span>
-<span id="405">405</span>
-<span id="406">406</span>
-<span id="407">407</span>
-<span id="408">408</span>
-<span id="409">409</span>
-<span id="410">410</span>
-<span id="411">411</span>
-<span id="412">412</span>
-<span id="413">413</span>
-<span id="414">414</span>
-<span id="415">415</span>
-<span id="416">416</span>
-<span id="417">417</span>
-<span id="418">418</span>
-<span id="419">419</span>
-<span id="420">420</span>
-<span id="421">421</span>
-<span id="422">422</span>
-<span id="423">423</span>
-<span id="424">424</span>
-<span id="425">425</span>
-<span id="426">426</span>
-<span id="427">427</span>
-<span id="428">428</span>
-<span id="429">429</span>
-<span id="430">430</span>
-<span id="431">431</span>
-<span id="432">432</span>
-<span id="433">433</span>
-<span id="434">434</span>
-<span id="435">435</span>
-<span id="436">436</span>
-<span id="437">437</span>
-<span id="438">438</span>
-<span id="439">439</span>
-<span id="440">440</span>
-<span id="441">441</span>
-<span id="442">442</span>
-<span id="443">443</span>
-<span id="444">444</span>
-<span id="445">445</span>
-<span id="446">446</span>
-<span id="447">447</span>
-<span id="448">448</span>
-<span id="449">449</span>
-<span id="450">450</span>
-<span id="451">451</span>
-<span id="452">452</span>
-<span id="453">453</span>
-<span id="454">454</span>
-<span id="455">455</span>
-<span id="456">456</span>
-<span id="457">457</span>
-<span id="458">458</span>
-<span id="459">459</span>
-<span id="460">460</span>
-<span id="461">461</span>
-<span id="462">462</span>
-<span id="463">463</span>
-<span id="464">464</span>
-<span id="465">465</span>
-<span id="466">466</span>
-<span id="467">467</span>
-<span id="468">468</span>
-<span id="469">469</span>
-<span id="470">470</span>
-<span id="471">471</span>
-<span id="472">472</span>
-<span id="473">473</span>
-<span id="474">474</span>
-<span id="475">475</span>
-<span id="476">476</span>
-<span id="477">477</span>
-<span id="478">478</span>
-<span id="479">479</span>
-<span id="480">480</span>
-<span id="481">481</span>
-<span id="482">482</span>
-<span id="483">483</span>
-<span id="484">484</span>
-<span id="485">485</span>
-<span id="486">486</span>
-<span id="487">487</span>
-<span id="488">488</span>
-<span id="489">489</span>
-<span id="490">490</span>
-<span id="491">491</span>
-<span id="492">492</span>
-<span id="493">493</span>
-<span id="494">494</span>
-<span id="495">495</span>
-<span id="496">496</span>
-<span id="497">497</span>
-<span id="498">498</span>
-<span id="499">499</span>
-<span id="500">500</span>
-<span id="501">501</span>
-<span id="502">502</span>
-<span id="503">503</span>
-<span id="504">504</span>
-<span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
-<span id="508">508</span>
-<span id="509">509</span>
-<span id="510">510</span>
-<span id="511">511</span>
-<span id="512">512</span>
-<span id="513">513</span>
-<span id="514">514</span>
-<span id="515">515</span>
-<span id="516">516</span>
-<span id="517">517</span>
-<span id="518">518</span>
-<span id="519">519</span>
-<span id="520">520</span>
-<span id="521">521</span>
-<span id="522">522</span>
-<span id="523">523</span>
-<span id="524">524</span>
-<span id="525">525</span>
-<span id="526">526</span>
-<span id="527">527</span>
-<span id="528">528</span>
-<span id="529">529</span>
-<span id="530">530</span>
-<span id="531">531</span>
-<span id="532">532</span>
-<span id="533">533</span>
-<span id="534">534</span>
-<span id="535">535</span>
-<span id="536">536</span>
-<span id="537">537</span>
-<span id="538">538</span>
-<span id="539">539</span>
-<span id="540">540</span>
-<span id="541">541</span>
-<span id="542">542</span>
-<span id="543">543</span>
-<span id="544">544</span>
-<span id="545">545</span>
-<span id="546">546</span>
-<span id="547">547</span>
-<span id="548">548</span>
-<span id="549">549</span>
-<span id="550">550</span>
-<span id="551">551</span>
-<span id="552">552</span>
-<span id="553">553</span>
-<span id="554">554</span>
-<span id="555">555</span>
-<span id="556">556</span>
-<span id="557">557</span>
-<span id="558">558</span>
-<span id="559">559</span>
-<span id="560">560</span>
-<span id="561">561</span>
-<span id="562">562</span>
-<span id="563">563</span>
-<span id="564">564</span>
-</pre><pre class="rust"><code><span class="doccomment">//! &quot;一次初始化&quot; 原语</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 该原语旨在用于运行一次性初始化。</span>
-<span class="doccomment">//! 一个示例用例将是初始化 FFI 库。</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/std/src/sync/once.rs`."><title>once.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../source-files1.71.0.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../std/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<a href="#2" id="2">2</a>
+<a href="#3" id="3">3</a>
+<a href="#4" id="4">4</a>
+<a href="#5" id="5">5</a>
+<a href="#6" id="6">6</a>
+<a href="#7" id="7">7</a>
+<a href="#8" id="8">8</a>
+<a href="#9" id="9">9</a>
+<a href="#10" id="10">10</a>
+<a href="#11" id="11">11</a>
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
+<a href="#48" id="48">48</a>
+<a href="#49" id="49">49</a>
+<a href="#50" id="50">50</a>
+<a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! &quot;一次初始化&quot; 原语
+//!
+//! 该原语旨在用于运行一次性初始化。
+//! 一个示例用例将是初始化 FFI 库。
 
-<span class="comment">// &quot;once&quot; 是一个相对简单的原语，通常也由操作系统提供 (请参见 `pthread_once` 或 `InitOnceExecuteOnce`)。</span>
-<span class="comment">// 但是，操作系统原语往往具有令人惊讶的限制，例如 Unix 不允许将参数传递给函数。</span>
-<span class="comment">//</span>
-<span class="comment">// 结果，我们最终在标准库中自己实现了它。</span>
-<span class="comment">// 这也为我们提供了优化实现的机会，这将有助于在调用站点上实现快速路径。因此，让我们解释一下该原语现在是如何工作的！</span>
-<span class="comment">//</span>
-<span class="comment">// 因此，回顾一下，一次的保证是它将最多调用一次初始化闭包，并且直到运行的那个完成运行后它才会返回。</span>
-<span class="comment">// 这意味着，至少在自定义回调运行时，我们需要在此处进行某种形式的阻塞。</span>
-<span class="comment">// 此外，我们增加了中毒的限制。</span>
-<span class="comment">// 每当初始化闭包 panics 时，`Once` 都会进入 &quot;poisoned&quot; 状态，这意味着所有 future 调用也将立即变为 panic。</span>
-<span class="comment">//</span>
-<span class="comment">// 因此，要实现此目的，可能首先需要购买 `Mutex`，但不能将其放入 `static`。</span>
-<span class="comment">// 通过中毒来确定何时需要释放互斥锁也会变得更加困难，因为它不是在闭包结束之后，而是在第一个成功的闭包结束之后。</span>
-<span class="comment">//</span>
-<span class="comment">// 总而言之，这是通过原子和无锁操作实现的！ 呜！每个 `Once` 都有一个原子状态的字，此状态已通过 CAS 确定要做什么。</span>
-<span class="comment">// `Once` 有四种可能的状态：</span>
-<span class="comment">//</span>
-<span class="comment">// * 未完成 - 尚未运行任何初始化，并且当前没有线程在使用 `Once`。</span>
-<span class="comment">// * 中毒 - 一些线程之前尝试初始化 `Once`，但是它 panic 了，所以 `Once` 现在是中毒的。当前没有其他线程访问此一次。</span>
-<span class="comment">// * 正在运行 - 某些线程当前正在尝试运行初始化。它可能会成功，因此所有 future 线程都需要等待它完成。</span>
-<span class="comment">//             请注意，这种状态伴随着一个有效载荷，如下所述。</span>
-<span class="comment">// * 完成 - 初始化已完成，所有 future 调用应立即完成。</span>
-<span class="comment">//</span>
-<span class="comment">// 对于 4 种状态，我们需要 2 位来对此进行编码，并且我们将已分配的字中的其余位用作线程队列，等待负责进入 RUNNING 状态的线程。</span>
-<span class="comment">//</span>
-<span class="comment">// 该队列只是一个 Waiter 节点的链表，其大小单调增加。</span>
-<span class="comment">// 每个节点都分配在栈上，并且每当运行的闭包完成时，它将消耗整个队列，并通知所有等待者他们应再次尝试。</span>
-<span class="comment">//</span>
-<span class="comment">// 您会在实现中找到更多细节，但这就是要点！</span>
-<span class="comment">//</span>
-<span class="comment">// 原子顺序：</span>
-<span class="comment">// 当运行 `Once` 时，我们处理多个原子：</span>
-<span class="comment">// `Once.state_and_queue` 和未知数量的 `Waiter.signaled`。</span>
-<span class="comment">// * `state_and_queue` 使用 (1) 作为状态标志，(2) 用于同步 `Once` 的结果，(3) 用于同步 `Waiter` 节点。</span>
-<span class="comment">//     - 在 `call_inner` 函数的末尾，我们必须确保已获取 `Once` 的结果。</span>
-<span class="comment">//     因此，可能是唯一要加载完成的负载，每个负载都必须至少具有获取顺序，这意味着它们全部都是三个。</span>
-<span class="comment">//     - `WaiterQueue::Drop` 是唯一可以存储 COMPLETED 的地方，并且必须使用 Release 排序才能使结果可用。</span>
-<span class="comment">//     - `wait` 将 `Waiter` 节点作为 `state_and_queue` 中的指针插入，并且需要使用 Release 排序使节点可用。</span>
-<span class="comment">//     `compare_exchange` 中的负载可以放宽，因为它只需要比较原子，而不必读取其他数据。</span>
-<span class="comment">//     - `WaiterQueue::Drop` 必须看到 `Waiter` 节点，因此它必须使用 Acquire ordering 加载 `state_and_queue`。</span>
-<span class="comment">//     - 只有一个存储区，其中 `state_and_queue` 仅用作状态标志，而不必同步数据：在 `call_inner` 中将状态从 INCOMPLETE 切换为 RUNNING。</span>
-<span class="comment">// 这个 store 可以是 Relaxed，但是 read 必须是 Acquire，因为上面提到的要求。</span>
-<span class="comment">// * `Waiter.signaled` 既用作标志，又用于保护 `Waiter` 中具有内部可变性的字段。</span>
-<span class="comment">// `Waiter.thread` 在 `WaiterQueue::Drop` 中更改，然后将 `signaled` 设置为发布顺序。</span>
-<span class="comment">//   `wait` 用 Acquire 加载 `signaled` 后，如果发现它是正确的，则需要查看更改以正确放置 `Waiter` 结构体。</span>
-<span class="comment">// * 在一个地方，两个原子 `Once.state_and_queue` 和 `Waiter.signaled` 在一起，并且可能由编译器或处理器重新排序。</span>
-<span class="comment">// 因为两者都使用 Acquire 排序，所以不允许这样的重新排序，因此不需要 SeqCst。</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
+</span><span class="attr">#[cfg(all(test, not(target_os = <span class="string">&quot;emscripten&quot;</span>)))]
+</span><span class="kw">mod </span>tests;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">test</span>, <span class="ident">not</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;emscripten&quot;</span>)))]</span>
-<span class="kw">mod</span> <span class="ident">tests</span>;
+<span class="kw">use </span><span class="kw">crate</span>::fmt;
+<span class="kw">use </span><span class="kw">crate</span>::panic::{RefUnwindSafe, UnwindSafe};
+<span class="kw">use </span><span class="kw">crate</span>::sys_common::once <span class="kw">as </span>sys;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cell::Cell</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::fmt</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::marker</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sync::atomic</span>::{<span class="ident">AtomicBool</span>, <span class="ident">AtomicUsize</span>, <span class="ident">Ordering</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::thread</span>::{<span class="self">self</span>, <span class="ident">Thread</span>};
-
-<span class="doccomment">/// 同步原语，可用于运行一次性初始化。</span>
-<span class="doccomment">/// 对于 FFI 或相关功能的一次性初始化很有用。</span>
-<span class="doccomment">/// 该类型只能用 [`Once::new()`] 构造。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// use std::sync::Once;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// static START: Once = Once::new();</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// START.call_once(|| {</span>
-<span class="doccomment">///     // 在这里运行初始化</span>
-<span class="doccomment">/// });</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Once</span> {
-    <span class="comment">// `state_and_queue` 实际上是一个指向带有额外状态位的 `Waiter` 的指针，因此我们适当地添加了 `PhantomData`。</span>
-    <span class="comment">//</span>
-    <span class="ident">state_and_queue</span>: <span class="ident">AtomicUsize</span>,
-    <span class="ident">_marker</span>: <span class="ident">marker::PhantomData</span><span class="op">&lt;</span><span class="kw-2">*</span><span class="kw">const</span> <span class="ident">Waiter</span><span class="op">&gt;</span>,
+<span class="doccomment">/// 同步原语，可用于运行一次性初始化。
+/// 对于 FFI 或相关功能的一次性初始化很有用。
+/// 该类型只能用 [`Once::new()`] 构造。
+///
+/// # Examples
+///
+/// ```
+/// use std::sync::Once;
+///
+/// static START: Once = Once::new();
+///
+/// START.call_once(|| {
+///     // 在这里运行初始化
+/// });
+/// ```
+</span><span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+</span><span class="kw">pub struct </span>Once {
+    inner: sys::Once,
 }
 
-<span class="comment">// 裸指针的 `PhantomData` 删除了这两个自动 traits，但是我们在实现中强制执行以下两项，因此添加起来应该很安全。</span>
-<span class="comment">//</span>
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Sync</span> <span class="kw">for</span> <span class="ident">Once</span> {}
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="ident">Once</span> {}
+<span class="attr">#[stable(feature = <span class="string">&quot;sync_once_unwind_safe&quot;</span>, since = <span class="string">&quot;1.59.0&quot;</span>)]
+</span><span class="kw">impl </span>UnwindSafe <span class="kw">for </span>Once {}
 
-<span class="doccomment">/// 状态产生于 [`Once::call_once_force () `] 的闭包参数。</span>
-<span class="doccomment">/// 该状态可用于查询 [`Once`] 的中毒状态。</span>
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;once_poison&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.51.0&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">OnceState</span> {
-    <span class="ident">poisoned</span>: <span class="ident">bool</span>,
-    <span class="ident">set_state_on_drop_to</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
+<span class="attr">#[stable(feature = <span class="string">&quot;sync_once_unwind_safe&quot;</span>, since = <span class="string">&quot;1.59.0&quot;</span>)]
+</span><span class="kw">impl </span>RefUnwindSafe <span class="kw">for </span>Once {}
+
+<span class="doccomment">/// 状态产生于 [`Once::call_once_force () `] 的闭包参数。
+/// 该状态可用于查询 [`Once`] 的中毒状态。
+</span><span class="attr">#[stable(feature = <span class="string">&quot;once_poison&quot;</span>, since = <span class="string">&quot;1.51.0&quot;</span>)]
+</span><span class="kw">pub struct </span>OnceState {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) inner: sys::OnceState,
 }
 
-<span class="doccomment">/// 静态 [`Once`] 值的初始化值。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// use std::sync::{Once, ONCE_INIT};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// static START: Once = ONCE_INIT;</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">rustc_deprecated</span>(
-    <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.38.0&quot;</span>,
-    <span class="ident">reason</span> <span class="op">=</span> <span class="string">&quot;the `new` function is now preferred&quot;</span>,
-    <span class="ident">suggestion</span> <span class="op">=</span> <span class="string">&quot;Once::new()&quot;</span>
-)]</span>
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ONCE_INIT</span>: <span class="ident">Once</span> <span class="op">=</span> <span class="ident">Once::new</span>();
-
-<span class="comment">// 一次可以进入的四个状态，被编码为一次结构体中 `state_and_queue` 的低位。</span>
-<span class="comment">//</span>
-<span class="kw">const</span> <span class="ident">INCOMPLETE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">0x0</span>;
-<span class="kw">const</span> <span class="ident">POISONED</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">0x1</span>;
-<span class="kw">const</span> <span class="ident">RUNNING</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">0x2</span>;
-<span class="kw">const</span> <span class="ident">COMPLETE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">0x3</span>;
-
-<span class="comment">// 隐含的了解状态。</span>
-<span class="comment">// 如果其他所有位都处于 RUNNING 状态，则它们都是等待者的队列。</span>
-<span class="kw">const</span> <span class="ident">STATE_MASK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">0x3</span>;
-
-<span class="comment">// 处于 RUNNING 状态时使用的等待者的链表中的节点表示。</span>
-<span class="comment">// Note: `Waiter` 不能持有指向下一个线程的可变指针，因为 `wait` 会同时向其 `Waiter` 节点发出变量引用，并保留共享的引用以检查 `signaled`。</span>
-<span class="comment">// 相反，我们使用共享引用，并使用内部可变性。</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="comment">//</span>
-<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">align</span>(<span class="number">4</span>))]</span> <span class="comment">// 确保两个低位可以自由用作状态位。</span>
-<span class="kw">struct</span> <span class="ident">Waiter</span> {
-    <span class="ident">thread</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Thread</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">signaled</span>: <span class="ident">AtomicBool</span>,
-    <span class="ident">next</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">Waiter</span>,
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum </span>ExclusiveState {
+    Incomplete,
+    Poisoned,
+    Complete,
 }
 
-<span class="comment">// 等待者链表的头。</span>
-<span class="comment">// 每个节点都是等待线程栈上的结构体。</span>
-<span class="comment">// 丢弃时将唤醒等待者，例如在 panic 上。</span>
-<span class="kw">struct</span> <span class="ident">WaiterQueue</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">state_and_queue</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">AtomicUsize</span>,
-    <span class="ident">set_state_on_drop_to</span>: <span class="ident">usize</span>,
-}
+<span class="doccomment">/// 静态 [`Once`] 值的初始化值。
+///
+/// # Examples
+///
+/// ```
+/// use std::sync::{Once, ONCE_INIT};
+///
+/// static START: Once = ONCE_INIT;
+/// ```
+</span><span class="attr">#[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+#[deprecated(
+    since = <span class="string">&quot;1.38.0&quot;</span>,
+    note = <span class="string">&quot;the `new` function is now preferred&quot;</span>,
+    suggestion = <span class="string">&quot;Once::new()&quot;
+</span>)]
+</span><span class="kw">pub const </span>ONCE_INIT: Once = Once::new();
 
-<span class="kw">impl</span> <span class="ident">Once</span> {
-    <span class="doccomment">/// 创建一个新的 `Once` 值。</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;once_new&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.2.0&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">rustc_const_stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;const_once_new&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.32.0&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">Once</span> {
-        <span class="ident">Once</span> { <span class="ident">state_and_queue</span>: <span class="ident">AtomicUsize::new</span>(<span class="ident">INCOMPLETE</span>), <span class="ident">_marker</span>: <span class="ident">marker::PhantomData</span> }
+<span class="kw">impl </span>Once {
+    <span class="doccomment">/// 创建一个新的 `Once` 值。
+    </span><span class="attr">#[inline]
+    #[stable(feature = <span class="string">&quot;once_new&quot;</span>, since = <span class="string">&quot;1.2.0&quot;</span>)]
+    #[rustc_const_stable(feature = <span class="string">&quot;const_once_new&quot;</span>, since = <span class="string">&quot;1.32.0&quot;</span>)]
+    #[must_use]
+    </span><span class="kw">pub const fn </span>new() -&gt; Once {
+        Once { inner: sys::Once::new() }
     }
 
-    <span class="doccomment">/// 仅执行一次初始化例程。如果这是第一次调用 `call_once`，则将执行给定的闭包，否则将 *不* 调用例程。</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 如果当前正在运行另一个初始化例程，则此方法将阻止调用线程。</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 当这个函数返回时，保证一些初始化已经运行并完成 (它可能不是指定的闭包)。</span>
-    <span class="doccomment">/// 还可以确保此时其他线程可以可靠地观察到由执行的闭包执行的任何内存写操作 (闭包与返回之后执行的代码之间存在先于发生的关系)。</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 如果给定的闭包在同一 [`Once`] 实例上递归调用 `call_once`，则未指定确切的行为，则允许的结果为 panic 或死锁。</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use std::sync::Once;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// static mut VAL: usize = 0;</span>
-    <span class="doccomment">/// static INIT: Once = Once::new();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// // 在很多情况下，访问 `static mut` 是不安全的，但是如果我们以同步方式进行操作 (例如，一次写入或全部读取)，那么我们就可以开始了！</span>
-    <span class="comment">/////</span>
-    <span class="comment">/////</span>
-    <span class="doccomment">/// // 此函数将只调用一次 `expensive_computation`，否则将始终返回从第一次调用返回的值。</span>
-    <span class="comment">/////</span>
-    <span class="comment">/////</span>
-    <span class="doccomment">/// fn get_cached_val() -&gt; usize {</span>
-    <span class="doccomment">///     unsafe {</span>
-    <span class="doccomment">///         INIT.call_once(|| {</span>
-    <span class="doccomment">///             VAL = expensive_computation();</span>
-    <span class="doccomment">///         });</span>
-    <span class="doccomment">///         VAL</span>
-    <span class="doccomment">///     }</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// fn expensive_computation() -&gt; usize {</span>
-    <span class="doccomment">///     // ...</span>
-    <span class="doccomment">/// # 2</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Panics</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 如果在多个线程中同时调用闭包 `f`，则将仅执行一次。</span>
-    <span class="doccomment">/// 但是，如果该闭包 panics 将会毒化该 [`Once`] 实例，从而导致 `call_once` 的所有 future 调用也变为 panic。</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 这类似于 [互斥体中毒][poison]。</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// [poison]: struct.Mutex.html#poisoning</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rust1&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.0.0&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">call_once</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>)
-    <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(),
+    <span class="doccomment">/// 仅执行一次初始化例程。如果这是第一次调用 `call_once`，则将执行给定的闭包，否则将 *不* 调用例程。
+    ///
+    /// 如果当前正在运行另一个初始化例程，则此方法将阻止调用线程。
+    ///
+    /// 当这个函数返回时，保证一些初始化已经运行并完成 (它可能不是指定的闭包)。
+    /// 还可以确保此时其他线程可以可靠地观察到由执行的闭包执行的任何内存写操作 (闭包与返回之后执行的代码之间存在先于发生的关系)。
+    ///
+    ///
+    /// 如果给定的闭包在同一 [`Once`] 实例上递归调用 `call_once`，则未指定确切的行为，则允许的结果为 panic 或死锁。
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use std::sync::Once;
+    ///
+    /// static mut VAL: usize = 0;
+    /// static INIT: Once = Once::new();
+    ///
+    /// // 在很多情况下，访问 `static mut` 是不安全的，但是如果我们以同步方式进行操作 (例如，一次写入或全部读取)，那么我们就可以开始了！
+    </span><span class="comment">/////
+    /////
+    </span><span class="doccomment">/// // 此函数将只调用一次 `expensive_computation`，否则将始终返回从第一次调用返回的值。
+    </span><span class="comment">/////
+    /////
+    </span><span class="doccomment">/// fn get_cached_val() -&gt; usize {
+    ///     unsafe {
+    ///         INIT.call_once(|| {
+    ///             VAL = expensive_computation();
+    ///         });
+    ///         VAL
+    ///     }
+    /// }
+    ///
+    /// fn expensive_computation() -&gt; usize {
+    ///     // ...
+    /// # 2
+    /// }
+    /// ```
+    ///
+    /// # Panics
+    ///
+    /// 如果在多个线程中同时调用闭包 `f`，则将仅执行一次。
+    /// 但是，如果该闭包 panics 将会毒化该 [`Once`] 实例，从而导致 `call_once` 的所有 future 调用也变为 panic。
+    ///
+    /// 这类似于 [互斥体中毒][poison]。
+    ///
+    /// [poison]: struct.Mutex.html#poisoning
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    </span><span class="attr">#[inline]
+    #[stable(feature = <span class="string">&quot;rust1&quot;</span>, since = <span class="string">&quot;1.0.0&quot;</span>)]
+    #[track_caller]
+    </span><span class="kw">pub fn </span>call_once&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, f: F)
+    <span class="kw">where
+        </span>F: FnOnce(),
     {
-        <span class="comment">// 快速路径检查</span>
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_completed</span>() {
+        <span class="comment">// 快速路径检查
+        </span><span class="kw">if </span><span class="self">self</span>.inner.is_completed() {
             <span class="kw">return</span>;
         }
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">f</span>);
-        <span class="self">self</span>.<span class="ident">call_inner</span>(<span class="bool-val">false</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">f</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>()());
+        <span class="kw">let </span><span class="kw-2">mut </span>f = <span class="prelude-val">Some</span>(f);
+        <span class="self">self</span>.inner.call(<span class="bool-val">false</span>, <span class="kw-2">&amp;mut </span>|<span class="kw">_</span>| f.take().unwrap()());
     }
 
-    <span class="doccomment">/// 执行与 [`call_once()`] 相同的函数，只是忽略中毒。</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 与 [`call_once()`] 不同，如果此 [`Once`] 已中毒 (例如，先前对 [`call_once()`] 或 [`call_once_force()`] 的调用导致 panic)，则调用 [`call_once_force()`] 仍将调用闭包 `f`，并且 _not_ 会立即导致 panic。</span>
-    <span class="doccomment">/// 如果 `f` panics，则 [`Once`] 将保持中毒状态。</span>
-    <span class="doccomment">/// 如果 `f` 执行 _not_ panic，则 [`Once`] 将不再处于中毒状态，并且所有对 [`call_once()`] 或 [`call_once_force()`] 的 future 调用都将变为无操作。</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 闭包 `f` 产生 [`OnceState`] 结构体，可用于查询 [`Once`] 的中毒状态。</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// [`call_once()`]: Once::call_once</span>
-    <span class="doccomment">/// [`call_once_force()`]: Once::call_once_force</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use std::sync::Once;</span>
-    <span class="doccomment">/// use std::thread;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// static INIT: Once = Once::new();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// // 中毒一次</span>
-    <span class="doccomment">/// let handle = thread::spawn(|| {</span>
-    <span class="doccomment">///     INIT.call_once(|| panic!());</span>
-    <span class="doccomment">/// });</span>
-    <span class="doccomment">/// assert!(handle.join().is_err());</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// // 中毒传播</span>
-    <span class="doccomment">/// let handle = thread::spawn(|| {</span>
-    <span class="doccomment">///     INIT.call_once(|| {});</span>
-    <span class="doccomment">/// });</span>
-    <span class="doccomment">/// assert!(handle.join().is_err());</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// // call_once_force 仍将运行并重置中毒状态</span>
-    <span class="doccomment">/// INIT.call_once_force(|state| {</span>
-    <span class="doccomment">///     assert!(state.is_poisoned());</span>
-    <span class="doccomment">/// });</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// // 一旦成功，我们就停止传播毒药</span>
-    <span class="doccomment">/// INIT.call_once(|| {});</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;once_poison&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.51.0&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">call_once_force</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>)
-    <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">OnceState</span>),
+    <span class="doccomment">/// 执行与 [`call_once()`] 相同的函数，只是忽略中毒。
+    ///
+    /// 与 [`call_once()`] 不同，如果此 [`Once`] 已中毒 (例如，先前对 [`call_once()`] 或 [`call_once_force()`] 的调用导致 panic)，则调用 [`call_once_force()`] 仍将调用闭包 `f`，并且 _not_ 会立即导致 panic。
+    /// 如果 `f` panics，则 [`Once`] 将保持中毒状态。
+    /// 如果 `f` 执行 _not_ panic，则 [`Once`] 将不再处于中毒状态，并且所有对 [`call_once()`] 或 [`call_once_force()`] 的 future 调用都将变为无操作。
+    ///
+    /// 闭包 `f` 产生 [`OnceState`] 结构体，可用于查询 [`Once`] 的中毒状态。
+    ///
+    /// [`call_once()`]: Once::call_once
+    /// [`call_once_force()`]: Once::call_once_force
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use std::sync::Once;
+    /// use std::thread;
+    ///
+    /// static INIT: Once = Once::new();
+    ///
+    /// // 中毒一次
+    /// let handle = thread::spawn(|| {
+    ///     INIT.call_once(|| panic!());
+    /// });
+    /// assert!(handle.join().is_err());
+    ///
+    /// // 中毒传播
+    /// let handle = thread::spawn(|| {
+    ///     INIT.call_once(|| {});
+    /// });
+    /// assert!(handle.join().is_err());
+    ///
+    /// // call_once_force 仍将运行并重置中毒状态
+    /// INIT.call_once_force(|state| {
+    ///     assert!(state.is_poisoned());
+    /// });
+    ///
+    /// // 一旦成功，我们就停止传播毒药
+    /// INIT.call_once(|| {});
+    /// ```
+    ///
+    ///
+    ///
+    ///
+    ///
+    </span><span class="attr">#[inline]
+    #[stable(feature = <span class="string">&quot;once_poison&quot;</span>, since = <span class="string">&quot;1.51.0&quot;</span>)]
+    </span><span class="kw">pub fn </span>call_once_force&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, f: F)
+    <span class="kw">where
+        </span>F: FnOnce(<span class="kw-2">&amp;</span>OnceState),
     {
-        <span class="comment">// 快速路径检查</span>
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_completed</span>() {
+        <span class="comment">// 快速路径检查
+        </span><span class="kw">if </span><span class="self">self</span>.inner.is_completed() {
             <span class="kw">return</span>;
         }
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">f</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">f</span>);
-        <span class="self">self</span>.<span class="ident">call_inner</span>(<span class="bool-val">true</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">f</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>()(<span class="ident">p</span>));
+        <span class="kw">let </span><span class="kw-2">mut </span>f = <span class="prelude-val">Some</span>(f);
+        <span class="self">self</span>.inner.call(<span class="bool-val">true</span>, <span class="kw-2">&amp;mut </span>|p| f.take().unwrap()(p));
     }
 
-    <span class="doccomment">/// 如果某些 [`call_once()`] 调用已成功完成，则返回 `true`。具体而言，在以下情况下，`is_completed` 将返回 false：</span>
-    <span class="doccomment">///   * [`call_once()`] 根本没有被调用，</span>
-    <span class="doccomment">///   * [`call_once()`] 已被调用，但尚未完成，</span>
-    <span class="doccomment">///   * [`Once`] 实例中毒</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 此函数返回 `false` 并不意味着 [`Once`] 尚未执行。</span>
-    <span class="doccomment">/// 例如，它可能是在 `is_completed` 开始执行到返回之间的时间执行的，在这种情况下，`false` 的返回值将是陈旧的 (但仍然是允许的)。</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// [`call_once()`]: Once::call_once</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use std::sync::Once;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// static INIT: Once = Once::new();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// assert_eq!(INIT.is_completed(), false);</span>
-    <span class="doccomment">/// INIT.call_once(|| {</span>
-    <span class="doccomment">///     assert_eq!(INIT.is_completed(), false);</span>
-    <span class="doccomment">/// });</span>
-    <span class="doccomment">/// assert_eq!(INIT.is_completed(), true);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use std::sync::Once;</span>
-    <span class="doccomment">/// use std::thread;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// static INIT: Once = Once::new();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// assert_eq!(INIT.is_completed(), false);</span>
-    <span class="doccomment">/// let handle = thread::spawn(|| {</span>
-    <span class="doccomment">///     INIT.call_once(|| panic!());</span>
-    <span class="doccomment">/// });</span>
-    <span class="doccomment">/// assert!(handle.join().is_err());</span>
-    <span class="doccomment">/// assert_eq!(INIT.is_completed(), false);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;once_is_completed&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.43.0&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_completed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="comment">// `Acquire` 负载就足够了，因为这使我们可以看到所有初始化操作，并且这是一条捷径，较弱的排序有助于提高性能。</span>
-        <span class="comment">// 该 `Acquire` 与慢速路径上的 `Release` 操作同步。</span>
-        <span class="comment">//</span>
-        <span class="comment">//</span>
-        <span class="self">self</span>.<span class="ident">state_and_queue</span>.<span class="ident">load</span>(<span class="ident">Ordering::Acquire</span>) <span class="op">==</span> <span class="ident">COMPLETE</span>
+    <span class="doccomment">/// 如果某些 [`call_once()`] 调用已成功完成，则返回 `true`。具体而言，在以下情况下，`is_completed` 将返回 false：
+    ///   * [`call_once()`] 根本没有被调用，
+    ///   * [`call_once()`] 已被调用，但尚未完成，
+    ///   * [`Once`] 实例中毒
+    ///
+    /// 此函数返回 `false` 并不意味着 [`Once`] 尚未执行。
+    /// 例如，它可能是在 `is_completed` 开始执行到返回之间的时间执行的，在这种情况下，`false` 的返回值将是陈旧的 (但仍然是允许的)。
+    ///
+    ///
+    /// [`call_once()`]: Once::call_once
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use std::sync::Once;
+    ///
+    /// static INIT: Once = Once::new();
+    ///
+    /// assert_eq!(INIT.is_completed(), false);
+    /// INIT.call_once(|| {
+    ///     assert_eq!(INIT.is_completed(), false);
+    /// });
+    /// assert_eq!(INIT.is_completed(), true);
+    /// ```
+    ///
+    /// ```
+    /// use std::sync::Once;
+    /// use std::thread;
+    ///
+    /// static INIT: Once = Once::new();
+    ///
+    /// assert_eq!(INIT.is_completed(), false);
+    /// let handle = thread::spawn(|| {
+    ///     INIT.call_once(|| panic!());
+    /// });
+    /// assert!(handle.join().is_err());
+    /// assert_eq!(INIT.is_completed(), false);
+    /// ```
+    ///
+    ///
+    ///
+    </span><span class="attr">#[stable(feature = <span class="string">&quot;once_is_completed&quot;</span>, since = <span class="string">&quot;1.43.0&quot;</span>)]
+    #[inline]
+    </span><span class="kw">pub fn </span>is_completed(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.inner.is_completed()
     }
 
-    <span class="comment">// 这是一个非通用类型的函数，可以减少使用 `call_once` 的单态化成本 (这并非微不足道或很小的实现)。</span>
-    <span class="comment">//</span>
-    <span class="comment">// 另外，它用 `#[cold]` 标记，因为它确实应该是冷的，它有助于让 LLVM 知道对该函数的调用应该不在快速路径之内。</span>
-    <span class="comment">// 从本质上讲，这应该有助于在 LLVM 中生成更多直线代码。</span>
-    <span class="comment">//</span>
-    <span class="comment">// 最后，这需要 `FnMut` 而不是 `FnOnce`，因为当前没有办法通过虚拟调度来获取 `FnOnce` 并调用它，而没有一些分配开销。</span>
-    <span class="comment">//</span>
-    <span class="comment">//</span>
-    <span class="comment">//</span>
-    <span class="comment">//</span>
-    <span class="comment">//</span>
-    <span class="attribute">#[<span class="ident">cold</span>]</span>
-    <span class="kw">fn</span> <span class="ident">call_inner</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ignore_poisoning</span>: <span class="ident">bool</span>, <span class="ident">init</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">dyn</span> <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">OnceState</span>)) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state_and_queue</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state_and_queue</span>.<span class="ident">load</span>(<span class="ident">Ordering::Acquire</span>);
-        <span class="kw">loop</span> {
-            <span class="kw">match</span> <span class="ident">state_and_queue</span> {
-                <span class="ident">COMPLETE</span> =&gt; <span class="kw">break</span>,
-                <span class="ident">POISONED</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">ignore_poisoning</span> =&gt; {
-                    <span class="comment">// panic 会传播 poison。</span>
-                    <span class="macro">panic!</span>(<span class="string">&quot;Once instance has previously been poisoned&quot;</span>);
-                }
-                <span class="ident">POISONED</span> <span class="op">|</span> <span class="ident">INCOMPLETE</span> =&gt; {
-                    <span class="comment">// 尝试将该线程注册为一个正在运行的线程。</span>
-                    <span class="kw">let</span> <span class="ident">exchange_result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state_and_queue</span>.<span class="ident">compare_exchange</span>(
-                        <span class="ident">state_and_queue</span>,
-                        <span class="ident">RUNNING</span>,
-                        <span class="ident">Ordering::Acquire</span>,
-                        <span class="ident">Ordering::Acquire</span>,
-                    );
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">old</span>) <span class="op">=</span> <span class="ident">exchange_result</span> {
-                        <span class="ident">state_and_queue</span> <span class="op">=</span> <span class="ident">old</span>;
-                        <span class="kw">continue</span>;
-                    }
-                    <span class="comment">// `waiter_queue` 将管理其他等待线程，并在丢弃时唤醒它们。</span>
-                    <span class="comment">//</span>
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">waiter_queue</span> <span class="op">=</span> <span class="ident">WaiterQueue</span> {
-                        <span class="ident">state_and_queue</span>: <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state_and_queue</span>,
-                        <span class="ident">set_state_on_drop_to</span>: <span class="ident">POISONED</span>,
-                    };
-                    <span class="comment">// 运行初始化函数，让它知道我们是否中毒。</span>
-                    <span class="comment">//</span>
-                    <span class="kw">let</span> <span class="ident">init_state</span> <span class="op">=</span> <span class="ident">OnceState</span> {
-                        <span class="ident">poisoned</span>: <span class="ident">state_and_queue</span> <span class="op">==</span> <span class="ident">POISONED</span>,
-                        <span class="ident">set_state_on_drop_to</span>: <span class="ident">Cell::new</span>(<span class="ident">COMPLETE</span>),
-                    };
-                    <span class="ident">init</span>(<span class="kw-2">&amp;</span><span class="ident">init_state</span>);
-                    <span class="ident">waiter_queue</span>.<span class="ident">set_state_on_drop_to</span> <span class="op">=</span> <span class="ident">init_state</span>.<span class="ident">set_state_on_drop_to</span>.<span class="ident">get</span>();
-                    <span class="kw">break</span>;
-                }
-                <span class="kw">_</span> =&gt; {
-                    <span class="comment">// 所有其他值都必须为 RUNNING，并且可能有一个指向更高有效位的侍者队列的指针。</span>
-                    <span class="comment">//</span>
-                    <span class="macro">assert!</span>(<span class="ident">state_and_queue</span> <span class="op">&amp;</span> <span class="ident">STATE_MASK</span> <span class="op">==</span> <span class="ident">RUNNING</span>);
-                    <span class="ident">wait</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state_and_queue</span>, <span class="ident">state_and_queue</span>);
-                    <span class="ident">state_and_queue</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state_and_queue</span>.<span class="ident">load</span>(<span class="ident">Ordering::Acquire</span>);
-                }
-            }
-        }
+    <span class="doccomment">/// 返回 `Once` 实例的当前状态。
+    ///
+    /// 由于这采用可变引用，因此当前无法运行任何初始化，因此状态必须是 &quot;incomplete&quot;、&quot;poisoned&quot; 或 &quot;complete&quot;。
+    ///
+    ///
+    </span><span class="attr">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>state(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; ExclusiveState {
+        <span class="self">self</span>.inner.state()
     }
 }
 
-<span class="kw">fn</span> <span class="ident">wait</span>(<span class="ident">state_and_queue</span>: <span class="kw-2">&amp;</span><span class="ident">AtomicUsize</span>, <span class="kw-2">mut</span> <span class="ident">current_state</span>: <span class="ident">usize</span>) {
-    <span class="comment">// Note: 以下代码经过精心编写，以避免对 `node` 创建别名。</span>
-    <span class="comment">//</span>
-    <span class="kw">loop</span> {
-        <span class="comment">// 如果状态不再运行，请不要将此线程排队，否则我们不会被唤醒。</span>
-        <span class="comment">//</span>
-        <span class="kw">if</span> <span class="ident">current_state</span> <span class="op">&amp;</span> <span class="ident">STATE_MASK</span> <span class="op">!</span><span class="op">=</span> <span class="ident">RUNNING</span> {
-            <span class="kw">return</span>;
-        }
-
-        <span class="comment">// 为我们当前的线程创建节点。</span>
-        <span class="kw">let</span> <span class="ident">node</span> <span class="op">=</span> <span class="ident">Waiter</span> {
-            <span class="ident">thread</span>: <span class="ident">Cell::new</span>(<span class="prelude-val">Some</span>(<span class="ident">thread::current</span>())),
-            <span class="ident">signaled</span>: <span class="ident">AtomicBool::new</span>(<span class="bool-val">false</span>),
-            <span class="ident">next</span>: (<span class="ident">current_state</span> <span class="op">&amp;</span> <span class="op">!</span><span class="ident">STATE_MASK</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">Waiter</span>,
-        };
-        <span class="kw">let</span> <span class="ident">me</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">node</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">Waiter</span> <span class="kw">as</span> <span class="ident">usize</span>;
-
-        <span class="comment">// 尝试在链表顶部的节点中滑动，确保其他线程不只是替换链表的头部。</span>
-        <span class="comment">//</span>
-        <span class="kw">let</span> <span class="ident">exchange_result</span> <span class="op">=</span> <span class="ident">state_and_queue</span>.<span class="ident">compare_exchange</span>(
-            <span class="ident">current_state</span>,
-            <span class="ident">me</span> <span class="op">|</span> <span class="ident">RUNNING</span>,
-            <span class="ident">Ordering::Release</span>,
-            <span class="ident">Ordering::Relaxed</span>,
-        );
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">old</span>) <span class="op">=</span> <span class="ident">exchange_result</span> {
-            <span class="ident">current_state</span> <span class="op">=</span> <span class="ident">old</span>;
-            <span class="kw">continue</span>;
-        }
-
-        <span class="comment">// 我们已经入队，现在让我们等待。</span>
-        <span class="comment">// 重要的是不要在收到信号之前返回，否则我们将丢弃 `Waiter` 节点，并将 hole 留在链表中 (并悬垂引用)。</span>
-        <span class="comment">// 提醒自己，直到收到信号为止，以防虚假唤醒。</span>
-        <span class="comment">//</span>
-        <span class="comment">//</span>
-        <span class="kw">while</span> <span class="op">!</span><span class="ident">node</span>.<span class="ident">signaled</span>.<span class="ident">load</span>(<span class="ident">Ordering::Acquire</span>) {
-            <span class="comment">// 如果管理线程恰好在我们可以停泊自己之前发出信号并释放了我们，则结果可能是该线程永远不会停泊。</span>
-            <span class="comment">// 幸运的是，`park` 保证如果它在未停放的线程上获得 `unpark`，则它不会 park。</span>
-            <span class="comment">//</span>
-            <span class="comment">//</span>
-            <span class="ident">thread::park</span>();
-        }
-        <span class="kw">break</span>;
+<span class="attr">#[stable(feature = <span class="string">&quot;std_debug&quot;</span>, since = <span class="string">&quot;1.16.0&quot;</span>)]
+</span><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>Once {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+        f.debug_struct(<span class="string">&quot;Once&quot;</span>).finish_non_exhaustive()
     }
 }
 
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std_debug&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.16.0&quot;</span>)]</span>
-<span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">Once</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;Once&quot;</span>).<span class="ident">finish_non_exhaustive</span>()
+<span class="kw">impl </span>OnceState {
+    <span class="doccomment">/// 如果关联的 [`Once`] 在调用传递给 [`Once::call_once_force()`] 的闭包之前中毒，则返回 `true`。
+    ///
+    ///
+    /// # Examples
+    ///
+    /// 中毒的 [`Once`]：
+    ///
+    /// ```
+    /// use std::sync::Once;
+    /// use std::thread;
+    ///
+    /// static INIT: Once = Once::new();
+    ///
+    /// // 中毒一次
+    /// let handle = thread::spawn(|| {
+    ///     INIT.call_once(|| panic!());
+    /// });
+    /// assert!(handle.join().is_err());
+    ///
+    /// INIT.call_once_force(|state| {
+    ///     assert!(state.is_poisoned());
+    /// });
+    /// ```
+    ///
+    /// 无毒的 [`Once`]：
+    ///
+    /// ```
+    /// use std::sync::Once;
+    ///
+    /// static INIT: Once = Once::new();
+    ///
+    /// INIT.call_once_force(|state| {
+    ///     assert!(!state.is_poisoned());
+    /// });
+    </span><span class="attr">#[stable(feature = <span class="string">&quot;once_poison&quot;</span>, since = <span class="string">&quot;1.51.0&quot;</span>)]
+    #[inline]
+    </span><span class="kw">pub fn </span>is_poisoned(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.inner.is_poisoned()
+    }
+
+    <span class="doccomment">/// 中毒关联的 [`Once`]，而不显式 panic。
+    </span><span class="comment">// NOTE: 这目前仅针对 `OnceLock` 公开。
+    </span><span class="attr">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>poison(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="self">self</span>.inner.poison();
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">WaiterQueue</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-        <span class="comment">// 与我们交换状态，但是我们完成了。</span>
-        <span class="kw">let</span> <span class="ident">state_and_queue</span> <span class="op">=</span>
-            <span class="self">self</span>.<span class="ident">state_and_queue</span>.<span class="ident">swap</span>(<span class="self">self</span>.<span class="ident">set_state_on_drop_to</span>, <span class="ident">Ordering::AcqRel</span>);
-
-        <span class="comment">// 我们应该只看到一个正在运行的旧状态。</span>
-        <span class="macro">assert_eq!</span>(<span class="ident">state_and_queue</span> <span class="op">&amp;</span> <span class="ident">STATE_MASK</span>, <span class="ident">RUNNING</span>);
-
-        <span class="comment">// 遍历整个 waiters 的链表并唤醒他们 (按照 lifo 顺序，最后注册要首先唤醒)。</span>
-        <span class="comment">//</span>
-        <span class="kw">unsafe</span> {
-            <span class="comment">// 设置 `node.signaled = true` 之后，如果恰好有虚假唤醒，其他线程可能会释放 `node`。</span>
-            <span class="comment">//</span>
-            <span class="comment">// 因此，我们必须取出 `thread` 字段，然后首先将指针复制到 `next`。</span>
-            <span class="comment">//</span>
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">queue</span> <span class="op">=</span> (<span class="ident">state_and_queue</span> <span class="op">&amp;</span> <span class="op">!</span><span class="ident">STATE_MASK</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">Waiter</span>;
-            <span class="kw">while</span> <span class="op">!</span><span class="ident">queue</span>.<span class="ident">is_null</span>() {
-                <span class="kw">let</span> <span class="ident">next</span> <span class="op">=</span> (<span class="kw-2">*</span><span class="ident">queue</span>).<span class="ident">next</span>;
-                <span class="kw">let</span> <span class="ident">thread</span> <span class="op">=</span> (<span class="kw-2">*</span><span class="ident">queue</span>).<span class="ident">thread</span>.<span class="ident">take</span>().<span class="ident">unwrap</span>();
-                (<span class="kw-2">*</span><span class="ident">queue</span>).<span class="ident">signaled</span>.<span class="ident">store</span>(<span class="bool-val">true</span>, <span class="ident">Ordering::Release</span>);
-                <span class="comment">// ^- FIXME (maybe): 这是 issue #55005 的另一种情况 `store()` 潜在地悬挂了对 `signaled` 的引用。</span>
-                <span class="comment">//</span>
-                <span class="ident">queue</span> <span class="op">=</span> <span class="ident">next</span>;
-                <span class="ident">thread</span>.<span class="ident">unpark</span>();
-            }
-        }
+<span class="attr">#[stable(feature = <span class="string">&quot;std_debug&quot;</span>, since = <span class="string">&quot;1.16.0&quot;</span>)]
+</span><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>OnceState {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+        f.debug_struct(<span class="string">&quot;OnceState&quot;</span>).field(<span class="string">&quot;poisoned&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.is_poisoned()).finish()
     }
 }
-
-<span class="kw">impl</span> <span class="ident">OnceState</span> {
-    <span class="doccomment">/// 如果关联的 [`Once`] 在调用传递给 [`Once::call_once_force()`] 的闭包之前中毒，则返回 `true`。</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 中毒的 [`Once`]：</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use std::sync::Once;</span>
-    <span class="doccomment">/// use std::thread;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// static INIT: Once = Once::new();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// // 中毒一次</span>
-    <span class="doccomment">/// let handle = thread::spawn(|| {</span>
-    <span class="doccomment">///     INIT.call_once(|| panic!());</span>
-    <span class="doccomment">/// });</span>
-    <span class="doccomment">/// assert!(handle.join().is_err());</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// INIT.call_once_force(|state| {</span>
-    <span class="doccomment">///     assert!(state.is_poisoned());</span>
-    <span class="doccomment">/// });</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 无毒的 [`Once`]：</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use std::sync::Once;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// static INIT: Once = Once::new();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// INIT.call_once_force(|state| {</span>
-    <span class="doccomment">///     assert!(!state.is_poisoned());</span>
-    <span class="doccomment">/// });</span>
-    <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;once_poison&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.51.0&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_poisoned</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">poisoned</span>
-    }
-
-    <span class="doccomment">/// 中毒关联的 [`Once`]，而不显式 panic。</span>
-    <span class="comment">// NOTE: 当前仅针对 `lazy` 模块公开</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">poison</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">set_state_on_drop_to</span>.<span class="ident">set</span>(<span class="ident">POISONED</span>);
-    }
-}
-</code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="std" data-search-index-js="../../../search-index1.58.0.js" data-search-js="../../../search1.58.0.js"></div>
-    <script src="../../../main1.58.0.js"></script><script src="../../../source-script1.58.0.js"></script><script src="../../../source-files1.58.0.js"></script>
-</body></html>
+</code></pre></div></section></main></body></html>

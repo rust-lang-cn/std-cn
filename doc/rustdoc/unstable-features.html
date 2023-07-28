@@ -1,0 +1,661 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Unstable features - The rustdoc book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="what-is-rustdoc.html"><strong aria-hidden="true">1.</strong> What is rustdoc?</a></li><li class="chapter-item expanded "><a href="command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line arguments</a></li><li class="chapter-item expanded "><a href="how-to-read-rustdoc.html"><strong aria-hidden="true">3.</strong> How to read rustdoc output</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="read-documentation/in-doc-settings.html"><strong aria-hidden="true">3.1.</strong> In-doc settings</a></li></ol></li><li class="chapter-item expanded "><a href="how-to-write-documentation.html"><strong aria-hidden="true">4.</strong> How to write documentation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="write-documentation/what-to-include.html"><strong aria-hidden="true">4.1.</strong> What to include (and exclude)</a></li><li class="chapter-item expanded "><a href="write-documentation/the-doc-attribute.html"><strong aria-hidden="true">4.2.</strong> The #[doc] attribute</a></li><li class="chapter-item expanded "><a href="write-documentation/linking-to-items-by-name.html"><strong aria-hidden="true">4.3.</strong> Linking to items by name</a></li><li class="chapter-item expanded "><a href="write-documentation/documentation-tests.html"><strong aria-hidden="true">4.4.</strong> Documentation tests</a></li></ol></li><li class="chapter-item expanded "><a href="lints.html"><strong aria-hidden="true">5.</strong> Rustdoc-specific lints</a></li><li class="chapter-item expanded "><a href="scraped-examples.html"><strong aria-hidden="true">6.</strong> Scraped examples</a></li><li class="chapter-item expanded "><a href="advanced-features.html"><strong aria-hidden="true">7.</strong> Advanced features</a></li><li class="chapter-item expanded "><a href="unstable-features.html" class="active"><strong aria-hidden="true">8.</strong> Unstable features</a></li><li class="chapter-item expanded "><a href="deprecated-features.html"><strong aria-hidden="true">9.</strong> Deprecated features</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">10.</strong> References</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The rustdoc book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/master/src/doc/rustdoc" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="unstable-features"><a class="header" href="#unstable-features">Unstable features</a></h1>
+<p>Rustdoc is under active development, and like the Rust compiler, some features are only available
+on nightly releases. Some of these features are new and need some more testing before they're able to be
+released to the world at large, and some of them are tied to features in the Rust compiler that are unstable. Several features here require a matching <code>#![feature(...)]</code> attribute to
+enable, and thus are more fully documented in the <a href="../unstable-book/index.html">Unstable Book</a>. Those sections will link over
+there as necessary.</p>
+<h2 id="nightly-gated-functionality"><a class="header" href="#nightly-gated-functionality">Nightly-gated functionality</a></h2>
+<p>These features just require a nightly build to operate. Unlike the other features on this page,
+these don't need to be &quot;turned on&quot; with a command-line flag or a <code>#![feature(...)]</code> attribute in
+your crate. This can give them some subtle fallback modes when used on a stable release, so be
+careful!</p>
+<h3 id="error-numbers-for-compile-fail-doctests"><a class="header" href="#error-numbers-for-compile-fail-doctests">Error numbers for <code>compile-fail</code> doctests</a></h3>
+<p>As detailed in <a href="write-documentation/documentation-tests.html#attributes">the chapter on documentation tests</a>, you can add a
+<code>compile_fail</code> attribute to a doctest to state that the test should fail to compile. However, on
+nightly, you can optionally add an error number to state that a doctest should emit a specific error
+number:</p>
+<pre><code class="language-markdown">```compile_fail,E0044
+extern { fn some_func&lt;T&gt;(x: T); }
+```
+</code></pre>
+<p>This is used by the error index to ensure that the samples that correspond to a given error number
+properly emit that error code. However, these error codes aren't guaranteed to be the only thing
+that a piece of code emits from version to version, so this is unlikely to be stabilized in the
+future.</p>
+<p>Attempting to use these error numbers on stable will result in the code sample being interpreted as
+plain text.</p>
+<h3 id="missing_doc_code_examples-lint"><a class="header" href="#missing_doc_code_examples-lint"><code>missing_doc_code_examples</code> lint</a></h3>
+<p>This lint will emit a warning if an item doesn't have a code example in its documentation.
+It can be enabled using:</p>
+<pre><code class="language-rust ignore (nightly)">#![deny(rustdoc::missing_doc_code_examples)]</code></pre>
+<h2 id="extensions-to-the-doc-attribute"><a class="header" href="#extensions-to-the-doc-attribute">Extensions to the <code>#[doc]</code> attribute</a></h2>
+<p>These features operate by extending the <code>#[doc]</code> attribute, and thus can be caught by the compiler
+and enabled with a <code>#![feature(...)]</code> attribute in your crate.</p>
+<h3 id="doccfg-recording-what-platforms-or-features-are-required-for-code-to-be-present"><a class="header" href="#doccfg-recording-what-platforms-or-features-are-required-for-code-to-be-present"><code>#[doc(cfg)]</code>: Recording what platforms or features are required for code to be present</a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/43781">#43781</a></li>
+</ul>
+<p>You can use <code>#[doc(cfg(...))]</code> to tell Rustdoc exactly which platform items appear on.
+This has two effects:</p>
+<ol>
+<li>doctests will only run on the appropriate platforms, and</li>
+<li>When Rustdoc renders documentation for that item, it will be accompanied by a banner explaining
+that the item is only available on certain platforms.</li>
+</ol>
+<p><code>#[doc(cfg)]</code> is intended to be used alongside <a href="./advanced-features.html"><code>#[cfg(doc)]</code></a>.
+For example, <code>#[cfg(any(windows, doc))]</code> will preserve the item either on Windows or during the
+documentation process. Then, adding a new attribute <code>#[doc(cfg(windows))]</code> will tell Rustdoc that
+the item is supposed to be used on Windows. For example:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>#![feature(doc_cfg)]
+
+<span class="boring">fn main() {
+</span>/// Token struct that can only be used on Windows.
+#[cfg(any(windows, doc))]
+#[doc(cfg(windows))]
+pub struct WindowsToken;
+
+/// Token struct that can only be used on Unix.
+#[cfg(any(unix, doc))]
+#[doc(cfg(unix))]
+pub struct UnixToken;
+
+/// Token struct that is only available with the `serde` feature
+#[cfg(feature = &quot;serde&quot;)]
+#[doc(cfg(feature = &quot;serde&quot;))]
+#[derive(serde::Deserialize)]
+pub struct SerdeToken;
+<span class="boring">}</span></code></pre></pre>
+<p>In this sample, the tokens will only appear on their respective platforms, but they will both appear
+in documentation.</p>
+<p><code>#[doc(cfg(...))]</code> was introduced to be used by the standard library and currently requires the
+<code>#![feature(doc_cfg)]</code> feature gate. For more information, see <a href="../unstable-book/language-features/doc-cfg.html">its chapter in the Unstable
+Book</a> and <a href="https://github.com/rust-lang/rust/issues/43781">its tracking issue</a>.</p>
+<h3 id="doc_auto_cfg-automatically-generate-doccfg"><a class="header" href="#doc_auto_cfg-automatically-generate-doccfg"><code>doc_auto_cfg</code>: Automatically generate <code>#[doc(cfg)]</code></a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/43781">#43781</a></li>
+</ul>
+<p><code>doc_auto_cfg</code> is an extension to the <code>#[doc(cfg)]</code> feature. With it, you don't need to add
+<code>#[doc(cfg(...)]</code> anymore unless you want to override the default behaviour. So if we take the
+previous source code:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>#![feature(doc_auto_cfg)]
+
+<span class="boring">fn main() {
+</span>/// Token struct that can only be used on Windows.
+#[cfg(any(windows, doc))]
+pub struct WindowsToken;
+
+/// Token struct that can only be used on Unix.
+#[cfg(any(unix, doc))]
+pub struct UnixToken;
+
+/// Token struct that is only available with the `serde` feature
+#[cfg(feature = &quot;serde&quot;)]
+#[derive(serde::Deserialize)]
+pub struct SerdeToken;
+<span class="boring">}</span></code></pre></pre>
+<p>It'll render almost the same, the difference being that <code>doc</code> will also be displayed. To fix this,
+you can use <code>doc_cfg_hide</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>#![feature(doc_cfg_hide)]
+#![doc(cfg_hide(doc))]
+<span class="boring">fn main() {
+</span><span class="boring">}</span></code></pre></pre>
+<p>And <code>doc</code> won't show up anymore!</p>
+<h3 id="adding-your-trait-to-the-notable-traits-dialog"><a class="header" href="#adding-your-trait-to-the-notable-traits-dialog">Adding your trait to the &quot;Notable traits&quot; dialog</a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/45040">#45040</a></li>
+</ul>
+<p>Rustdoc keeps a list of a few traits that are believed to be &quot;fundamental&quot; to
+types that implement them. These traits are intended to be the primary interface
+for their implementers, and are often most of the API available to be documented
+on their types. For this reason, Rustdoc will track when a given type implements
+one of these traits and call special attention to it when a function returns one
+of these types. This is the &quot;Notable traits&quot; dialog, accessible as a circled <code>i</code>
+button next to the function, which, when clicked, shows the dialog.</p>
+<p>In the standard library, some of the traits that are part of this list are
+<code>Iterator</code>, <code>Future</code>, <code>io::Read</code>, and <code>io::Write</code>. However, rather than being
+implemented as a hard-coded list, these traits have a special marker attribute
+on them: <code>#[doc(notable_trait)]</code>. This means that you can apply this attribute
+to your own trait to include it in the &quot;Notable traits&quot; dialog in documentation.</p>
+<p>The <code>#[doc(notable_trait)]</code> attribute currently requires the <code>#![feature(doc_notable_trait)]</code>
+feature gate. For more information, see <a href="../unstable-book/language-features/doc-notable-trait.html">its chapter in the Unstable Book</a>
+and <a href="https://github.com/rust-lang/rust/issues/45040">its tracking issue</a>.</p>
+<h3 id="exclude-certain-dependencies-from-documentation"><a class="header" href="#exclude-certain-dependencies-from-documentation">Exclude certain dependencies from documentation</a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/44027">#44027</a></li>
+</ul>
+<p>The standard library uses several dependencies which, in turn, use several types and traits from the
+standard library. In addition, there are several compiler-internal crates that are not considered to
+be part of the official standard library, and thus would be a distraction to include in
+documentation. It's not enough to exclude their crate documentation, since information about trait
+implementations appears on the pages for both the type and the trait, which can be in different
+crates!</p>
+<p>To prevent internal types from being included in documentation, the standard library adds an
+attribute to their <code>extern crate</code> declarations: <code>#[doc(masked)]</code>. This causes Rustdoc to &quot;mask out&quot;
+types from these crates when building lists of trait implementations.</p>
+<p>The <code>#[doc(masked)]</code> attribute is intended to be used internally, and requires the
+<code>#![feature(doc_masked)]</code> feature gate.  For more information, see <a href="../unstable-book/language-features/doc-masked.html">its chapter in the Unstable
+Book</a> and <a href="https://github.com/rust-lang/rust/issues/44027">its tracking issue</a>.</p>
+<h3 id="document-primitives"><a class="header" href="#document-primitives">Document primitives</a></h3>
+<p>This is for Rust compiler internal use only.</p>
+<p>Since primitive types are defined in the compiler, there's no place to attach documentation
+attributes. The <code>#[rustc_doc_primitive = &quot;...&quot;]</code> attribute is used by the standard library to
+provide a way to generate documentation for primitive types, and requires <code>#![feature(rustc_attrs)]</code>
+to enable.</p>
+<h3 id="document-keywords"><a class="header" href="#document-keywords">Document keywords</a></h3>
+<p>This is for Rust compiler internal use only.</p>
+<p>Rust keywords are documented in the standard library (look for <code>match</code> for example).</p>
+<p>To do so, the <code>#[doc(keyword = &quot;...&quot;)]</code> attribute is used. Example:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>#![feature(rustdoc_internals)]
+
+<span class="boring">fn main() {
+</span>/// Some documentation about the keyword.
+#[doc(keyword = &quot;keyword&quot;)]
+mod empty_mod {}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="effects-of-other-nightly-features"><a class="header" href="#effects-of-other-nightly-features">Effects of other nightly features</a></h2>
+<p>These nightly-only features are not primarily related to Rustdoc,
+but have convenient effects on the documentation produced.</p>
+<h3 id="fundamental-types"><a class="header" href="#fundamental-types"><code>fundamental</code> types</a></h3>
+<p>Annotating a type with <code>#[fundamental]</code> primarily influences coherence rules about generic types,
+i.e., they alter whether other crates can provide implementations for that type.
+The unstable book <a href="https://doc.rust-lang.org/unstable-book/language-features/fundamental.html">links to further information</a>.</p>
+<p>For documentation, this has an additional side effect:
+If a method is implemented on <code>F&lt;T&gt;</code> (or <code>F&lt;&amp;T&gt;</code>),
+where <code>F</code> is a fundamental type,
+then the method is not only documented at the page about <code>F</code>,
+but also on the page about <code>T</code>.
+In a sense, it makes the type transparent to Rustdoc.
+This is especially convenient for types that work as annotated pointers,
+such as <code>Pin&lt;&amp;mut T&gt;</code>,
+as it ensures that methods only implemented through those annotated pointers
+can still be found with the type they act on.</p>
+<p>If the <code>fundamental</code> feature's effect on coherence is not intended,
+such a type can be marked as fundamental only for purposes of documentation
+by introducing a custom feature and
+limiting the use of <code>fundamental</code> to when documentation is built.</p>
+<h2 id="unstable-command-line-arguments"><a class="header" href="#unstable-command-line-arguments">Unstable command-line arguments</a></h2>
+<p>These features are enabled by passing a command-line flag to Rustdoc, but the flags in question are
+themselves marked as unstable. To use any of these options, pass <code>-Z unstable-options</code> as well as
+the flag in question to Rustdoc on the command-line. To do this from Cargo, you can either use the
+<code>RUSTDOCFLAGS</code> environment variable or the <code>cargo rustdoc</code> command.</p>
+<h3 id="--markdown-before-content-include-rendered-markdown-before-the-content"><a class="header" href="#--markdown-before-content-include-rendered-markdown-before-the-content"><code>--markdown-before-content</code>: include rendered Markdown before the content</a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/44027">#44027</a></li>
+</ul>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options --markdown-before-content extra.md
+$ rustdoc README.md -Z unstable-options --markdown-before-content extra.md
+</code></pre>
+<p>Just like <code>--html-before-content</code>, this allows you to insert extra content inside the <code>&lt;body&gt;</code> tag
+but before the other content <code>rustdoc</code> would normally produce in the rendered documentation.
+However, instead of directly inserting the file verbatim, <code>rustdoc</code> will pass the files through a
+Markdown renderer before inserting the result into the file.</p>
+<h3 id="--markdown-after-content-include-rendered-markdown-after-the-content"><a class="header" href="#--markdown-after-content-include-rendered-markdown-after-the-content"><code>--markdown-after-content</code>: include rendered Markdown after the content</a></h3>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options --markdown-after-content extra.md
+$ rustdoc README.md -Z unstable-options --markdown-after-content extra.md
+</code></pre>
+<p>Just like <code>--html-after-content</code>, this allows you to insert extra content before the <code>&lt;/body&gt;</code> tag
+but after the other content <code>rustdoc</code> would normally produce in the rendered documentation.
+However, instead of directly inserting the file verbatim, <code>rustdoc</code> will pass the files through a
+Markdown renderer before inserting the result into the file.</p>
+<h3 id="--playground-url-control-the-location-of-the-playground"><a class="header" href="#--playground-url-control-the-location-of-the-playground"><code>--playground-url</code>: control the location of the playground</a></h3>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options --playground-url https://play.rust-lang.org/
+</code></pre>
+<p>When rendering a crate's docs, this flag gives the base URL of the Rust Playground, to use for
+generating <code>Run</code> buttons. Unlike <code>--markdown-playground-url</code>, this argument works for standalone
+Markdown files <em>and</em> Rust crates. This works the same way as adding <code>#![doc(html_playground_url = &quot;url&quot;)]</code> to your crate root, as mentioned in <a href="write-documentation/the-doc-attribute.html#html_playground_url">the chapter about the <code>#[doc]</code>
+attribute</a>. Please be aware that the official Rust Playground at
+https://play.rust-lang.org does not have every crate available, so if your examples require your
+crate, make sure the playground you provide has your crate available.</p>
+<p>If both <code>--playground-url</code> and <code>--markdown-playground-url</code> are present when rendering a standalone
+Markdown file, the URL given to <code>--markdown-playground-url</code> will take precedence. If both
+<code>--playground-url</code> and <code>#![doc(html_playground_url = &quot;url&quot;)]</code> are present when rendering crate docs,
+the attribute will take precedence.</p>
+<h3 id="--sort-modules-by-appearance-control-how-items-on-module-pages-are-sorted"><a class="header" href="#--sort-modules-by-appearance-control-how-items-on-module-pages-are-sorted"><code>--sort-modules-by-appearance</code>: control how items on module pages are sorted</a></h3>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options --sort-modules-by-appearance
+</code></pre>
+<p>Ordinarily, when <code>rustdoc</code> prints items in module pages, it will sort them alphabetically (taking
+some consideration for their stability, and names that end in a number). Giving this flag to
+<code>rustdoc</code> will disable this sorting and instead make it print the items in the order they appear in
+the source.</p>
+<h3 id="--show-type-layout-add-a-section-to-each-types-docs-describing-its-memory-layout"><a class="header" href="#--show-type-layout-add-a-section-to-each-types-docs-describing-its-memory-layout"><code>--show-type-layout</code>: add a section to each type's docs describing its memory layout</a></h3>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options --show-type-layout
+</code></pre>
+<p>When this flag is passed, rustdoc will add a &quot;Layout&quot; section at the bottom of
+each type's docs page that includes a summary of the type's memory layout as
+computed by rustc. For example, rustdoc will show the size in bytes that a value
+of that type will take in memory.</p>
+<p>Note that most layout information is <strong>completely unstable</strong> and may even differ
+between compilations.</p>
+<h3 id="--resource-suffix-modifying-the-name-of-cssjavascript-in-crate-docs"><a class="header" href="#--resource-suffix-modifying-the-name-of-cssjavascript-in-crate-docs"><code>--resource-suffix</code>: modifying the name of CSS/JavaScript in crate docs</a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/54765">#54765</a></li>
+</ul>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options --resource-suffix suf
+</code></pre>
+<p>When rendering docs, <code>rustdoc</code> creates several CSS and JavaScript files as part of the output. Since
+all these files are linked from every page, changing where they are can be cumbersome if you need to
+specially cache them. This flag will rename all these files in the output to include the suffix in
+the filename. For example, <code>light.css</code> would become <code>light-suf.css</code> with the above command.</p>
+<h3 id="--extern-html-root-url-control-how-rustdoc-links-to-non-local-crates"><a class="header" href="#--extern-html-root-url-control-how-rustdoc-links-to-non-local-crates"><code>--extern-html-root-url</code>: control how rustdoc links to non-local crates</a></h3>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options --extern-html-root-url some-crate=https://example.com/some-crate/1.0.1
+</code></pre>
+<p>Ordinarily, when rustdoc wants to link to a type from a different crate, it looks in two places:
+docs that already exist in the output directory, or the <code>#![doc(doc_html_root)]</code> set in the other
+crate. However, if you want to link to docs that exist in neither of those places, you can use these
+flags to control that behavior. When the <code>--extern-html-root-url</code> flag is given with a name matching
+one of your dependencies, rustdoc use that URL for those docs. Keep in mind that if those docs exist
+in the output directory, those local docs will still override this flag.</p>
+<h3 id="-z-force-unstable-if-unmarked"><a class="header" href="#-z-force-unstable-if-unmarked"><code>-Z force-unstable-if-unmarked</code></a></h3>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z force-unstable-if-unmarked
+</code></pre>
+<p>This is an internal flag intended for the standard library and compiler that applies an
+<code>#[unstable]</code> attribute to any dependent crate that doesn't have another stability attribute. This
+allows <code>rustdoc</code> to be able to generate documentation for the compiler crates and the standard
+library, as an equivalent command-line argument is provided to <code>rustc</code> when building those crates.</p>
+<h3 id="--index-page-provide-a-top-level-landing-page-for-docs"><a class="header" href="#--index-page-provide-a-top-level-landing-page-for-docs"><code>--index-page</code>: provide a top-level landing page for docs</a></h3>
+<p>This feature allows you to generate an index-page with a given markdown file. A good example of it
+is the <a href="https://doc.rust-lang.org/nightly/index.html">rust documentation index</a>.</p>
+<p>With this, you'll have a page which you can custom as much as you want at the top of your crates.</p>
+<p>Using <code>index-page</code> option enables <code>enable-index-page</code> option as well.</p>
+<h3 id="--enable-index-page-generate-a-default-index-page-for-docs"><a class="header" href="#--enable-index-page-generate-a-default-index-page-for-docs"><code>--enable-index-page</code>: generate a default index page for docs</a></h3>
+<p>This feature allows the generation of a default index-page which lists the generated crates.</p>
+<h3 id="--nocapture-disable-output-capture-for-test"><a class="header" href="#--nocapture-disable-output-capture-for-test"><code>--nocapture</code>: disable output capture for test</a></h3>
+<p>When this flag is used with <code>--test</code>, the output (stdout and stderr) of your tests won't be
+captured by rustdoc. Instead, the output will be directed to your terminal,
+as if you had run the test executable manually. This is especially useful
+for debugging your tests!</p>
+<h3 id="--check-only-checks-the-documentation"><a class="header" href="#--check-only-checks-the-documentation"><code>--check</code>: only checks the documentation</a></h3>
+<p>When this flag is supplied, rustdoc will type check and lint your code, but will not generate any
+documentation or run your doctests.</p>
+<p>Using this flag looks like:</p>
+<pre><code class="language-bash">rustdoc -Z unstable-options --check src/lib.rs
+</code></pre>
+<h3 id="--static-root-path-control-how-static-files-are-loaded-in-html-output"><a class="header" href="#--static-root-path-control-how-static-files-are-loaded-in-html-output"><code>--static-root-path</code>: control how static files are loaded in HTML output</a></h3>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options --static-root-path '/cache/'
+</code></pre>
+<p>This flag controls how rustdoc links to its static files on HTML pages. If you're hosting a lot of
+crates' docs generated by the same version of rustdoc, you can use this flag to cache rustdoc's CSS,
+JavaScript, and font files in a single location, rather than duplicating it once per &quot;doc root&quot;
+(grouping of crate docs generated into the same output directory, like with <code>cargo doc</code>). Per-crate
+files like the search index will still load from the documentation root, but anything that gets
+renamed with <code>--resource-suffix</code> will load from the given path.</p>
+<h3 id="--persist-doctests-persist-doctest-executables-after-running"><a class="header" href="#--persist-doctests-persist-doctest-executables-after-running"><code>--persist-doctests</code>: persist doctest executables after running</a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/56925">#56925</a></li>
+</ul>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs --test -Z unstable-options --persist-doctests target/rustdoctest
+</code></pre>
+<p>This flag allows you to keep doctest executables around after they're compiled or run.
+Usually, rustdoc will immediately discard a compiled doctest after it's been tested, but
+with this option, you can keep those binaries around for farther testing.</p>
+<h3 id="--show-coverage-calculate-the-percentage-of-items-with-documentation"><a class="header" href="#--show-coverage-calculate-the-percentage-of-items-with-documentation"><code>--show-coverage</code>: calculate the percentage of items with documentation</a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/58154">#58154</a></li>
+</ul>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options --show-coverage
+</code></pre>
+<p>It generates something like this:</p>
+<pre><code class="language-bash">+-------------------------------------+------------+------------+------------+------------+
+| File                                | Documented | Percentage |   Examples | Percentage |
++-------------------------------------+------------+------------+------------+------------+
+| lib.rs                              |          4 |     100.0% |          1 |      25.0% |
++-------------------------------------+------------+------------+------------+------------+
+| Total                               |          4 |     100.0% |          1 |      25.0% |
++-------------------------------------+------------+------------+------------+------------+
+</code></pre>
+<p>If you want to determine how many items in your crate are documented, pass this flag to rustdoc.
+When it receives this flag, it will count the public items in your crate that have documentation,
+and print out the counts and a percentage instead of generating docs.</p>
+<p>Some methodology notes about what rustdoc counts in this metric:</p>
+<ul>
+<li>Rustdoc will only count items from your crate (i.e. items re-exported from other crates don't
+count).</li>
+<li>Docs written directly onto inherent impl blocks are not counted, even though their doc comments
+are displayed, because the common pattern in Rust code is to write all inherent methods into the
+same impl block.</li>
+<li>Items in a trait implementation are not counted, as those impls will inherit any docs from the
+trait itself.</li>
+<li>By default, only public items are counted. To count private items as well, pass
+<code>--document-private-items</code> at the same time.</li>
+</ul>
+<p>Public items that are not documented can be seen with the built-in <code>missing_docs</code> lint. Private
+items that are not documented can be seen with Clippy's <code>missing_docs_in_private_items</code> lint.</p>
+<p>Calculating code examples follows these rules:</p>
+<ol>
+<li>These items aren't accounted by default:</li>
+</ol>
+<ul>
+<li>struct/union field</li>
+<li>enum variant</li>
+<li>constant</li>
+<li>static</li>
+<li>typedef</li>
+</ul>
+<ol start="2">
+<li>If one of the previously listed items has a code example, then it'll be counted.</li>
+</ol>
+<h4 id="json-output"><a class="header" href="#json-output">JSON output</a></h4>
+<p>When using <code>--output-format json</code> with this option, it will display the coverage information in
+JSON format. For example, here is the JSON for a file with one documented item and one
+undocumented item:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// This item has documentation
+pub fn foo() {}
+
+pub fn no_documentation() {}
+<span class="boring">}</span></code></pre></pre>
+<pre><code class="language-json">{&quot;no_std.rs&quot;:{&quot;total&quot;:3,&quot;with_docs&quot;:1,&quot;total_examples&quot;:3,&quot;with_examples&quot;:0}}
+</code></pre>
+<p>Note that the third item is the crate root, which in this case is undocumented.</p>
+<h3 id="-w--output-format-output-format"><a class="header" href="#-w--output-format-output-format"><code>-w</code>/<code>--output-format</code>: output format</a></h3>
+<p><code>--output-format json</code> emits documentation in the experimental
+<a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustdoc_json_types/">JSON format</a>. <code>--output-format html</code> has no effect,
+and is also accepted on stable toolchains.</p>
+<p>JSON Output for toolchain crates (<code>std</code>, <code>alloc</code>, <code>core</code>, <code>test</code>, and <code>proc_macro</code>)
+is available via the <code>rust-docs-json</code> rustup component.</p>
+<pre><code class="language-shell">rustup component add --toolchain nightly rust-docs-json
+</code></pre>
+<p>Then the json files will be present in the <code>share/doc/rust/json/</code> directory
+of the rustup toolchain directory.</p>
+<p>It can also be used with <code>--show-coverage</code>. Take a look at its
+<a href="#--show-coverage-calculate-the-percentage-of-items-with-documentation">documentation</a> for more
+information.</p>
+<h3 id="--enable-per-target-ignores-allow-ignore-foo-style-filters-for-doctests"><a class="header" href="#--enable-per-target-ignores-allow-ignore-foo-style-filters-for-doctests"><code>--enable-per-target-ignores</code>: allow <code>ignore-foo</code> style filters for doctests</a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/64245">#64245</a></li>
+</ul>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options --enable-per-target-ignores
+</code></pre>
+<p>This flag allows you to tag doctests with compiletest style <code>ignore-foo</code> filters that prevent
+rustdoc from running that test if the target triple string contains foo. For example:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>///```ignore-foo,ignore-bar
+///assert!(2 == 2);
+///```
+struct Foo;
+<span class="boring">}</span></code></pre></pre>
+<p>This will not be run when the build target is <code>super-awesome-foo</code> or <code>less-bar-awesome</code>.
+If the flag is not enabled, then rustdoc will consume the filter, but do nothing with it, and
+the above example will be run for all targets.
+If you want to preserve backwards compatibility for older versions of rustdoc, you can use</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>///```ignore,ignore-foo
+///assert!(2 == 2);
+///```
+struct Foo;
+<span class="boring">}</span></code></pre></pre>
+<p>In older versions, this will be ignored on all targets, but on newer versions <code>ignore-gnu</code> will
+override <code>ignore</code>.</p>
+<h3 id="--runtool---runtool-arg-program-to-run-tests-with-args-to-pass-to-it"><a class="header" href="#--runtool---runtool-arg-program-to-run-tests-with-args-to-pass-to-it"><code>--runtool</code>, <code>--runtool-arg</code>: program to run tests with; args to pass to it</a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/64245">#64245</a></li>
+</ul>
+<p>Using these options looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options --runtool runner --runtool-arg --do-thing --runtool-arg --do-other-thing
+</code></pre>
+<p>These options can be used to run the doctest under a program, and also pass arguments to
+that program. For example, if you want to run your doctests under valgrind you might run</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options --runtool valgrind
+</code></pre>
+<p>Another use case would be to run a test inside an emulator, or through a Virtual Machine.</p>
+<h3 id="--with-examples-include-examples-of-uses-of-items-as-documentation"><a class="header" href="#--with-examples-include-examples-of-uses-of-items-as-documentation"><code>--with-examples</code>: include examples of uses of items as documentation</a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/88791">#88791</a></li>
+</ul>
+<p>This option, combined with <code>--scrape-examples-target-crate</code> and
+<code>--scrape-examples-output-path</code>, is used to implement the functionality in <a href="https://github.com/rust-lang/rfcs/pull/3123">RFC
+#3123</a>. Uses of an item (currently
+functions / call-sites) are found in a crate and its reverse-dependencies, and
+then the uses are included as documentation for that item. This feature is
+intended to be used via <code>cargo doc --scrape-examples</code>, but the rustdoc-only
+workflow looks like:</p>
+<pre><code class="language-bash">$ rustdoc examples/ex.rs -Z unstable-options \
+    --extern foobar=target/deps/libfoobar.rmeta \
+    --scrape-examples-target-crate foobar \
+    --scrape-examples-output-path output.calls
+$ rustdoc src/lib.rs -Z unstable-options --with-examples output.calls
+</code></pre>
+<p>First, the library must be checked to generate an <code>rmeta</code>. Then a
+reverse-dependency like <code>examples/ex.rs</code> is given to rustdoc with the target
+crate being documented (<code>foobar</code>) and a path to output the calls
+(<code>output.calls</code>). Then, the generated calls file can be passed via
+<code>--with-examples</code> to the subsequent documentation of <code>foobar</code>.</p>
+<p>To scrape examples from test code, e.g. functions marked <code>#[test]</code>, then
+add the <code>--scrape-tests</code> flag.</p>
+<h3 id="--check-cfg-check-configuration-flags"><a class="header" href="#--check-cfg-check-configuration-flags"><code>--check-cfg</code>: check configuration flags</a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/82450">#82450</a></li>
+</ul>
+<p>This flag accepts the same values as <code>rustc --check-cfg</code>, and uses it to check configuration flags.</p>
+<p>Using this flag looks like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs -Z unstable-options \
+    --check-cfg='names()' --check-cfg='values(feature, &quot;foo&quot;, &quot;bar&quot;)'
+</code></pre>
+<p>The example above check every well known names (<code>target_os</code>, <code>doc</code>, <code>test</code>, ... via <code>names()</code>)
+and check the values of <code>feature</code>: <code>foo</code> and <code>bar</code>.</p>
+<h3 id="--generate-link-to-definition-generate-links-on-types-in-source-code"><a class="header" href="#--generate-link-to-definition-generate-links-on-types-in-source-code"><code>--generate-link-to-definition</code>: Generate links on types in source code</a></h3>
+<ul>
+<li>Tracking issue: <a href="https://github.com/rust-lang/rust/issues/89095">#89095</a></li>
+</ul>
+<p>This flag enables the generation of links in the source code pages which allow the reader
+to jump to a type definition.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="advanced-features.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="deprecated-features.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="advanced-features.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="deprecated-features.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

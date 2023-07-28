@@ -1,81 +1,70 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="通用哈希支持。"><meta name="keywords" content="rust, rustlang, rust-lang, hash"><title>std::hash - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../../storage1.58.0.js"></script><script src="../../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow1.58.0.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../std/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo1.58.0.png' alt='logo'></div></a><h2 class="location">Module hash</h2><div class="sidebar-elems"><div class="block items"><ul><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li></ul></div><div id="sidebar-vars" data-name="hash" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Module <a href="../index.html">std</a>::<wbr><a class="mod" href="#">hash</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard1.58.0.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span class="since" title="Stable since Rust version 1.0.0">1.0.0</span><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/core/lib.rs.html#324" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>通用哈希支持。</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="通用哈希支持。"><title>std::hash - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../std/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../std/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Module hash</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li><li><a href="#derives">Derive Macros</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">std</a>::<wbr><a class="mod" href="#">hash</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><span class="since" title="Stable since Rust version 1.0.0">1.0.0</span> · <a class="srclink" href="../../src/core/lib.rs.html#366">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>通用哈希支持。</p>
 <p>该模块提供了一种计算值的 <a href="https://en.wikipedia.org/wiki/Hash_function">哈希</a> 的通用方法。
 哈希最常与 <a href="../../std/collections/struct.HashMap.html"><code>HashMap</code></a> 和 <a href="../../std/collections/struct.HashSet.html"><code>HashSet</code></a> 一起使用。</p>
 <p>使类型可哈希化的最简单方法是使用 <code>#[derive(Hash)]</code>：</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::collections::hash_map::DefaultHasher</span>;
-<span class="kw">use</span> <span class="ident">std::hash</span>::{<span class="ident">Hash</span>, <span class="ident">Hasher</span>};
+<h2 id="examples"><a href="#examples">Examples</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::collections::hash_map::DefaultHasher;
+<span class="kw">use </span>std::hash::{Hash, Hasher};
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Hash</span>)]</span>
-<span class="kw">struct</span> <span class="ident">Person</span> {
-    <span class="ident">id</span>: <span class="ident">u32</span>,
-    <span class="ident">name</span>: <span class="ident">String</span>,
-    <span class="ident">phone</span>: <span class="ident">u64</span>,
+<span class="attr">#[derive(Hash)]
+</span><span class="kw">struct </span>Person {
+    id: u32,
+    name: String,
+    phone: u64,
 }
 
-<span class="kw">let</span> <span class="ident">person1</span> <span class="op">=</span> <span class="ident">Person</span> {
-    <span class="ident">id</span>: <span class="number">5</span>,
-    <span class="ident">name</span>: <span class="string">&quot;Janet&quot;</span>.<span class="ident">to_string</span>(),
-    <span class="ident">phone</span>: <span class="number">555_666_7777</span>,
+<span class="kw">let </span>person1 = Person {
+    id: <span class="number">5</span>,
+    name: <span class="string">&quot;Janet&quot;</span>.to_string(),
+    phone: <span class="number">555_666_7777</span>,
 };
-<span class="kw">let</span> <span class="ident">person2</span> <span class="op">=</span> <span class="ident">Person</span> {
-    <span class="ident">id</span>: <span class="number">5</span>,
-    <span class="ident">name</span>: <span class="string">&quot;Bob&quot;</span>.<span class="ident">to_string</span>(),
-    <span class="ident">phone</span>: <span class="number">555_666_7777</span>,
+<span class="kw">let </span>person2 = Person {
+    id: <span class="number">5</span>,
+    name: <span class="string">&quot;Bob&quot;</span>.to_string(),
+    phone: <span class="number">555_666_7777</span>,
 };
 
-<span class="macro">assert!</span>(<span class="ident">calculate_hash</span>(<span class="kw-2">&amp;</span><span class="ident">person1</span>) <span class="op">!</span><span class="op">=</span> <span class="ident">calculate_hash</span>(<span class="kw-2">&amp;</span><span class="ident">person2</span>));
+<span class="macro">assert!</span>(calculate_hash(<span class="kw-2">&amp;</span>person1) != calculate_hash(<span class="kw-2">&amp;</span>person2));
 
-<span class="kw">fn</span> <span class="ident">calculate_hash</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Hash</span><span class="op">&gt;</span>(<span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">u64</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">DefaultHasher::new</span>();
-    <span class="ident">t</span>.<span class="ident">hash</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>);
-    <span class="ident">s</span>.<span class="ident">finish</span>()
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Ause%20std%3A%3Acollections%3A%3Ahash_map%3A%3ADefaultHasher%3B%0Ause%20std%3A%3Ahash%3A%3A%7BHash%2C%20Hasher%7D%3B%0A%0A%23%5Bderive(Hash)%5D%0Astruct%20Person%20%7B%0A%20%20%20%20id%3A%20u32%2C%0A%20%20%20%20name%3A%20String%2C%0A%20%20%20%20phone%3A%20u64%2C%0A%7D%0A%0Alet%20person1%20%3D%20Person%20%7B%0A%20%20%20%20id%3A%205%2C%0A%20%20%20%20name%3A%20%22Janet%22.to_string()%2C%0A%20%20%20%20phone%3A%20555_666_7777%2C%0A%7D%3B%0Alet%20person2%20%3D%20Person%20%7B%0A%20%20%20%20id%3A%205%2C%0A%20%20%20%20name%3A%20%22Bob%22.to_string()%2C%0A%20%20%20%20phone%3A%20555_666_7777%2C%0A%7D%3B%0A%0Aassert!(calculate_hash(%26person1)%20!%3D%20calculate_hash(%26person2))%3B%0A%0Afn%20calculate_hash%3CT%3A%20Hash%3E(t%3A%20%26T)%20-%3E%20u64%20%7B%0A%20%20%20%20let%20mut%20s%20%3D%20DefaultHasher%3A%3Anew()%3B%0A%20%20%20%20t.hash(%26mut%20s)%3B%0A%20%20%20%20s.finish()%0A%7D%0A%7D&amp;edition=2018">Run</a></div>
-<p>如果您需要更多地控制值的散列方式，则需要实现 <a href="trait.Hash.html" title="Hash"><code>Hash</code></a> trait：</p>
+<span class="kw">fn </span>calculate_hash&lt;T: Hash&gt;(t: <span class="kw-2">&amp;</span>T) -&gt; u64 {
+    <span class="kw">let </span><span class="kw-2">mut </span>s = DefaultHasher::new();
+    t.hash(<span class="kw-2">&amp;mut </span>s);
+    s.finish()
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Ause+std::collections::hash_map::DefaultHasher;%0Ause+std::hash::%7BHash,+Hasher%7D;%0A%0A%23%5Bderive(Hash)%5D%0Astruct+Person+%7B%0A++++id:+u32,%0A++++name:+String,%0A++++phone:+u64,%0A%7D%0A%0Alet+person1+=+Person+%7B%0A++++id:+5,%0A++++name:+%22Janet%22.to_string(),%0A++++phone:+555_666_7777,%0A%7D;%0Alet+person2+=+Person+%7B%0A++++id:+5,%0A++++name:+%22Bob%22.to_string(),%0A++++phone:+555_666_7777,%0A%7D;%0A%0Aassert!(calculate_hash(%26person1)+!=+calculate_hash(%26person2));%0A%0Afn+calculate_hash%3CT:+Hash%3E(t:+%26T)+-%3E+u64+%7B%0A++++let+mut+s+=+DefaultHasher::new();%0A++++t.hash(%26mut+s);%0A++++s.finish()%0A%7D%0A%7D&amp;edition=2021">Run</a></div>
+<p>如果您需要更多地控制值的散列方式，则需要实现 <a href="trait.Hash.html" title="trait std::hash::Hash"><code>Hash</code></a> trait：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::collections::hash_map::DefaultHasher</span>;
-<span class="kw">use</span> <span class="ident">std::hash</span>::{<span class="ident">Hash</span>, <span class="ident">Hasher</span>};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::collections::hash_map::DefaultHasher;
+<span class="kw">use </span>std::hash::{Hash, Hasher};
 
-<span class="kw">struct</span> <span class="ident">Person</span> {
-    <span class="ident">id</span>: <span class="ident">u32</span>,
-    <span class="ident">name</span>: <span class="ident">String</span>,
-    <span class="ident">phone</span>: <span class="ident">u64</span>,
+<span class="kw">struct </span>Person {
+    id: u32,
+    name: String,
+    phone: u64,
 }
 
-<span class="kw">impl</span> <span class="ident">Hash</span> <span class="kw">for</span> <span class="ident">Person</span> {
-    <span class="kw">fn</span> <span class="ident">hash</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">Hasher</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">state</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">H</span>) {
-        <span class="self">self</span>.<span class="ident">id</span>.<span class="ident">hash</span>(<span class="ident">state</span>);
-        <span class="self">self</span>.<span class="ident">phone</span>.<span class="ident">hash</span>(<span class="ident">state</span>);
+<span class="kw">impl </span>Hash <span class="kw">for </span>Person {
+    <span class="kw">fn </span>hash&lt;H: Hasher&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, state: <span class="kw-2">&amp;mut </span>H) {
+        <span class="self">self</span>.id.hash(state);
+        <span class="self">self</span>.phone.hash(state);
     }
 }
 
-<span class="kw">let</span> <span class="ident">person1</span> <span class="op">=</span> <span class="ident">Person</span> {
-    <span class="ident">id</span>: <span class="number">5</span>,
-    <span class="ident">name</span>: <span class="string">&quot;Janet&quot;</span>.<span class="ident">to_string</span>(),
-    <span class="ident">phone</span>: <span class="number">555_666_7777</span>,
+<span class="kw">let </span>person1 = Person {
+    id: <span class="number">5</span>,
+    name: <span class="string">&quot;Janet&quot;</span>.to_string(),
+    phone: <span class="number">555_666_7777</span>,
 };
-<span class="kw">let</span> <span class="ident">person2</span> <span class="op">=</span> <span class="ident">Person</span> {
-    <span class="ident">id</span>: <span class="number">5</span>,
-    <span class="ident">name</span>: <span class="string">&quot;Bob&quot;</span>.<span class="ident">to_string</span>(),
-    <span class="ident">phone</span>: <span class="number">555_666_7777</span>,
+<span class="kw">let </span>person2 = Person {
+    id: <span class="number">5</span>,
+    name: <span class="string">&quot;Bob&quot;</span>.to_string(),
+    phone: <span class="number">555_666_7777</span>,
 };
 
-<span class="macro">assert_eq!</span>(<span class="ident">calculate_hash</span>(<span class="kw-2">&amp;</span><span class="ident">person1</span>), <span class="ident">calculate_hash</span>(<span class="kw-2">&amp;</span><span class="ident">person2</span>));
+<span class="macro">assert_eq!</span>(calculate_hash(<span class="kw-2">&amp;</span>person1), calculate_hash(<span class="kw-2">&amp;</span>person2));
 
-<span class="kw">fn</span> <span class="ident">calculate_hash</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Hash</span><span class="op">&gt;</span>(<span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">u64</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">DefaultHasher::new</span>();
-    <span class="ident">t</span>.<span class="ident">hash</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>);
-    <span class="ident">s</span>.<span class="ident">finish</span>()
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Ause%20std%3A%3Acollections%3A%3Ahash_map%3A%3ADefaultHasher%3B%0Ause%20std%3A%3Ahash%3A%3A%7BHash%2C%20Hasher%7D%3B%0A%0Astruct%20Person%20%7B%0A%20%20%20%20id%3A%20u32%2C%0A%23%5Ballow(dead_code)%5D%0A%20%20%20%20name%3A%20String%2C%0A%20%20%20%20phone%3A%20u64%2C%0A%7D%0A%0Aimpl%20Hash%20for%20Person%20%7B%0A%20%20%20%20fn%20hash%3CH%3A%20Hasher%3E(%26self%2C%20state%3A%20%26mut%20H)%20%7B%0A%20%20%20%20%20%20%20%20self.id.hash(state)%3B%0A%20%20%20%20%20%20%20%20self.phone.hash(state)%3B%0A%20%20%20%20%7D%0A%7D%0A%0Alet%20person1%20%3D%20Person%20%7B%0A%20%20%20%20id%3A%205%2C%0A%20%20%20%20name%3A%20%22Janet%22.to_string()%2C%0A%20%20%20%20phone%3A%20555_666_7777%2C%0A%7D%3B%0Alet%20person2%20%3D%20Person%20%7B%0A%20%20%20%20id%3A%205%2C%0A%20%20%20%20name%3A%20%22Bob%22.to_string()%2C%0A%20%20%20%20phone%3A%20555_666_7777%2C%0A%7D%3B%0A%0Aassert_eq!(calculate_hash(%26person1)%2C%20calculate_hash(%26person2))%3B%0A%0Afn%20calculate_hash%3CT%3A%20Hash%3E(t%3A%20%26T)%20-%3E%20u64%20%7B%0A%20%20%20%20let%20mut%20s%20%3D%20DefaultHasher%3A%3Anew()%3B%0A%20%20%20%20t.hash(%26mut%20s)%3B%0A%20%20%20%20s.finish()%0A%7D%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><h2 id="macros" class="section-header"><a href="#macros">Macros</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.Hash.html" title="std::hash::Hash macro">Hash</a></div><div class="item-right docblock-short"><p>派生宏，生成 <code>Hash</code> trait 的实现。</p>
-</div></div></div><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.BuildHasherDefault.html" title="std::hash::BuildHasherDefault struct">BuildHasherDefault</a></div><div class="item-right docblock-short"><p>用于为实现 <a href="trait.Hasher.html" title="Hasher"><code>Hasher</code></a> 和 <a href="../default/trait.Default.html" title="Default"><code>Default</code></a> 的类型创建默认的 <a href="trait.BuildHasher.html" title="BuildHasher"><code>BuildHasher</code></a> 实例。</p>
-</div></div><div class="item-row"><div class="item-left deprecated module-item"><a class="struct" href="struct.SipHasher.html" title="std::hash::SipHasher struct">SipHasher</a><span class="stab deprecated" title="">Deprecated</span></div><div class="item-right docblock-short"><p>SipHash 2-4 的实现。</p>
-</div></div></div><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.BuildHasher.html" title="std::hash::BuildHasher trait">BuildHasher</a></div><div class="item-right docblock-short"><p>用于创建 <a href="trait.Hasher.html" title="Hasher"><code>Hasher</code></a> 实例的 trait。</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Hash.html" title="std::hash::Hash trait">Hash</a></div><div class="item-right docblock-short"><p>可散列的类型。</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Hasher.html" title="std::hash::Hasher trait">Hasher</a></div><div class="item-right docblock-short"><p>对任意字节流进行散列的 trait。</p>
-</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="std" data-search-index-js="../../search-index1.58.0.js" data-search-js="../../search1.58.0.js"></div>
-    <script src="../../main1.58.0.js"></script>
-</body></html>
+<span class="kw">fn </span>calculate_hash&lt;T: Hash&gt;(t: <span class="kw-2">&amp;</span>T) -&gt; u64 {
+    <span class="kw">let </span><span class="kw-2">mut </span>s = DefaultHasher::new();
+    t.hash(<span class="kw-2">&amp;mut </span>s);
+    s.finish()
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Ause+std::collections::hash_map::DefaultHasher;%0Ause+std::hash::%7BHash,+Hasher%7D;%0A%0Astruct+Person+%7B%0A++++id:+u32,%0A%23%5Ballow(dead_code)%5D%0A++++name:+String,%0A++++phone:+u64,%0A%7D%0A%0Aimpl+Hash+for+Person+%7B%0A++++fn+hash%3CH:+Hasher%3E(%26self,+state:+%26mut+H)+%7B%0A++++++++self.id.hash(state);%0A++++++++self.phone.hash(state);%0A++++%7D%0A%7D%0A%0Alet+person1+=+Person+%7B%0A++++id:+5,%0A++++name:+%22Janet%22.to_string(),%0A++++phone:+555_666_7777,%0A%7D;%0Alet+person2+=+Person+%7B%0A++++id:+5,%0A++++name:+%22Bob%22.to_string(),%0A++++phone:+555_666_7777,%0A%7D;%0A%0Aassert_eq!(calculate_hash(%26person1),+calculate_hash(%26person2));%0A%0Afn+calculate_hash%3CT:+Hash%3E(t:+%26T)+-%3E+u64+%7B%0A++++let+mut+s+=+DefaultHasher::new();%0A++++t.hash(%26mut+s);%0A++++s.finish()%0A%7D%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.BuildHasherDefault.html" title="struct std::hash::BuildHasherDefault">BuildHasherDefault</a></div><div class="desc docblock-short">用于为实现 <a href="trait.Hasher.html" title="trait std::hash::Hasher"><code>Hasher</code></a> 和 <a href="../default/trait.Default.html" title="trait std::default::Default"><code>Default</code></a> 的类型创建默认的 <a href="trait.BuildHasher.html" title="trait std::hash::BuildHasher"><code>BuildHasher</code></a> 实例。</div></li><li><div class="item-name"><a class="struct" href="struct.SipHasher.html" title="struct std::hash::SipHasher">SipHasher</a><span class="stab deprecated" title="">Deprecated</span></div><div class="desc docblock-short">SipHash 2-4 的实现。</div></li></ul><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.BuildHasher.html" title="trait std::hash::BuildHasher">BuildHasher</a></div><div class="desc docblock-short">用于创建 <a href="trait.Hasher.html" title="trait std::hash::Hasher"><code>Hasher</code></a> 实例的 trait。</div></li><li><div class="item-name"><a class="trait" href="trait.Hash.html" title="trait std::hash::Hash">Hash</a></div><div class="desc docblock-short">可散列的类型。</div></li><li><div class="item-name"><a class="trait" href="trait.Hasher.html" title="trait std::hash::Hasher">Hasher</a></div><div class="desc docblock-short">对任意字节流进行散列的 trait。</div></li></ul><h2 id="derives" class="small-section-header"><a href="#derives">Derive Macros</a></h2><ul class="item-table"><li><div class="item-name"><a class="derive" href="derive.Hash.html" title="derive std::hash::Hash">Hash</a></div><div class="desc docblock-short">派生宏，生成 <code>Hash</code> trait 的实现。</div></li></ul></section></div></main></body></html>

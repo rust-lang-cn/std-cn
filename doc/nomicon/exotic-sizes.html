@@ -1,0 +1,346 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Exotically Sized Types - The Rustonomicon</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="The Dark Arts of Advanced and Unsafe Rust Programming">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/nomicon.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Introduction</a></li><li class="chapter-item expanded "><a href="meet-safe-and-unsafe.html"><strong aria-hidden="true">1.</strong> Meet Safe and Unsafe</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="safe-unsafe-meaning.html"><strong aria-hidden="true">1.1.</strong> How Safe and Unsafe Interact</a></li><li class="chapter-item expanded "><a href="what-unsafe-does.html"><strong aria-hidden="true">1.2.</strong> What Unsafe Can Do</a></li><li class="chapter-item expanded "><a href="working-with-unsafe.html"><strong aria-hidden="true">1.3.</strong> Working with Unsafe</a></li></ol></li><li class="chapter-item expanded "><a href="data.html"><strong aria-hidden="true">2.</strong> Data Layout</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="repr-rust.html"><strong aria-hidden="true">2.1.</strong> repr(Rust)</a></li><li class="chapter-item expanded "><a href="exotic-sizes.html" class="active"><strong aria-hidden="true">2.2.</strong> Exotically Sized Types</a></li><li class="chapter-item expanded "><a href="other-reprs.html"><strong aria-hidden="true">2.3.</strong> Other reprs</a></li></ol></li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">3.</strong> Ownership</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">3.1.</strong> References</a></li><li class="chapter-item expanded "><a href="aliasing.html"><strong aria-hidden="true">3.2.</strong> Aliasing</a></li><li class="chapter-item expanded "><a href="lifetimes.html"><strong aria-hidden="true">3.3.</strong> Lifetimes</a></li><li class="chapter-item expanded "><a href="lifetime-mismatch.html"><strong aria-hidden="true">3.4.</strong> Limits of Lifetimes</a></li><li class="chapter-item expanded "><a href="lifetime-elision.html"><strong aria-hidden="true">3.5.</strong> Lifetime Elision</a></li><li class="chapter-item expanded "><a href="unbounded-lifetimes.html"><strong aria-hidden="true">3.6.</strong> Unbounded Lifetimes</a></li><li class="chapter-item expanded "><a href="hrtb.html"><strong aria-hidden="true">3.7.</strong> Higher-Rank Trait Bounds</a></li><li class="chapter-item expanded "><a href="subtyping.html"><strong aria-hidden="true">3.8.</strong> Subtyping and Variance</a></li><li class="chapter-item expanded "><a href="dropck.html"><strong aria-hidden="true">3.9.</strong> Drop Check</a></li><li class="chapter-item expanded "><a href="phantom-data.html"><strong aria-hidden="true">3.10.</strong> PhantomData</a></li><li class="chapter-item expanded "><a href="borrow-splitting.html"><strong aria-hidden="true">3.11.</strong> Splitting Borrows</a></li></ol></li><li class="chapter-item expanded "><a href="conversions.html"><strong aria-hidden="true">4.</strong> Type Conversions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="coercions.html"><strong aria-hidden="true">4.1.</strong> Coercions</a></li><li class="chapter-item expanded "><a href="dot-operator.html"><strong aria-hidden="true">4.2.</strong> The Dot Operator</a></li><li class="chapter-item expanded "><a href="casts.html"><strong aria-hidden="true">4.3.</strong> Casts</a></li><li class="chapter-item expanded "><a href="transmutes.html"><strong aria-hidden="true">4.4.</strong> Transmutes</a></li></ol></li><li class="chapter-item expanded "><a href="uninitialized.html"><strong aria-hidden="true">5.</strong> Uninitialized Memory</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="checked-uninit.html"><strong aria-hidden="true">5.1.</strong> Checked</a></li><li class="chapter-item expanded "><a href="drop-flags.html"><strong aria-hidden="true">5.2.</strong> Drop Flags</a></li><li class="chapter-item expanded "><a href="unchecked-uninit.html"><strong aria-hidden="true">5.3.</strong> Unchecked</a></li></ol></li><li class="chapter-item expanded "><a href="obrm.html"><strong aria-hidden="true">6.</strong> Ownership Based Resource Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="constructors.html"><strong aria-hidden="true">6.1.</strong> Constructors</a></li><li class="chapter-item expanded "><a href="destructors.html"><strong aria-hidden="true">6.2.</strong> Destructors</a></li><li class="chapter-item expanded "><a href="leaking.html"><strong aria-hidden="true">6.3.</strong> Leaking</a></li></ol></li><li class="chapter-item expanded "><a href="unwinding.html"><strong aria-hidden="true">7.</strong> Unwinding</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="exception-safety.html"><strong aria-hidden="true">7.1.</strong> Exception Safety</a></li><li class="chapter-item expanded "><a href="poisoning.html"><strong aria-hidden="true">7.2.</strong> Poisoning</a></li></ol></li><li class="chapter-item expanded "><a href="concurrency.html"><strong aria-hidden="true">8.</strong> Concurrency</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="races.html"><strong aria-hidden="true">8.1.</strong> Races</a></li><li class="chapter-item expanded "><a href="send-and-sync.html"><strong aria-hidden="true">8.2.</strong> Send and Sync</a></li><li class="chapter-item expanded "><a href="atomics.html"><strong aria-hidden="true">8.3.</strong> Atomics</a></li></ol></li><li class="chapter-item expanded "><a href="vec/vec.html"><strong aria-hidden="true">9.</strong> Implementing Vec</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="vec/vec-layout.html"><strong aria-hidden="true">9.1.</strong> Layout</a></li><li class="chapter-item expanded "><a href="vec/vec-alloc.html"><strong aria-hidden="true">9.2.</strong> Allocating</a></li><li class="chapter-item expanded "><a href="vec/vec-push-pop.html"><strong aria-hidden="true">9.3.</strong> Push and Pop</a></li><li class="chapter-item expanded "><a href="vec/vec-dealloc.html"><strong aria-hidden="true">9.4.</strong> Deallocating</a></li><li class="chapter-item expanded "><a href="vec/vec-deref.html"><strong aria-hidden="true">9.5.</strong> Deref</a></li><li class="chapter-item expanded "><a href="vec/vec-insert-remove.html"><strong aria-hidden="true">9.6.</strong> Insert and Remove</a></li><li class="chapter-item expanded "><a href="vec/vec-into-iter.html"><strong aria-hidden="true">9.7.</strong> IntoIter</a></li><li class="chapter-item expanded "><a href="vec/vec-raw.html"><strong aria-hidden="true">9.8.</strong> RawVec</a></li><li class="chapter-item expanded "><a href="vec/vec-drain.html"><strong aria-hidden="true">9.9.</strong> Drain</a></li><li class="chapter-item expanded "><a href="vec/vec-zsts.html"><strong aria-hidden="true">9.10.</strong> Handling Zero-Sized Types</a></li><li class="chapter-item expanded "><a href="vec/vec-final.html"><strong aria-hidden="true">9.11.</strong> Final Code</a></li></ol></li><li class="chapter-item expanded "><a href="arc-mutex/arc-and-mutex.html"><strong aria-hidden="true">10.</strong> Implementing Arc and Mutex</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="arc-mutex/arc.html"><strong aria-hidden="true">10.1.</strong> Arc</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="arc-mutex/arc-layout.html"><strong aria-hidden="true">10.1.1.</strong> Layout</a></li><li class="chapter-item expanded "><a href="arc-mutex/arc-base.html"><strong aria-hidden="true">10.1.2.</strong> Base Code</a></li><li class="chapter-item expanded "><a href="arc-mutex/arc-clone.html"><strong aria-hidden="true">10.1.3.</strong> Cloning</a></li><li class="chapter-item expanded "><a href="arc-mutex/arc-drop.html"><strong aria-hidden="true">10.1.4.</strong> Dropping</a></li><li class="chapter-item expanded "><a href="arc-mutex/arc-final.html"><strong aria-hidden="true">10.1.5.</strong> Final Code</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="ffi.html"><strong aria-hidden="true">11.</strong> FFI</a></li><li class="chapter-item expanded "><a href="beneath-std.html"><strong aria-hidden="true">12.</strong> Beneath std</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="panic-handler.html"><strong aria-hidden="true">12.1.</strong> #[panic_handler]</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rustonomicon</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/nomicon" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="exotically-sized-types"><a class="header" href="#exotically-sized-types">Exotically Sized Types</a></h1>
+<p>Most of the time, we expect types to have a statically known and positive size.
+This isn't always the case in Rust.</p>
+<h2 id="dynamically-sized-types-dsts"><a class="header" href="#dynamically-sized-types-dsts">Dynamically Sized Types (DSTs)</a></h2>
+<p>Rust supports Dynamically Sized Types (DSTs): types without a statically
+known size or alignment. On the surface, this is a bit nonsensical: Rust <em>must</em>
+know the size and alignment of something in order to correctly work with it! In
+this regard, DSTs are not normal types. Because they lack a statically known
+size, these types can only exist behind a pointer. Any pointer to a
+DST consequently becomes a <em>wide</em> pointer consisting of the pointer and the
+information that &quot;completes&quot; them (more on this below).</p>
+<p>There are two major DSTs exposed by the language:</p>
+<ul>
+<li>trait objects: <code>dyn MyTrait</code></li>
+<li>slices: <a href="../std/primitive.slice.html"><code>[T]</code></a>, <a href="../std/primitive.str.html"><code>str</code></a>, and others</li>
+</ul>
+<p>A trait object represents some type that implements the traits it specifies.
+The exact original type is <em>erased</em> in favor of runtime reflection
+with a vtable containing all the information necessary to use the type.
+The information that completes a trait object pointer is the vtable pointer.
+The runtime size of the pointee can be dynamically requested from the vtable.</p>
+<p>A slice is simply a view into some contiguous storage -- typically an array or
+<code>Vec</code>. The information that completes a slice pointer is just the number of elements
+it points to. The runtime size of the pointee is just the statically known size
+of an element multiplied by the number of elements.</p>
+<p>Structs can actually store a single DST directly as their last field, but this
+makes them a DST as well:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Can't be stored on the stack directly
+struct MySuperSlice {
+    info: u32,
+    data: [u8],
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Although such a type is largely useless without a way to construct it. Currently the
+only properly supported way to create a custom DST is by making your type generic
+and performing an <em>unsizing coercion</em>:</p>
+<pre><pre class="playground"><code class="language-rust edition2021">struct MySuperSliceable&lt;T: ?Sized&gt; {
+    info: u32,
+    data: T,
+}
+
+fn main() {
+    let sized: MySuperSliceable&lt;[u8; 8]&gt; = MySuperSliceable {
+        info: 17,
+        data: [0; 8],
+    };
+
+    let dynamic: &amp;MySuperSliceable&lt;[u8]&gt; = &amp;sized;
+
+    // prints: &quot;17 [0, 0, 0, 0, 0, 0, 0, 0]&quot;
+    println!(&quot;{} {:?}&quot;, dynamic.info, &amp;dynamic.data);
+}</code></pre></pre>
+<p>(Yes, custom DSTs are a largely half-baked feature for now.)</p>
+<h2 id="zero-sized-types-zsts"><a class="header" href="#zero-sized-types-zsts">Zero Sized Types (ZSTs)</a></h2>
+<p>Rust also allows types to be specified that occupy no space:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Nothing; // No fields = no size
+
+// All fields have no size = no size
+struct LotsOfNothing {
+    foo: Nothing,
+    qux: (),      // empty tuple has no size
+    baz: [u8; 0], // empty array has no size
+}
+<span class="boring">}</span></code></pre></pre>
+<p>On their own, Zero Sized Types (ZSTs) are, for obvious reasons, pretty useless.
+However as with many curious layout choices in Rust, their potential is realized
+in a generic context: Rust largely understands that any operation that produces
+or stores a ZST can be reduced to a no-op. First off, storing it doesn't even
+make sense -- it doesn't occupy any space. Also there's only one value of that
+type, so anything that loads it can just produce it from the aether -- which is
+also a no-op since it doesn't occupy any space.</p>
+<p>One of the most extreme examples of this is Sets and Maps. Given a
+<code>Map&lt;Key, Value&gt;</code>, it is common to implement a <code>Set&lt;Key&gt;</code> as just a thin wrapper
+around <code>Map&lt;Key, UselessJunk&gt;</code>. In many languages, this would necessitate
+allocating space for UselessJunk and doing work to store and load UselessJunk
+only to discard it. Proving this unnecessary would be a difficult analysis for
+the compiler.</p>
+<p>However in Rust, we can just say that  <code>Set&lt;Key&gt; = Map&lt;Key, ()&gt;</code>. Now Rust
+statically knows that every load and store is useless, and no allocation has any
+size. The result is that the monomorphized code is basically a custom
+implementation of a HashSet with none of the overhead that HashMap would have to
+support values.</p>
+<p>Safe code need not worry about ZSTs, but <em>unsafe</em> code must be careful about the
+consequence of types with no size. In particular, pointer offsets are no-ops,
+and allocators typically <a href="../std/alloc/trait.GlobalAlloc.html#tymethod.alloc">require a non-zero size</a>.</p>
+<p>Note that references to ZSTs (including empty slices), just like all other
+references, must be non-null and suitably aligned. Dereferencing a null or
+unaligned pointer to a ZST is <a href="what-unsafe-does.html">undefined behavior</a>, just like for any other
+type.</p>
+<h2 id="empty-types"><a class="header" href="#empty-types">Empty Types</a></h2>
+<p>Rust also enables types to be declared that <em>cannot even be instantiated</em>. These
+types can only be talked about at the type level, and never at the value level.
+Empty types can be declared by specifying an enum with no variants:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Void {} // No variants = EMPTY
+<span class="boring">}</span></code></pre></pre>
+<p>Empty types are even more marginal than ZSTs. The primary motivating example for
+an empty type is type-level unreachability. For instance, suppose an API needs to
+return a Result in general, but a specific case actually is infallible. It's
+actually possible to communicate this at the type level by returning a
+<code>Result&lt;T, Void&gt;</code>. Consumers of the API can confidently unwrap such a Result
+knowing that it's <em>statically impossible</em> for this value to be an <code>Err</code>, as
+this would require providing a value of type <code>Void</code>.</p>
+<p>In principle, Rust can do some interesting analyses and optimizations based
+on this fact. For instance, <code>Result&lt;T, Void&gt;</code> is represented as just <code>T</code>,
+because the <code>Err</code> case doesn't actually exist (strictly speaking, this is only
+an optimization that is not guaranteed, so for example transmuting one into the
+other is still Undefined Behavior).</p>
+<p>The following <em>could</em> also compile:</p>
+<pre><pre class="playground"><code class="language-rust compile_fail edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Void {}
+
+let res: Result&lt;u32, Void&gt; = Ok(0);
+
+// Err doesn't exist anymore, so Ok is actually irrefutable.
+let Ok(num) = res;
+<span class="boring">}</span></code></pre></pre>
+<p>But this trick doesn't work yet.</p>
+<p>One final subtle detail about empty types is that raw pointers to them are
+actually valid to construct, but dereferencing them is Undefined Behavior
+because that wouldn't make sense.</p>
+<p>We recommend against modelling C's <code>void*</code> type with <code>*const Void</code>.
+A lot of people started doing that but quickly ran into trouble because
+Rust doesn't really have any safety guards against trying to instantiate
+empty types with unsafe code, and if you do it, it's Undefined Behavior.
+This was especially problematic because developers had a habit of converting
+raw pointers to references and <code>&amp;Void</code> is <em>also</em> Undefined Behavior to
+construct.</p>
+<p><code>*const ()</code> (or equivalent) works reasonably well for <code>void*</code>, and can be made
+into a reference without any safety problems. It still doesn't prevent you from
+trying to read or write values, but at least it compiles to a no-op instead
+of Undefined Behavior.</p>
+<h2 id="extern-types"><a class="header" href="#extern-types">Extern Types</a></h2>
+<p>There is <a href="https://github.com/rust-lang/rfcs/blob/master/text/1861-extern-types.md">an accepted RFC</a> to add proper types with an unknown size,
+called <em>extern types</em>, which would let Rust developers model things like C's <code>void*</code>
+and other &quot;declared but never defined&quot; types more accurately. However as of
+Rust 2018, <a href="https://github.com/rust-lang/rust/issues/43467">the feature is stuck in limbo over how <code>size_of_val::&lt;MyExternType&gt;()</code>
+should behave</a>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="repr-rust.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="other-reprs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="repr-rust.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="other-reprs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

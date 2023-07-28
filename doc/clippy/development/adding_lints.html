@@ -1,0 +1,833 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Adding Lints - Clippy Documentation</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="../configuration.html"><strong aria-hidden="true">3.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lint_configuration.html"><strong aria-hidden="true">3.1.</strong> Lint Configuration</a></li></ol></li><li class="chapter-item expanded "><a href="../lints.html"><strong aria-hidden="true">4.</strong> Clippy's Lints</a></li><li class="chapter-item expanded "><a href="../continuous_integration/index.html"><strong aria-hidden="true">5.</strong> Continuous Integration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../continuous_integration/github_actions.html"><strong aria-hidden="true">5.1.</strong> GitHub Actions</a></li><li class="chapter-item expanded "><a href="../continuous_integration/travis.html"><strong aria-hidden="true">5.2.</strong> Travis CI</a></li></ol></li><li class="chapter-item expanded "><a href="../development/index.html"><strong aria-hidden="true">6.</strong> Development</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../development/basics.html"><strong aria-hidden="true">6.1.</strong> Basics</a></li><li class="chapter-item expanded "><a href="../development/adding_lints.html" class="active"><strong aria-hidden="true">6.2.</strong> Adding Lints</a></li><li class="chapter-item expanded "><a href="../development/lint_passes.html"><strong aria-hidden="true">6.3.</strong> Lint Passes</a></li><li class="chapter-item expanded "><a href="../development/type_checking.html"><strong aria-hidden="true">6.4.</strong> Type Checking</a></li><li class="chapter-item expanded "><a href="../development/macro_expansions.html"><strong aria-hidden="true">6.5.</strong> Macro Expansions</a></li><li class="chapter-item expanded "><a href="../development/common_tools_writing_lints.html"><strong aria-hidden="true">6.6.</strong> Common Tools</a></li><li class="chapter-item expanded "><a href="../development/infrastructure/index.html"><strong aria-hidden="true">6.7.</strong> Infrastructure</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../development/infrastructure/sync.html"><strong aria-hidden="true">6.7.1.</strong> Syncing changes between Clippy and rust-lang/rust</a></li><li class="chapter-item expanded "><a href="../development/infrastructure/backport.html"><strong aria-hidden="true">6.7.2.</strong> Backporting Changes</a></li><li class="chapter-item expanded "><a href="../development/infrastructure/changelog_update.html"><strong aria-hidden="true">6.7.3.</strong> Updating the Changelog</a></li><li class="chapter-item expanded "><a href="../development/infrastructure/release.html"><strong aria-hidden="true">6.7.4.</strong> Release a New Version</a></li><li class="chapter-item expanded "><a href="../development/infrastructure/book.html"><strong aria-hidden="true">6.7.5.</strong> The Clippy Book</a></li></ol></li><li class="chapter-item expanded "><a href="../development/proposals/index.html"><strong aria-hidden="true">6.8.</strong> Proposals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../development/proposals/roadmap-2021.html"><strong aria-hidden="true">6.8.1.</strong> Roadmap 2021</a></li><li class="chapter-item expanded "><a href="../development/proposals/syntax-tree-patterns.html"><strong aria-hidden="true">6.8.2.</strong> Syntax Tree Patterns</a></li></ol></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Clippy Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust-clippy/tree/master/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust-clippy/edit/master/book/src/development/adding_lints.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="adding-a-new-lint"><a class="header" href="#adding-a-new-lint">Adding a new lint</a></h1>
+<p>You are probably here because you want to add a new lint to Clippy. If this is
+the first time you're contributing to Clippy, this document guides you through
+creating an example lint from scratch.</p>
+<p>To get started, we will create a lint that detects functions called <code>foo</code>,
+because that's clearly a non-descriptive name.</p>
+<ul>
+<li><a href="#adding-a-new-lint">Adding a new lint</a>
+<ul>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#getting-started">Getting Started</a>
+<ul>
+<li><a href="#defining-our-lint">Defining Our Lint</a>
+<ul>
+<li><a href="#standalone">Standalone</a></li>
+<li><a href="#specific-type">Specific Type</a></li>
+<li><a href="#tests-location">Tests Location</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#testing">Testing</a>
+<ul>
+<li><a href="#cargo-lints">Cargo lints</a></li>
+</ul>
+</li>
+<li><a href="#rustfix-tests">Rustfix tests</a></li>
+<li><a href="#testing-manually">Testing manually</a></li>
+<li><a href="#running-directly">Running directly</a></li>
+<li><a href="#lint-declaration">Lint declaration</a></li>
+<li><a href="#lint-registration">Lint registration</a></li>
+<li><a href="#lint-passes">Lint passes</a></li>
+<li><a href="#emitting-a-lint">Emitting a lint</a></li>
+<li><a href="#adding-the-lint-logic">Adding the lint logic</a></li>
+<li><a href="#specifying-the-lints-minimum-supported-rust-version-msrv">Specifying the lint's minimum supported Rust version (MSRV)</a></li>
+<li><a href="#author-lint">Author lint</a></li>
+<li><a href="#print-hir-lint">Print HIR lint</a></li>
+<li><a href="#documentation">Documentation</a></li>
+<li><a href="#running-rustfmt">Running rustfmt</a></li>
+<li><a href="#debugging">Debugging</a></li>
+<li><a href="#pr-checklist">PR Checklist</a></li>
+<li><a href="#adding-configuration-to-a-lint">Adding configuration to a lint</a></li>
+<li><a href="#cheat-sheet">Cheat Sheet</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
+<p>See the <a href="basics.html#get-the-code">Basics</a> documentation.</p>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<p>There is a bit of boilerplate code that needs to be set up when creating a new
+lint. Fortunately, you can use the Clippy dev tools to handle this for you. We
+are naming our new lint <code>foo_functions</code> (lints are generally written in snake
+case), and we don't need type information, so it will have an early pass type
+(more on this later). If you're unsure if the name you chose fits the lint,
+take a look at our <a href="https://rust-lang.github.io/rfcs/0344-conventions-galore.html#lints">lint naming guidelines</a>.</p>
+<h2 id="defining-our-lint"><a class="header" href="#defining-our-lint">Defining Our Lint</a></h2>
+<p>To get started, there are two ways to define our lint.</p>
+<h3 id="standalone"><a class="header" href="#standalone">Standalone</a></h3>
+<p>Command: <code>cargo dev new_lint --name=foo_functions --pass=early --category=pedantic</code>
+(category will default to nursery if not provided)</p>
+<p>This command will create a new file: <code>clippy_lints/src/foo_functions.rs</code>, as well
+as <a href="#lint-registration">register the lint</a>.</p>
+<h3 id="specific-type"><a class="header" href="#specific-type">Specific Type</a></h3>
+<p>Command: <code>cargo dev new_lint --name=foo_functions --type=functions --category=pedantic</code></p>
+<p>This command will create a new file: <code>clippy_lints/src/{type}/foo_functions.rs</code>.</p>
+<p>Notice how this command has a <code>--type</code> flag instead of <code>--pass</code>. Unlike a standalone
+definition, this lint won't be registered in the traditional sense. Instead, you will
+call your lint from within the type's lint pass, found in <code>clippy_lints/src/{type}/mod.rs</code>.</p>
+<p>A &quot;type&quot; is just the name of a directory in <code>clippy_lints/src</code>, like <code>functions</code> in
+the example command. These are groupings of lints with common behaviors, so if your
+lint falls into one, it would be best to add it to that type.</p>
+<h3 id="tests-location"><a class="header" href="#tests-location">Tests Location</a></h3>
+<p>Both commands will create a file: <code>tests/ui/foo_functions.rs</code>. For cargo lints,
+two project hierarchies (fail/pass) will be created by default under <code>tests/ui-cargo</code>.</p>
+<p>Next, we'll open up these files and add our lint!</p>
+<h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
+<p>Let's write some tests first that we can execute while we iterate on our lint.</p>
+<p>Clippy uses UI tests for testing. UI tests check that the output of Clippy is
+exactly as expected. Each test is just a plain Rust file that contains the code
+we want to check. The output of Clippy is compared against a <code>.stderr</code> file.
+Note that you don't have to create this file yourself, we'll get to generating
+the <code>.stderr</code> files further down.</p>
+<p>We start by opening the test file created at <code>tests/ui/foo_functions.rs</code>.</p>
+<p>Update the file with some examples to get started:</p>
+<pre><pre class="playground"><code class="language-rust edition2018">#![allow(unused)]
+#![warn(clippy::foo_functions)]
+
+// Impl methods
+struct A;
+impl A {
+    pub fn fo(&amp;self) {}
+    pub fn foo(&amp;self) {}
+    pub fn food(&amp;self) {}
+}
+
+// Default trait methods
+trait B {
+    fn fo(&amp;self) {}
+    fn foo(&amp;self) {}
+    fn food(&amp;self) {}
+}
+
+// Plain functions
+fn fo() {}
+fn foo() {}
+fn food() {}
+
+fn main() {
+    // We also don't want to lint method calls
+    foo();
+    let a = A;
+    a.foo();
+}</code></pre></pre>
+<p>Now we can run the test with <code>TESTNAME=foo_functions cargo uitest</code>, currently
+this test is meaningless though.</p>
+<p>While we are working on implementing our lint, we can keep running the UI test.
+That allows us to check if the output is turning into what we want.</p>
+<p>Once we are satisfied with the output, we need to run <code>cargo dev bless</code> to
+update the <code>.stderr</code> file for our lint. Please note that, we should run
+<code>TESTNAME=foo_functions cargo uitest</code> every time before running <code>cargo dev bless</code>. Running <code>TESTNAME=foo_functions cargo uitest</code> should pass then. When we
+commit our lint, we need to commit the generated <code>.stderr</code> files, too. In
+general, you should only commit files changed by <code>cargo dev bless</code> for the
+specific lint you are creating/editing. Note that if the generated files are
+empty, they should be removed.</p>
+<blockquote>
+<p><em>Note:</em> you can run multiple test files by specifying a comma separated list:
+<code>TESTNAME=foo_functions,test2,test3</code>.</p>
+</blockquote>
+<h3 id="cargo-lints"><a class="header" href="#cargo-lints">Cargo lints</a></h3>
+<p>For cargo lints, the process of testing differs in that we are interested in the
+<code>Cargo.toml</code> manifest file. We also need a minimal crate associated with that
+manifest.</p>
+<p>If our new lint is named e.g. <code>foo_categories</code>, after running <code>cargo dev new_lint --name=foo_categories --type=cargo --category=cargo</code> we will find by
+default two new crates, each with its manifest file:</p>
+<ul>
+<li><code>tests/ui-cargo/foo_categories/fail/Cargo.toml</code>: this file should cause the
+new lint to raise an error.</li>
+<li><code>tests/ui-cargo/foo_categories/pass/Cargo.toml</code>: this file should not trigger
+the lint.</li>
+</ul>
+<p>If you need more cases, you can copy one of those crates (under
+<code>foo_categories</code>) and rename it.</p>
+<p>The process of generating the <code>.stderr</code> file is the same, and prepending the
+<code>TESTNAME</code> variable to <code>cargo uitest</code> works too.</p>
+<h2 id="rustfix-tests"><a class="header" href="#rustfix-tests">Rustfix tests</a></h2>
+<p>If the lint you are working on is making use of structured suggestions, the test
+file should include a <code>//@run-rustfix</code> comment at the top. This will
+additionally run <a href="https://github.com/rust-lang/rustfix">rustfix</a> for that test. Rustfix will apply the suggestions
+from the lint to the code of the test file and compare that to the contents of a
+<code>.fixed</code> file.</p>
+<p>Use <code>cargo dev bless</code> to automatically generate the <code>.fixed</code> file after running
+the tests.</p>
+<h2 id="testing-manually"><a class="header" href="#testing-manually">Testing manually</a></h2>
+<p>Manually testing against an example file can be useful if you have added some
+<code>println!</code>s and the test suite output becomes unreadable. To try Clippy with
+your local modifications, run</p>
+<pre><code>cargo dev lint input.rs
+</code></pre>
+<p>from the working copy root. With tests in place, let's have a look at
+implementing our lint now.</p>
+<h2 id="running-directly"><a class="header" href="#running-directly">Running directly</a></h2>
+<p>While it's easier to just use <code>cargo dev lint</code>, it might be desirable to get
+<code>target/release/cargo-clippy</code> and <code>target/release/clippy-driver</code> to work as well in some cases.
+By default, they don't work because clippy dynamically links rustc. To help them find rustc,
+add the path printed by<code>rustc --print target-libdir</code> (ran inside this workspace so that the rustc version matches)
+to your library search path.
+On linux, this can be done by setting the <code>LD_LIBRARY_PATH</code> environment variable to that path.</p>
+<h2 id="lint-declaration"><a class="header" href="#lint-declaration">Lint declaration</a></h2>
+<p>Let's start by opening the new file created in the <code>clippy_lints</code> crate at
+<code>clippy_lints/src/foo_functions.rs</code>. That's the crate where all the lint code
+is. This file has already imported some initial things we will need:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use rustc_lint::{EarlyLintPass, EarlyContext};
+use rustc_session::{declare_lint_pass, declare_tool_lint};
+use rustc_ast::ast::*;
+<span class="boring">}</span></code></pre></pre>
+<p>The next step is to update the lint declaration. Lints are declared using the
+<a href="https://github.com/rust-lang/rust-clippy/blob/557f6848bd5b7183f55c1e1522a326e9e1df6030/clippy_lints/src/lib.rs#L60"><code>declare_clippy_lint!</code></a> macro, and we just need to update
+the auto-generated lint declaration to have a real description, something like
+this:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>declare_clippy_lint! {
+    /// ### What it does
+    ///
+    /// ### Why is this bad?
+    ///
+    /// ### Example
+    /// ```rust
+    /// // example code
+    /// ```
+    #[clippy::version = &quot;1.29.0&quot;]
+    pub FOO_FUNCTIONS,
+    pedantic,
+    &quot;function named `foo`, which is not a descriptive name&quot;
+}
+<span class="boring">}</span></code></pre></pre>
+<ul>
+<li>The section of lines prefixed with <code>///</code> constitutes the lint documentation
+section. This is the default documentation style and will be displayed <a href="https://rust-lang.github.io/rust-clippy/master/index.html#redundant_closure">like
+this</a>. To render and open this documentation locally in a
+browser, run <code>cargo dev serve</code>.</li>
+<li>The <code>#[clippy::version]</code> attribute will be rendered as part of the lint
+documentation. The value should be set to the current Rust version that the
+lint is developed in, it can be retrieved by running <code>rustc -vV</code> in the
+rust-clippy directory. The version is listed under <em>release</em>. (Use the version
+without the <code>-nightly</code>) suffix.</li>
+<li><code>FOO_FUNCTIONS</code> is the name of our lint. Be sure to follow the <a href="https://rust-lang.github.io/rfcs/0344-conventions-galore.html#lints">lint naming
+guidelines</a> here when naming your lint. In short, the name should
+state the thing that is being checked for and read well when used with
+<code>allow</code>/<code>warn</code>/<code>deny</code>.</li>
+<li><code>pedantic</code> sets the lint level to <code>Allow</code>. The exact mapping can be found
+<a href="https://github.com/rust-lang/rust-clippy/blob/557f6848bd5b7183f55c1e1522a326e9e1df6030/clippy_lints/src/lib.rs#L110">here</a></li>
+<li>The last part should be a text that explains what exactly is wrong with the
+code</li>
+</ul>
+<p>The rest of this file contains an empty implementation for our lint pass, which
+in this case is <code>EarlyLintPass</code> and should look like this:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// clippy_lints/src/foo_functions.rs
+
+// .. imports and lint declaration ..
+
+declare_lint_pass!(FooFunctions =&gt; [FOO_FUNCTIONS]);
+
+impl EarlyLintPass for FooFunctions {}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="lint-registration"><a class="header" href="#lint-registration">Lint registration</a></h2>
+<p>When using <code>cargo dev new_lint</code>, the lint is automatically registered and
+nothing more has to be done.</p>
+<p>When declaring a new lint by hand and <code>cargo dev update_lints</code> is used, the lint
+pass may have to be registered manually in the <code>register_plugins</code> function in
+<code>clippy_lints/src/lib.rs</code>:</p>
+<pre><code class="language-rust ignore">store.register_early_pass(|| Box::new(foo_functions::FooFunctions));</code></pre>
+<p>As one may expect, there is a corresponding <code>register_late_pass</code> method
+available as well. Without a call to one of <code>register_early_pass</code> or
+<code>register_late_pass</code>, the lint pass in question will not be run.</p>
+<p>One reason that <code>cargo dev update_lints</code> does not automate this step is that
+multiple lints can use the same lint pass, so registering the lint pass may
+already be done when adding a new lint. Another reason that this step is not
+automated is that the order that the passes are registered determines the order
+the passes actually run, which in turn affects the order that any emitted lints
+are output in.</p>
+<h2 id="lint-passes"><a class="header" href="#lint-passes">Lint passes</a></h2>
+<p>Writing a lint that only checks for the name of a function means that we only
+have to deal with the AST and don't have to deal with the type system at all.
+This is good, because it makes writing this particular lint less complicated.</p>
+<p>We have to make this decision with every new Clippy lint. It boils down to using
+either <a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_lint/trait.EarlyLintPass.html"><code>EarlyLintPass</code></a> or <a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_lint/trait.LateLintPass.html"><code>LateLintPass</code></a>.</p>
+<p>In short, the <code>LateLintPass</code> has access to type information while the
+<code>EarlyLintPass</code> doesn't. If you don't need access to type information, use the
+<code>EarlyLintPass</code>. The <code>EarlyLintPass</code> is also faster. However, linting speed
+hasn't really been a concern with Clippy so far.</p>
+<p>Since we don't need type information for checking the function name, we used
+<code>--pass=early</code> when running the new lint automation and all the imports were
+added accordingly.</p>
+<h2 id="emitting-a-lint"><a class="header" href="#emitting-a-lint">Emitting a lint</a></h2>
+<p>With UI tests and the lint declaration in place, we can start working on the
+implementation of the lint logic.</p>
+<p>Let's start by implementing the <code>EarlyLintPass</code> for our <code>FooFunctions</code>:</p>
+<pre><code class="language-rust ignore">impl EarlyLintPass for FooFunctions {
+    fn check_fn(&amp;mut self, cx: &amp;EarlyContext&lt;'_&gt;, fn_kind: FnKind&lt;'_&gt;, span: Span, _: NodeId) {
+        // TODO: Emit lint here
+    }
+}</code></pre>
+<p>We implement the <a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_lint/trait.EarlyLintPass.html#method.check_fn"><code>check_fn</code></a> method from the
+<a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_lint/trait.EarlyLintPass.html"><code>EarlyLintPass</code></a> trait. This gives us access to various
+information about the function that is currently being checked. More on that in
+the next section. Let's worry about the details later and emit our lint for
+<em>every</em> function definition first.</p>
+<p>Depending on how complex we want our lint message to be, we can choose from a
+variety of lint emission functions. They can all be found in
+<a href="https://github.com/rust-lang/rust-clippy/blob/master/clippy_utils/src/diagnostics.rs"><code>clippy_utils/src/diagnostics.rs</code></a>.</p>
+<p><code>span_lint_and_help</code> seems most appropriate in this case. It allows us to
+provide an extra help message, and we can't really suggest a better name
+automatically. This is how it looks:</p>
+<pre><code class="language-rust ignore">impl EarlyLintPass for FooFunctions {
+    fn check_fn(&amp;mut self, cx: &amp;EarlyContext&lt;'_&gt;, fn_kind: FnKind&lt;'_&gt;, span: Span, _: NodeId) {
+        span_lint_and_help(
+            cx,
+            FOO_FUNCTIONS,
+            span,
+            &quot;function named `foo`&quot;,
+            None,
+            &quot;consider using a more meaningful name&quot;
+        );
+    }
+}</code></pre>
+<p>Running our UI test should now produce output that contains the lint message.</p>
+<p>According to <a href="https://rustc-dev-guide.rust-lang.org/diagnostics.html">the rustc-dev-guide</a>, the text should be matter of fact and avoid
+capitalization and periods, unless multiple sentences are needed. When code or
+an identifier must appear in a message or label, it should be surrounded with
+single grave accents `.</p>
+<h2 id="adding-the-lint-logic"><a class="header" href="#adding-the-lint-logic">Adding the lint logic</a></h2>
+<p>Writing the logic for your lint will most likely be different from our example,
+so this section is kept rather short.</p>
+<p>Using the <a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_lint/trait.EarlyLintPass.html#method.check_fn"><code>check_fn</code></a> method gives us access to <a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_ast/visit/enum.FnKind.html"><code>FnKind</code></a>
+that has the <a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_ast/visit/enum.FnKind.html#variant.Fn"><code>FnKind::Fn</code></a> variant. It provides access to the name of the
+function/method via an <a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_span/symbol/struct.Ident.html"><code>Ident</code></a>.</p>
+<p>With that we can expand our <code>check_fn</code> method to:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl EarlyLintPass for FooFunctions {
+    fn check_fn(&amp;mut self, cx: &amp;EarlyContext&lt;'_&gt;, fn_kind: FnKind&lt;'_&gt;, span: Span, _: NodeId) {
+        if is_foo_fn(fn_kind) {
+            span_lint_and_help(
+                cx,
+                FOO_FUNCTIONS,
+                span,
+                &quot;function named `foo`&quot;,
+                None,
+                &quot;consider using a more meaningful name&quot;
+            );
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>We separate the lint conditional from the lint emissions because it makes the
+code a bit easier to read. In some cases this separation would also allow to
+write some unit tests (as opposed to only UI tests) for the separate function.</p>
+<p>In our example, <code>is_foo_fn</code> looks like:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// use statements, impl EarlyLintPass, check_fn, ..
+
+fn is_foo_fn(fn_kind: FnKind&lt;'_&gt;) -&gt; bool {
+    match fn_kind {
+        FnKind::Fn(_, ident, ..) =&gt; {
+            // check if `fn` name is `foo`
+            ident.name.as_str() == &quot;foo&quot;
+        }
+        // ignore closures
+        FnKind::Closure(..) =&gt; false
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Now we should also run the full test suite with <code>cargo test</code>. At this point
+running <code>cargo test</code> should produce the expected output. Remember to run <code>cargo dev bless</code> to update the <code>.stderr</code> file.</p>
+<p><code>cargo test</code> (as opposed to <code>cargo uitest</code>) will also ensure that our lint
+implementation is not violating any Clippy lints itself.</p>
+<p>That should be it for the lint implementation. Running <code>cargo test</code> should now
+pass.</p>
+<h2 id="specifying-the-lints-minimum-supported-rust-version-msrv"><a class="header" href="#specifying-the-lints-minimum-supported-rust-version-msrv">Specifying the lint's minimum supported Rust version (MSRV)</a></h2>
+<p>Sometimes a lint makes suggestions that require a certain version of Rust. For
+example, the <code>manual_strip</code> lint suggests using <code>str::strip_prefix</code> and
+<code>str::strip_suffix</code> which is only available after Rust 1.45. In such cases, you
+need to ensure that the MSRV configured for the project is &gt;= the MSRV of the
+required Rust feature. If multiple features are required, just use the one with
+a lower MSRV.</p>
+<p>First, add an MSRV alias for the required feature in <a href="https://doc.rust-lang.org/nightly/nightly-rustc/clippy_utils/msrvs/index.html"><code>clippy_utils::msrvs</code></a>.
+This can be accessed later as <code>msrvs::STR_STRIP_PREFIX</code>, for example.</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>msrv_aliases! {
+    ..
+    1,45,0 { STR_STRIP_PREFIX }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>In order to access the project-configured MSRV, you need to have an <code>msrv</code> field
+in the LintPass struct, and a constructor to initialize the field. The <code>msrv</code>
+value is passed to the constructor in <code>clippy_lints/lib.rs</code>.</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct ManualStrip {
+    msrv: Msrv,
+}
+
+impl ManualStrip {
+    #[must_use]
+    pub fn new(msrv: Msrv) -&gt; Self {
+        Self { msrv }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The project's MSRV can then be matched against the feature MSRV in the LintPass
+using the <code>Msrv::meets</code> method.</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if !self.msrv.meets(msrvs::STR_STRIP_PREFIX) {
+    return;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The project's MSRV can also be specified as an attribute, which overrides
+the value from <code>clippy.toml</code>. This can be accounted for using the
+<code>extract_msrv_attr!(LintContext)</code> macro and passing
+<code>LateContext</code>/<code>EarlyContext</code>.</p>
+<pre><code class="language-rust ignore">impl&lt;'tcx&gt; LateLintPass&lt;'tcx&gt; for ManualStrip {
+    fn check_expr(&amp;mut self, cx: &amp;LateContext&lt;'tcx&gt;, expr: &amp;'tcx Expr&lt;'_&gt;) {
+        ...
+    }
+    extract_msrv_attr!(LateContext);
+}</code></pre>
+<p>Once the <code>msrv</code> is added to the lint, a relevant test case should be added to
+the lint's test file, <code>tests/ui/manual_strip.rs</code> in this example. It should
+have a case for the version below the MSRV and one with the same contents but
+for the MSRV version itself.</p>
+<pre><code class="language-rust ignore">...
+
+#[clippy::msrv = &quot;1.44&quot;]
+fn msrv_1_44() {
+    /* something that would trigger the lint */
+}
+
+#[clippy::msrv = &quot;1.45&quot;]
+fn msrv_1_45() {
+    /* something that would trigger the lint */
+}</code></pre>
+<p>As a last step, the lint should be added to the lint documentation. This is done
+in <code>clippy_lints/src/utils/conf.rs</code>:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>define_Conf! {
+    /// Lint: LIST, OF, LINTS, &lt;THE_NEWLY_ADDED_LINT&gt;. The minimum rust version that the project supports
+    (msrv: Option&lt;String&gt; = None),
+    ...
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="author-lint"><a class="header" href="#author-lint">Author lint</a></h2>
+<p>If you have trouble implementing your lint, there is also the internal <code>author</code>
+lint to generate Clippy code that detects the offending pattern. It does not
+work for all the Rust syntax, but can give a good starting point.</p>
+<p>The quickest way to use it, is the <a href="https://play.rust-lang.org/?version=nightly&amp;mode=debug&amp;edition=2018&amp;gist=9a12cb60e5c6ad4e3003ac6d5e63cf55">Rust playground:
+play.rust-lang.org</a>. Put the code you want to lint into the
+editor and add the <code>#[clippy::author]</code> attribute above the item. Then run Clippy
+via <code>Tools -&gt; Clippy</code> and you should see the generated code in the output below.</p>
+<p><a href="https://play.rust-lang.org/?version=nightly&amp;mode=debug&amp;edition=2018&amp;gist=9a12cb60e5c6ad4e3003ac6d5e63cf55">Here</a> is an example on the playground.</p>
+<p>If the command was executed successfully, you can copy the code over to where
+you are implementing your lint.</p>
+<h2 id="print-hir-lint"><a class="header" href="#print-hir-lint">Print HIR lint</a></h2>
+<p>To implement a lint, it's helpful to first understand the internal
+representation that rustc uses. Clippy has the <code>#[clippy::dump]</code> attribute that
+prints the <a href="https://rustc-dev-guide.rust-lang.org/hir.html"><em>High-Level Intermediate Representation (HIR)</em></a> of the item,
+statement, or expression that the attribute is attached to. To attach the
+attribute to expressions you often need to enable
+<code>#![feature(stmt_expr_attributes)]</code>.</p>
+<p><a href="https://play.rust-lang.org/?version=nightly&amp;mode=debug&amp;edition=2021&amp;gist=daf14db3a7f39ca467cd1b86c34b9afb">Here</a> you can find an example, just select <em>Tools</em> and run
+<em>Clippy</em>.</p>
+<h2 id="documentation"><a class="header" href="#documentation">Documentation</a></h2>
+<p>The final thing before submitting our PR is to add some documentation to our
+lint declaration.</p>
+<p>Please document your lint with a doc comment akin to the following:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>declare_clippy_lint! {
+    /// ### What it does
+    /// Checks for ... (describe what the lint matches).
+    ///
+    /// ### Why is this bad?
+    /// Supply the reason for linting the code.
+    ///
+    /// ### Example
+    ///
+    /// ```rust,ignore
+    /// // A short example of code that triggers the lint
+    /// ```
+    ///
+    /// Use instead:
+    /// ```rust,ignore
+    /// // A short example of improved code that doesn't trigger the lint
+    /// ```
+    #[clippy::version = &quot;1.29.0&quot;]
+    pub FOO_FUNCTIONS,
+    pedantic,
+    &quot;function named `foo`, which is not a descriptive name&quot;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Once your lint is merged, this documentation will show up in the <a href="https://rust-lang.github.io/rust-clippy/master/index.html">lint
+list</a>.</p>
+<h2 id="running-rustfmt"><a class="header" href="#running-rustfmt">Running rustfmt</a></h2>
+<p><a href="https://github.com/rust-lang/rustfmt">Rustfmt</a> is a tool for formatting Rust code according to style guidelines. Your
+code has to be formatted by <code>rustfmt</code> before a PR can be merged. Clippy uses
+nightly <code>rustfmt</code> in the CI.</p>
+<p>It can be installed via <code>rustup</code>:</p>
+<pre><code class="language-bash">rustup component add rustfmt --toolchain=nightly
+</code></pre>
+<p>Use <code>cargo dev fmt</code> to format the whole codebase. Make sure that <code>rustfmt</code> is
+installed for the nightly toolchain.</p>
+<h2 id="debugging"><a class="header" href="#debugging">Debugging</a></h2>
+<p>If you want to debug parts of your lint implementation, you can use the <a href="https://doc.rust-lang.org/std/macro.dbg.html"><code>dbg!</code></a>
+macro anywhere in your code. Running the tests should then include the debug
+output in the <code>stdout</code> part.</p>
+<h2 id="pr-checklist"><a class="header" href="#pr-checklist">PR Checklist</a></h2>
+<p>Before submitting your PR make sure you followed all the basic requirements:</p>
+<!-- Sync this with `.github/PULL_REQUEST_TEMPLATE` -->
+<ul>
+<li>[ ] Followed <a href="https://rust-lang.github.io/rfcs/0344-conventions-galore.html#lints">lint naming conventions</a></li>
+<li>[ ] Added passing UI tests (including committed <code>.stderr</code> file)</li>
+<li>[ ] <code>cargo test</code> passes locally</li>
+<li>[ ] Executed <code>cargo dev update_lints</code></li>
+<li>[ ] Added lint documentation</li>
+<li>[ ] Run <code>cargo dev fmt</code></li>
+</ul>
+<h2 id="adding-configuration-to-a-lint"><a class="header" href="#adding-configuration-to-a-lint">Adding configuration to a lint</a></h2>
+<p>Clippy supports the configuration of lints values using a <code>clippy.toml</code> file in
+the workspace directory. Adding a configuration to a lint can be useful for
+thresholds or to constrain some behavior that can be seen as a false positive
+for some users. Adding a configuration is done in the following steps:</p>
+<ol>
+<li>
+<p>Adding a new configuration entry to <a href="https://github.com/rust-lang/rust-clippy/blob/master/clippy_lints/src/utils/conf.rs"><code>clippy_lints::utils::conf</code></a> like this:</p>
+<pre><code class="language-rust ignore">/// Lint: LINT_NAME.
+///
+/// &lt;The configuration field doc comment&gt;
+(configuration_ident: Type = DefaultValue),</code></pre>
+<p>The doc comment is automatically added to the documentation of the listed
+lints. The default value will be formatted using the <code>Debug</code> implementation
+of the type.</p>
+</li>
+<li>
+<p>Adding the configuration value to the lint impl struct:</p>
+<ol>
+<li>
+<p>This first requires the definition of a lint impl struct. Lint impl
+structs are usually generated with the <code>declare_lint_pass!</code> macro. This
+struct needs to be defined manually to add some kind of metadata to it:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Generated struct definition
+declare_lint_pass!(StructName =&gt; [
+    LINT_NAME
+]);
+
+// New manual definition struct
+#[derive(Copy, Clone)]
+pub struct StructName {}
+
+impl_lint_pass!(StructName =&gt; [
+    LINT_NAME
+]);
+<span class="boring">}</span></code></pre></pre>
+</li>
+<li>
+<p>Next add the configuration value and a corresponding creation method like
+this:</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Copy, Clone)]
+pub struct StructName {
+    configuration_ident: Type,
+}
+
+// ...
+
+impl StructName {
+    pub fn new(configuration_ident: Type) -&gt; Self {
+        Self {
+            configuration_ident,
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+</li>
+</ol>
+</li>
+<li>
+<p>Passing the configuration value to the lint impl struct:</p>
+<p>First find the struct construction in the <a href="https://github.com/rust-lang/rust-clippy/blob/master/clippy_lints/src/lib.rs"><code>clippy_lints</code> lib file</a>. The
+configuration value is now cloned or copied into a local value that is then
+passed to the impl struct like this:</p>
+<pre><code class="language-rust ignore">// Default generated registration:
+store.register_*_pass(|| box module::StructName);
+
+// New registration with configuration value
+let configuration_ident = conf.configuration_ident.clone();
+store.register_*_pass(move || box module::StructName::new(configuration_ident));</code></pre>
+<p>Congratulations the work is almost done. The configuration value can now be
+accessed in the linting code via <code>self.configuration_ident</code>.</p>
+</li>
+<li>
+<p>Adding tests:</p>
+<ol>
+<li>The default configured value can be tested like any normal lint in
+<a href="https://github.com/rust-lang/rust-clippy/blob/master/tests/ui"><code>tests/ui</code></a>.</li>
+<li>The configuration itself will be tested separately in <a href="https://github.com/rust-lang/rust-clippy/blob/master/tests/ui-toml"><code>tests/ui-toml</code></a>.
+Simply add a new subfolder with a fitting name. This folder contains a
+<code>clippy.toml</code> file with the configuration value and a rust file that
+should be linted by Clippy. The test can otherwise be written as usual.</li>
+</ol>
+</li>
+<li>
+<p>Update <a href="../lint_configuration.html">Lint Configuration</a></p>
+<p>Run <code>cargo collect-metadata</code> to generate documentation changes for the book.</p>
+</li>
+</ol>
+<h2 id="cheat-sheet"><a class="header" href="#cheat-sheet">Cheat Sheet</a></h2>
+<p>Here are some pointers to things you are likely going to need for every lint:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/nightly/nightly-rustc/clippy_utils/index.html">Clippy utils</a> - Various helper functions. Maybe the function you need
+is already in here (<a href="https://doc.rust-lang.org/nightly/nightly-rustc/clippy_utils/ty/fn.is_type_diagnostic_item.html"><code>is_type_diagnostic_item</code></a>, <a href="https://doc.rust-lang.org/nightly/nightly-rustc/clippy_utils/ty/fn.implements_trait.html"><code>implements_trait</code></a>,
+<a href="https://doc.rust-lang.org/nightly/nightly-rustc/clippy_utils/source/fn.snippet.html"><code>snippet</code></a>, etc)</li>
+<li><a href="https://github.com/rust-lang/rust-clippy/blob/master/clippy_utils/src/diagnostics.rs">Clippy diagnostics</a></li>
+<li><a href="https://github.com/rust-lang/rust/pull/94927">Let chains</a></li>
+<li><a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_span/struct.Span.html#method.from_expansion"><code>from_expansion</code></a> and
+<a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_middle/lint/fn.in_external_macro.html"><code>in_external_macro</code></a></li>
+<li><a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_span/struct.Span.html"><code>Span</code></a></li>
+<li><a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_errors/enum.Applicability.html"><code>Applicability</code></a></li>
+<li><a href="common_tools_writing_lints.html">Common tools for writing lints</a> helps with
+common operations</li>
+<li><a href="https://rustc-dev-guide.rust-lang.org/">The rustc-dev-guide</a> explains a lot of internal compiler
+concepts</li>
+<li><a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_middle/">The nightly rustc docs</a> which has been linked to throughout
+this guide</li>
+</ul>
+<p>For <code>EarlyLintPass</code> lints:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_lint/trait.EarlyLintPass.html"><code>EarlyLintPass</code></a></li>
+<li><a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_ast/ast/index.html"><code>rustc_ast::ast</code></a></li>
+</ul>
+<p>For <code>LateLintPass</code> lints:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_lint/trait.LateLintPass.html"><code>LateLintPass</code></a></li>
+<li><a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_middle/ty/sty/index.html"><code>Ty::TyKind</code></a></li>
+</ul>
+<p>While most of Clippy's lint utils are documented, most of rustc's internals lack
+documentation currently. This is unfortunate, but in most cases you can probably
+get away with copying things from existing similar lints. If you are stuck,
+don't hesitate to ask on <a href="https://rust-lang.zulipchat.com/#narrow/stream/clippy">Zulip</a> or in the issue/PR.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../development/basics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../development/lint_passes.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../development/basics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../development/lint_passes.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace.js"></script>
+        <script src="../editor.js"></script>
+        <script src="../mode-rust.js"></script>
+        <script src="../theme-dawn.js"></script>
+        <script src="../theme-tomorrow_night.js"></script>
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

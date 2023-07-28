@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>What are editions? - The Rust Edition Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../editions/index.html" class="active"><strong aria-hidden="true">1.</strong> What are editions?</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editions/creating-a-new-project.html"><strong aria-hidden="true">1.1.</strong> Creating a new project</a></li><li class="chapter-item expanded "><a href="../editions/transitioning-an-existing-project-to-a-new-edition.html"><strong aria-hidden="true">1.2.</strong> Transitioning an existing project to a new edition</a></li><li class="chapter-item expanded "><a href="../editions/advanced-migrations.html"><strong aria-hidden="true">1.3.</strong> Advanced migrations</a></li></ol></li><li class="chapter-item expanded "><a href="../rust-2015/index.html"><strong aria-hidden="true">2.</strong> Rust 2015</a></li><li class="chapter-item expanded "><a href="../rust-2018/index.html"><strong aria-hidden="true">3.</strong> Rust 2018</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rust-2018/path-changes.html"><strong aria-hidden="true">3.1.</strong> Path and module system changes</a></li><li class="chapter-item expanded "><a href="../rust-2018/trait-fn-parameters.html"><strong aria-hidden="true">3.2.</strong> Anonymous trait function parameters deprecated</a></li><li class="chapter-item expanded "><a href="../rust-2018/new-keywords.html"><strong aria-hidden="true">3.3.</strong> New keywords</a></li><li class="chapter-item expanded "><a href="../rust-2018/tyvar-behind-raw-pointer.html"><strong aria-hidden="true">3.4.</strong> Method dispatch for raw pointers to inference variables</a></li><li class="chapter-item expanded "><a href="../rust-2018/cargo.html"><strong aria-hidden="true">3.5.</strong> Cargo changes</a></li></ol></li><li class="chapter-item expanded "><a href="../rust-2021/index.html"><strong aria-hidden="true">4.</strong> Rust 2021</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rust-2021/prelude.html"><strong aria-hidden="true">4.1.</strong> Additions to the prelude</a></li><li class="chapter-item expanded "><a href="../rust-2021/default-cargo-resolver.html"><strong aria-hidden="true">4.2.</strong> Default Cargo feature resolver</a></li><li class="chapter-item expanded "><a href="../rust-2021/IntoIterator-for-arrays.html"><strong aria-hidden="true">4.3.</strong> IntoIterator for arrays</a></li><li class="chapter-item expanded "><a href="../rust-2021/disjoint-capture-in-closures.html"><strong aria-hidden="true">4.4.</strong> Disjoint capture in closures</a></li><li class="chapter-item expanded "><a href="../rust-2021/panic-macro-consistency.html"><strong aria-hidden="true">4.5.</strong> Panic macro consistency</a></li><li class="chapter-item expanded "><a href="../rust-2021/reserving-syntax.html"><strong aria-hidden="true">4.6.</strong> Reserving syntax</a></li><li class="chapter-item expanded "><a href="../rust-2021/warnings-promoted-to-error.html"><strong aria-hidden="true">4.7.</strong> Warnings promoted to errors</a></li><li class="chapter-item expanded "><a href="../rust-2021/or-patterns-macro-rules.html"><strong aria-hidden="true">4.8.</strong> Or patterns in macro-rules</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Edition Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/edition-guide" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="what-are-editions"><a class="header" href="#what-are-editions">What are Editions?</a></h1>
+<p>The release of Rust 1.0
+(<a href="https://blog.rust-lang.org/2015/05/15/Rust-1.0.html">in May 2015</a>)
+established
+<a href="https://blog.rust-lang.org/2014/10/30/Stability.html">&quot;stability without stagnation&quot;</a>
+as a core Rust deliverable.
+Ever since the 1.0 release,
+the rule for Rust has been that once a feature has been released on stable,
+we are committed to supporting that feature for all future releases.</p>
+<p>There are times, however, when it is useful to be able to make small changes
+to the language that are not backwards compatible.
+The most obvious example is introducing a new keyword,
+which would invalidate variables with the same name.
+For example, the first version of Rust did not have the <code>async</code> and <code>await</code> keywords.
+Suddenly changing those words to keywords in a later version would've broken code like <code>let async = 1;</code>.</p>
+<p><strong>Editions</strong> are the mechanism we use to solve this problem.
+When we want to release a feature that would otherwise be backwards incompatible,
+we do so as part of a new Rust <em>edition</em>.
+Editions are opt-in, and so existing crates do
+not see these changes until they explicitly migrate over to the new edition.
+This means that even the latest version of Rust will still <em>not</em> treat <code>async</code> as a keyword,
+unless edition 2018 or later is chosen.
+This choice is made <em>per crate</em> <a href="https://doc.rust-lang.org/cargo/reference/manifest.html#the-edition-field">as part of its <code>Cargo.toml</code></a>.
+New crates created by <code>cargo new</code> are always configured to use the latest stable edition.</p>
+<h3 id="editions-do-not-split-the-ecosystem"><a class="header" href="#editions-do-not-split-the-ecosystem">Editions do not split the ecosystem</a></h3>
+<p>The most important rule for editions is that crates in one edition can
+interoperate seamlessly with crates compiled in other editions. This ensures
+that the decision to migrate to a newer edition is a &quot;private one&quot; that the
+crate can make without affecting others.</p>
+<p>The requirement for crate interoperability implies some limits on the kinds of
+changes that we can make in an edition.
+In general, changes that occur in an edition tend to be &quot;skin deep&quot;.
+All Rust code, regardless of edition,
+is ultimately compiled to the same internal representation within the compiler.</p>
+<h3 id="edition-migration-is-easy-and-largely-automated"><a class="header" href="#edition-migration-is-easy-and-largely-automated">Edition migration is easy and largely automated</a></h3>
+<p>Our goal is to make it easy for crates to upgrade to a new edition.
+When we release a new edition,
+we also provide <a href="https://doc.rust-lang.org/cargo/commands/cargo-fix.html">tooling to automate the migration</a>.
+It makes minor changes to your code necessary to make it compatible with the new edition.
+For example, when migrating to Rust 2018, it changes anything named <code>async</code> to use the equivalent
+<a href="https://doc.rust-lang.org/rust-by-example/compatibility/raw_identifiers.html">raw identifier syntax</a>: <code>r#async</code>.</p>
+<p>The automated migrations are not necessarily perfect:
+there might be some corner cases where manual changes are still required.
+The tooling tries hard to avoid changes
+to semantics that could affect the correctness or performance of the code.</p>
+<p>In addition to tooling, we also maintain this Rust Edition Guide that covers
+the changes that are part of an edition.
+This guide describes each change and gives pointers to where you can learn more about it.
+It also covers any corner cases or details you should be aware of.
+This guide serves as an overview of editions,
+as a migration guide for specific editions,
+and as a quick troubleshooting reference
+if you encounter problems with the automated tooling.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../editions/creating-a-new-project.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../editions/creating-a-new-project.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

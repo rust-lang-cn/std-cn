@@ -1,1 +1,0 @@
-initSidebarItems({"trait":[["Borrow","借用数据的 trait。"],["BorrowMut","用于可变借用数据的 trait。"]]});

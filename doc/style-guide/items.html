@@ -1,0 +1,659 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Module-level items - The Rust Style Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="items.html" class="active"><strong aria-hidden="true">1.</strong> Module-level items</a></li><li class="chapter-item expanded "><a href="statements.html"><strong aria-hidden="true">2.</strong> Statements</a></li><li class="chapter-item expanded "><a href="expressions.html"><strong aria-hidden="true">3.</strong> Expressions</a></li><li class="chapter-item expanded "><a href="types.html"><strong aria-hidden="true">4.</strong> Types</a></li><li class="chapter-item expanded "><a href="advice.html"><strong aria-hidden="true">5.</strong> Non-formatting conventions</a></li><li class="chapter-item expanded "><a href="cargo.html"><strong aria-hidden="true">6.</strong> Cargo.toml conventions</a></li><li class="chapter-item expanded "><a href="principles.html"><strong aria-hidden="true">7.</strong> Principles used for deciding these guidelines</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Style Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/HEAD/src/doc/style-guide/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="items"><a class="header" href="#items">Items</a></h2>
+<p><code>extern crate</code> statements must be first in a file. They must be ordered
+alphabetically.</p>
+<p><code>use</code> statements, and module <em>declarations</em> (<code>mod foo;</code>, not <code>mod { ... }</code>)
+must come before other items. We recommend that imports come before module
+declarations; if imports and modules are separated, then they should be ordered
+alphabetically. When sorting, <code>self</code> and <code>super</code> must come before any other
+names. Module declarations should not be moved if they are annotated with
+<code>#[macro_use]</code>, since that may be semantics changing.</p>
+<p>Tools should make the above ordering optional.</p>
+<h3 id="function-definitions"><a class="header" href="#function-definitions">Function definitions</a></h3>
+<p>In Rust, one finds functions by searching for <code>fn [function-name]</code>; It's
+important that you style your code so that it's very searchable in this way.</p>
+<p>The proper ordering and spacing is:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[pub] [unsafe] [extern [&quot;ABI&quot;]] fn foo(arg1: i32, arg2: i32) -&gt; i32 {
+    ...
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Avoid comments within the signature itself.</p>
+<p>If the function signature does not fit on one line, then break after the opening
+parenthesis and before the closing parenthesis and put each argument on its own
+block-indented line. For example,</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo(
+    arg1: i32,
+    arg2: i32,
+) -&gt; i32 {
+    ...
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Note the trailing comma on the last argument.</p>
+<h3 id="tuples-and-tuple-structs"><a class="header" href="#tuples-and-tuple-structs">Tuples and tuple structs</a></h3>
+<p>Write the type list as you would a parameter list to a function.</p>
+<p>Build a tuple or tuple struct as you would call a function.</p>
+<h4 id="single-line"><a class="header" href="#single-line">Single-line</a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Bar(Type1, Type2);
+
+let x = Bar(11, 22);
+let y = (11, 22, 33);
+<span class="boring">}</span></code></pre></pre>
+<h3 id="enums"><a class="header" href="#enums">Enums</a></h3>
+<p>In the declaration, put each variant on its own line, block indented.</p>
+<p>Format each variant accordingly as either a struct, tuple struct, or identifier,
+which doesn't require special formatting (but without the <code>struct</code> keyword.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum FooBar {
+    First(u32),
+    Second,
+    Error {
+        err: Box&lt;Error&gt;,
+        line: u32,
+    },
+}
+<span class="boring">}</span></code></pre></pre>
+<p>If a struct variant is <a href="index.html#small-items"><em>small</em></a>, it may be formatted on
+one line. In this case, do not use a trailing comma for the field list, but do
+put spaces around each brace:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum FooBar {
+    Error { err: Box&lt;Error&gt;, line: u32 },
+}
+<span class="boring">}</span></code></pre></pre>
+<p>In an enum with multiple struct variants, if any struct variant is written on
+multiple lines, then the multi-line formatting should be used for all struct
+variants. However, such a situation might be an indication that you should
+factor out the fields of the variant into their own struct.</p>
+<h3 id="structs-and-unions"><a class="header" href="#structs-and-unions">Structs and Unions</a></h3>
+<p>Struct names follow on the same line as the <code>struct</code> keyword, with the opening
+brace on the same line when it fits within the right margin. All struct fields
+are indented once and end with a trailing comma. The closing brace is not
+indented and appears on its own line.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Foo {
+    a: A,
+    b: B,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>If and only if the type of a field does not fit within the right margin, it is
+pulled down to its own line and indented again.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Foo {
+    a: A,
+    long_name:
+        LongType,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Prefer using a unit struct (e.g., <code>struct Foo;</code>) to an empty struct (e.g.,
+<code>struct Foo();</code> or <code>struct Foo {}</code>, these only exist to simplify code
+generation), but if you must use an empty struct, keep it on one line with no
+space between the braces: <code>struct Foo;</code> or <code>struct Foo {}</code>.</p>
+<p>The same guidelines are used for untagged union declarations.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>union Foo {
+    a: A,
+    b: B,
+    long_name:
+        LongType,
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="tuple-structs"><a class="header" href="#tuple-structs">Tuple structs</a></h3>
+<p>Put the whole struct on one line if possible. Types in the parentheses should be
+separated by a comma and space with no trailing comma. No spaces around the
+parentheses or semi-colon:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Foo(String, u8);
+<span class="boring">}</span></code></pre></pre>
+<p>Prefer unit structs to empty tuple structs (these only exist to simplify code
+generation), e.g., <code>struct Foo;</code> rather than <code>struct Foo();</code>.</p>
+<p>For more than a few fields, prefer a proper struct with named fields. Given
+this, a tuple struct should always fit on one line. If it does not, block format
+the fields with a field on each line and a trailing comma:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Foo(
+    String,
+    u8,
+);
+<span class="boring">}</span></code></pre></pre>
+<h3 id="traits"><a class="header" href="#traits">Traits</a></h3>
+<p>Trait items should be block-indented. If there are no items, the trait may be
+formatted on a single line. Otherwise there should be line-breaks after the
+opening brace and before the closing brace:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait Foo {}
+
+pub trait Bar {
+    ...
+}
+<span class="boring">}</span></code></pre></pre>
+<p>If the trait has bounds, there should be a space after the colon but not before
+and before and after each <code>+</code>, e.g.,</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait Foo: Debug + Bar {}
+<span class="boring">}</span></code></pre></pre>
+<p>Prefer not to line-break in the bounds if possible (consider using a <code>where</code>
+clause). Prefer to break between bounds than to break any individual bound. If
+you must break the bounds, put each bound (including the first) on its own
+block-indented line, break before the <code>+</code> and put the opening brace on its own
+line:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait IndexRanges:
+    Index&lt;Range&lt;usize&gt;, Output=Self&gt;
+    + Index&lt;RangeTo&lt;usize&gt;, Output=Self&gt;
+    + Index&lt;RangeFrom&lt;usize&gt;, Output=Self&gt;
+    + Index&lt;RangeFull, Output=Self&gt;
+{
+    ...
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="impls"><a class="header" href="#impls">Impls</a></h3>
+<p>Impl items should be block indented. If there are no items, the impl may be
+formatted on a single line. Otherwise there should be line-breaks after the
+opening brace and before the closing brace:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Foo {}
+
+impl Bar for Foo {
+    ...
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Avoid line-breaking in the signature if possible. If a line break is required in
+a non-inherent impl, break immediately before <code>for</code>, block indent the concrete type
+and put the opening brace on its own line:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Bar
+    for Foo
+{
+    ...
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="extern-crate"><a class="header" href="#extern-crate">Extern crate</a></h3>
+<p><code>extern crate foo;</code></p>
+<p>Use spaces around keywords, no spaces around the semi-colon.</p>
+<h3 id="modules"><a class="header" href="#modules">Modules</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>mod foo {
+}
+<span class="boring">}</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>mod foo;
+<span class="boring">}</span></code></pre></pre>
+<p>Use spaces around keywords and before the opening brace, no spaces around the
+semi-colon.</p>
+<h3 id="macro_rules"><a class="header" href="#macro_rules">macro_rules!</a></h3>
+<p>Use <code>{}</code> for the full definition of the macro.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! foo {
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="generics"><a class="header" href="#generics">Generics</a></h3>
+<p>Prefer to put a generics clause on one line. Break other parts of an item
+declaration rather than line-breaking a generics clause. If a generics clause is
+large enough to require line-breaking, you should prefer to use a <code>where</code> clause
+instead.</p>
+<p>Do not put spaces before or after <code>&lt;</code> nor before <code>&gt;</code>. Only put a space after <code>&gt;</code>
+if it is followed by a word or opening brace, not an opening parenthesis. There
+should be a space after each comma and no trailing comma.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo&lt;T: Display, U: Debug&gt;(x: Vec&lt;T&gt;, y: Vec&lt;U&gt;) ...
+
+impl&lt;T: Display, U: Debug&gt; SomeType&lt;T, U&gt; { ...
+<span class="boring">}</span></code></pre></pre>
+<p>If the generics clause must be formatted across multiple lines, each parameter
+should have its own block-indented line, there should be newlines after the
+opening bracket and before the closing bracket, and the should be a trailing
+comma.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo&lt;
+    T: Display,
+    U: Debug,
+&gt;(x: Vec&lt;T&gt;, y: Vec&lt;U&gt;) ...
+<span class="boring">}</span></code></pre></pre>
+<p>If an associated type is bound in a generic type, then there should be spaces on
+either side of the <code>=</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>&lt;T: Example&lt;Item = u32&gt;&gt;
+<span class="boring">}</span></code></pre></pre>
+<p>Prefer to use single-letter names for generic parameters.</p>
+<h3 id="where-clauses"><a class="header" href="#where-clauses"><code>where</code> clauses</a></h3>
+<p>These rules apply for <code>where</code> clauses on any item.</p>
+<p>A <code>where</code> clause may immediately follow a closing bracket of any kind.
+Otherwise, it must start a new line, with no indent. Each component of a <code>where</code>
+clause must be on its own line and be block indented. There should be a trailing
+comma, unless the clause is terminated with a semicolon. If the <code>where</code> clause
+is followed by a block (or assignment), the block should be started on a new
+line. Examples:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn function&lt;T, U&gt;(args)
+where
+    T: Bound,
+    U: AnotherBound,
+{
+    body
+}
+
+fn foo&lt;T&gt;(
+    args
+) -&gt; ReturnType
+where
+    T: Bound,
+{
+    body
+}
+
+fn foo&lt;T, U&gt;(
+    args,
+) where
+    T: Bound,
+    U: AnotherBound,
+{
+    body
+}
+
+fn foo&lt;T, U&gt;(
+    args
+) -&gt; ReturnType
+where
+    T: Bound,
+    U: AnotherBound;  // Note, no trailing comma.
+
+// Note that where clauses on `type` aliases are not enforced and should not
+// be used.
+type Foo&lt;T&gt;
+where
+    T: Bound
+= Bar&lt;T&gt;;
+<span class="boring">}</span></code></pre></pre>
+<p>If a <code>where</code> clause is very short, we recommend using an inline bound on the
+type parameter.</p>
+<p>If a component of a <code>where</code> clause is long, it may be broken before <code>+</code> and
+further block indented. Each bound should go on its own line. E.g.,</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;T: ?Sized, Idx&gt; IndexRanges&lt;Idx&gt; for T
+where
+    T: Index&lt;Range&lt;Idx&gt;, Output = Self::Output&gt;
+        + Index&lt;RangeTo&lt;Idx&gt;, Output = Self::Output&gt;
+        + Index&lt;RangeFrom&lt;Idx&gt;, Output = Self::Output&gt;
+        + Index&lt;RangeInclusive&lt;Idx&gt;, Output = Self::Output&gt;
+        + Index&lt;RangeToInclusive&lt;Idx&gt;, Output = Self::Output&gt; + Index&lt;RangeFull&gt;
+<span class="boring">}</span></code></pre></pre>
+<h4 id="option---where_single_line"><a class="header" href="#option---where_single_line">Option - <code>where_single_line</code></a></h4>
+<p><code>where_single_line</code> is <code>false</code> by default. If <code>true</code>, then a where clause with
+exactly one component may be formatted on a single line if the rest of the
+item's signature is also kept on one line. In this case, there is no need for a
+trailing comma and if followed by a block, no need for a newline before the
+block. E.g.,</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// May be single-lined.
+fn foo&lt;T&gt;(args) -&gt; ReturnType
+where T: Bound {
+    body
+}
+
+// Must be multi-lined.
+fn foo&lt;T&gt;(
+    args
+) -&gt; ReturnType
+where
+    T: Bound,
+{
+    body
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="type-aliases"><a class="header" href="#type-aliases">Type aliases</a></h3>
+<p>Type aliases should generally be kept on one line. If necessary to break the
+line, do so after the <code>=</code>; the right-hand-side should be block indented:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub type Foo = Bar&lt;T&gt;;
+
+// If multi-line is required
+type VeryLongType&lt;T, U: SomeBound&gt; =
+    AnEvenLongerType&lt;T, U, Foo&lt;T&gt;&gt;;
+<span class="boring">}</span></code></pre></pre>
+<p>Where possible avoid <code>where</code> clauses and keep type constraints inline. Where
+that is not possible split the line before and after the <code>where</code> clause (and
+split the <code>where</code> clause as normal), e.g.,</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type VeryLongType&lt;T, U&gt;
+where
+    T: U::AnAssociatedType,
+    U: SomeBound,
+= AnEvenLongerType&lt;T, U, Foo&lt;T&gt;&gt;;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="associated-types"><a class="header" href="#associated-types">Associated types</a></h3>
+<p>Associated types should follow the guidelines above for type aliases. Where an
+associated type has a bound, there should be a space after the colon but not
+before:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub type Foo: Bar;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="extern-items"><a class="header" href="#extern-items">extern items</a></h3>
+<p>When writing extern items (such as <code>extern &quot;C&quot; fn</code>), always be explicit about
+the ABI. For example, write <code>extern &quot;C&quot; fn foo ...</code>, not <code>extern fn foo ...</code>, or
+<code>extern &quot;C&quot; { ... }</code>.</p>
+<h3 id="imports-use-statements"><a class="header" href="#imports-use-statements">Imports (<code>use</code> statements)</a></h3>
+<p>If an import can be formatted on one line, do so. There should be no spaces
+around braces.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use a::b::c;
+use a::b::d::*;
+use a::b::{foo, bar, baz};
+<span class="boring">}</span></code></pre></pre>
+<h4 id="large-list-imports"><a class="header" href="#large-list-imports">Large list imports</a></h4>
+<p>Prefer to use multiple imports rather than a multi-line import. However, tools
+should not split imports by default (they may offer this as an option).</p>
+<p>If an import does require multiple lines (either because a list of single names
+does not fit within the max width, or because of the rules for nested imports
+below), then break after the opening brace and before the closing brace, use a
+trailing comma, and block indent the names.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Prefer
+foo::{long, list, of, imports};
+foo::{more, imports};
+
+// If necessary
+foo::{
+    long, list, of, imports, more,
+    imports,  // Note trailing comma
+};
+<span class="boring">}</span></code></pre></pre>
+<h4 id="ordering-of-imports"><a class="header" href="#ordering-of-imports">Ordering of imports</a></h4>
+<p>A <em>group</em> of imports is a set of imports on the same or sequential lines. One or
+more blank lines or other items (e.g., a function) separate groups of imports.</p>
+<p>Within a group of imports, imports must be sorted ascii-betically. Groups of
+imports must not be merged or re-ordered.</p>
+<p>E.g., input:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use d;
+use c;
+
+use b;
+use a;
+<span class="boring">}</span></code></pre></pre>
+<p>output:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use c;
+use d;
+
+use a;
+use b;
+<span class="boring">}</span></code></pre></pre>
+<p>Because of <code>macro_use</code>, attributes must also start a new group and prevent
+re-ordering.</p>
+<p>Note that tools which only have access to syntax (such as Rustfmt) cannot tell
+which imports are from an external crate or the std lib, etc.</p>
+<h4 id="ordering-list-import"><a class="header" href="#ordering-list-import">Ordering list import</a></h4>
+<p>Names in a list import must be sorted ascii-betically, but with <code>self</code> and
+<code>super</code> first, and groups and glob imports last. This applies recursively. For
+example, <code>a::*</code> comes before <code>b::a</code> but <code>a::b</code> comes before <code>a::*</code>. E.g.,
+<code>use foo::bar::{a, b::c, b::d, b::d::{x, y, z}, b::{self, r, s}};</code>.</p>
+<h4 id="normalisation"><a class="header" href="#normalisation">Normalisation</a></h4>
+<p>Tools must make the following normalisations:</p>
+<ul>
+<li><code>use a::self;</code> -&gt; <code>use a;</code></li>
+<li><code>use a::{};</code> -&gt; (nothing)</li>
+<li><code>use a::{b};</code> -&gt; <code>use a::b;</code></li>
+</ul>
+<p>And must apply these recursively.</p>
+<p>Tools must not otherwise merge or un-merge import lists or adjust glob imports
+(without an explicit option).</p>
+<h4 id="nested-imports"><a class="header" href="#nested-imports">Nested imports</a></h4>
+<p>If there are any nested imports in a list import, then use the multi-line form,
+even if the import fits on one line. Each nested import must be on its own line,
+but non-nested imports must be grouped on as few lines as possible.</p>
+<p>For example,</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use a::b::{
+    x, y, z,
+    u::{...},
+    w::{...},
+};
+<span class="boring">}</span></code></pre></pre>
+<h4 id="mergingun-merging-imports"><a class="header" href="#mergingun-merging-imports">Merging/un-merging imports</a></h4>
+<p>An example:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Un-merged
+use a::b;
+use a::c::d;
+
+// Merged
+use a::{b, c::d};
+<span class="boring">}</span></code></pre></pre>
+<p>Tools must not merge or un-merge imports by default. They may offer merging or
+un-merging as an option.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="statements.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="statements.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

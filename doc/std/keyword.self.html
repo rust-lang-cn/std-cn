@@ -1,68 +1,66 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="方法的接收者，或当前模块。"><meta name="keywords" content="rust, rustlang, rust-lang, self"><title>self - Rust</title><link rel="stylesheet" type="text/css" href="../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../storage1.58.0.js"></script><script src="../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow1.58.0.svg");}</style></head><body class="rustdoc keyword"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../std/index.html'><div class='logo-container rust-logo'><img src='../rust-logo1.58.0.png' alt='logo'></div></a><div class="sidebar-elems"><h2 class="location">Other items in<br><a href="index.html">std</a></h2><div id="sidebar-vars" data-name="self" data-ty="keyword" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Keyword <a class="keyword" href="#">self</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard1.58.0.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/std/keyword_docs.rs.html#1308" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>方法的接收者，或当前模块。</p>
-<p><code>self</code> 用于两种情况：引用当前模块和标识方法的接收者。</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="方法的接收者，或当前模块。"><title>self - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../static.files/storage-62ce34ea385b278a.js"></script><script defer src="sidebar-items1.71.0.js"></script><script defer src="../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc keyword"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../std/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../std/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><div class="sidebar-elems"><h2><a href="index.html">In std</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Keyword <a class="keyword" href="#">self</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../src/std/keyword_docs.rs.html#1322">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>方法的接收者，或当前模块。</p>
+<p><code>self</code> 用于两种情况：引用当前模块和标记方法的接收者。</p>
 <p>在路径中，<code>self</code> 可用于在 <a href="keyword.use.html"><code>use</code></a> 语句中或在访问元素的路径中引用当前模块：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>::{<span class="self">self</span>, <span class="ident">Read</span>};</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(unused_imports)%5D%0Afn%20main()%20%7B%0Ause%20std%3A%3Aio%3A%3A%7Bself%2C%20Read%7D%3B%0A%7D&amp;edition=2018">Run</a></div>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io::{<span class="self">self</span>, Read};</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(unused_imports)%5D%0Afn+main()+%7B%0Ause+std::io::%7Bself,+Read%7D;%0A%7D&amp;edition=2021">Run</a></div>
 <p>在功能上与以下内容相同：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>;
-<span class="kw">use</span> <span class="ident">std::io::Read</span>;</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(unused_imports)%5D%0Afn%20main()%20%7B%0Ause%20std%3A%3Aio%3B%0Ause%20std%3A%3Aio%3A%3ARead%3B%0A%7D&amp;edition=2018">Run</a></div>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io;
+<span class="kw">use </span>std::io::Read;</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(unused_imports)%5D%0Afn+main()+%7B%0Ause+std::io;%0Ause+std::io::Read;%0A%7D&amp;edition=2021">Run</a></div>
 <p>使用 <code>self</code> 访问当前模块中的元素：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">fn</span> <span class="ident">foo</span>() {}
-<span class="kw">fn</span> <span class="ident">bar</span>() {
-    <span class="ident"><span class="self">self</span>::foo</span>()
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(dead_code)%5D%0Afn%20main()%20%7B%7D%0Afn%20foo()%20%7B%7D%0Afn%20bar()%20%7B%0A%20%20%20%20self%3A%3Afoo()%0A%7D&amp;edition=2018">Run</a></div>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">fn </span>foo() {}
+<span class="kw">fn </span>bar() {
+    <span class="self">self</span>::foo()
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Ballow(dead_code)%5D%0Afn+main()+%7B%7D%0Afn+foo()+%7B%7D%0Afn+bar()+%7B%0A++++self::foo()%0A%7D&amp;edition=2021">Run</a></div>
 <p><code>self</code> 作为方法的当前接收者，允许在大多数情况下省略参数类型。
 除了这种特殊性，<code>self</code> 的用法与任何其他参数非常相似：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">struct</span> <span class="ident">Foo</span>(<span class="ident">i32</span>);
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">struct </span>Foo(i32);
 
-<span class="kw">impl</span> <span class="ident">Foo</span> {
-    <span class="comment">// 没有 `self`。</span>
-    <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="self">Self</span> {
+<span class="kw">impl </span>Foo {
+    <span class="comment">// 没有 `self`。
+    </span><span class="kw">fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>(<span class="number">0</span>)
     }
 
-    <span class="comment">// 消耗 `self`。</span>
-    <span class="kw">fn</span> <span class="ident">consume</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span>(<span class="self">self</span>.<span class="number">0</span> <span class="op">+</span> <span class="number">1</span>)
+    <span class="comment">// 消耗 `self`。
+    </span><span class="kw">fn </span>consume(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(<span class="self">self</span>.<span class="number">0 </span>+ <span class="number">1</span>)
     }
 
-    <span class="comment">// 借用 `self`。</span>
-    <span class="kw">fn</span> <span class="ident">borrow</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">i32</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
-    }
+    <span class="comment">// 借用 `self`。
+    </span><span class="kw">fn </span>borrow(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>i32 {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0
+    </span>}
 
-    <span class="comment">// 借用 `self` 可变。</span>
-    <span class="kw">fn</span> <span class="ident">borrow_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">i32</span> {
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="number">0</span>
-    }
+    <span class="comment">// 借用 `self` 可变。
+    </span><span class="kw">fn </span>borrow_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>i32 {
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>.<span class="number">0
+    </span>}
 }
 
-<span class="comment">// 必须使用 `Type::` 前缀调用此方法。</span>
-<span class="kw">let</span> <span class="ident">foo</span> <span class="op">=</span> <span class="ident">Foo::new</span>();
-<span class="macro">assert_eq!</span>(<span class="ident">foo</span>.<span class="number">0</span>, <span class="number">0</span>);
+<span class="comment">// 必须使用 `Type::` 前缀调用此方法。
+</span><span class="kw">let </span>foo = Foo::new();
+<span class="macro">assert_eq!</span>(foo.<span class="number">0</span>, <span class="number">0</span>);
 
-<span class="comment">// 这两个调用产生相同的结果。</span>
-<span class="kw">let</span> <span class="ident">foo</span> <span class="op">=</span> <span class="ident">Foo::consume</span>(<span class="ident">foo</span>);
-<span class="macro">assert_eq!</span>(<span class="ident">foo</span>.<span class="number">0</span>, <span class="number">1</span>);
-<span class="kw">let</span> <span class="ident">foo</span> <span class="op">=</span> <span class="ident">foo</span>.<span class="ident">consume</span>();
-<span class="macro">assert_eq!</span>(<span class="ident">foo</span>.<span class="number">0</span>, <span class="number">2</span>);
+<span class="comment">// 这两个调用产生相同的结果。
+</span><span class="kw">let </span>foo = Foo::consume(foo);
+<span class="macro">assert_eq!</span>(foo.<span class="number">0</span>, <span class="number">1</span>);
+<span class="kw">let </span>foo = foo.consume();
+<span class="macro">assert_eq!</span>(foo.<span class="number">0</span>, <span class="number">2</span>);
 
-<span class="comment">// 使用第二种语法会自动处理借用。</span>
-<span class="kw">let</span> <span class="ident">borrow_1</span> <span class="op">=</span> <span class="ident">Foo::borrow</span>(<span class="kw-2">&amp;</span><span class="ident">foo</span>);
-<span class="kw">let</span> <span class="ident">borrow_2</span> <span class="op">=</span> <span class="ident">foo</span>.<span class="ident">borrow</span>();
-<span class="macro">assert_eq!</span>(<span class="ident">borrow_1</span>, <span class="ident">borrow_2</span>);
+<span class="comment">// 使用第二种语法会自动处理借用。
+</span><span class="kw">let </span>borrow_1 = Foo::borrow(<span class="kw-2">&amp;</span>foo);
+<span class="kw">let </span>borrow_2 = foo.borrow();
+<span class="macro">assert_eq!</span>(borrow_1, borrow_2);
 
-<span class="comment">// 第二种语法也会自动处理可变借用。</span>
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">foo</span> <span class="op">=</span> <span class="ident">Foo::new</span>();
-<span class="kw-2">*</span><span class="ident">Foo::borrow_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">foo</span>) <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-<span class="macro">assert_eq!</span>(<span class="ident">foo</span>.<span class="number">0</span>, <span class="number">1</span>);
-<span class="kw-2">*</span><span class="ident">foo</span>.<span class="ident">borrow_mut</span>() <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-<span class="macro">assert_eq!</span>(<span class="ident">foo</span>.<span class="number">0</span>, <span class="number">2</span>);</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn%20main()%20%7B%0Astruct%20Foo(i32)%3B%0A%0Aimpl%20Foo%20%7B%0A%20%20%20%20%2F%2F%20%E6%B2%A1%E6%9C%89%20%60self%60%E3%80%82%0A%20%20%20%20fn%20new()%20-%3E%20Self%20%7B%0A%20%20%20%20%20%20%20%20Self(0)%0A%20%20%20%20%7D%0A%0A%20%20%20%20%2F%2F%20%E6%B6%88%E8%80%97%20%60self%60%E3%80%82%0A%20%20%20%20fn%20consume(self)%20-%3E%20Self%20%7B%0A%20%20%20%20%20%20%20%20Self(self.0%20%2B%201)%0A%20%20%20%20%7D%0A%0A%20%20%20%20%2F%2F%20%E5%80%9F%E7%94%A8%20%60self%60%E3%80%82%0A%20%20%20%20fn%20borrow(%26self)%20-%3E%20%26i32%20%7B%0A%20%20%20%20%20%20%20%20%26self.0%0A%20%20%20%20%7D%0A%0A%20%20%20%20%2F%2F%20%E5%80%9F%E7%94%A8%20%60self%60%20%E5%8F%AF%E5%8F%98%E3%80%82%0A%20%20%20%20fn%20borrow_mut(%26mut%20self)%20-%3E%20%26mut%20i32%20%7B%0A%20%20%20%20%20%20%20%20%26mut%20self.0%0A%20%20%20%20%7D%0A%7D%0A%0A%2F%2F%20%E5%BF%85%E9%A1%BB%E4%BD%BF%E7%94%A8%20%60Type%3A%3A%60%20%E5%89%8D%E7%BC%80%E8%B0%83%E7%94%A8%E6%AD%A4%E6%96%B9%E6%B3%95%E3%80%82%0Alet%20foo%20%3D%20Foo%3A%3Anew()%3B%0Aassert_eq!(foo.0%2C%200)%3B%0A%0A%2F%2F%20%E8%BF%99%E4%B8%A4%E4%B8%AA%E8%B0%83%E7%94%A8%E4%BA%A7%E7%94%9F%E7%9B%B8%E5%90%8C%E7%9A%84%E7%BB%93%E6%9E%9C%E3%80%82%0Alet%20foo%20%3D%20Foo%3A%3Aconsume(foo)%3B%0Aassert_eq!(foo.0%2C%201)%3B%0Alet%20foo%20%3D%20foo.consume()%3B%0Aassert_eq!(foo.0%2C%202)%3B%0A%0A%2F%2F%20%E4%BD%BF%E7%94%A8%E7%AC%AC%E4%BA%8C%E7%A7%8D%E8%AF%AD%E6%B3%95%E4%BC%9A%E8%87%AA%E5%8A%A8%E5%A4%84%E7%90%86%E5%80%9F%E7%94%A8%E3%80%82%0Alet%20borrow_1%20%3D%20Foo%3A%3Aborrow(%26foo)%3B%0Alet%20borrow_2%20%3D%20foo.borrow()%3B%0Aassert_eq!(borrow_1%2C%20borrow_2)%3B%0A%0A%2F%2F%20%E7%AC%AC%E4%BA%8C%E7%A7%8D%E8%AF%AD%E6%B3%95%E4%B9%9F%E4%BC%9A%E8%87%AA%E5%8A%A8%E5%A4%84%E7%90%86%E5%8F%AF%E5%8F%98%E5%80%9F%E7%94%A8%E3%80%82%0Alet%20mut%20foo%20%3D%20Foo%3A%3Anew()%3B%0A*Foo%3A%3Aborrow_mut(%26mut%20foo)%20%2B%3D%201%3B%0Aassert_eq!(foo.0%2C%201)%3B%0A*foo.borrow_mut()%20%2B%3D%201%3B%0Aassert_eq!(foo.0%2C%202)%3B%0A%7D&amp;edition=2018">Run</a></div>
+<span class="comment">// 第二种语法也会自动处理可变借用。
+</span><span class="kw">let </span><span class="kw-2">mut </span>foo = Foo::new();
+<span class="kw-2">*</span>Foo::borrow_mut(<span class="kw-2">&amp;mut </span>foo) += <span class="number">1</span>;
+<span class="macro">assert_eq!</span>(foo.<span class="number">0</span>, <span class="number">1</span>);
+<span class="kw-2">*</span>foo.borrow_mut() += <span class="number">1</span>;
+<span class="macro">assert_eq!</span>(foo.<span class="number">0</span>, <span class="number">2</span>);</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Astruct+Foo(i32);%0A%0Aimpl+Foo+%7B%0A++++//+%E6%B2%A1%E6%9C%89+%60self%60%E3%80%82%0A++++fn+new()+-%3E+Self+%7B%0A++++++++Self(0)%0A++++%7D%0A%0A++++//+%E6%B6%88%E8%80%97+%60self%60%E3%80%82%0A++++fn+consume(self)+-%3E+Self+%7B%0A++++++++Self(self.0+%2B+1)%0A++++%7D%0A%0A++++//+%E5%80%9F%E7%94%A8+%60self%60%E3%80%82%0A++++fn+borrow(%26self)+-%3E+%26i32+%7B%0A++++++++%26self.0%0A++++%7D%0A%0A++++//+%E5%80%9F%E7%94%A8+%60self%60+%E5%8F%AF%E5%8F%98%E3%80%82%0A++++fn+borrow_mut(%26mut+self)+-%3E+%26mut+i32+%7B%0A++++++++%26mut+self.0%0A++++%7D%0A%7D%0A%0A//+%E5%BF%85%E9%A1%BB%E4%BD%BF%E7%94%A8+%60Type::%60+%E5%89%8D%E7%BC%80%E8%B0%83%E7%94%A8%E6%AD%A4%E6%96%B9%E6%B3%95%E3%80%82%0Alet+foo+=+Foo::new();%0Aassert_eq!(foo.0,+0);%0A%0A//+%E8%BF%99%E4%B8%A4%E4%B8%AA%E8%B0%83%E7%94%A8%E4%BA%A7%E7%94%9F%E7%9B%B8%E5%90%8C%E7%9A%84%E7%BB%93%E6%9E%9C%E3%80%82%0Alet+foo+=+Foo::consume(foo);%0Aassert_eq!(foo.0,+1);%0Alet+foo+=+foo.consume();%0Aassert_eq!(foo.0,+2);%0A%0A//+%E4%BD%BF%E7%94%A8%E7%AC%AC%E4%BA%8C%E7%A7%8D%E8%AF%AD%E6%B3%95%E4%BC%9A%E8%87%AA%E5%8A%A8%E5%A4%84%E7%90%86%E5%80%9F%E7%94%A8%E3%80%82%0Alet+borrow_1+=+Foo::borrow(%26foo);%0Alet+borrow_2+=+foo.borrow();%0Aassert_eq!(borrow_1,+borrow_2);%0A%0A//+%E7%AC%AC%E4%BA%8C%E7%A7%8D%E8%AF%AD%E6%B3%95%E4%B9%9F%E4%BC%9A%E8%87%AA%E5%8A%A8%E5%A4%84%E7%90%86%E5%8F%AF%E5%8F%98%E5%80%9F%E7%94%A8%E3%80%82%0Alet+mut+foo+=+Foo::new();%0A*Foo::borrow_mut(%26mut+foo)+%2B=+1;%0Aassert_eq!(foo.0,+1);%0A*foo.borrow_mut()+%2B=+1;%0Aassert_eq!(foo.0,+2);%0A%7D&amp;edition=2021">Run</a></div>
 <p>请注意，调用 <code>foo.method()</code> 时的这种自动转换不限于以上示例。
 有关更多信息，请参见 <a href="../reference/items/associated-items.html#methods">Reference</a>。</p>
-</div></details></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="std" data-search-index-js="../search-index1.58.0.js" data-search-js="../search1.58.0.js"></div>
-    <script src="../main1.58.0.js"></script>
-</body></html>
+</div></details></section></div></main></body></html>

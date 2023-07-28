@@ -1,0 +1,327 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Default Cargo feature resolver - The Rust Edition Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../editions/index.html"><strong aria-hidden="true">1.</strong> What are editions?</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editions/creating-a-new-project.html"><strong aria-hidden="true">1.1.</strong> Creating a new project</a></li><li class="chapter-item expanded "><a href="../editions/transitioning-an-existing-project-to-a-new-edition.html"><strong aria-hidden="true">1.2.</strong> Transitioning an existing project to a new edition</a></li><li class="chapter-item expanded "><a href="../editions/advanced-migrations.html"><strong aria-hidden="true">1.3.</strong> Advanced migrations</a></li></ol></li><li class="chapter-item expanded "><a href="../rust-2015/index.html"><strong aria-hidden="true">2.</strong> Rust 2015</a></li><li class="chapter-item expanded "><a href="../rust-2018/index.html"><strong aria-hidden="true">3.</strong> Rust 2018</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rust-2018/path-changes.html"><strong aria-hidden="true">3.1.</strong> Path and module system changes</a></li><li class="chapter-item expanded "><a href="../rust-2018/trait-fn-parameters.html"><strong aria-hidden="true">3.2.</strong> Anonymous trait function parameters deprecated</a></li><li class="chapter-item expanded "><a href="../rust-2018/new-keywords.html"><strong aria-hidden="true">3.3.</strong> New keywords</a></li><li class="chapter-item expanded "><a href="../rust-2018/tyvar-behind-raw-pointer.html"><strong aria-hidden="true">3.4.</strong> Method dispatch for raw pointers to inference variables</a></li><li class="chapter-item expanded "><a href="../rust-2018/cargo.html"><strong aria-hidden="true">3.5.</strong> Cargo changes</a></li></ol></li><li class="chapter-item expanded "><a href="../rust-2021/index.html"><strong aria-hidden="true">4.</strong> Rust 2021</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rust-2021/prelude.html"><strong aria-hidden="true">4.1.</strong> Additions to the prelude</a></li><li class="chapter-item expanded "><a href="../rust-2021/default-cargo-resolver.html" class="active"><strong aria-hidden="true">4.2.</strong> Default Cargo feature resolver</a></li><li class="chapter-item expanded "><a href="../rust-2021/IntoIterator-for-arrays.html"><strong aria-hidden="true">4.3.</strong> IntoIterator for arrays</a></li><li class="chapter-item expanded "><a href="../rust-2021/disjoint-capture-in-closures.html"><strong aria-hidden="true">4.4.</strong> Disjoint capture in closures</a></li><li class="chapter-item expanded "><a href="../rust-2021/panic-macro-consistency.html"><strong aria-hidden="true">4.5.</strong> Panic macro consistency</a></li><li class="chapter-item expanded "><a href="../rust-2021/reserving-syntax.html"><strong aria-hidden="true">4.6.</strong> Reserving syntax</a></li><li class="chapter-item expanded "><a href="../rust-2021/warnings-promoted-to-error.html"><strong aria-hidden="true">4.7.</strong> Warnings promoted to errors</a></li><li class="chapter-item expanded "><a href="../rust-2021/or-patterns-macro-rules.html"><strong aria-hidden="true">4.8.</strong> Or patterns in macro-rules</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Edition Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/edition-guide" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="default-cargo-feature-resolver"><a class="header" href="#default-cargo-feature-resolver">Default Cargo feature resolver</a></h1>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<ul>
+<li><code>edition = &quot;2021&quot;</code> implies <code>resolver = &quot;2&quot;</code> in <code>Cargo.toml</code>.</li>
+</ul>
+<h2 id="details"><a class="header" href="#details">Details</a></h2>
+<p>Since Rust 1.51.0, Cargo has opt-in support for a <a href="../../cargo/reference/resolver.html#feature-resolver-version-2">new feature resolver</a>
+which can be activated with <code>resolver = &quot;2&quot;</code> in <code>Cargo.toml</code>.</p>
+<p>Starting in Rust 2021, this will be the default.
+That is, writing <code>edition = &quot;2021&quot;</code> in <code>Cargo.toml</code> will imply <code>resolver = &quot;2&quot;</code>.</p>
+<p>The resolver is a global setting for a <a href="../../cargo/reference/workspaces.html">workspace</a>, and the setting is ignored in dependencies.
+The setting is only honored for the top-level package of the workspace.
+If you are using a <a href="../../cargo/reference/workspaces.html#virtual-manifest">virtual workspace</a>, you will still need to explicitly set the <a href="../../cargo/reference/resolver.html#resolver-versions"><code>resolver</code> field</a>
+in the <code>[workspace]</code> definition if you want to opt-in to the new resolver.</p>
+<p>The new feature resolver no longer merges all requested features for
+crates that are depended on in multiple ways.
+See <a href="https://blog.rust-lang.org/2021/03/25/Rust-1.51.0.html#cargos-new-feature-resolver">the announcement of Rust 1.51</a> for details.</p>
+<h2 id="migration"><a class="header" href="#migration">Migration</a></h2>
+<p>There are no automated migration tools for updating for the new resolver.
+For most projects, there are usually few or no changes as a result of updating.</p>
+<p>When updating with <code>cargo fix --edition</code>, Cargo will display a report if the new resolver will build dependencies with different features.
+It may look something like this:</p>
+<blockquote>
+<p>note: Switching to Edition 2021 will enable the use of the version 2 feature resolver in Cargo.
+This may cause some dependencies to be built with fewer features enabled than previously.
+More information about the resolver changes may be found at <a href="https://doc.rust-lang.org/nightly/edition-guide/rust-2021/default-cargo-resolver.html">https://doc.rust-lang.org/nightly/edition-guide/rust-2021/default-cargo-resolver.html</a><br>
+When building the following dependencies, the given features will no longer be used:</p>
+<pre><code class="language-text">  bstr v0.2.16: default, lazy_static, regex-automata, unicode
+  libz-sys v1.1.3 (as host dependency): libc
+</code></pre>
+</blockquote>
+<p>This lets you know that certain dependencies will no longer be built with the given features.</p>
+<h3 id="build-failures"><a class="header" href="#build-failures">Build failures</a></h3>
+<p>There may be some circumstances where your project may not build correctly after the change.
+If a dependency declaration in one package assumes that certain features are enabled in another, and those features are now disabled, it may fail to compile.</p>
+<p>For example, let's say we have a dependency like this:</p>
+<pre><code class="language-toml"># Cargo.toml
+
+[dependencies]
+bstr = { version = &quot;0.2.16&quot;, default-features = false }
+# ...
+</code></pre>
+<p>And somewhere in our dependency tree, another package has this:</p>
+<pre><code class="language-toml"># Another package's Cargo.toml
+
+[build-dependencies]
+bstr = &quot;0.2.16&quot;
+</code></pre>
+<p>In our package, we've been using the <a href="https://docs.rs/bstr/0.2.16/bstr/trait.ByteSlice.html#method.words_with_breaks"><code>words_with_breaks</code></a> method from <code>bstr</code>, which requires <code>bstr</code>'s  &quot;unicode&quot; feature to be enabled.
+This has historically worked because Cargo unified the features of <code>bstr</code> between the two packages.
+However, after updating to Rust 2021, the new resolver will build <code>bstr</code> twice, once with the default features (as a build dependency), and once with no features (as our normal dependency).
+Since <code>bstr</code> is now being built without the &quot;unicode&quot; feature, the <code>words_with_breaks</code> method doesn't exist, and the build will fail with an error that the method is missing.</p>
+<p>The solution here is to ensure that the dependency is declared with the features you are actually using.
+For example:</p>
+<pre><code class="language-toml">[dependencies]
+bstr = { version = &quot;0.2.16&quot;, default-features = false, features = [&quot;unicode&quot;] }
+</code></pre>
+<p>In some cases, this may be a problem with a third-party dependency that you don't have direct control over.
+You can consider submitting a patch to that project to try to declare the correct set of features for the problematic dependency.
+Alternatively, you can add features to any dependency from within your own <code>Cargo.toml</code> file.
+For example, if the <code>bstr</code> example given above was declared in some third-party dependency, you can just copy the correct dependency declaration into your own project.
+The features will be unified, as long as they match the unification rules of the new resolver. Those are:</p>
+<ul>
+<li>Features enabled on platform-specific dependencies for targets not currently being built are ignored.</li>
+<li>Build-dependencies and proc-macros do not share features with normal dependencies.</li>
+<li>Dev-dependencies do not activate features unless building a target that needs them (like tests or examples).</li>
+</ul>
+<p>A real-world example is using <a href="https://crates.io/crates/diesel"><code>diesel</code></a> and <a href="https://crates.io/crates/diesel_migrations"><code>diesel_migrations</code></a>.
+These packages provide database support, and the database is selected using a feature, like this:</p>
+<pre><code class="language-toml">[dependencies]
+diesel = { version = &quot;1.4.7&quot;, features = [&quot;postgres&quot;] }
+diesel_migrations = &quot;1.4.0&quot;
+</code></pre>
+<p>The problem is that <code>diesel_migrations</code> has an internal proc-macro which itself depends on <code>diesel</code>, and the proc-macro assumes its own copy of <code>diesel</code> has the same features enabled as the rest of the dependency graph.
+After updating to the new resolver, it fails to build because now there are two copies of <code>diesel</code>, and the one built for the proc-macro is missing the &quot;postgres&quot; feature.</p>
+<p>A solution here is to add <code>diesel</code> as a build-dependency with the required features, for example:</p>
+<pre><code class="language-toml">[build-dependencies]
+diesel = { version = &quot;1.4.7&quot;, features = [&quot;postgres&quot;] }
+</code></pre>
+<p>This causes Cargo to add &quot;postgres&quot; as a feature for host dependencies (proc-macros and build-dependencies).
+Now, the <code>diesel_migrations</code> proc-macro will get the &quot;postgres&quot; feature enabled, and it will build correctly.</p>
+<p>The 2.0 release of <code>diesel</code> (currently in development) does not have this problem as it has been restructured to not have this dependency requirement.</p>
+<h3 id="exploring-features"><a class="header" href="#exploring-features">Exploring features</a></h3>
+<p>The <a href="../../cargo/commands/cargo-tree.html"><code>cargo tree</code></a> command has had substantial improvements to help with the migration to the new resolver.
+<code>cargo tree</code> can be used to explore the dependency graph, and to see which features are being enabled, and importantly <em>why</em> they are being enabled.</p>
+<p>One option is to use the <code>--duplicates</code> flag (<code>-d</code> for short), which will tell you when a package is being built multiple times.
+Taking the <code>bstr</code> example from earlier, we might see:</p>
+<pre><code class="language-console">&gt; cargo tree -d
+bstr v0.2.16
+└── foo v0.1.0 (/MyProjects/foo)
+
+bstr v0.2.16
+[build-dependencies]
+└── bar v0.1.0
+    └── foo v0.1.0 (/MyProjects/foo)
+
+</code></pre>
+<p>This output tells us that <code>bstr</code> is built twice, and shows the chain of dependencies that led to its inclusion in both cases.</p>
+<p>You can print which features each package is using with the <code>-f</code> flag, like this:</p>
+<pre><code class="language-console">cargo tree -f '{p} {f}'
+</code></pre>
+<p>This tells Cargo to change the &quot;format&quot; of the output, where it will print both the package and the enabled features.</p>
+<p>You can also use the <code>-e</code> flag to tell it which &quot;edges&quot; to display.
+For example, <code>cargo tree -e features</code> will show in-between each dependency which features are being added by each dependency.
+This option becomes more useful with the <code>-i</code> flag which can be used to &quot;invert&quot; the tree.
+This allows you to see how features <em>flow</em> into a given dependency.
+For example, let's say the dependency graph is large, and we're not quite sure who is depending on <code>bstr</code>, the following command will show that:</p>
+<pre><code class="language-console">&gt; cargo tree -e features -i bstr
+bstr v0.2.16
+├── bstr feature &quot;default&quot;
+│   [build-dependencies]
+│   └── bar v0.1.0
+│       └── bar feature &quot;default&quot;
+│           └── foo v0.1.0 (/MyProjects/foo)
+├── bstr feature &quot;lazy_static&quot;
+│   └── bstr feature &quot;unicode&quot;
+│       └── bstr feature &quot;default&quot; (*)
+├── bstr feature &quot;regex-automata&quot;
+│   └── bstr feature &quot;unicode&quot; (*)
+├── bstr feature &quot;std&quot;
+│   └── bstr feature &quot;default&quot; (*)
+└── bstr feature &quot;unicode&quot; (*)
+</code></pre>
+<p>This snippet of output shows that the project <code>foo</code> depends on <code>bar</code> with the &quot;default&quot; feature.
+Then, <code>bar</code> depends on <code>bstr</code> as a build-dependency with the &quot;default&quot; feature.
+We can further see that <code>bstr</code>'s  &quot;default&quot; feature enables &quot;unicode&quot; (among other features).</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../rust-2021/prelude.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../rust-2021/IntoIterator-for-arrays.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../rust-2021/prelude.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../rust-2021/IntoIterator-for-arrays.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

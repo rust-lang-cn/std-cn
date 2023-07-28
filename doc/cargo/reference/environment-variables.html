@@ -1,0 +1,519 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Environment Variables - The Cargo Book</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+            dd {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/first-steps.html"><strong aria-hidden="true">1.2.</strong> First Steps with Cargo</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Cargo Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-cargo-exists.html"><strong aria-hidden="true">2.1.</strong> Why Cargo Exists</a></li><li class="chapter-item expanded "><a href="../guide/creating-a-new-project.html"><strong aria-hidden="true">2.2.</strong> Creating a New Package</a></li><li class="chapter-item expanded "><a href="../guide/working-on-an-existing-project.html"><strong aria-hidden="true">2.3.</strong> Working on an Existing Package</a></li><li class="chapter-item expanded "><a href="../guide/dependencies.html"><strong aria-hidden="true">2.4.</strong> Dependencies</a></li><li class="chapter-item expanded "><a href="../guide/project-layout.html"><strong aria-hidden="true">2.5.</strong> Package Layout</a></li><li class="chapter-item expanded "><a href="../guide/cargo-toml-vs-cargo-lock.html"><strong aria-hidden="true">2.6.</strong> Cargo.toml vs Cargo.lock</a></li><li class="chapter-item expanded "><a href="../guide/tests.html"><strong aria-hidden="true">2.7.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../guide/continuous-integration.html"><strong aria-hidden="true">2.8.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../guide/cargo-home.html"><strong aria-hidden="true">2.9.</strong> Cargo Home</a></li><li class="chapter-item expanded "><a href="../guide/build-cache.html"><strong aria-hidden="true">2.10.</strong> Build Cache</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">3.</strong> Cargo Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/specifying-dependencies.html"><strong aria-hidden="true">3.1.</strong> Specifying Dependencies</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/overriding-dependencies.html"><strong aria-hidden="true">3.1.1.</strong> Overriding Dependencies</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/manifest.html"><strong aria-hidden="true">3.2.</strong> The Manifest Format</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/cargo-targets.html"><strong aria-hidden="true">3.2.1.</strong> Cargo Targets</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/workspaces.html"><strong aria-hidden="true">3.3.</strong> Workspaces</a></li><li class="chapter-item expanded "><a href="../reference/features.html"><strong aria-hidden="true">3.4.</strong> Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/features-examples.html"><strong aria-hidden="true">3.4.1.</strong> Features Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/profiles.html"><strong aria-hidden="true">3.5.</strong> Profiles</a></li><li class="chapter-item expanded "><a href="../reference/config.html"><strong aria-hidden="true">3.6.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../reference/environment-variables.html" class="active"><strong aria-hidden="true">3.7.</strong> Environment Variables</a></li><li class="chapter-item expanded "><a href="../reference/build-scripts.html"><strong aria-hidden="true">3.8.</strong> Build Scripts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/build-script-examples.html"><strong aria-hidden="true">3.8.1.</strong> Build Script Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/publishing.html"><strong aria-hidden="true">3.9.</strong> Publishing on crates.io</a></li><li class="chapter-item expanded "><a href="../reference/pkgid-spec.html"><strong aria-hidden="true">3.10.</strong> Package ID Specifications</a></li><li class="chapter-item expanded "><a href="../reference/source-replacement.html"><strong aria-hidden="true">3.11.</strong> Source Replacement</a></li><li class="chapter-item expanded "><a href="../reference/external-tools.html"><strong aria-hidden="true">3.12.</strong> External Tools</a></li><li class="chapter-item expanded "><a href="../reference/registries.html"><strong aria-hidden="true">3.13.</strong> Registries</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/running-a-registry.html"><strong aria-hidden="true">3.13.1.</strong> Running a Registry</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/registry-index.html"><strong aria-hidden="true">3.13.1.1.</strong> Registry Index</a></li><li class="chapter-item expanded "><a href="../reference/registry-web-api.html"><strong aria-hidden="true">3.13.1.2.</strong> Registry Web API</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../reference/resolver.html"><strong aria-hidden="true">3.14.</strong> Dependency Resolution</a></li><li class="chapter-item expanded "><a href="../reference/semver.html"><strong aria-hidden="true">3.15.</strong> SemVer Compatibility</a></li><li class="chapter-item expanded "><a href="../reference/future-incompat-report.html"><strong aria-hidden="true">3.16.</strong> Future incompat report</a></li><li class="chapter-item expanded "><a href="../reference/timings.html"><strong aria-hidden="true">3.17.</strong> Reporting build timings</a></li><li class="chapter-item expanded "><a href="../reference/unstable.html"><strong aria-hidden="true">3.18.</strong> Unstable Features</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/index.html"><strong aria-hidden="true">4.</strong> Cargo Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/general-commands.html"><strong aria-hidden="true">4.1.</strong> General Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo.html"><strong aria-hidden="true">4.1.1.</strong> cargo</a></li><li class="chapter-item expanded "><a href="../commands/cargo-help.html"><strong aria-hidden="true">4.1.2.</strong> cargo help</a></li><li class="chapter-item expanded "><a href="../commands/cargo-version.html"><strong aria-hidden="true">4.1.3.</strong> cargo version</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/build-commands.html"><strong aria-hidden="true">4.2.</strong> Build Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-bench.html"><strong aria-hidden="true">4.2.1.</strong> cargo bench</a></li><li class="chapter-item expanded "><a href="../commands/cargo-build.html"><strong aria-hidden="true">4.2.2.</strong> cargo build</a></li><li class="chapter-item expanded "><a href="../commands/cargo-check.html"><strong aria-hidden="true">4.2.3.</strong> cargo check</a></li><li class="chapter-item expanded "><a href="../commands/cargo-clean.html"><strong aria-hidden="true">4.2.4.</strong> cargo clean</a></li><li class="chapter-item expanded "><a href="../commands/cargo-doc.html"><strong aria-hidden="true">4.2.5.</strong> cargo doc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fetch.html"><strong aria-hidden="true">4.2.6.</strong> cargo fetch</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fix.html"><strong aria-hidden="true">4.2.7.</strong> cargo fix</a></li><li class="chapter-item expanded "><a href="../commands/cargo-run.html"><strong aria-hidden="true">4.2.8.</strong> cargo run</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustc.html"><strong aria-hidden="true">4.2.9.</strong> cargo rustc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustdoc.html"><strong aria-hidden="true">4.2.10.</strong> cargo rustdoc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-test.html"><strong aria-hidden="true">4.2.11.</strong> cargo test</a></li><li class="chapter-item expanded "><a href="../commands/cargo-report.html"><strong aria-hidden="true">4.2.12.</strong> cargo report</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/manifest-commands.html"><strong aria-hidden="true">4.3.</strong> Manifest Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-add.html"><strong aria-hidden="true">4.3.1.</strong> cargo add</a></li><li class="chapter-item expanded "><a href="../commands/cargo-generate-lockfile.html"><strong aria-hidden="true">4.3.2.</strong> cargo generate-lockfile</a></li><li class="chapter-item expanded "><a href="../commands/cargo-locate-project.html"><strong aria-hidden="true">4.3.3.</strong> cargo locate-project</a></li><li class="chapter-item expanded "><a href="../commands/cargo-metadata.html"><strong aria-hidden="true">4.3.4.</strong> cargo metadata</a></li><li class="chapter-item expanded "><a href="../commands/cargo-pkgid.html"><strong aria-hidden="true">4.3.5.</strong> cargo pkgid</a></li><li class="chapter-item expanded "><a href="../commands/cargo-remove.html"><strong aria-hidden="true">4.3.6.</strong> cargo remove</a></li><li class="chapter-item expanded "><a href="../commands/cargo-tree.html"><strong aria-hidden="true">4.3.7.</strong> cargo tree</a></li><li class="chapter-item expanded "><a href="../commands/cargo-update.html"><strong aria-hidden="true">4.3.8.</strong> cargo update</a></li><li class="chapter-item expanded "><a href="../commands/cargo-vendor.html"><strong aria-hidden="true">4.3.9.</strong> cargo vendor</a></li><li class="chapter-item expanded "><a href="../commands/cargo-verify-project.html"><strong aria-hidden="true">4.3.10.</strong> cargo verify-project</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/package-commands.html"><strong aria-hidden="true">4.4.</strong> Package Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-init.html"><strong aria-hidden="true">4.4.1.</strong> cargo init</a></li><li class="chapter-item expanded "><a href="../commands/cargo-install.html"><strong aria-hidden="true">4.4.2.</strong> cargo install</a></li><li class="chapter-item expanded "><a href="../commands/cargo-new.html"><strong aria-hidden="true">4.4.3.</strong> cargo new</a></li><li class="chapter-item expanded "><a href="../commands/cargo-search.html"><strong aria-hidden="true">4.4.4.</strong> cargo search</a></li><li class="chapter-item expanded "><a href="../commands/cargo-uninstall.html"><strong aria-hidden="true">4.4.5.</strong> cargo uninstall</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/publishing-commands.html"><strong aria-hidden="true">4.5.</strong> Publishing Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-login.html"><strong aria-hidden="true">4.5.1.</strong> cargo login</a></li><li class="chapter-item expanded "><a href="../commands/cargo-logout.html"><strong aria-hidden="true">4.5.2.</strong> cargo logout</a></li><li class="chapter-item expanded "><a href="../commands/cargo-owner.html"><strong aria-hidden="true">4.5.3.</strong> cargo owner</a></li><li class="chapter-item expanded "><a href="../commands/cargo-package.html"><strong aria-hidden="true">4.5.4.</strong> cargo package</a></li><li class="chapter-item expanded "><a href="../commands/cargo-publish.html"><strong aria-hidden="true">4.5.5.</strong> cargo publish</a></li><li class="chapter-item expanded "><a href="../commands/cargo-yank.html"><strong aria-hidden="true">4.5.6.</strong> cargo yank</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">5.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">6.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/git-authentication.html"><strong aria-hidden="true">7.</strong> Appendix: Git Authentication</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Cargo Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/tree/master/src/doc/src" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/edit/master/src/doc/src/reference/environment-variables.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="environment-variables"><a class="header" href="#environment-variables">Environment Variables</a></h2>
+<p>Cargo sets and reads a number of environment variables which your code can detect
+or override. Here is a list of the variables Cargo sets, organized by when it interacts
+with them:</p>
+<h3 id="environment-variables-cargo-reads"><a class="header" href="#environment-variables-cargo-reads">Environment variables Cargo reads</a></h3>
+<p>You can override these environment variables to change Cargo’s behavior on your
+system:</p>
+<ul>
+<li><code>CARGO_LOG</code> — Cargo uses the <a href="https://docs.rs/env_logger"><code>env_logger</code></a> crate to display debug log messages.
+The <code>CARGO_LOG</code> environment variable can be set to enable debug logging,
+with a value such as <code>trace</code>, <code>debug</code>, or <code>warn</code>.
+Usually it is only used during debugging. For more details refer to the
+<a href="https://doc.crates.io/contrib/architecture/console.html#debug-logging">Debug logging</a>.</li>
+<li><code>CARGO_HOME</code> — Cargo maintains a local cache of the registry index and of
+git checkouts of crates. By default these are stored under <code>$HOME/.cargo</code>
+(<code>%USERPROFILE%\.cargo</code> on Windows), but this variable overrides the
+location of this directory. Once a crate is cached it is not removed by the
+clean command.
+For more details refer to the <a href="../guide/cargo-home.html">guide</a>.</li>
+<li><code>CARGO_TARGET_DIR</code> — Location of where to place all generated artifacts,
+relative to the current working directory. See <a href="config.html#buildtarget-dir"><code>build.target-dir</code></a> to set
+via config.</li>
+<li><code>CARGO</code> — If set, Cargo will forward this value instead of setting it
+to its own auto-detected path when it builds crates and when it
+executes build scripts and external subcommands. This value is not
+directly executed by Cargo, and should always point at a command that
+behaves exactly like <code>cargo</code>, as that’s what users of the variable
+will be expecting.</li>
+<li><code>RUSTC</code> — Instead of running <code>rustc</code>, Cargo will execute this specified
+compiler instead. See <a href="config.html#buildrustc"><code>build.rustc</code></a> to set via config.</li>
+<li><code>RUSTC_WRAPPER</code> — Instead of simply running <code>rustc</code>, Cargo will execute this
+specified wrapper, passing as its command-line arguments the rustc
+invocation, with the first argument being the path to the actual rustc.
+Useful to set up a build cache tool such as <code>sccache</code>. See
+<a href="config.html#buildrustc-wrapper"><code>build.rustc-wrapper</code></a> to set via config. Setting this to the empty string
+overwrites the config and resets cargo to not use a wrapper.</li>
+<li><code>RUSTC_WORKSPACE_WRAPPER</code> — Instead of simply running <code>rustc</code>, for workspace
+members Cargo will execute this specified wrapper, passing
+as its command-line arguments the rustc invocation, with the first argument
+being the path to the actual rustc. It affects the filename hash
+so that artifacts produced by the wrapper are cached separately.
+See <a href="config.html#buildrustc-workspace-wrapper"><code>build.rustc-workspace-wrapper</code></a> to set via config. Setting this to the empty string
+overwrites the config and resets cargo to not use a wrapper for workspace members.</li>
+<li><code>RUSTDOC</code> — Instead of running <code>rustdoc</code>, Cargo will execute this specified
+<code>rustdoc</code> instance instead. See <a href="config.html#buildrustdoc"><code>build.rustdoc</code></a> to set via config.</li>
+<li><code>RUSTDOCFLAGS</code> — A space-separated list of custom flags to pass to all <code>rustdoc</code>
+invocations that Cargo performs. In contrast with <a href="../commands/cargo-rustdoc.html"><code>cargo rustdoc</code></a>, this is
+useful for passing a flag to <em>all</em> <code>rustdoc</code> instances. See
+<a href="config.html#buildrustdocflags"><code>build.rustdocflags</code></a> for some more ways to set flags. This string is
+split by whitespace; for a more robust encoding of multiple arguments,
+see <code>CARGO_ENCODED_RUSTDOCFLAGS</code>.</li>
+<li><code>CARGO_ENCODED_RUSTDOCFLAGS</code> —  A list of custom flags separated by <code>0x1f</code>
+(ASCII Unit Separator) to pass to all <code>rustdoc</code> invocations that Cargo performs.</li>
+<li><code>RUSTFLAGS</code> — A space-separated list of custom flags to pass to all compiler
+invocations that Cargo performs. In contrast with <a href="../commands/cargo-rustc.html"><code>cargo rustc</code></a>, this is
+useful for passing a flag to <em>all</em> compiler instances. See
+<a href="config.html#buildrustflags"><code>build.rustflags</code></a> for some more ways to set flags. This string is
+split by whitespace; for a more robust encoding of multiple arguments,
+see <code>CARGO_ENCODED_RUSTFLAGS</code>.</li>
+<li><code>CARGO_ENCODED_RUSTFLAGS</code> — A list of custom flags separated by <code>0x1f</code>
+(ASCII Unit Separator) to pass to all compiler invocations that Cargo performs.</li>
+<li><code>CARGO_INCREMENTAL</code> — If this is set to 1 then Cargo will force <a href="profiles.html#incremental">incremental
+compilation</a> to be enabled for the current compilation, and when set to 0 it
+will force disabling it. If this env var isn’t present then cargo’s defaults
+will otherwise be used. See also <a href="config.html#buildincremental"><code>build.incremental</code></a> config value.</li>
+<li><code>CARGO_CACHE_RUSTC_INFO</code> — If this is set to 0 then Cargo will not try to cache
+compiler version information.</li>
+<li><code>HTTPS_PROXY</code> or <code>https_proxy</code> or <code>http_proxy</code> — The HTTP proxy to use, see
+<a href="config.html#httpproxy"><code>http.proxy</code></a> for more detail.</li>
+<li><code>HTTP_TIMEOUT</code> — The HTTP timeout in seconds, see <a href="config.html#httptimeout"><code>http.timeout</code></a> for more
+detail.</li>
+<li><code>TERM</code> — If this is set to <code>dumb</code>, it disables the progress bar.</li>
+<li><code>BROWSER</code> — The web browser to execute to open documentation with <a href="../commands/cargo-doc.html"><code>cargo doc</code></a>’s’ <code>--open</code> flag, see <a href="config.html#docbrowser"><code>doc.browser</code></a> for more details.</li>
+<li><code>RUSTFMT</code> — Instead of running <code>rustfmt</code>,
+<a href="https://github.com/rust-lang/rustfmt"><code>cargo fmt</code></a> will execute this specified
+<code>rustfmt</code> instance instead.</li>
+</ul>
+<h4 id="configuration-environment-variables"><a class="header" href="#configuration-environment-variables">Configuration environment variables</a></h4>
+<p>Cargo reads environment variables for some configuration values.
+See the <a href="config.html#environment-variables">configuration chapter</a> for more details.
+In summary, the supported environment variables are:</p>
+<ul>
+<li><code>CARGO_ALIAS_&lt;name&gt;</code> — Command aliases, see <a href="config.html#alias"><code>alias</code></a>.</li>
+<li><code>CARGO_BUILD_JOBS</code> — Number of parallel jobs, see <a href="config.html#buildjobs"><code>build.jobs</code></a>.</li>
+<li><code>CARGO_BUILD_RUSTC</code> — The <code>rustc</code> executable, see <a href="config.html#buildrustc"><code>build.rustc</code></a>.</li>
+<li><code>CARGO_BUILD_RUSTC_WRAPPER</code> — The <code>rustc</code> wrapper, see <a href="config.html#buildrustc-wrapper"><code>build.rustc-wrapper</code></a>.</li>
+<li><code>CARGO_BUILD_RUSTC_WORKSPACE_WRAPPER</code> — The <code>rustc</code> wrapper for workspace members only, see <a href="config.html#buildrustc-workspace-wrapper"><code>build.rustc-workspace-wrapper</code></a>.</li>
+<li><code>CARGO_BUILD_RUSTDOC</code> — The <code>rustdoc</code> executable, see <a href="config.html#buildrustdoc"><code>build.rustdoc</code></a>.</li>
+<li><code>CARGO_BUILD_TARGET</code> — The default target platform, see <a href="config.html#buildtarget"><code>build.target</code></a>.</li>
+<li><code>CARGO_BUILD_TARGET_DIR</code> — The default output directory, see <a href="config.html#buildtarget-dir"><code>build.target-dir</code></a>.</li>
+<li><code>CARGO_BUILD_RUSTFLAGS</code> — Extra <code>rustc</code> flags, see <a href="config.html#buildrustflags"><code>build.rustflags</code></a>.</li>
+<li><code>CARGO_BUILD_RUSTDOCFLAGS</code> — Extra <code>rustdoc</code> flags, see <a href="config.html#buildrustdocflags"><code>build.rustdocflags</code></a>.</li>
+<li><code>CARGO_BUILD_INCREMENTAL</code> — Incremental compilation, see <a href="config.html#buildincremental"><code>build.incremental</code></a>.</li>
+<li><code>CARGO_BUILD_DEP_INFO_BASEDIR</code> — Dep-info relative directory, see <a href="config.html#builddep-info-basedir"><code>build.dep-info-basedir</code></a>.</li>
+<li><code>CARGO_CARGO_NEW_VCS</code> — The default source control system with <a href="../commands/cargo-new.html"><code>cargo new</code></a>, see <a href="config.html#cargo-newvcs"><code>cargo-new.vcs</code></a>.</li>
+<li><code>CARGO_FUTURE_INCOMPAT_REPORT_FREQUENCY</code> — How often we should generate a future incompat report notification, see <a href="config.html#future-incompat-reportfrequency"><code>future-incompat-report.frequency</code></a>.</li>
+<li><code>CARGO_HTTP_DEBUG</code> — Enables HTTP debugging, see <a href="config.html#httpdebug"><code>http.debug</code></a>.</li>
+<li><code>CARGO_HTTP_PROXY</code> — Enables HTTP proxy, see <a href="config.html#httpproxy"><code>http.proxy</code></a>.</li>
+<li><code>CARGO_HTTP_TIMEOUT</code> — The HTTP timeout, see <a href="config.html#httptimeout"><code>http.timeout</code></a>.</li>
+<li><code>CARGO_HTTP_CAINFO</code> — The TLS certificate Certificate Authority file, see <a href="config.html#httpcainfo"><code>http.cainfo</code></a>.</li>
+<li><code>CARGO_HTTP_CHECK_REVOKE</code> — Disables TLS certificate revocation checks, see <a href="config.html#httpcheck-revoke"><code>http.check-revoke</code></a>.</li>
+<li><code>CARGO_HTTP_SSL_VERSION</code> — The TLS version to use, see <a href="config.html#httpssl-version"><code>http.ssl-version</code></a>.</li>
+<li><code>CARGO_HTTP_LOW_SPEED_LIMIT</code> — The HTTP low-speed limit, see <a href="config.html#httplow-speed-limit"><code>http.low-speed-limit</code></a>.</li>
+<li><code>CARGO_HTTP_MULTIPLEXING</code> — Whether HTTP/2 multiplexing is used, see <a href="config.html#httpmultiplexing"><code>http.multiplexing</code></a>.</li>
+<li><code>CARGO_HTTP_USER_AGENT</code> — The HTTP user-agent header, see <a href="config.html#httpuser-agent"><code>http.user-agent</code></a>.</li>
+<li><code>CARGO_INSTALL_ROOT</code> — The default directory for <a href="../commands/cargo-install.html"><code>cargo install</code></a>, see <a href="config.html#installroot"><code>install.root</code></a>.</li>
+<li><code>CARGO_NET_RETRY</code> — Number of times to retry network errors, see <a href="config.html#netretry"><code>net.retry</code></a>.</li>
+<li><code>CARGO_NET_GIT_FETCH_WITH_CLI</code> — Enables the use of the <code>git</code> executable to fetch, see <a href="config.html#netgit-fetch-with-cli"><code>net.git-fetch-with-cli</code></a>.</li>
+<li><code>CARGO_NET_OFFLINE</code> — Offline mode, see <a href="config.html#netoffline"><code>net.offline</code></a>.</li>
+<li><code>CARGO_PROFILE_&lt;name&gt;_BUILD_OVERRIDE_&lt;key&gt;</code> — Override build script profile, see <a href="config.html#profilenamebuild-override"><code>profile.&lt;name&gt;.build-override</code></a>.</li>
+<li><code>CARGO_PROFILE_&lt;name&gt;_CODEGEN_UNITS</code> — Set code generation units, see <a href="config.html#profilenamecodegen-units"><code>profile.&lt;name&gt;.codegen-units</code></a>.</li>
+<li><code>CARGO_PROFILE_&lt;name&gt;_DEBUG</code> — What kind of debug info to include, see <a href="config.html#profilenamedebug"><code>profile.&lt;name&gt;.debug</code></a>.</li>
+<li><code>CARGO_PROFILE_&lt;name&gt;_DEBUG_ASSERTIONS</code> — Enable/disable debug assertions, see <a href="config.html#profilenamedebug-assertions"><code>profile.&lt;name&gt;.debug-assertions</code></a>.</li>
+<li><code>CARGO_PROFILE_&lt;name&gt;_INCREMENTAL</code> — Enable/disable incremental compilation, see <a href="config.html#profilenameincremental"><code>profile.&lt;name&gt;.incremental</code></a>.</li>
+<li><code>CARGO_PROFILE_&lt;name&gt;_LTO</code> — Link-time optimization, see <a href="config.html#profilenamelto"><code>profile.&lt;name&gt;.lto</code></a>.</li>
+<li><code>CARGO_PROFILE_&lt;name&gt;_OVERFLOW_CHECKS</code> — Enable/disable overflow checks, see <a href="config.html#profilenameoverflow-checks"><code>profile.&lt;name&gt;.overflow-checks</code></a>.</li>
+<li><code>CARGO_PROFILE_&lt;name&gt;_OPT_LEVEL</code> — Set the optimization level, see <a href="config.html#profilenameopt-level"><code>profile.&lt;name&gt;.opt-level</code></a>.</li>
+<li><code>CARGO_PROFILE_&lt;name&gt;_PANIC</code> — The panic strategy to use, see <a href="config.html#profilenamepanic"><code>profile.&lt;name&gt;.panic</code></a>.</li>
+<li><code>CARGO_PROFILE_&lt;name&gt;_RPATH</code> — The rpath linking option, see <a href="config.html#profilenamerpath"><code>profile.&lt;name&gt;.rpath</code></a>.</li>
+<li><code>CARGO_PROFILE_&lt;name&gt;_SPLIT_DEBUGINFO</code> — Controls debug file output behavior, see <a href="config.html#profilenamesplit-debuginfo"><code>profile.&lt;name&gt;.split-debuginfo</code></a>.</li>
+<li><code>CARGO_REGISTRIES_&lt;name&gt;_INDEX</code> — URL of a registry index, see <a href="config.html#registriesnameindex"><code>registries.&lt;name&gt;.index</code></a>.</li>
+<li><code>CARGO_REGISTRIES_&lt;name&gt;_TOKEN</code> — Authentication token of a registry, see <a href="config.html#registriesnametoken"><code>registries.&lt;name&gt;.token</code></a>.</li>
+<li><code>CARGO_REGISTRY_DEFAULT</code> — Default registry for the <code>--registry</code> flag, see <a href="config.html#registrydefault"><code>registry.default</code></a>.</li>
+<li><code>CARGO_REGISTRY_TOKEN</code> — Authentication token for <a href="https://crates.io/">crates.io</a>, see <a href="config.html#registrytoken"><code>registry.token</code></a>.</li>
+<li><code>CARGO_TARGET_&lt;triple&gt;_LINKER</code> — The linker to use, see <a href="config.html#targettriplelinker"><code>target.&lt;triple&gt;.linker</code></a>. The triple must be <a href="config.html#environment-variables">converted to uppercase and underscores</a>.</li>
+<li><code>CARGO_TARGET_&lt;triple&gt;_RUNNER</code> — The executable runner, see <a href="config.html#targettriplerunner"><code>target.&lt;triple&gt;.runner</code></a>.</li>
+<li><code>CARGO_TARGET_&lt;triple&gt;_RUSTFLAGS</code> — Extra <code>rustc</code> flags for a target, see <a href="config.html#targettriplerustflags"><code>target.&lt;triple&gt;.rustflags</code></a>.</li>
+<li><code>CARGO_TERM_QUIET</code> — Quiet mode, see <a href="config.html#termquiet"><code>term.quiet</code></a>.</li>
+<li><code>CARGO_TERM_VERBOSE</code> — The default terminal verbosity, see <a href="config.html#termverbose"><code>term.verbose</code></a>.</li>
+<li><code>CARGO_TERM_COLOR</code> — The default color mode, see <a href="config.html#termcolor"><code>term.color</code></a>.</li>
+<li><code>CARGO_TERM_PROGRESS_WHEN</code> — The default progress bar showing mode, see <a href="config.html#termprogresswhen"><code>term.progress.when</code></a>.</li>
+<li><code>CARGO_TERM_PROGRESS_WIDTH</code> — The default progress bar width, see <a href="config.html#termprogresswidth"><code>term.progress.width</code></a>.</li>
+</ul>
+<h3 id="environment-variables-cargo-sets-for-crates"><a class="header" href="#environment-variables-cargo-sets-for-crates">Environment variables Cargo sets for crates</a></h3>
+<p>Cargo exposes these environment variables to your crate when it is compiled.
+Note that this applies for running binaries with <code>cargo run</code> and <code>cargo test</code>
+as well. To get the value of any of these variables in a Rust program, do
+this:</p>
+<pre><code class="language-rust ignore">let version = env!(&quot;CARGO_PKG_VERSION&quot;);</code></pre>
+<p><code>version</code> will now contain the value of <code>CARGO_PKG_VERSION</code>.</p>
+<p>Note that if one of these values is not provided in the manifest, the
+corresponding environment variable is set to the empty string, <code>&quot;&quot;</code>.</p>
+<ul>
+<li><code>CARGO</code> — Path to the <code>cargo</code> binary performing the build.</li>
+<li><code>CARGO_MANIFEST_DIR</code> — The directory containing the manifest of your package.</li>
+<li><code>CARGO_PKG_VERSION</code> — The full version of your package.</li>
+<li><code>CARGO_PKG_VERSION_MAJOR</code> — The major version of your package.</li>
+<li><code>CARGO_PKG_VERSION_MINOR</code> — The minor version of your package.</li>
+<li><code>CARGO_PKG_VERSION_PATCH</code> — The patch version of your package.</li>
+<li><code>CARGO_PKG_VERSION_PRE</code> — The pre-release version of your package.</li>
+<li><code>CARGO_PKG_AUTHORS</code> — Colon separated list of authors from the manifest of your package.</li>
+<li><code>CARGO_PKG_NAME</code> — The name of your package.</li>
+<li><code>CARGO_PKG_DESCRIPTION</code> — The description from the manifest of your package.</li>
+<li><code>CARGO_PKG_HOMEPAGE</code> — The home page from the manifest of your package.</li>
+<li><code>CARGO_PKG_REPOSITORY</code> — The repository from the manifest of your package.</li>
+<li><code>CARGO_PKG_LICENSE</code> — The license from the manifest of your package.</li>
+<li><code>CARGO_PKG_LICENSE_FILE</code> — The license file from the manifest of your package.</li>
+<li><code>CARGO_PKG_RUST_VERSION</code> — The Rust version from the manifest of your package.
+Note that this is the minimum Rust version supported by the package, not the
+current Rust version.</li>
+<li><code>CARGO_PKG_README</code> — Path to the README file of your package.</li>
+<li><code>CARGO_CRATE_NAME</code> — The name of the crate that is currently being compiled. It is the name of the <a href="cargo-targets.html">Cargo target</a> with <code>-</code> converted to <code>_</code>, such as the name of the library, binary, example, integration test, or benchmark.</li>
+<li><code>CARGO_BIN_NAME</code> — The name of the binary that is currently being compiled.
+Only set for <a href="cargo-targets.html#binaries">binaries</a> or binary <a href="cargo-targets.html#examples">examples</a>. This name does not include any
+file extension, such as <code>.exe</code>.</li>
+<li><code>OUT_DIR</code> — If the package has a build script, this is set to the folder where the build
+script should place its output. See below for more information.
+(Only set during compilation.)</li>
+<li><code>CARGO_BIN_EXE_&lt;name&gt;</code> — The absolute path to a binary target’s executable.
+This is only set when building an <a href="cargo-targets.html#integration-tests">integration test</a> or benchmark. This may
+be used with the <a href="../../std/macro.env.html"><code>env</code> macro</a> to find the executable to run for testing
+purposes. The <code>&lt;name&gt;</code> is the name of the binary target, exactly as-is. For
+example, <code>CARGO_BIN_EXE_my-program</code> for a binary named <code>my-program</code>.
+Binaries are automatically built when the test is built, unless the binary
+has required features that are not enabled.</li>
+<li><code>CARGO_PRIMARY_PACKAGE</code> — This environment variable will be set if the
+package being built is primary. Primary packages are the ones the user
+selected on the command-line, either with <code>-p</code> flags or the defaults based
+on the current directory and the default workspace members. This environment
+variable will not be set when building dependencies. This is only set when
+compiling the package (not when running binaries or tests).</li>
+<li><code>CARGO_TARGET_TMPDIR</code> — Only set when building <a href="cargo-targets.html#integration-tests">integration test</a> or benchmark code.
+This is a path to a directory inside the target directory
+where integration tests or benchmarks are free to put any data needed by
+the tests/benches. Cargo initially creates this directory but doesn’t
+manage its content in any way, this is the responsibility of the test code.</li>
+</ul>
+<h4 id="dynamic-library-paths"><a class="header" href="#dynamic-library-paths">Dynamic library paths</a></h4>
+<p>Cargo also sets the dynamic library path when compiling and running binaries
+with commands like <code>cargo run</code> and <code>cargo test</code>. This helps with locating
+shared libraries that are part of the build process. The variable name depends
+on the platform:</p>
+<ul>
+<li>Windows: <code>PATH</code></li>
+<li>macOS: <code>DYLD_FALLBACK_LIBRARY_PATH</code></li>
+<li>Unix: <code>LD_LIBRARY_PATH</code></li>
+</ul>
+<p>The value is extended from the existing value when Cargo starts. macOS has
+special consideration where if <code>DYLD_FALLBACK_LIBRARY_PATH</code> is not already
+set, it will add the default <code>$HOME/lib:/usr/local/lib:/usr/lib</code>.</p>
+<p>Cargo includes the following paths:</p>
+<ul>
+<li>Search paths included from any build script with the <a href="build-scripts.html#rustc-link-search"><code>rustc-link-search</code>
+instruction</a>. Paths outside of the
+<code>target</code> directory are removed. It is the responsibility of the user running
+Cargo to properly set the environment if additional libraries on the system
+are needed in the search path.</li>
+<li>The base output directory, such as <code>target/debug</code>, and the “deps” directory.
+This is mostly for legacy support of <code>rustc</code> compiler plugins.</li>
+<li>The rustc sysroot library path. This generally is not important to most
+users.</li>
+</ul>
+<h3 id="environment-variables-cargo-sets-for-build-scripts"><a class="header" href="#environment-variables-cargo-sets-for-build-scripts">Environment variables Cargo sets for build scripts</a></h3>
+<p>Cargo sets several environment variables when build scripts are run. Because these variables
+are not yet set when the build script is compiled, the above example using <code>env!</code> won’t work
+and instead you’ll need to retrieve the values when the build script is run:</p>
+<pre><code class="language-rust ignore">use std::env;
+let out_dir = env::var(&quot;OUT_DIR&quot;).unwrap();</code></pre>
+<p><code>out_dir</code> will now contain the value of <code>OUT_DIR</code>.</p>
+<ul>
+<li><code>CARGO</code> — Path to the <code>cargo</code> binary performing the build.</li>
+<li><code>CARGO_MANIFEST_DIR</code> — The directory containing the manifest for the package
+being built (the package containing the build
+script). Also note that this is the value of the
+current working directory of the build script when it
+starts.</li>
+<li><code>CARGO_MANIFEST_LINKS</code> — the manifest <code>links</code> value.</li>
+<li><code>CARGO_MAKEFLAGS</code> — Contains parameters needed for Cargo’s <a href="https://www.gnu.org/software/make/manual/html_node/Job-Slots.html">jobserver</a>
+implementation to parallelize subprocesses.
+Rustc or cargo invocations from build.rs can already
+read <code>CARGO_MAKEFLAGS</code>, but GNU Make requires the
+flags to be specified either directly as arguments,
+or through the <code>MAKEFLAGS</code> environment variable.
+Currently Cargo doesn’t set the <code>MAKEFLAGS</code> variable,
+but it’s free for build scripts invoking GNU Make
+to set it to the contents of <code>CARGO_MAKEFLAGS</code>.</li>
+<li><code>CARGO_FEATURE_&lt;name&gt;</code> — For each activated feature of the package being
+built, this environment variable will be present
+where <code>&lt;name&gt;</code> is the name of the feature uppercased
+and having <code>-</code> translated to <code>_</code>.</li>
+<li><code>CARGO_CFG_&lt;cfg&gt;</code> — For each <a href="../../reference/conditional-compilation.html">configuration option</a> of the
+package being built, this environment variable will contain the value of the
+configuration, where <code>&lt;cfg&gt;</code> is the name of the configuration uppercased and
+having <code>-</code> translated to <code>_</code>. Boolean configurations are present if they are
+set, and not present otherwise. Configurations with multiple values are
+joined to a single variable with the values delimited by <code>,</code>. This includes
+values built-in to the compiler (which can be seen with <code>rustc --print=cfg</code>)
+and values set by build scripts and extra flags passed to <code>rustc</code> (such as
+those defined in <code>RUSTFLAGS</code>). Some examples of what these variables are:
+<ul>
+<li><code>CARGO_CFG_UNIX</code> — Set on <a href="../../reference/conditional-compilation.html#unix-and-windows">unix-like platforms</a>.</li>
+<li><code>CARGO_CFG_WINDOWS</code> — Set on <a href="../../reference/conditional-compilation.html#unix-and-windows">windows-like platforms</a>.</li>
+<li><code>CARGO_CFG_TARGET_FAMILY=unix</code> — The <a href="../../reference/conditional-compilation.html#target_family">target family</a>.</li>
+<li><code>CARGO_CFG_TARGET_OS=macos</code> — The <a href="../../reference/conditional-compilation.html#target_os">target operating system</a>.</li>
+<li><code>CARGO_CFG_TARGET_ARCH=x86_64</code> — The CPU <a href="../../reference/conditional-compilation.html#target_arch">target architecture</a>.</li>
+<li><code>CARGO_CFG_TARGET_VENDOR=apple</code> — The <a href="../../reference/conditional-compilation.html#target_vendor">target vendor</a>.</li>
+<li><code>CARGO_CFG_TARGET_ENV=gnu</code> — The <a href="../../reference/conditional-compilation.html#target_env">target environment</a> ABI.</li>
+<li><code>CARGO_CFG_TARGET_POINTER_WIDTH=64</code> — The CPU <a href="../../reference/conditional-compilation.html#target_pointer_width">pointer width</a>.</li>
+<li><code>CARGO_CFG_TARGET_ENDIAN=little</code> — The CPU <a href="../../reference/conditional-compilation.html#target_endian">target endianness</a>.</li>
+<li><code>CARGO_CFG_TARGET_FEATURE=mmx,sse</code> — List of CPU <a href="../../reference/conditional-compilation.html#target_feature">target features</a> enabled.</li>
+</ul>
+</li>
+<li><code>OUT_DIR</code> — the folder in which all output and intermediate artifacts should
+be placed. This folder is inside the build directory for the
+package being built, and it is unique for the package in question.</li>
+<li><code>TARGET</code> — the target triple that is being compiled for. Native code should be
+compiled for this triple. See the <a href="../appendix/glossary.html#target">Target Triple</a> description
+for more information.</li>
+<li><code>HOST</code> — the host triple of the Rust compiler.</li>
+<li><code>NUM_JOBS</code> — the parallelism specified as the top-level parallelism. This can
+be useful to pass a <code>-j</code> parameter to a system like <code>make</code>. Note
+that care should be taken when interpreting this environment
+variable. For historical purposes this is still provided but
+recent versions of Cargo, for example, do not need to run <code>make -j</code>, and instead can set the <code>MAKEFLAGS</code> env var to the content
+of <code>CARGO_MAKEFLAGS</code> to activate the use of Cargo’s GNU Make
+compatible <a href="https://www.gnu.org/software/make/manual/html_node/Job-Slots.html">jobserver</a> for sub-make invocations.</li>
+<li><code>OPT_LEVEL</code>, <code>DEBUG</code> — values of the corresponding variables for the
+profile currently being built.</li>
+<li><code>PROFILE</code> — <code>release</code> for release builds, <code>debug</code> for other builds. This is
+determined based on if the <a href="profiles.html">profile</a> inherits from the <a href="profiles.html#dev"><code>dev</code></a> or
+<a href="profiles.html#release"><code>release</code></a> profile. Using this environment variable is not recommended.
+Using other environment variables like <code>OPT_LEVEL</code> provide a more correct
+view of the actual settings being used.</li>
+<li><code>DEP_&lt;name&gt;_&lt;key&gt;</code> — For more information about this set of environment
+variables, see build script documentation about <a href="build-scripts.html#the-links-manifest-key"><code>links</code></a>.</li>
+<li><code>RUSTC</code>, <code>RUSTDOC</code> — the compiler and documentation generator that Cargo has
+resolved to use, passed to the build script so it might
+use it as well.</li>
+<li><code>RUSTC_WRAPPER</code> — the <code>rustc</code> wrapper, if any, that Cargo is using.
+See <a href="config.html#buildrustc-wrapper"><code>build.rustc-wrapper</code></a>.</li>
+<li><code>RUSTC_WORKSPACE_WRAPPER</code> — the <code>rustc</code> wrapper, if any, that Cargo is
+using for workspace members. See
+<a href="config.html#buildrustc-workspace-wrapper"><code>build.rustc-workspace-wrapper</code></a>.</li>
+<li><code>RUSTC_LINKER</code> — The path to the linker binary that Cargo has resolved to use
+for the current target, if specified. The linker can be
+changed by editing <code>.cargo/config.toml</code>; see the documentation
+about <a href="config.html">cargo configuration</a> for more
+information.</li>
+<li><code>CARGO_ENCODED_RUSTFLAGS</code> — extra flags that Cargo invokes <code>rustc</code> with,
+separated by a <code>0x1f</code> character (ASCII Unit Separator). See
+<a href="config.html#buildrustflags"><code>build.rustflags</code></a>. Note that since Rust 1.55, <code>RUSTFLAGS</code> is removed from
+the environment; scripts should use <code>CARGO_ENCODED_RUSTFLAGS</code> instead.</li>
+<li><code>CARGO_PKG_&lt;var&gt;</code> — The package information variables, with the same names and values as are <a href="#environment-variables-cargo-sets-for-crates">provided during crate building</a>.</li>
+</ul>
+<h3 id="environment-variables-cargo-sets-for-3rd-party-subcommands"><a class="header" href="#environment-variables-cargo-sets-for-3rd-party-subcommands">Environment variables Cargo sets for 3rd party subcommands</a></h3>
+<p>Cargo exposes this environment variable to 3rd party subcommands
+(ie. programs named <code>cargo-foobar</code> placed in <code>$PATH</code>):</p>
+<ul>
+<li><code>CARGO</code> — Path to the <code>cargo</code> binary performing the build.</li>
+</ul>
+<p>For extended information about your environment you may run <code>cargo metadata</code>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/config.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../reference/build-scripts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/config.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../reference/build-scripts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

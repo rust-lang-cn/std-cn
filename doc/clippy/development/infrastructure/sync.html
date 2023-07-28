@@ -1,0 +1,325 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Syncing changes between Clippy and rust-lang/rust - Clippy Documentation</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../../installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../../usage.html"><strong aria-hidden="true">2.</strong> Usage</a></li><li class="chapter-item expanded "><a href="../../configuration.html"><strong aria-hidden="true">3.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../lint_configuration.html"><strong aria-hidden="true">3.1.</strong> Lint Configuration</a></li></ol></li><li class="chapter-item expanded "><a href="../../lints.html"><strong aria-hidden="true">4.</strong> Clippy's Lints</a></li><li class="chapter-item expanded "><a href="../../continuous_integration/index.html"><strong aria-hidden="true">5.</strong> Continuous Integration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../continuous_integration/github_actions.html"><strong aria-hidden="true">5.1.</strong> GitHub Actions</a></li><li class="chapter-item expanded "><a href="../../continuous_integration/travis.html"><strong aria-hidden="true">5.2.</strong> Travis CI</a></li></ol></li><li class="chapter-item expanded "><a href="../../development/index.html"><strong aria-hidden="true">6.</strong> Development</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../development/basics.html"><strong aria-hidden="true">6.1.</strong> Basics</a></li><li class="chapter-item expanded "><a href="../../development/adding_lints.html"><strong aria-hidden="true">6.2.</strong> Adding Lints</a></li><li class="chapter-item expanded "><a href="../../development/lint_passes.html"><strong aria-hidden="true">6.3.</strong> Lint Passes</a></li><li class="chapter-item expanded "><a href="../../development/type_checking.html"><strong aria-hidden="true">6.4.</strong> Type Checking</a></li><li class="chapter-item expanded "><a href="../../development/macro_expansions.html"><strong aria-hidden="true">6.5.</strong> Macro Expansions</a></li><li class="chapter-item expanded "><a href="../../development/common_tools_writing_lints.html"><strong aria-hidden="true">6.6.</strong> Common Tools</a></li><li class="chapter-item expanded "><a href="../../development/infrastructure/index.html"><strong aria-hidden="true">6.7.</strong> Infrastructure</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../development/infrastructure/sync.html" class="active"><strong aria-hidden="true">6.7.1.</strong> Syncing changes between Clippy and rust-lang/rust</a></li><li class="chapter-item expanded "><a href="../../development/infrastructure/backport.html"><strong aria-hidden="true">6.7.2.</strong> Backporting Changes</a></li><li class="chapter-item expanded "><a href="../../development/infrastructure/changelog_update.html"><strong aria-hidden="true">6.7.3.</strong> Updating the Changelog</a></li><li class="chapter-item expanded "><a href="../../development/infrastructure/release.html"><strong aria-hidden="true">6.7.4.</strong> Release a New Version</a></li><li class="chapter-item expanded "><a href="../../development/infrastructure/book.html"><strong aria-hidden="true">6.7.5.</strong> The Clippy Book</a></li></ol></li><li class="chapter-item expanded "><a href="../../development/proposals/index.html"><strong aria-hidden="true">6.8.</strong> Proposals</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../development/proposals/roadmap-2021.html"><strong aria-hidden="true">6.8.1.</strong> Roadmap 2021</a></li><li class="chapter-item expanded "><a href="../../development/proposals/syntax-tree-patterns.html"><strong aria-hidden="true">6.8.2.</strong> Syntax Tree Patterns</a></li></ol></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Clippy Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust-clippy/tree/master/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust-clippy/edit/master/book/src/development/infrastructure/sync.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="syncing-changes-between-clippy-and-rust-langrust"><a class="header" href="#syncing-changes-between-clippy-and-rust-langrust">Syncing changes between Clippy and <a href="https://github.com/rust-lang/rust"><code>rust-lang/rust</code></a></a></h1>
+<p>Clippy currently gets built with a pinned nightly version.</p>
+<p>In the <code>rust-lang/rust</code> repository, where rustc resides, there's a copy of
+Clippy that compiler hackers modify from time to time to adapt to changes in the
+unstable API of the compiler.</p>
+<p>We need to sync these changes back to this repository periodically, and the
+changes made to this repository in the meantime also need to be synced to the
+<code>rust-lang/rust</code> repository.</p>
+<p>To avoid flooding the <code>rust-lang/rust</code> PR queue, this two-way sync process is
+done in a bi-weekly basis if there's no urgent changes. This is done starting on
+the day of the Rust stable release and then every other week. That way we
+guarantee that we keep this repo up to date with the latest compiler API, and
+every feature in Clippy is available for 2 weeks in nightly, before it can get
+to beta. For reference, the first sync following this cadence was performed the
+2020-08-27.</p>
+<p>This process is described in detail in the following sections. For general
+information about <code>subtree</code>s in the Rust repository see <a href="https://rustc-dev-guide.rust-lang.org/external-repos.html#external-dependencies-subtree">the rustc-dev-guide</a>.</p>
+<h2 id="patching-git-subtree-to-work-with-big-repos"><a class="header" href="#patching-git-subtree-to-work-with-big-repos">Patching git-subtree to work with big repos</a></h2>
+<p>Currently, there's a bug in <code>git-subtree</code> that prevents it from working properly
+with the <a href="https://github.com/rust-lang/rust"><code>rust-lang/rust</code></a> repo. There's an open PR to fix that, but it's
+stale. Before continuing with the following steps, we need to manually apply
+that fix to our local copy of <code>git-subtree</code>.</p>
+<p>You can get the patched version of <code>git-subtree</code> from <a href="https://github.com/gitgitgadget/git/pull/493">here</a>.
+Put this file under <code>/usr/lib/git-core</code> (making a backup of the previous file)
+and make sure it has the proper permissions:</p>
+<pre><code class="language-bash">sudo cp --backup /path/to/patched/git-subtree.sh /usr/lib/git-core/git-subtree
+sudo chmod --reference=/usr/lib/git-core/git-subtree~ /usr/lib/git-core/git-subtree
+sudo chown --reference=/usr/lib/git-core/git-subtree~ /usr/lib/git-core/git-subtree
+</code></pre>
+<blockquote>
+<p><em>Note:</em> The first time running <code>git subtree push</code> a cache has to be built.
+This involves going through the complete Clippy history once. For this you
+have to increase the stack limit though, which you can do with <code>ulimit -s 60000</code>. Make sure to run the <code>ulimit</code> command from the same session you call
+git subtree.</p>
+</blockquote>
+<blockquote>
+<p><em>Note:</em> If you are a Debian user, <code>dash</code> is the shell used by default for
+scripts instead of <code>sh</code>. This shell has a hardcoded recursion limit set to
+1,000. In order to make this process work, you need to force the script to run
+<code>bash</code> instead. You can do this by editing the first line of the <code>git-subtree</code>
+script and changing <code>sh</code> to <code>bash</code>.</p>
+</blockquote>
+<h2 id="defining-remotes"><a class="header" href="#defining-remotes">Defining remotes</a></h2>
+<p>You may want to define remotes, so you don't have to type out the remote
+addresses on every sync. You can do this with the following commands (these
+commands still have to be run inside the <code>rust</code> directory):</p>
+<pre><code class="language-bash"># Set clippy-upstream remote for pulls
+$ git remote add clippy-upstream https://github.com/rust-lang/rust-clippy
+# Make sure to not push to the upstream repo
+$ git remote set-url --push clippy-upstream DISABLED
+# Set a local remote
+$ git remote add clippy-local /path/to/rust-clippy
+</code></pre>
+<blockquote>
+<p>Note: The following sections assume that you have set those remotes with the
+above remote names.</p>
+</blockquote>
+<h2 id="performing-the-sync-from-rust-langrust-to-clippy"><a class="header" href="#performing-the-sync-from-rust-langrust-to-clippy">Performing the sync from <a href="https://github.com/rust-lang/rust"><code>rust-lang/rust</code></a> to Clippy</a></h2>
+<p>Here is a TL;DR version of the sync process (all the following commands have
+to be run inside the <code>rust</code> directory):</p>
+<ol>
+<li>
+<p>Clone the <a href="https://github.com/rust-lang/rust"><code>rust-lang/rust</code></a> repository or make sure it is up-to-date.</p>
+</li>
+<li>
+<p>Checkout the commit from the latest available nightly. You can get it using
+<code>rustup check</code>.</p>
+</li>
+<li>
+<p>Sync the changes to the rust-copy of Clippy to your Clippy fork:</p>
+<pre><code class="language-bash"># Be sure to either use a net-new branch, e.g. `sync-from-rust`, or delete the branch beforehand
+# because changes cannot be fast forwarded and you have to run this command again.
+git subtree push -P src/tools/clippy clippy-local sync-from-rust
+</code></pre>
+<blockquote>
+<p><em>Note:</em> Most of the time you have to create a merge commit in the
+<code>rust-clippy</code> repo (this has to be done in the Clippy repo, not in the
+rust-copy of Clippy):</p>
+</blockquote>
+<pre><code class="language-bash">git fetch upstream  # assuming upstream is the rust-lang/rust remote
+git checkout sync-from-rust
+git merge upstream/master --no-ff
+</code></pre>
+<blockquote>
+<p>Note: This is one of the few instances where a merge commit is allowed in
+a PR.</p>
+</blockquote>
+</li>
+<li>
+<p>Bump the nightly version in the Clippy repository by changing the date in the
+rust-toolchain file to the current date and committing it with the message:</p>
+<pre><code class="language-bash">git commit -m &quot;Bump nightly version -&gt; YYYY-MM-DD&quot;
+</code></pre>
+</li>
+<li>
+<p>Open a PR to <code>rust-lang/rust-clippy</code> and wait for it to get merged (to
+accelerate the process ping the <code>@rust-lang/clippy</code> team in your PR and/or
+ask them in the <a href="https://rust-lang.zulipchat.com/#narrow/stream/clippy">Zulip</a> stream.)</p>
+</li>
+</ol>
+<h2 id="performing-the-sync-from-clippy-to-rust-langrust"><a class="header" href="#performing-the-sync-from-clippy-to-rust-langrust">Performing the sync from Clippy to <a href="https://github.com/rust-lang/rust"><code>rust-lang/rust</code></a></a></h2>
+<p>All the following commands have to be run inside the <code>rust</code> directory.</p>
+<ol>
+<li>Make sure you have checked out the latest <code>master</code> of <code>rust-lang/rust</code>.</li>
+<li>Sync the <code>rust-lang/rust-clippy</code> master to the rust-copy of Clippy:
+<pre><code class="language-bash">git checkout -b sync-from-clippy
+git subtree pull -P src/tools/clippy clippy-upstream master
+</code></pre>
+</li>
+<li>Open a PR to <a href="https://github.com/rust-lang/rust"><code>rust-lang/rust</code></a></li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../development/infrastructure/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../../development/infrastructure/backport.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../development/infrastructure/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../../development/infrastructure/backport.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../../ace.js"></script>
+        <script src="../../editor.js"></script>
+        <script src="../../mode-rust.js"></script>
+        <script src="../../theme-dawn.js"></script>
+        <script src="../../theme-tomorrow_night.js"></script>
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

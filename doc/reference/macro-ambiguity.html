@@ -1,0 +1,587 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Macro Follow-Set Ambiguity Formal Specification - The Rust Reference</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/reference.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="notation.html"><strong aria-hidden="true">1.</strong> Notation</a></li><li class="chapter-item expanded "><a href="lexical-structure.html"><strong aria-hidden="true">2.</strong> Lexical structure</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="input-format.html"><strong aria-hidden="true">2.1.</strong> Input format</a></li><li class="chapter-item expanded "><a href="keywords.html"><strong aria-hidden="true">2.2.</strong> Keywords</a></li><li class="chapter-item expanded "><a href="identifiers.html"><strong aria-hidden="true">2.3.</strong> Identifiers</a></li><li class="chapter-item expanded "><a href="comments.html"><strong aria-hidden="true">2.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="whitespace.html"><strong aria-hidden="true">2.5.</strong> Whitespace</a></li><li class="chapter-item expanded "><a href="tokens.html"><strong aria-hidden="true">2.6.</strong> Tokens</a></li></ol></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="macros-by-example.html"><strong aria-hidden="true">3.1.</strong> Macros By Example</a></li><li class="chapter-item expanded "><a href="procedural-macros.html"><strong aria-hidden="true">3.2.</strong> Procedural Macros</a></li></ol></li><li class="chapter-item expanded "><a href="crates-and-source-files.html"><strong aria-hidden="true">4.</strong> Crates and source files</a></li><li class="chapter-item expanded "><a href="conditional-compilation.html"><strong aria-hidden="true">5.</strong> Conditional compilation</a></li><li class="chapter-item expanded "><a href="items.html"><strong aria-hidden="true">6.</strong> Items</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="items/modules.html"><strong aria-hidden="true">6.1.</strong> Modules</a></li><li class="chapter-item expanded "><a href="items/extern-crates.html"><strong aria-hidden="true">6.2.</strong> Extern crates</a></li><li class="chapter-item expanded "><a href="items/use-declarations.html"><strong aria-hidden="true">6.3.</strong> Use declarations</a></li><li class="chapter-item expanded "><a href="items/functions.html"><strong aria-hidden="true">6.4.</strong> Functions</a></li><li class="chapter-item expanded "><a href="items/type-aliases.html"><strong aria-hidden="true">6.5.</strong> Type aliases</a></li><li class="chapter-item expanded "><a href="items/structs.html"><strong aria-hidden="true">6.6.</strong> Structs</a></li><li class="chapter-item expanded "><a href="items/enumerations.html"><strong aria-hidden="true">6.7.</strong> Enumerations</a></li><li class="chapter-item expanded "><a href="items/unions.html"><strong aria-hidden="true">6.8.</strong> Unions</a></li><li class="chapter-item expanded "><a href="items/constant-items.html"><strong aria-hidden="true">6.9.</strong> Constant items</a></li><li class="chapter-item expanded "><a href="items/static-items.html"><strong aria-hidden="true">6.10.</strong> Static items</a></li><li class="chapter-item expanded "><a href="items/traits.html"><strong aria-hidden="true">6.11.</strong> Traits</a></li><li class="chapter-item expanded "><a href="items/implementations.html"><strong aria-hidden="true">6.12.</strong> Implementations</a></li><li class="chapter-item expanded "><a href="items/external-blocks.html"><strong aria-hidden="true">6.13.</strong> External blocks</a></li><li class="chapter-item expanded "><a href="items/generics.html"><strong aria-hidden="true">6.14.</strong> Generic parameters</a></li><li class="chapter-item expanded "><a href="items/associated-items.html"><strong aria-hidden="true">6.15.</strong> Associated Items</a></li></ol></li><li class="chapter-item expanded "><a href="attributes.html"><strong aria-hidden="true">7.</strong> Attributes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="attributes/testing.html"><strong aria-hidden="true">7.1.</strong> Testing</a></li><li class="chapter-item expanded "><a href="attributes/derive.html"><strong aria-hidden="true">7.2.</strong> Derive</a></li><li class="chapter-item expanded "><a href="attributes/diagnostics.html"><strong aria-hidden="true">7.3.</strong> Diagnostics</a></li><li class="chapter-item expanded "><a href="attributes/codegen.html"><strong aria-hidden="true">7.4.</strong> Code generation</a></li><li class="chapter-item expanded "><a href="attributes/limits.html"><strong aria-hidden="true">7.5.</strong> Limits</a></li><li class="chapter-item expanded "><a href="attributes/type_system.html"><strong aria-hidden="true">7.6.</strong> Type System</a></li><li class="chapter-item expanded "><a href="attributes/debugger.html"><strong aria-hidden="true">7.7.</strong> Debugger</a></li></ol></li><li class="chapter-item expanded "><a href="statements-and-expressions.html"><strong aria-hidden="true">8.</strong> Statements and expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="statements.html"><strong aria-hidden="true">8.1.</strong> Statements</a></li><li class="chapter-item expanded "><a href="expressions.html"><strong aria-hidden="true">8.2.</strong> Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="expressions/literal-expr.html"><strong aria-hidden="true">8.2.1.</strong> Literal expressions</a></li><li class="chapter-item expanded "><a href="expressions/path-expr.html"><strong aria-hidden="true">8.2.2.</strong> Path expressions</a></li><li class="chapter-item expanded "><a href="expressions/block-expr.html"><strong aria-hidden="true">8.2.3.</strong> Block expressions</a></li><li class="chapter-item expanded "><a href="expressions/operator-expr.html"><strong aria-hidden="true">8.2.4.</strong> Operator expressions</a></li><li class="chapter-item expanded "><a href="expressions/grouped-expr.html"><strong aria-hidden="true">8.2.5.</strong> Grouped expressions</a></li><li class="chapter-item expanded "><a href="expressions/array-expr.html"><strong aria-hidden="true">8.2.6.</strong> Array and index expressions</a></li><li class="chapter-item expanded "><a href="expressions/tuple-expr.html"><strong aria-hidden="true">8.2.7.</strong> Tuple and index expressions</a></li><li class="chapter-item expanded "><a href="expressions/struct-expr.html"><strong aria-hidden="true">8.2.8.</strong> Struct expressions</a></li><li class="chapter-item expanded "><a href="expressions/call-expr.html"><strong aria-hidden="true">8.2.9.</strong> Call expressions</a></li><li class="chapter-item expanded "><a href="expressions/method-call-expr.html"><strong aria-hidden="true">8.2.10.</strong> Method call expressions</a></li><li class="chapter-item expanded "><a href="expressions/field-expr.html"><strong aria-hidden="true">8.2.11.</strong> Field access expressions</a></li><li class="chapter-item expanded "><a href="expressions/closure-expr.html"><strong aria-hidden="true">8.2.12.</strong> Closure expressions</a></li><li class="chapter-item expanded "><a href="expressions/loop-expr.html"><strong aria-hidden="true">8.2.13.</strong> Loop expressions</a></li><li class="chapter-item expanded "><a href="expressions/range-expr.html"><strong aria-hidden="true">8.2.14.</strong> Range expressions</a></li><li class="chapter-item expanded "><a href="expressions/if-expr.html"><strong aria-hidden="true">8.2.15.</strong> If and if let expressions</a></li><li class="chapter-item expanded "><a href="expressions/match-expr.html"><strong aria-hidden="true">8.2.16.</strong> Match expressions</a></li><li class="chapter-item expanded "><a href="expressions/return-expr.html"><strong aria-hidden="true">8.2.17.</strong> Return expressions</a></li><li class="chapter-item expanded "><a href="expressions/await-expr.html"><strong aria-hidden="true">8.2.18.</strong> Await expressions</a></li><li class="chapter-item expanded "><a href="expressions/underscore-expr.html"><strong aria-hidden="true">8.2.19.</strong> Underscore expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">9.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="type-system.html"><strong aria-hidden="true">10.</strong> Type system</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="types.html"><strong aria-hidden="true">10.1.</strong> Types</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="types/boolean.html"><strong aria-hidden="true">10.1.1.</strong> Boolean type</a></li><li class="chapter-item expanded "><a href="types/numeric.html"><strong aria-hidden="true">10.1.2.</strong> Numeric types</a></li><li class="chapter-item expanded "><a href="types/textual.html"><strong aria-hidden="true">10.1.3.</strong> Textual types</a></li><li class="chapter-item expanded "><a href="types/never.html"><strong aria-hidden="true">10.1.4.</strong> Never type</a></li><li class="chapter-item expanded "><a href="types/tuple.html"><strong aria-hidden="true">10.1.5.</strong> Tuple types</a></li><li class="chapter-item expanded "><a href="types/array.html"><strong aria-hidden="true">10.1.6.</strong> Array types</a></li><li class="chapter-item expanded "><a href="types/slice.html"><strong aria-hidden="true">10.1.7.</strong> Slice types</a></li><li class="chapter-item expanded "><a href="types/struct.html"><strong aria-hidden="true">10.1.8.</strong> Struct types</a></li><li class="chapter-item expanded "><a href="types/enum.html"><strong aria-hidden="true">10.1.9.</strong> Enumerated types</a></li><li class="chapter-item expanded "><a href="types/union.html"><strong aria-hidden="true">10.1.10.</strong> Union types</a></li><li class="chapter-item expanded "><a href="types/function-item.html"><strong aria-hidden="true">10.1.11.</strong> Function item types</a></li><li class="chapter-item expanded "><a href="types/closure.html"><strong aria-hidden="true">10.1.12.</strong> Closure types</a></li><li class="chapter-item expanded "><a href="types/pointer.html"><strong aria-hidden="true">10.1.13.</strong> Pointer types</a></li><li class="chapter-item expanded "><a href="types/function-pointer.html"><strong aria-hidden="true">10.1.14.</strong> Function pointer types</a></li><li class="chapter-item expanded "><a href="types/trait-object.html"><strong aria-hidden="true">10.1.15.</strong> Trait object types</a></li><li class="chapter-item expanded "><a href="types/impl-trait.html"><strong aria-hidden="true">10.1.16.</strong> Impl trait type</a></li><li class="chapter-item expanded "><a href="types/parameters.html"><strong aria-hidden="true">10.1.17.</strong> Type parameters</a></li><li class="chapter-item expanded "><a href="types/inferred.html"><strong aria-hidden="true">10.1.18.</strong> Inferred type</a></li></ol></li><li class="chapter-item expanded "><a href="dynamically-sized-types.html"><strong aria-hidden="true">10.2.</strong> Dynamically Sized Types</a></li><li class="chapter-item expanded "><a href="type-layout.html"><strong aria-hidden="true">10.3.</strong> Type layout</a></li><li class="chapter-item expanded "><a href="interior-mutability.html"><strong aria-hidden="true">10.4.</strong> Interior mutability</a></li><li class="chapter-item expanded "><a href="subtyping.html"><strong aria-hidden="true">10.5.</strong> Subtyping and Variance</a></li><li class="chapter-item expanded "><a href="trait-bounds.html"><strong aria-hidden="true">10.6.</strong> Trait and lifetime bounds</a></li><li class="chapter-item expanded "><a href="type-coercions.html"><strong aria-hidden="true">10.7.</strong> Type coercions</a></li><li class="chapter-item expanded "><a href="destructors.html"><strong aria-hidden="true">10.8.</strong> Destructors</a></li><li class="chapter-item expanded "><a href="lifetime-elision.html"><strong aria-hidden="true">10.9.</strong> Lifetime elision</a></li></ol></li><li class="chapter-item expanded "><a href="special-types-and-traits.html"><strong aria-hidden="true">11.</strong> Special types and traits</a></li><li class="chapter-item expanded "><a href="names.html"><strong aria-hidden="true">12.</strong> Names</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="names/namespaces.html"><strong aria-hidden="true">12.1.</strong> Namespaces</a></li><li class="chapter-item expanded "><a href="names/scopes.html"><strong aria-hidden="true">12.2.</strong> Scopes</a></li><li class="chapter-item expanded "><a href="names/preludes.html"><strong aria-hidden="true">12.3.</strong> Preludes</a></li><li class="chapter-item expanded "><a href="paths.html"><strong aria-hidden="true">12.4.</strong> Paths</a></li><li class="chapter-item expanded "><a href="names/name-resolution.html"><strong aria-hidden="true">12.5.</strong> Name resolution</a></li><li class="chapter-item expanded "><a href="visibility-and-privacy.html"><strong aria-hidden="true">12.6.</strong> Visibility and privacy</a></li></ol></li><li class="chapter-item expanded "><a href="memory-model.html"><strong aria-hidden="true">13.</strong> Memory model</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory-allocation-and-lifetime.html"><strong aria-hidden="true">13.1.</strong> Memory allocation and lifetime</a></li><li class="chapter-item expanded "><a href="variables.html"><strong aria-hidden="true">13.2.</strong> Variables</a></li></ol></li><li class="chapter-item expanded "><a href="linkage.html"><strong aria-hidden="true">14.</strong> Linkage</a></li><li class="chapter-item expanded "><a href="inline-assembly.html"><strong aria-hidden="true">15.</strong> Inline assembly</a></li><li class="chapter-item expanded "><a href="unsafety.html"><strong aria-hidden="true">16.</strong> Unsafety</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="unsafe-keyword.html"><strong aria-hidden="true">16.1.</strong> The unsafe keyword</a></li><li class="chapter-item expanded "><a href="behavior-considered-undefined.html"><strong aria-hidden="true">16.2.</strong> Behavior considered undefined</a></li><li class="chapter-item expanded "><a href="behavior-not-considered-unsafe.html"><strong aria-hidden="true">16.3.</strong> Behavior not considered unsafe</a></li></ol></li><li class="chapter-item expanded "><a href="const_eval.html"><strong aria-hidden="true">17.</strong> Constant Evaluation</a></li><li class="chapter-item expanded "><a href="abi.html"><strong aria-hidden="true">18.</strong> Application Binary Interface</a></li><li class="chapter-item expanded "><a href="runtime.html"><strong aria-hidden="true">19.</strong> The Rust runtime</a></li><li class="chapter-item expanded "><a href="appendices.html"><strong aria-hidden="true">20.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="macro-ambiguity.html" class="active"><strong aria-hidden="true">20.1.</strong> Macro Follow-Set Ambiguity Formal Specification</a></li><li class="chapter-item expanded "><a href="influences.html"><strong aria-hidden="true">20.2.</strong> Influences</a></li><li class="chapter-item expanded "><a href="glossary.html"><strong aria-hidden="true">20.3.</strong> Glossary</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Reference</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/reference/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/reference/edit/master/src/macro-ambiguity.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="appendix-macro-follow-set-ambiguity-formal-specification"><a class="header" href="#appendix-macro-follow-set-ambiguity-formal-specification">Appendix: Macro Follow-Set Ambiguity Formal Specification</a></h1>
+<p>This page documents the formal specification of the follow rules for <a href="macros-by-example.html">Macros
+By Example</a>. They were originally specified in <a href="https://github.com/rust-lang/rfcs/blob/master/text/0550-macro-future-proofing.md">RFC 550</a>, from which the bulk
+of this text is copied, and expanded upon in subsequent RFCs.</p>
+<h2 id="definitions--conventions"><a class="header" href="#definitions--conventions">Definitions &amp; Conventions</a></h2>
+<ul>
+<li><code>macro</code>: anything invokable as <code>foo!(...)</code> in source code.</li>
+<li><code>MBE</code>: macro-by-example, a macro defined by <code>macro_rules</code>.</li>
+<li><code>matcher</code>: the left-hand-side of a rule in a <code>macro_rules</code> invocation, or a
+subportion thereof.</li>
+<li><code>macro parser</code>: the bit of code in the Rust parser that will parse the
+input using a grammar derived from all of the matchers.</li>
+<li><code>fragment</code>: The class of Rust syntax that a given matcher will accept (or
+&quot;match&quot;).</li>
+<li><code>repetition</code> : a fragment that follows a regular repeating pattern</li>
+<li><code>NT</code>: non-terminal, the various &quot;meta-variables&quot; or repetition matchers
+that can appear in a matcher, specified in MBE syntax with a leading <code>$</code>
+character.</li>
+<li><code>simple NT</code>: a &quot;meta-variable&quot; non-terminal (further discussion below).</li>
+<li><code>complex NT</code>: a repetition matching non-terminal, specified via repetition
+operators (<code>*</code>, <code>+</code>, <code>?</code>).</li>
+<li><code>token</code>: an atomic element of a matcher; i.e. identifiers, operators,
+open/close delimiters, <em>and</em> simple NT's.</li>
+<li><code>token tree</code>: a tree structure formed from tokens (the leaves), complex
+NT's, and finite sequences of token trees.</li>
+<li><code>delimiter token</code>: a token that is meant to divide the end of one fragment
+and the start of the next fragment.</li>
+<li><code>separator token</code>: an optional delimiter token in an complex NT that
+separates each pair of elements in the matched repetition.</li>
+<li><code>separated complex NT</code>: a complex NT that has its own separator token.</li>
+<li><code>delimited sequence</code>: a sequence of token trees with appropriate open- and
+close-delimiters at the start and end of the sequence.</li>
+<li><code>empty fragment</code>: The class of invisible Rust syntax that separates tokens,
+i.e. whitespace, or (in some lexical contexts), the empty token sequence.</li>
+<li><code>fragment specifier</code>: The identifier in a simple NT that specifies which
+fragment the NT accepts.</li>
+<li><code>language</code>: a context-free language.</li>
+</ul>
+<p>Example:</p>
+<pre><pre class="playground"><code class="language-rust compile_fail edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! i_am_an_mbe {
+    (start $foo:expr $($i:ident),* end) =&gt; ($foo)
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>(start $foo:expr $($i:ident),* end)</code> is a matcher. The whole matcher is a
+delimited sequence (with open- and close-delimiters <code>(</code> and <code>)</code>), and <code>$foo</code>
+and <code>$i</code> are simple NT's with <code>expr</code> and <code>ident</code> as their respective fragment
+specifiers.</p>
+<p><code>$(i:ident),*</code> is <em>also</em> an NT; it is a complex NT that matches a
+comma-separated repetition of identifiers. The <code>,</code> is the separator token for
+the complex NT; it occurs in between each pair of elements (if any) of the
+matched fragment.</p>
+<p>Another example of a complex NT is <code>$(hi $e:expr ;)+</code>, which matches any
+fragment of the form <code>hi &lt;expr&gt;; hi &lt;expr&gt;; ...</code> where <code>hi &lt;expr&gt;;</code> occurs at
+least once. Note that this complex NT does not have a dedicated separator
+token.</p>
+<p>(Note that Rust's parser ensures that delimited sequences always occur with
+proper nesting of token tree structure and correct matching of open- and
+close-delimiters.)</p>
+<p>We will tend to use the variable &quot;M&quot; to stand for a matcher, variables &quot;t&quot; and
+&quot;u&quot; for arbitrary individual tokens, and the variables &quot;tt&quot; and &quot;uu&quot; for
+arbitrary token trees. (The use of &quot;tt&quot; does present potential ambiguity with
+its additional role as a fragment specifier; but it will be clear from context
+which interpretation is meant.)</p>
+<p>&quot;SEP&quot; will range over separator tokens, &quot;OP&quot; over the repetition operators
+<code>*</code>, <code>+</code>, and <code>?</code>, &quot;OPEN&quot;/&quot;CLOSE&quot; over matching token pairs surrounding a
+delimited sequence (e.g. <code>[</code> and <code>]</code>).</p>
+<p>Greek letters &quot;α&quot; &quot;β&quot; &quot;γ&quot; &quot;δ&quot;  stand for potentially empty token-tree sequences.
+(However, the Greek letter &quot;ε&quot; (epsilon) has a special role in the presentation
+and does not stand for a token-tree sequence.)</p>
+<ul>
+<li>This Greek letter convention is usually just employed when the presence of
+a sequence is a technical detail; in particular, when we wish to <em>emphasize</em>
+that we are operating on a sequence of token-trees, we will use the notation
+&quot;tt ...&quot; for the sequence, not a Greek letter.</li>
+</ul>
+<p>Note that a matcher is merely a token tree. A &quot;simple NT&quot;, as mentioned above,
+is an meta-variable NT; thus it is a non-repetition. For example, <code>$foo:ty</code> is
+a simple NT but <code>$($foo:ty)+</code> is a complex NT.</p>
+<p>Note also that in the context of this formalism, the term &quot;token&quot; generally
+<em>includes</em> simple NTs.</p>
+<p>Finally, it is useful for the reader to keep in mind that according to the
+definitions of this formalism, no simple NT matches the empty fragment, and
+likewise no token matches the empty fragment of Rust syntax. (Thus, the <em>only</em>
+NT that can match the empty fragment is a complex NT.) This is not actually
+true, because the <code>vis</code> matcher can match an empty fragment. Thus, for the
+purposes of the formalism, we will treat <code>$v:vis</code> as actually being
+<code>$($v:vis)?</code>, with a requirement that the matcher match an empty fragment.</p>
+<h3 id="the-matcher-invariants"><a class="header" href="#the-matcher-invariants">The Matcher Invariants</a></h3>
+<p>To be valid, a matcher must meet the following three invariants. The definitions
+of FIRST and FOLLOW are described later.</p>
+<ol>
+<li>For any two successive token tree sequences in a matcher <code>M</code> (i.e. <code>M = ... tt uu ...</code>) with <code>uu ...</code> nonempty, we must have FOLLOW(<code>... tt</code>) ∪ {ε} ⊇
+FIRST(<code>uu ...</code>).</li>
+<li>For any separated complex NT in a matcher, <code>M = ... $(tt ...) SEP OP ...</code>,
+we must have <code>SEP</code> ∈ FOLLOW(<code>tt ...</code>).</li>
+<li>For an unseparated complex NT in a matcher, <code>M = ... $(tt ...) OP ...</code>, if
+OP = <code>*</code> or <code>+</code>, we must have FOLLOW(<code>tt ...</code>) ⊇ FIRST(<code>tt ...</code>).</li>
+</ol>
+<p>The first invariant says that whatever actual token that comes after a matcher,
+if any, must be somewhere in the predetermined follow set.  This ensures that a
+legal macro definition will continue to assign the same determination as to
+where <code>... tt</code> ends and <code>uu ...</code> begins, even as new syntactic forms are added
+to the language.</p>
+<p>The second invariant says that a separated complex NT must use a separator token
+that is part of the predetermined follow set for the internal contents of the
+NT. This ensures that a legal macro definition will continue to parse an input
+fragment into the same delimited sequence of <code>tt ...</code>'s, even as new syntactic
+forms are added to the language.</p>
+<p>The third invariant says that when we have a complex NT that can match two or
+more copies of the same thing with no separation in between, it must be
+permissible for them to be placed next to each other as per the first invariant.
+This invariant also requires they be nonempty, which eliminates a possible
+ambiguity.</p>
+<p><strong>NOTE: The third invariant is currently unenforced due to historical oversight
+and significant reliance on the behaviour. It is currently undecided what to do
+about this going forward. Macros that do not respect the behaviour may become
+invalid in a future edition of Rust. See the <a href="https://github.com/rust-lang/rust/issues/56575">tracking issue</a>.</strong></p>
+<h3 id="first-and-follow-informally"><a class="header" href="#first-and-follow-informally">FIRST and FOLLOW, informally</a></h3>
+<p>A given matcher M maps to three sets: FIRST(M), LAST(M) and FOLLOW(M).</p>
+<p>Each of the three sets is made up of tokens. FIRST(M) and LAST(M) may also
+contain a distinguished non-token element ε (&quot;epsilon&quot;), which indicates that M
+can match the empty fragment. (But FOLLOW(M) is always just a set of tokens.)</p>
+<p>Informally:</p>
+<ul>
+<li>
+<p>FIRST(M): collects the tokens potentially used first when matching a
+fragment to M.</p>
+</li>
+<li>
+<p>LAST(M): collects the tokens potentially used last when matching a fragment
+to M.</p>
+</li>
+<li>
+<p>FOLLOW(M): the set of tokens allowed to follow immediately after some
+fragment matched by M.</p>
+<p>In other words: t ∈ FOLLOW(M) if and only if there exists (potentially
+empty) token sequences α, β, γ, δ where:</p>
+<ul>
+<li>
+<p>M matches β,</p>
+</li>
+<li>
+<p>t matches γ, and</p>
+</li>
+<li>
+<p>The concatenation α β γ δ is a parseable Rust program.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>We use the shorthand ANYTOKEN to denote the set of all tokens (including simple
+NTs). For example, if any token is legal after a matcher M, then FOLLOW(M) =
+ANYTOKEN.</p>
+<p>(To review one's understanding of the above informal descriptions, the reader
+at this point may want to jump ahead to the <a href="#examples-of-first-and-last">examples of
+FIRST/LAST</a> before reading their formal
+definitions.)</p>
+<h3 id="first-last"><a class="header" href="#first-last">FIRST, LAST</a></h3>
+<p>Below are formal inductive definitions for FIRST and LAST.</p>
+<p>&quot;A ∪ B&quot; denotes set union, &quot;A ∩ B&quot; denotes set intersection, and &quot;A \ B&quot;
+denotes set difference (i.e. all elements of A that are not present in B).</p>
+<h4 id="first"><a class="header" href="#first">FIRST</a></h4>
+<p>FIRST(M) is defined by case analysis on the sequence M and the structure of its
+first token-tree (if any):</p>
+<ul>
+<li>
+<p>if M is the empty sequence, then FIRST(M) = { ε },</p>
+</li>
+<li>
+<p>if M starts with a token t, then FIRST(M) = { t },</p>
+<p>(Note: this covers the case where M starts with a delimited token-tree
+sequence, <code>M = OPEN tt ... CLOSE ...</code>, in which case <code>t = OPEN</code> and thus
+FIRST(M) = { <code>OPEN</code> }.)</p>
+<p>(Note: this critically relies on the property that no simple NT matches the
+empty fragment.)</p>
+</li>
+<li>
+<p>Otherwise, M is a token-tree sequence starting with a complex NT: <code>M = $( tt ... ) OP α</code>, or <code>M = $( tt ... ) SEP OP α</code>, (where <code>α</code> is the (potentially
+empty) sequence of token trees for the rest of the matcher).</p>
+<ul>
+<li>Let SEP_SET(M) = { SEP } if SEP is present and ε ∈ FIRST(<code>tt ...</code>);
+otherwise SEP_SET(M) = {}.</li>
+</ul>
+</li>
+<li>
+<p>Let ALPHA_SET(M) = FIRST(<code>α</code>) if OP = <code>*</code> or <code>?</code> and ALPHA_SET(M) = {} if
+OP = <code>+</code>.</p>
+</li>
+<li>
+<p>FIRST(M) = (FIRST(<code>tt ...</code>) \ {ε}) ∪ SEP_SET(M) ∪ ALPHA_SET(M).</p>
+</li>
+</ul>
+<p>The definition for complex NTs deserves some justification. SEP_SET(M) defines
+the possibility that the separator could be a valid first token for M, which
+happens when there is a separator defined and the repeated fragment could be
+empty. ALPHA_SET(M) defines the possibility that the complex NT could be empty,
+meaning that M's valid first tokens are those of the following token-tree
+sequences <code>α</code>. This occurs when either <code>*</code> or <code>?</code> is used, in which case there
+could be zero repetitions. In theory, this could also occur if <code>+</code> was used with
+a potentially-empty repeating fragment, but this is forbidden by the third
+invariant.</p>
+<p>From there, clearly FIRST(M) can include any token from SEP_SET(M) or
+ALPHA_SET(M), and if the complex NT match is nonempty, then any token starting
+FIRST(<code>tt ...</code>) could work too. The last piece to consider is ε. SEP_SET(M) and
+FIRST(<code>tt ...</code>) \ {ε} cannot contain ε, but ALPHA_SET(M) could. Hence, this
+definition allows M to accept ε if and only if ε ∈ ALPHA_SET(M) does. This is
+correct because for M to accept ε in the complex NT case, both the complex NT
+and α must accept it. If OP = <code>+</code>, meaning that the complex NT cannot be empty,
+then by definition ε ∉ ALPHA_SET(M). Otherwise, the complex NT can accept zero
+repetitions, and then ALPHA_SET(M) = FOLLOW(<code>α</code>). So this definition is correct
+with respect to \varepsilon as well.</p>
+<h4 id="last"><a class="header" href="#last">LAST</a></h4>
+<p>LAST(M), defined by case analysis on M itself (a sequence of token-trees):</p>
+<ul>
+<li>
+<p>if M is the empty sequence, then LAST(M) = { ε }</p>
+</li>
+<li>
+<p>if M is a singleton token t, then LAST(M) = { t }</p>
+</li>
+<li>
+<p>if M is the singleton complex NT repeating zero or more times, <code>M = $( tt ... ) *</code>, or <code>M = $( tt ... ) SEP *</code></p>
+<ul>
+<li>
+<p>Let sep_set = { SEP } if SEP present; otherwise sep_set = {}.</p>
+</li>
+<li>
+<p>if ε ∈ LAST(<code>tt ...</code>) then LAST(M) = LAST(<code>tt ...</code>) ∪ sep_set</p>
+</li>
+<li>
+<p>otherwise, the sequence <code>tt ...</code> must be non-empty; LAST(M) = LAST(<code>tt ...</code>) ∪ {ε}.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>if M is the singleton complex NT repeating one or more times, <code>M = $( tt ... ) +</code>, or <code>M = $( tt ... ) SEP +</code></p>
+<ul>
+<li>
+<p>Let sep_set = { SEP } if SEP present; otherwise sep_set = {}.</p>
+</li>
+<li>
+<p>if ε ∈ LAST(<code>tt ...</code>) then LAST(M) = LAST(<code>tt ...</code>) ∪ sep_set</p>
+</li>
+<li>
+<p>otherwise, the sequence <code>tt ...</code> must be non-empty; LAST(M) = LAST(<code>tt ...</code>)</p>
+</li>
+</ul>
+</li>
+<li>
+<p>if M is the singleton complex NT repeating zero or one time, <code>M = $( tt ...) ?</code>, then LAST(M) = LAST(<code>tt ...</code>) ∪ {ε}.</p>
+</li>
+<li>
+<p>if M is a delimited token-tree sequence <code>OPEN tt ... CLOSE</code>, then LAST(M) =
+{ <code>CLOSE</code> }.</p>
+</li>
+<li>
+<p>if M is a non-empty sequence of token-trees <code>tt uu ...</code>,</p>
+<ul>
+<li>
+<p>If ε ∈ LAST(<code>uu ...</code>), then LAST(M) = LAST(<code>tt</code>) ∪ (LAST(<code>uu ...</code>) \ { ε }).</p>
+</li>
+<li>
+<p>Otherwise, the sequence <code>uu ...</code> must be non-empty; then LAST(M) =
+LAST(<code>uu ...</code>).</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="examples-of-first-and-last"><a class="header" href="#examples-of-first-and-last">Examples of FIRST and LAST</a></h3>
+<p>Below are some examples of FIRST and LAST.
+(Note in particular how the special ε element is introduced and
+eliminated based on the interaction between the pieces of the input.)</p>
+<p>Our first example is presented in a tree structure to elaborate on how
+the analysis of the matcher composes. (Some of the simpler subtrees
+have been elided.)</p>
+<pre><code class="language-text">INPUT:  $(  $d:ident   $e:expr   );*    $( $( h )* );*    $( f ; )+   g
+            ~~~~~~~~   ~~~~~~~                ~
+                |         |                   |
+FIRST:   { $d:ident }  { $e:expr }          { h }
+
+
+INPUT:  $(  $d:ident   $e:expr   );*    $( $( h )* );*    $( f ; )+
+            ~~~~~~~~~~~~~~~~~~             ~~~~~~~           ~~~
+                        |                      |               |
+FIRST:          { $d:ident }               { h, ε }         { f }
+
+INPUT:  $(  $d:ident   $e:expr   );*    $( $( h )* );*    $( f ; )+   g
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~    ~~~~~~~~~~~~~~    ~~~~~~~~~   ~
+                        |                       |              |       |
+FIRST:        { $d:ident, ε }            {  h, ε, ;  }      { f }   { g }
+
+
+INPUT:  $(  $d:ident   $e:expr   );*    $( $( h )* );*    $( f ; )+   g
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                        |
+FIRST:                       { $d:ident, h, ;,  f }
+</code></pre>
+<p>Thus:</p>
+<ul>
+<li>FIRST(<code>$($d:ident $e:expr );* $( $(h)* );* $( f ;)+ g</code>) = { <code>$d:ident</code>, <code>h</code>, <code>;</code>, <code>f</code> }</li>
+</ul>
+<p>Note however that:</p>
+<ul>
+<li>FIRST(<code>$($d:ident $e:expr );* $( $(h)* );* $($( f ;)+ g)*</code>) = { <code>$d:ident</code>, <code>h</code>, <code>;</code>, <code>f</code>, ε }</li>
+</ul>
+<p>Here are similar examples but now for LAST.</p>
+<ul>
+<li>LAST(<code>$d:ident $e:expr</code>) = { <code>$e:expr</code> }</li>
+<li>LAST(<code>$( $d:ident $e:expr );*</code>) = { <code>$e:expr</code>, ε }</li>
+<li>LAST(<code>$( $d:ident $e:expr );* $(h)*</code>) = { <code>$e:expr</code>, ε, <code>h</code> }</li>
+<li>LAST(<code>$( $d:ident $e:expr );* $(h)* $( f ;)+</code>) = { <code>;</code> }</li>
+<li>LAST(<code>$( $d:ident $e:expr );* $(h)* $( f ;)+ g</code>) = { <code>g</code> }</li>
+</ul>
+<h3 id="followm"><a class="header" href="#followm">FOLLOW(M)</a></h3>
+<p>Finally, the definition for FOLLOW(M) is built up as follows. pat, expr, etc.
+represent simple nonterminals with the given fragment specifier.</p>
+<ul>
+<li>
+<p>FOLLOW(pat) = {<code>=&gt;</code>, <code>,</code>, <code>=</code>, <code>|</code>, <code>if</code>, <code>in</code>}`.</p>
+</li>
+<li>
+<p>FOLLOW(expr) = FOLLOW(stmt) =  {<code>=&gt;</code>, <code>,</code>, <code>;</code>}`.</p>
+</li>
+<li>
+<p>FOLLOW(ty) = FOLLOW(path) = {<code>{</code>, <code>[</code>, <code>,</code>, <code>=&gt;</code>, <code>:</code>, <code>=</code>, <code>&gt;</code>, <code>&gt;&gt;</code>, <code>;</code>,
+<code>|</code>, <code>as</code>, <code>where</code>, block nonterminals}.</p>
+</li>
+<li>
+<p>FOLLOW(vis) = {<code>,</code>l any keyword or identifier except a non-raw <code>priv</code>; any
+token that can begin a type; ident, ty, and path nonterminals}.</p>
+</li>
+<li>
+<p>FOLLOW(t) = ANYTOKEN for any other simple token, including block, ident,
+tt, item, lifetime, literal and meta simple nonterminals, and all terminals.</p>
+</li>
+<li>
+<p>FOLLOW(M), for any other M, is defined as the intersection, as t ranges over
+(LAST(M) \ {ε}), of FOLLOW(t).</p>
+</li>
+</ul>
+<p>The tokens that can begin a type are, as of this writing, {<code>(</code>, <code>[</code>, <code>!</code>, <code>*</code>,
+<code>&amp;</code>, <code>&amp;&amp;</code>, <code>?</code>, lifetimes, <code>&gt;</code>, <code>&gt;&gt;</code>, <code>::</code>, any non-keyword identifier, <code>super</code>,
+<code>self</code>, <code>Self</code>, <code>extern</code>, <code>crate</code>, <code>$crate</code>, <code>_</code>, <code>for</code>, <code>impl</code>, <code>fn</code>, <code>unsafe</code>,
+<code>typeof</code>, <code>dyn</code>}, although this list may not be complete because people won't
+always remember to update the appendix when new ones are added.</p>
+<p>Examples of FOLLOW for complex M:</p>
+<ul>
+<li>FOLLOW(<code>$( $d:ident $e:expr )*</code>) = FOLLOW(<code>$e:expr</code>)</li>
+<li>FOLLOW(<code>$( $d:ident $e:expr )* $(;)*</code>) = FOLLOW(<code>$e:expr</code>) ∩ ANYTOKEN = FOLLOW(<code>$e:expr</code>)</li>
+<li>FOLLOW(<code>$( $d:ident $e:expr )* $(;)* $( f |)+</code>) = ANYTOKEN</li>
+</ul>
+<h3 id="examples-of-valid-and-invalid-matchers"><a class="header" href="#examples-of-valid-and-invalid-matchers">Examples of valid and invalid matchers</a></h3>
+<p>With the above specification in hand, we can present arguments for
+why particular matchers are legal and others are not.</p>
+<ul>
+<li>
+<p><code>($ty:ty &lt; foo ,)</code> : illegal, because FIRST(<code>&lt; foo ,</code>) = { <code>&lt;</code> } ⊈ FOLLOW(<code>ty</code>)</p>
+</li>
+<li>
+<p><code>($ty:ty , foo &lt;)</code> : legal, because FIRST(<code>, foo &lt;</code>) = { <code>,</code> }  is ⊆ FOLLOW(<code>ty</code>).</p>
+</li>
+<li>
+<p><code>($pa:pat $pb:pat $ty:ty ,)</code> : illegal, because FIRST(<code>$pb:pat $ty:ty ,</code>) = { <code>$pb:pat</code> } ⊈ FOLLOW(<code>pat</code>), and also FIRST(<code>$ty:ty ,</code>) = { <code>$ty:ty</code> } ⊈ FOLLOW(<code>pat</code>).</p>
+</li>
+<li>
+<p><code>( $($a:tt $b:tt)* ; )</code> : legal, because FIRST(<code>$b:tt</code>) = { <code>$b:tt</code> } is ⊆ FOLLOW(<code>tt</code>) = ANYTOKEN, as is FIRST(<code>;</code>) = { <code>;</code> }.</p>
+</li>
+<li>
+<p><code>( $($t:tt),* , $(t:tt),* )</code> : legal,  (though any attempt to actually use this macro will signal a local ambiguity error during expansion).</p>
+</li>
+<li>
+<p><code>($ty:ty $(; not sep)* -)</code> : illegal, because FIRST(<code>$(; not sep)* -</code>) = { <code>;</code>, <code>-</code> } is not in FOLLOW(<code>ty</code>).</p>
+</li>
+<li>
+<p><code>($($ty:ty)-+)</code> : illegal, because separator <code>-</code> is not in FOLLOW(<code>ty</code>).</p>
+</li>
+<li>
+<p><code>($($e:expr)*)</code> : illegal, because expr NTs are not in FOLLOW(expr NT).</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="appendices.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="influences.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="appendices.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="influences.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

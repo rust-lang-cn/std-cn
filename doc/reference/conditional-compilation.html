@@ -1,0 +1,501 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Conditional compilation - The Rust Reference</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/reference.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="notation.html"><strong aria-hidden="true">1.</strong> Notation</a></li><li class="chapter-item expanded "><a href="lexical-structure.html"><strong aria-hidden="true">2.</strong> Lexical structure</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="input-format.html"><strong aria-hidden="true">2.1.</strong> Input format</a></li><li class="chapter-item expanded "><a href="keywords.html"><strong aria-hidden="true">2.2.</strong> Keywords</a></li><li class="chapter-item expanded "><a href="identifiers.html"><strong aria-hidden="true">2.3.</strong> Identifiers</a></li><li class="chapter-item expanded "><a href="comments.html"><strong aria-hidden="true">2.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="whitespace.html"><strong aria-hidden="true">2.5.</strong> Whitespace</a></li><li class="chapter-item expanded "><a href="tokens.html"><strong aria-hidden="true">2.6.</strong> Tokens</a></li></ol></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="macros-by-example.html"><strong aria-hidden="true">3.1.</strong> Macros By Example</a></li><li class="chapter-item expanded "><a href="procedural-macros.html"><strong aria-hidden="true">3.2.</strong> Procedural Macros</a></li></ol></li><li class="chapter-item expanded "><a href="crates-and-source-files.html"><strong aria-hidden="true">4.</strong> Crates and source files</a></li><li class="chapter-item expanded "><a href="conditional-compilation.html" class="active"><strong aria-hidden="true">5.</strong> Conditional compilation</a></li><li class="chapter-item expanded "><a href="items.html"><strong aria-hidden="true">6.</strong> Items</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="items/modules.html"><strong aria-hidden="true">6.1.</strong> Modules</a></li><li class="chapter-item expanded "><a href="items/extern-crates.html"><strong aria-hidden="true">6.2.</strong> Extern crates</a></li><li class="chapter-item expanded "><a href="items/use-declarations.html"><strong aria-hidden="true">6.3.</strong> Use declarations</a></li><li class="chapter-item expanded "><a href="items/functions.html"><strong aria-hidden="true">6.4.</strong> Functions</a></li><li class="chapter-item expanded "><a href="items/type-aliases.html"><strong aria-hidden="true">6.5.</strong> Type aliases</a></li><li class="chapter-item expanded "><a href="items/structs.html"><strong aria-hidden="true">6.6.</strong> Structs</a></li><li class="chapter-item expanded "><a href="items/enumerations.html"><strong aria-hidden="true">6.7.</strong> Enumerations</a></li><li class="chapter-item expanded "><a href="items/unions.html"><strong aria-hidden="true">6.8.</strong> Unions</a></li><li class="chapter-item expanded "><a href="items/constant-items.html"><strong aria-hidden="true">6.9.</strong> Constant items</a></li><li class="chapter-item expanded "><a href="items/static-items.html"><strong aria-hidden="true">6.10.</strong> Static items</a></li><li class="chapter-item expanded "><a href="items/traits.html"><strong aria-hidden="true">6.11.</strong> Traits</a></li><li class="chapter-item expanded "><a href="items/implementations.html"><strong aria-hidden="true">6.12.</strong> Implementations</a></li><li class="chapter-item expanded "><a href="items/external-blocks.html"><strong aria-hidden="true">6.13.</strong> External blocks</a></li><li class="chapter-item expanded "><a href="items/generics.html"><strong aria-hidden="true">6.14.</strong> Generic parameters</a></li><li class="chapter-item expanded "><a href="items/associated-items.html"><strong aria-hidden="true">6.15.</strong> Associated Items</a></li></ol></li><li class="chapter-item expanded "><a href="attributes.html"><strong aria-hidden="true">7.</strong> Attributes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="attributes/testing.html"><strong aria-hidden="true">7.1.</strong> Testing</a></li><li class="chapter-item expanded "><a href="attributes/derive.html"><strong aria-hidden="true">7.2.</strong> Derive</a></li><li class="chapter-item expanded "><a href="attributes/diagnostics.html"><strong aria-hidden="true">7.3.</strong> Diagnostics</a></li><li class="chapter-item expanded "><a href="attributes/codegen.html"><strong aria-hidden="true">7.4.</strong> Code generation</a></li><li class="chapter-item expanded "><a href="attributes/limits.html"><strong aria-hidden="true">7.5.</strong> Limits</a></li><li class="chapter-item expanded "><a href="attributes/type_system.html"><strong aria-hidden="true">7.6.</strong> Type System</a></li><li class="chapter-item expanded "><a href="attributes/debugger.html"><strong aria-hidden="true">7.7.</strong> Debugger</a></li></ol></li><li class="chapter-item expanded "><a href="statements-and-expressions.html"><strong aria-hidden="true">8.</strong> Statements and expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="statements.html"><strong aria-hidden="true">8.1.</strong> Statements</a></li><li class="chapter-item expanded "><a href="expressions.html"><strong aria-hidden="true">8.2.</strong> Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="expressions/literal-expr.html"><strong aria-hidden="true">8.2.1.</strong> Literal expressions</a></li><li class="chapter-item expanded "><a href="expressions/path-expr.html"><strong aria-hidden="true">8.2.2.</strong> Path expressions</a></li><li class="chapter-item expanded "><a href="expressions/block-expr.html"><strong aria-hidden="true">8.2.3.</strong> Block expressions</a></li><li class="chapter-item expanded "><a href="expressions/operator-expr.html"><strong aria-hidden="true">8.2.4.</strong> Operator expressions</a></li><li class="chapter-item expanded "><a href="expressions/grouped-expr.html"><strong aria-hidden="true">8.2.5.</strong> Grouped expressions</a></li><li class="chapter-item expanded "><a href="expressions/array-expr.html"><strong aria-hidden="true">8.2.6.</strong> Array and index expressions</a></li><li class="chapter-item expanded "><a href="expressions/tuple-expr.html"><strong aria-hidden="true">8.2.7.</strong> Tuple and index expressions</a></li><li class="chapter-item expanded "><a href="expressions/struct-expr.html"><strong aria-hidden="true">8.2.8.</strong> Struct expressions</a></li><li class="chapter-item expanded "><a href="expressions/call-expr.html"><strong aria-hidden="true">8.2.9.</strong> Call expressions</a></li><li class="chapter-item expanded "><a href="expressions/method-call-expr.html"><strong aria-hidden="true">8.2.10.</strong> Method call expressions</a></li><li class="chapter-item expanded "><a href="expressions/field-expr.html"><strong aria-hidden="true">8.2.11.</strong> Field access expressions</a></li><li class="chapter-item expanded "><a href="expressions/closure-expr.html"><strong aria-hidden="true">8.2.12.</strong> Closure expressions</a></li><li class="chapter-item expanded "><a href="expressions/loop-expr.html"><strong aria-hidden="true">8.2.13.</strong> Loop expressions</a></li><li class="chapter-item expanded "><a href="expressions/range-expr.html"><strong aria-hidden="true">8.2.14.</strong> Range expressions</a></li><li class="chapter-item expanded "><a href="expressions/if-expr.html"><strong aria-hidden="true">8.2.15.</strong> If and if let expressions</a></li><li class="chapter-item expanded "><a href="expressions/match-expr.html"><strong aria-hidden="true">8.2.16.</strong> Match expressions</a></li><li class="chapter-item expanded "><a href="expressions/return-expr.html"><strong aria-hidden="true">8.2.17.</strong> Return expressions</a></li><li class="chapter-item expanded "><a href="expressions/await-expr.html"><strong aria-hidden="true">8.2.18.</strong> Await expressions</a></li><li class="chapter-item expanded "><a href="expressions/underscore-expr.html"><strong aria-hidden="true">8.2.19.</strong> Underscore expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">9.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="type-system.html"><strong aria-hidden="true">10.</strong> Type system</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="types.html"><strong aria-hidden="true">10.1.</strong> Types</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="types/boolean.html"><strong aria-hidden="true">10.1.1.</strong> Boolean type</a></li><li class="chapter-item expanded "><a href="types/numeric.html"><strong aria-hidden="true">10.1.2.</strong> Numeric types</a></li><li class="chapter-item expanded "><a href="types/textual.html"><strong aria-hidden="true">10.1.3.</strong> Textual types</a></li><li class="chapter-item expanded "><a href="types/never.html"><strong aria-hidden="true">10.1.4.</strong> Never type</a></li><li class="chapter-item expanded "><a href="types/tuple.html"><strong aria-hidden="true">10.1.5.</strong> Tuple types</a></li><li class="chapter-item expanded "><a href="types/array.html"><strong aria-hidden="true">10.1.6.</strong> Array types</a></li><li class="chapter-item expanded "><a href="types/slice.html"><strong aria-hidden="true">10.1.7.</strong> Slice types</a></li><li class="chapter-item expanded "><a href="types/struct.html"><strong aria-hidden="true">10.1.8.</strong> Struct types</a></li><li class="chapter-item expanded "><a href="types/enum.html"><strong aria-hidden="true">10.1.9.</strong> Enumerated types</a></li><li class="chapter-item expanded "><a href="types/union.html"><strong aria-hidden="true">10.1.10.</strong> Union types</a></li><li class="chapter-item expanded "><a href="types/function-item.html"><strong aria-hidden="true">10.1.11.</strong> Function item types</a></li><li class="chapter-item expanded "><a href="types/closure.html"><strong aria-hidden="true">10.1.12.</strong> Closure types</a></li><li class="chapter-item expanded "><a href="types/pointer.html"><strong aria-hidden="true">10.1.13.</strong> Pointer types</a></li><li class="chapter-item expanded "><a href="types/function-pointer.html"><strong aria-hidden="true">10.1.14.</strong> Function pointer types</a></li><li class="chapter-item expanded "><a href="types/trait-object.html"><strong aria-hidden="true">10.1.15.</strong> Trait object types</a></li><li class="chapter-item expanded "><a href="types/impl-trait.html"><strong aria-hidden="true">10.1.16.</strong> Impl trait type</a></li><li class="chapter-item expanded "><a href="types/parameters.html"><strong aria-hidden="true">10.1.17.</strong> Type parameters</a></li><li class="chapter-item expanded "><a href="types/inferred.html"><strong aria-hidden="true">10.1.18.</strong> Inferred type</a></li></ol></li><li class="chapter-item expanded "><a href="dynamically-sized-types.html"><strong aria-hidden="true">10.2.</strong> Dynamically Sized Types</a></li><li class="chapter-item expanded "><a href="type-layout.html"><strong aria-hidden="true">10.3.</strong> Type layout</a></li><li class="chapter-item expanded "><a href="interior-mutability.html"><strong aria-hidden="true">10.4.</strong> Interior mutability</a></li><li class="chapter-item expanded "><a href="subtyping.html"><strong aria-hidden="true">10.5.</strong> Subtyping and Variance</a></li><li class="chapter-item expanded "><a href="trait-bounds.html"><strong aria-hidden="true">10.6.</strong> Trait and lifetime bounds</a></li><li class="chapter-item expanded "><a href="type-coercions.html"><strong aria-hidden="true">10.7.</strong> Type coercions</a></li><li class="chapter-item expanded "><a href="destructors.html"><strong aria-hidden="true">10.8.</strong> Destructors</a></li><li class="chapter-item expanded "><a href="lifetime-elision.html"><strong aria-hidden="true">10.9.</strong> Lifetime elision</a></li></ol></li><li class="chapter-item expanded "><a href="special-types-and-traits.html"><strong aria-hidden="true">11.</strong> Special types and traits</a></li><li class="chapter-item expanded "><a href="names.html"><strong aria-hidden="true">12.</strong> Names</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="names/namespaces.html"><strong aria-hidden="true">12.1.</strong> Namespaces</a></li><li class="chapter-item expanded "><a href="names/scopes.html"><strong aria-hidden="true">12.2.</strong> Scopes</a></li><li class="chapter-item expanded "><a href="names/preludes.html"><strong aria-hidden="true">12.3.</strong> Preludes</a></li><li class="chapter-item expanded "><a href="paths.html"><strong aria-hidden="true">12.4.</strong> Paths</a></li><li class="chapter-item expanded "><a href="names/name-resolution.html"><strong aria-hidden="true">12.5.</strong> Name resolution</a></li><li class="chapter-item expanded "><a href="visibility-and-privacy.html"><strong aria-hidden="true">12.6.</strong> Visibility and privacy</a></li></ol></li><li class="chapter-item expanded "><a href="memory-model.html"><strong aria-hidden="true">13.</strong> Memory model</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory-allocation-and-lifetime.html"><strong aria-hidden="true">13.1.</strong> Memory allocation and lifetime</a></li><li class="chapter-item expanded "><a href="variables.html"><strong aria-hidden="true">13.2.</strong> Variables</a></li></ol></li><li class="chapter-item expanded "><a href="linkage.html"><strong aria-hidden="true">14.</strong> Linkage</a></li><li class="chapter-item expanded "><a href="inline-assembly.html"><strong aria-hidden="true">15.</strong> Inline assembly</a></li><li class="chapter-item expanded "><a href="unsafety.html"><strong aria-hidden="true">16.</strong> Unsafety</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="unsafe-keyword.html"><strong aria-hidden="true">16.1.</strong> The unsafe keyword</a></li><li class="chapter-item expanded "><a href="behavior-considered-undefined.html"><strong aria-hidden="true">16.2.</strong> Behavior considered undefined</a></li><li class="chapter-item expanded "><a href="behavior-not-considered-unsafe.html"><strong aria-hidden="true">16.3.</strong> Behavior not considered unsafe</a></li></ol></li><li class="chapter-item expanded "><a href="const_eval.html"><strong aria-hidden="true">17.</strong> Constant Evaluation</a></li><li class="chapter-item expanded "><a href="abi.html"><strong aria-hidden="true">18.</strong> Application Binary Interface</a></li><li class="chapter-item expanded "><a href="runtime.html"><strong aria-hidden="true">19.</strong> The Rust runtime</a></li><li class="chapter-item expanded "><a href="appendices.html"><strong aria-hidden="true">20.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="macro-ambiguity.html"><strong aria-hidden="true">20.1.</strong> Macro Follow-Set Ambiguity Formal Specification</a></li><li class="chapter-item expanded "><a href="influences.html"><strong aria-hidden="true">20.2.</strong> Influences</a></li><li class="chapter-item expanded "><a href="glossary.html"><strong aria-hidden="true">20.3.</strong> Glossary</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Reference</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/reference/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/reference/edit/master/src/conditional-compilation.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="conditional-compilation"><a class="header" href="#conditional-compilation">Conditional compilation</a></h1>
+<blockquote>
+<p><strong><sup>Syntax</sup></strong><br />
+<em>ConfigurationPredicate</em> :<br />
+      <em>ConfigurationOption</em><br />
+   | <em>ConfigurationAll</em><br />
+   | <em>ConfigurationAny</em><br />
+   | <em>ConfigurationNot</em></p>
+<p><em>ConfigurationOption</em> :<br />
+   <a href="identifiers.html">IDENTIFIER</a> (<code>=</code> (<a href="tokens.html#string-literals">STRING_LITERAL</a> | <a href="tokens.html#raw-string-literals">RAW_STRING_LITERAL</a>))<sup>?</sup></p>
+<p><em>ConfigurationAll</em><br />
+   <code>all</code> <code>(</code> <em>ConfigurationPredicateList</em><sup>?</sup> <code>)</code></p>
+<p><em>ConfigurationAny</em><br />
+   <code>any</code> <code>(</code> <em>ConfigurationPredicateList</em><sup>?</sup> <code>)</code></p>
+<p><em>ConfigurationNot</em><br />
+   <code>not</code> <code>(</code> <em>ConfigurationPredicate</em> <code>)</code></p>
+<p><em>ConfigurationPredicateList</em><br />
+   <em>ConfigurationPredicate</em> (<code>,</code> <em>ConfigurationPredicate</em>)<sup>*</sup> <code>,</code><sup>?</sup></p>
+</blockquote>
+<p><em>Conditionally compiled source code</em> is source code that may or may not be
+considered a part of the source code depending on certain conditions. <!-- This
+definition is sort of vacuous --> Source code can be conditionally compiled
+using the <a href="attributes.html">attributes</a> <a href="#the-cfg-attribute"><code>cfg</code></a> and <a href="#the-cfg_attr-attribute"><code>cfg_attr</code></a> and the built-in <a href="#the-cfg-macro"><code>cfg</code> macro</a>.
+These conditions are based on the target architecture of the compiled crate,
+arbitrary values passed to the compiler, and a few other miscellaneous things
+further described below in detail.</p>
+<p>Each form of conditional compilation takes a <em>configuration predicate</em> that
+evaluates to true or false. The predicate is one of the following:</p>
+<ul>
+<li>A configuration option. It is true if the option is set and false if it is
+unset.</li>
+<li><code>all()</code> with a comma separated list of configuration predicates. It is false
+if at least one predicate is false. If there are no predicates, it is true.</li>
+<li><code>any()</code> with a comma separated list of configuration predicates. It is true
+if at least one predicate is true. If there are no predicates, it is false.</li>
+<li><code>not()</code> with a configuration predicate. It is true if its predicate is false
+and false if its predicate is true.</li>
+</ul>
+<p><em>Configuration options</em> are names and key-value pairs that are either set or
+unset. Names are written as a single identifier such as, for example, <code>unix</code>.
+Key-value pairs are written as an identifier, <code>=</code>, and then a string. For
+example, <code>target_arch = &quot;x86_64&quot;</code> is a configuration option.</p>
+<blockquote>
+<p><strong>Note</strong>: Whitespace around the <code>=</code> is ignored. <code>foo=&quot;bar&quot;</code> and <code>foo = &quot;bar&quot;</code>
+are equivalent configuration options.</p>
+</blockquote>
+<p>Keys are not unique in the set of key-value configuration options. For example,
+both <code>feature = &quot;std&quot;</code> and <code>feature = &quot;serde&quot;</code> can be set at the same time.</p>
+<h2 id="set-configuration-options"><a class="header" href="#set-configuration-options">Set Configuration Options</a></h2>
+<p>Which configuration options are set is determined statically during the
+compilation of the crate. Certain options are <em>compiler-set</em> based on data
+about the compilation. Other options are <em>arbitrarily-set</em>, set based on input
+passed to the compiler outside of the code. It is not possible to set a
+configuration option from within the source code of the crate being compiled.</p>
+<blockquote>
+<p><strong>Note</strong>: For <code>rustc</code>, arbitrary-set configuration options are set using the
+<a href="../rustc/command-line-arguments.html#--cfg-configure-the-compilation-environment"><code>--cfg</code></a> flag.</p>
+</blockquote>
+<blockquote>
+<p><strong>Note</strong>: Configuration options with the key <code>feature</code> are a convention used
+by <a href="../cargo/reference/features.html">Cargo</a> for specifying compile-time options and optional
+dependencies.</p>
+</blockquote>
+<div class="warning">
+<p>Warning: It is possible for arbitrarily-set configuration options to have the
+same value as compiler-set configuration options. For example, it is possible
+to do <code>rustc --cfg &quot;unix&quot; program.rs</code> while compiling to a Windows target, and
+have both <code>unix</code> and <code>windows</code> configuration options set at the same time. It
+is unwise to actually do this.</p>
+</div>
+<h3 id="target_arch"><a class="header" href="#target_arch"><code>target_arch</code></a></h3>
+<p>Key-value option set once with the target's CPU architecture. The value is
+similar to the first element of the platform's target triple, but not
+identical.</p>
+<p>Example values:</p>
+<ul>
+<li><code>&quot;x86&quot;</code></li>
+<li><code>&quot;x86_64&quot;</code></li>
+<li><code>&quot;mips&quot;</code></li>
+<li><code>&quot;powerpc&quot;</code></li>
+<li><code>&quot;powerpc64&quot;</code></li>
+<li><code>&quot;arm&quot;</code></li>
+<li><code>&quot;aarch64&quot;</code></li>
+</ul>
+<h3 id="target_feature"><a class="header" href="#target_feature"><code>target_feature</code></a></h3>
+<p>Key-value option set for each platform feature available for the current
+compilation target.</p>
+<p>Example values:</p>
+<ul>
+<li><code>&quot;avx&quot;</code></li>
+<li><code>&quot;avx2&quot;</code></li>
+<li><code>&quot;crt-static&quot;</code></li>
+<li><code>&quot;rdrand&quot;</code></li>
+<li><code>&quot;sse&quot;</code></li>
+<li><code>&quot;sse2&quot;</code></li>
+<li><code>&quot;sse4.1&quot;</code></li>
+</ul>
+<p>See the <a href="attributes/codegen.html#the-target_feature-attribute"><code>target_feature</code> attribute</a> for more details on the available
+features. An additional feature of <code>crt-static</code> is available to the
+<code>target_feature</code> option to indicate that a <a href="linkage.html#static-and-dynamic-c-runtimes">static C runtime</a> is available.</p>
+<h3 id="target_os"><a class="header" href="#target_os"><code>target_os</code></a></h3>
+<p>Key-value option set once with the target's operating system. This value is
+similar to the second and third element of the platform's target triple.</p>
+<p>Example values:</p>
+<ul>
+<li><code>&quot;windows&quot;</code></li>
+<li><code>&quot;macos&quot;</code></li>
+<li><code>&quot;ios&quot;</code></li>
+<li><code>&quot;linux&quot;</code></li>
+<li><code>&quot;android&quot;</code></li>
+<li><code>&quot;freebsd&quot;</code></li>
+<li><code>&quot;dragonfly&quot;</code></li>
+<li><code>&quot;openbsd&quot;</code></li>
+<li><code>&quot;netbsd&quot;</code></li>
+</ul>
+<h3 id="target_family"><a class="header" href="#target_family"><code>target_family</code></a></h3>
+<p>Key-value option providing a more generic description of a target, such as the family of the
+operating systems or architectures that the target generally falls into. Any number of
+<code>target_family</code> key-value pairs can be set.</p>
+<p>Example values:</p>
+<ul>
+<li><code>&quot;unix&quot;</code></li>
+<li><code>&quot;windows&quot;</code></li>
+<li><code>&quot;wasm&quot;</code></li>
+</ul>
+<h3 id="unix-and-windows"><a class="header" href="#unix-and-windows"><code>unix</code> and <code>windows</code></a></h3>
+<p><code>unix</code> is set if <code>target_family = &quot;unix&quot;</code> is set and <code>windows</code> is set if
+<code>target_family = &quot;windows&quot;</code> is set.</p>
+<h3 id="target_env"><a class="header" href="#target_env"><code>target_env</code></a></h3>
+<p>Key-value option set with further disambiguating information about the target
+platform with information about the ABI or <code>libc</code> used. For historical reasons,
+this value is only defined as not the empty-string when actually needed for
+disambiguation. Thus, for example, on many GNU platforms, this value will be
+empty. This value is similar to the fourth element of the platform's target
+triple. One difference is that embedded ABIs such as <code>gnueabihf</code> will simply
+define <code>target_env</code> as <code>&quot;gnu&quot;</code>.</p>
+<p>Example values:</p>
+<ul>
+<li><code>&quot;&quot;</code></li>
+<li><code>&quot;gnu&quot;</code></li>
+<li><code>&quot;msvc&quot;</code></li>
+<li><code>&quot;musl&quot;</code></li>
+<li><code>&quot;sgx&quot;</code></li>
+</ul>
+<h3 id="target_endian"><a class="header" href="#target_endian"><code>target_endian</code></a></h3>
+<p>Key-value option set once with either a value of &quot;little&quot; or &quot;big&quot; depending
+on the endianness of the target's CPU.</p>
+<h3 id="target_pointer_width"><a class="header" href="#target_pointer_width"><code>target_pointer_width</code></a></h3>
+<p>Key-value option set once with the target's pointer width in bits.</p>
+<p>Example values:</p>
+<ul>
+<li><code>&quot;16&quot;</code></li>
+<li><code>&quot;32&quot;</code></li>
+<li><code>&quot;64&quot;</code></li>
+</ul>
+<h3 id="target_vendor"><a class="header" href="#target_vendor"><code>target_vendor</code></a></h3>
+<p>Key-value option set once with the vendor of the target.</p>
+<p>Example values:</p>
+<ul>
+<li><code>&quot;apple&quot;</code></li>
+<li><code>&quot;fortanix&quot;</code></li>
+<li><code>&quot;pc&quot;</code></li>
+<li><code>&quot;unknown&quot;</code></li>
+</ul>
+<h3 id="target_has_atomic"><a class="header" href="#target_has_atomic"><code>target_has_atomic</code></a></h3>
+<p>Key-value option set for each bit width that the target supports
+atomic loads, stores, and compare-and-swap operations.</p>
+<p>When this cfg is present, all of the stable <a href="../core/sync/atomic/index.html"><code>core::sync::atomic</code></a> APIs are available for
+the relevant atomic width.</p>
+<p>Possible values:</p>
+<ul>
+<li><code>&quot;8&quot;</code></li>
+<li><code>&quot;16&quot;</code></li>
+<li><code>&quot;32&quot;</code></li>
+<li><code>&quot;64&quot;</code></li>
+<li><code>&quot;128&quot;</code></li>
+<li><code>&quot;ptr&quot;</code></li>
+</ul>
+<h3 id="test"><a class="header" href="#test"><code>test</code></a></h3>
+<p>Enabled when compiling the test harness. Done with <code>rustc</code> by using the
+<a href="../rustc/command-line-arguments.html#--test-build-a-test-harness"><code>--test</code></a> flag. See <a href="attributes/testing.html">Testing</a> for more on testing support.</p>
+<h3 id="debug_assertions"><a class="header" href="#debug_assertions"><code>debug_assertions</code></a></h3>
+<p>Enabled by default when compiling without optimizations.
+This can be used to enable extra debugging code in development but not in
+production.  For example, it controls the behavior of the standard library's
+<a href="../std/macro.debug_assert.html"><code>debug_assert!</code></a> macro.</p>
+<h3 id="proc_macro"><a class="header" href="#proc_macro"><code>proc_macro</code></a></h3>
+<p>Set when the crate being compiled is being compiled with the <code>proc_macro</code>
+<a href="linkage.html">crate type</a>.</p>
+<h3 id="panic"><a class="header" href="#panic"><code>panic</code></a></h3>
+<p>Key-value option set depending on the panic strategy. Note that more values may be added in the future.</p>
+<p>Example values:</p>
+<ul>
+<li><code>&quot;abort&quot;</code></li>
+<li><code>&quot;unwind&quot;</code></li>
+</ul>
+<h2 id="forms-of-conditional-compilation"><a class="header" href="#forms-of-conditional-compilation">Forms of conditional compilation</a></h2>
+<h3 id="the-cfg-attribute"><a class="header" href="#the-cfg-attribute">The <code>cfg</code> attribute</a></h3>
+<blockquote>
+<p><strong><sup>Syntax</sup></strong><br />
+<em>CfgAttrAttribute</em> :<br />
+   <code>cfg</code> <code>(</code> <em>ConfigurationPredicate</em> <code>)</code></p>
+</blockquote>
+<!-- should we say they're active attributes here? -->
+<p>The <code>cfg</code> <a href="attributes.html">attribute</a> conditionally includes the thing it is attached to based
+on a configuration predicate.</p>
+<p>It is written as <code>cfg</code>, <code>(</code>, a configuration predicate, and finally <code>)</code>.</p>
+<p>If the predicate is true, the thing is rewritten to not have the <code>cfg</code> attribute
+on it. If the predicate is false, the thing is removed from the source code.</p>
+<p>Some examples on functions:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// The function is only included in the build when compiling for macOS
+#[cfg(target_os = &quot;macos&quot;)]
+fn macos_only() {
+  // ...
+}
+
+// This function is only included when either foo or bar is defined
+#[cfg(any(foo, bar))]
+fn needs_foo_or_bar() {
+  // ...
+}
+
+// This function is only included when compiling for a unixish OS with a 32-bit
+// architecture
+#[cfg(all(unix, target_pointer_width = &quot;32&quot;))]
+fn on_32bit_unix() {
+  // ...
+}
+
+// This function is only included when foo is not defined
+#[cfg(not(foo))]
+fn needs_not_foo() {
+  // ...
+}
+
+// This function is only included when the panic strategy is set to unwind
+#[cfg(panic = &quot;unwind&quot;)]
+fn when_unwinding() {
+  // ...
+}
+
+<span class="boring">}</span></code></pre></pre>
+<p>The <code>cfg</code> attribute is allowed anywhere attributes are allowed.</p>
+<h3 id="the-cfg_attr-attribute"><a class="header" href="#the-cfg_attr-attribute">The <code>cfg_attr</code> attribute</a></h3>
+<blockquote>
+<p><strong><sup>Syntax</sup></strong><br />
+<em>CfgAttrAttribute</em> :<br />
+   <code>cfg_attr</code> <code>(</code> <em>ConfigurationPredicate</em> <code>,</code> <em>CfgAttrs</em><sup>?</sup> <code>)</code></p>
+<p><em>CfgAttrs</em> :<br />
+   <a href="attributes.html"><em>Attr</em></a> (<code>,</code> <a href="attributes.html"><em>Attr</em></a>)<sup>*</sup> <code>,</code><sup>?</sup></p>
+</blockquote>
+<p>The <code>cfg_attr</code> <a href="attributes.html">attribute</a> conditionally includes <a href="attributes.html">attributes</a> based on a
+configuration predicate.</p>
+<p>When the configuration predicate is true, this attribute expands out to the
+attributes listed after the predicate. For example, the following module will
+either be found at <code>linux.rs</code> or <code>windows.rs</code> based on the target.</p>
+<!-- ignore: `mod` needs multiple files -->
+<pre><code class="language-rust ignore">#[cfg_attr(target_os = &quot;linux&quot;, path = &quot;linux.rs&quot;)]
+#[cfg_attr(windows, path = &quot;windows.rs&quot;)]
+mod os;</code></pre>
+<p>Zero, one, or more attributes may be listed. Multiple attributes will each be
+expanded into separate attributes. For example:</p>
+<!-- ignore: fake attributes -->
+<pre><code class="language-rust ignore">#[cfg_attr(feature = &quot;magic&quot;, sparkles, crackles)]
+fn bewitched() {}
+
+// When the `magic` feature flag is enabled, the above will expand to:
+#[sparkles]
+#[crackles]
+fn bewitched() {}</code></pre>
+<blockquote>
+<p><strong>Note</strong>: The <code>cfg_attr</code> can expand to another <code>cfg_attr</code>. For example,
+<code>#[cfg_attr(target_os = &quot;linux&quot;, cfg_attr(feature = &quot;multithreaded&quot;, some_other_attribute))]</code>
+is valid. This example would be equivalent to
+<code>#[cfg_attr(all(target_os = &quot;linux&quot;, feature =&quot;multithreaded&quot;), some_other_attribute)]</code>.</p>
+</blockquote>
+<p>The <code>cfg_attr</code> attribute is allowed anywhere attributes are allowed.</p>
+<h3 id="the-cfg-macro"><a class="header" href="#the-cfg-macro">The <code>cfg</code> macro</a></h3>
+<p>The built-in <code>cfg</code> macro takes in a single configuration predicate and evaluates
+to the <code>true</code> literal when the predicate is true and the <code>false</code> literal when
+it is false.</p>
+<p>For example:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let machine_kind = if cfg!(unix) {
+  &quot;unix&quot;
+} else if cfg!(windows) {
+  &quot;windows&quot;
+} else {
+  &quot;unknown&quot;
+};
+
+println!(&quot;I'm running on a {} machine!&quot;, machine_kind);
+<span class="boring">}</span></code></pre></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="crates-and-source-files.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="items.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="crates-and-source-files.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="items.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

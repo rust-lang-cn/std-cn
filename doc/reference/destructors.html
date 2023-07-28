@@ -1,0 +1,532 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Destructors - The Rust Reference</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/reference.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="notation.html"><strong aria-hidden="true">1.</strong> Notation</a></li><li class="chapter-item expanded "><a href="lexical-structure.html"><strong aria-hidden="true">2.</strong> Lexical structure</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="input-format.html"><strong aria-hidden="true">2.1.</strong> Input format</a></li><li class="chapter-item expanded "><a href="keywords.html"><strong aria-hidden="true">2.2.</strong> Keywords</a></li><li class="chapter-item expanded "><a href="identifiers.html"><strong aria-hidden="true">2.3.</strong> Identifiers</a></li><li class="chapter-item expanded "><a href="comments.html"><strong aria-hidden="true">2.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="whitespace.html"><strong aria-hidden="true">2.5.</strong> Whitespace</a></li><li class="chapter-item expanded "><a href="tokens.html"><strong aria-hidden="true">2.6.</strong> Tokens</a></li></ol></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="macros-by-example.html"><strong aria-hidden="true">3.1.</strong> Macros By Example</a></li><li class="chapter-item expanded "><a href="procedural-macros.html"><strong aria-hidden="true">3.2.</strong> Procedural Macros</a></li></ol></li><li class="chapter-item expanded "><a href="crates-and-source-files.html"><strong aria-hidden="true">4.</strong> Crates and source files</a></li><li class="chapter-item expanded "><a href="conditional-compilation.html"><strong aria-hidden="true">5.</strong> Conditional compilation</a></li><li class="chapter-item expanded "><a href="items.html"><strong aria-hidden="true">6.</strong> Items</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="items/modules.html"><strong aria-hidden="true">6.1.</strong> Modules</a></li><li class="chapter-item expanded "><a href="items/extern-crates.html"><strong aria-hidden="true">6.2.</strong> Extern crates</a></li><li class="chapter-item expanded "><a href="items/use-declarations.html"><strong aria-hidden="true">6.3.</strong> Use declarations</a></li><li class="chapter-item expanded "><a href="items/functions.html"><strong aria-hidden="true">6.4.</strong> Functions</a></li><li class="chapter-item expanded "><a href="items/type-aliases.html"><strong aria-hidden="true">6.5.</strong> Type aliases</a></li><li class="chapter-item expanded "><a href="items/structs.html"><strong aria-hidden="true">6.6.</strong> Structs</a></li><li class="chapter-item expanded "><a href="items/enumerations.html"><strong aria-hidden="true">6.7.</strong> Enumerations</a></li><li class="chapter-item expanded "><a href="items/unions.html"><strong aria-hidden="true">6.8.</strong> Unions</a></li><li class="chapter-item expanded "><a href="items/constant-items.html"><strong aria-hidden="true">6.9.</strong> Constant items</a></li><li class="chapter-item expanded "><a href="items/static-items.html"><strong aria-hidden="true">6.10.</strong> Static items</a></li><li class="chapter-item expanded "><a href="items/traits.html"><strong aria-hidden="true">6.11.</strong> Traits</a></li><li class="chapter-item expanded "><a href="items/implementations.html"><strong aria-hidden="true">6.12.</strong> Implementations</a></li><li class="chapter-item expanded "><a href="items/external-blocks.html"><strong aria-hidden="true">6.13.</strong> External blocks</a></li><li class="chapter-item expanded "><a href="items/generics.html"><strong aria-hidden="true">6.14.</strong> Generic parameters</a></li><li class="chapter-item expanded "><a href="items/associated-items.html"><strong aria-hidden="true">6.15.</strong> Associated Items</a></li></ol></li><li class="chapter-item expanded "><a href="attributes.html"><strong aria-hidden="true">7.</strong> Attributes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="attributes/testing.html"><strong aria-hidden="true">7.1.</strong> Testing</a></li><li class="chapter-item expanded "><a href="attributes/derive.html"><strong aria-hidden="true">7.2.</strong> Derive</a></li><li class="chapter-item expanded "><a href="attributes/diagnostics.html"><strong aria-hidden="true">7.3.</strong> Diagnostics</a></li><li class="chapter-item expanded "><a href="attributes/codegen.html"><strong aria-hidden="true">7.4.</strong> Code generation</a></li><li class="chapter-item expanded "><a href="attributes/limits.html"><strong aria-hidden="true">7.5.</strong> Limits</a></li><li class="chapter-item expanded "><a href="attributes/type_system.html"><strong aria-hidden="true">7.6.</strong> Type System</a></li><li class="chapter-item expanded "><a href="attributes/debugger.html"><strong aria-hidden="true">7.7.</strong> Debugger</a></li></ol></li><li class="chapter-item expanded "><a href="statements-and-expressions.html"><strong aria-hidden="true">8.</strong> Statements and expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="statements.html"><strong aria-hidden="true">8.1.</strong> Statements</a></li><li class="chapter-item expanded "><a href="expressions.html"><strong aria-hidden="true">8.2.</strong> Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="expressions/literal-expr.html"><strong aria-hidden="true">8.2.1.</strong> Literal expressions</a></li><li class="chapter-item expanded "><a href="expressions/path-expr.html"><strong aria-hidden="true">8.2.2.</strong> Path expressions</a></li><li class="chapter-item expanded "><a href="expressions/block-expr.html"><strong aria-hidden="true">8.2.3.</strong> Block expressions</a></li><li class="chapter-item expanded "><a href="expressions/operator-expr.html"><strong aria-hidden="true">8.2.4.</strong> Operator expressions</a></li><li class="chapter-item expanded "><a href="expressions/grouped-expr.html"><strong aria-hidden="true">8.2.5.</strong> Grouped expressions</a></li><li class="chapter-item expanded "><a href="expressions/array-expr.html"><strong aria-hidden="true">8.2.6.</strong> Array and index expressions</a></li><li class="chapter-item expanded "><a href="expressions/tuple-expr.html"><strong aria-hidden="true">8.2.7.</strong> Tuple and index expressions</a></li><li class="chapter-item expanded "><a href="expressions/struct-expr.html"><strong aria-hidden="true">8.2.8.</strong> Struct expressions</a></li><li class="chapter-item expanded "><a href="expressions/call-expr.html"><strong aria-hidden="true">8.2.9.</strong> Call expressions</a></li><li class="chapter-item expanded "><a href="expressions/method-call-expr.html"><strong aria-hidden="true">8.2.10.</strong> Method call expressions</a></li><li class="chapter-item expanded "><a href="expressions/field-expr.html"><strong aria-hidden="true">8.2.11.</strong> Field access expressions</a></li><li class="chapter-item expanded "><a href="expressions/closure-expr.html"><strong aria-hidden="true">8.2.12.</strong> Closure expressions</a></li><li class="chapter-item expanded "><a href="expressions/loop-expr.html"><strong aria-hidden="true">8.2.13.</strong> Loop expressions</a></li><li class="chapter-item expanded "><a href="expressions/range-expr.html"><strong aria-hidden="true">8.2.14.</strong> Range expressions</a></li><li class="chapter-item expanded "><a href="expressions/if-expr.html"><strong aria-hidden="true">8.2.15.</strong> If and if let expressions</a></li><li class="chapter-item expanded "><a href="expressions/match-expr.html"><strong aria-hidden="true">8.2.16.</strong> Match expressions</a></li><li class="chapter-item expanded "><a href="expressions/return-expr.html"><strong aria-hidden="true">8.2.17.</strong> Return expressions</a></li><li class="chapter-item expanded "><a href="expressions/await-expr.html"><strong aria-hidden="true">8.2.18.</strong> Await expressions</a></li><li class="chapter-item expanded "><a href="expressions/underscore-expr.html"><strong aria-hidden="true">8.2.19.</strong> Underscore expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">9.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="type-system.html"><strong aria-hidden="true">10.</strong> Type system</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="types.html"><strong aria-hidden="true">10.1.</strong> Types</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="types/boolean.html"><strong aria-hidden="true">10.1.1.</strong> Boolean type</a></li><li class="chapter-item expanded "><a href="types/numeric.html"><strong aria-hidden="true">10.1.2.</strong> Numeric types</a></li><li class="chapter-item expanded "><a href="types/textual.html"><strong aria-hidden="true">10.1.3.</strong> Textual types</a></li><li class="chapter-item expanded "><a href="types/never.html"><strong aria-hidden="true">10.1.4.</strong> Never type</a></li><li class="chapter-item expanded "><a href="types/tuple.html"><strong aria-hidden="true">10.1.5.</strong> Tuple types</a></li><li class="chapter-item expanded "><a href="types/array.html"><strong aria-hidden="true">10.1.6.</strong> Array types</a></li><li class="chapter-item expanded "><a href="types/slice.html"><strong aria-hidden="true">10.1.7.</strong> Slice types</a></li><li class="chapter-item expanded "><a href="types/struct.html"><strong aria-hidden="true">10.1.8.</strong> Struct types</a></li><li class="chapter-item expanded "><a href="types/enum.html"><strong aria-hidden="true">10.1.9.</strong> Enumerated types</a></li><li class="chapter-item expanded "><a href="types/union.html"><strong aria-hidden="true">10.1.10.</strong> Union types</a></li><li class="chapter-item expanded "><a href="types/function-item.html"><strong aria-hidden="true">10.1.11.</strong> Function item types</a></li><li class="chapter-item expanded "><a href="types/closure.html"><strong aria-hidden="true">10.1.12.</strong> Closure types</a></li><li class="chapter-item expanded "><a href="types/pointer.html"><strong aria-hidden="true">10.1.13.</strong> Pointer types</a></li><li class="chapter-item expanded "><a href="types/function-pointer.html"><strong aria-hidden="true">10.1.14.</strong> Function pointer types</a></li><li class="chapter-item expanded "><a href="types/trait-object.html"><strong aria-hidden="true">10.1.15.</strong> Trait object types</a></li><li class="chapter-item expanded "><a href="types/impl-trait.html"><strong aria-hidden="true">10.1.16.</strong> Impl trait type</a></li><li class="chapter-item expanded "><a href="types/parameters.html"><strong aria-hidden="true">10.1.17.</strong> Type parameters</a></li><li class="chapter-item expanded "><a href="types/inferred.html"><strong aria-hidden="true">10.1.18.</strong> Inferred type</a></li></ol></li><li class="chapter-item expanded "><a href="dynamically-sized-types.html"><strong aria-hidden="true">10.2.</strong> Dynamically Sized Types</a></li><li class="chapter-item expanded "><a href="type-layout.html"><strong aria-hidden="true">10.3.</strong> Type layout</a></li><li class="chapter-item expanded "><a href="interior-mutability.html"><strong aria-hidden="true">10.4.</strong> Interior mutability</a></li><li class="chapter-item expanded "><a href="subtyping.html"><strong aria-hidden="true">10.5.</strong> Subtyping and Variance</a></li><li class="chapter-item expanded "><a href="trait-bounds.html"><strong aria-hidden="true">10.6.</strong> Trait and lifetime bounds</a></li><li class="chapter-item expanded "><a href="type-coercions.html"><strong aria-hidden="true">10.7.</strong> Type coercions</a></li><li class="chapter-item expanded "><a href="destructors.html" class="active"><strong aria-hidden="true">10.8.</strong> Destructors</a></li><li class="chapter-item expanded "><a href="lifetime-elision.html"><strong aria-hidden="true">10.9.</strong> Lifetime elision</a></li></ol></li><li class="chapter-item expanded "><a href="special-types-and-traits.html"><strong aria-hidden="true">11.</strong> Special types and traits</a></li><li class="chapter-item expanded "><a href="names.html"><strong aria-hidden="true">12.</strong> Names</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="names/namespaces.html"><strong aria-hidden="true">12.1.</strong> Namespaces</a></li><li class="chapter-item expanded "><a href="names/scopes.html"><strong aria-hidden="true">12.2.</strong> Scopes</a></li><li class="chapter-item expanded "><a href="names/preludes.html"><strong aria-hidden="true">12.3.</strong> Preludes</a></li><li class="chapter-item expanded "><a href="paths.html"><strong aria-hidden="true">12.4.</strong> Paths</a></li><li class="chapter-item expanded "><a href="names/name-resolution.html"><strong aria-hidden="true">12.5.</strong> Name resolution</a></li><li class="chapter-item expanded "><a href="visibility-and-privacy.html"><strong aria-hidden="true">12.6.</strong> Visibility and privacy</a></li></ol></li><li class="chapter-item expanded "><a href="memory-model.html"><strong aria-hidden="true">13.</strong> Memory model</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory-allocation-and-lifetime.html"><strong aria-hidden="true">13.1.</strong> Memory allocation and lifetime</a></li><li class="chapter-item expanded "><a href="variables.html"><strong aria-hidden="true">13.2.</strong> Variables</a></li></ol></li><li class="chapter-item expanded "><a href="linkage.html"><strong aria-hidden="true">14.</strong> Linkage</a></li><li class="chapter-item expanded "><a href="inline-assembly.html"><strong aria-hidden="true">15.</strong> Inline assembly</a></li><li class="chapter-item expanded "><a href="unsafety.html"><strong aria-hidden="true">16.</strong> Unsafety</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="unsafe-keyword.html"><strong aria-hidden="true">16.1.</strong> The unsafe keyword</a></li><li class="chapter-item expanded "><a href="behavior-considered-undefined.html"><strong aria-hidden="true">16.2.</strong> Behavior considered undefined</a></li><li class="chapter-item expanded "><a href="behavior-not-considered-unsafe.html"><strong aria-hidden="true">16.3.</strong> Behavior not considered unsafe</a></li></ol></li><li class="chapter-item expanded "><a href="const_eval.html"><strong aria-hidden="true">17.</strong> Constant Evaluation</a></li><li class="chapter-item expanded "><a href="abi.html"><strong aria-hidden="true">18.</strong> Application Binary Interface</a></li><li class="chapter-item expanded "><a href="runtime.html"><strong aria-hidden="true">19.</strong> The Rust runtime</a></li><li class="chapter-item expanded "><a href="appendices.html"><strong aria-hidden="true">20.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="macro-ambiguity.html"><strong aria-hidden="true">20.1.</strong> Macro Follow-Set Ambiguity Formal Specification</a></li><li class="chapter-item expanded "><a href="influences.html"><strong aria-hidden="true">20.2.</strong> Influences</a></li><li class="chapter-item expanded "><a href="glossary.html"><strong aria-hidden="true">20.3.</strong> Glossary</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Reference</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/reference/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/reference/edit/master/src/destructors.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="destructors"><a class="header" href="#destructors">Destructors</a></h1>
+<p>When an <a href="glossary.html#initialized">initialized</a> <a href="variables.html">variable</a> or <a href="expressions.html#temporaries">temporary</a> goes out of
+<a href="#drop-scopes">scope</a>, its <em>destructor</em> is run, or it is <em>dropped</em>. <a href="expressions/operator-expr.html#assignment-expressions">Assignment</a>
+also runs the destructor of its left-hand operand, if it's initialized. If a
+variable has been partially initialized, only its initialized fields are
+dropped.</p>
+<p>The destructor of a type <code>T</code> consists of:</p>
+<ol>
+<li>If <code>T: Drop</code>, calling <a href="../std/ops/trait.Drop.html#tymethod.drop"><code>&lt;T as std::ops::Drop&gt;::drop</code></a></li>
+<li>Recursively running the destructor of all of its fields.
+<ul>
+<li>The fields of a <a href="types/struct.html">struct</a> are dropped in declaration order.</li>
+<li>The fields of the active <a href="types/enum.html">enum variant</a> are dropped in declaration order.</li>
+<li>The fields of a <a href="types/tuple.html">tuple</a> are dropped in order.</li>
+<li>The elements of an <a href="types/array.html">array</a> or owned <a href="types/slice.html">slice</a> are dropped from the
+first element to the last.</li>
+<li>The variables that a <a href="types/closure.html">closure</a> captures by move are dropped in an
+unspecified order.</li>
+<li><a href="types/trait-object.html">Trait objects</a> run the destructor of the underlying type.</li>
+<li>Other types don't result in any further drops.</li>
+</ul>
+</li>
+</ol>
+<p>If a destructor must be run manually, such as when implementing your own smart
+pointer, <a href="../std/ptr/fn.drop_in_place.html"><code>std::ptr::drop_in_place</code></a> can be used.</p>
+<p>Some examples:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct PrintOnDrop(&amp;'static str);
+
+impl Drop for PrintOnDrop {
+    fn drop(&amp;mut self) {
+        println!(&quot;{}&quot;, self.0);
+    }
+}
+
+let mut overwritten = PrintOnDrop(&quot;drops when overwritten&quot;);
+overwritten = PrintOnDrop(&quot;drops when scope ends&quot;);
+
+let tuple = (PrintOnDrop(&quot;Tuple first&quot;), PrintOnDrop(&quot;Tuple second&quot;));
+
+let moved;
+// No destructor run on assignment.
+moved = PrintOnDrop(&quot;Drops when moved&quot;);
+// Drops now, but is then uninitialized.
+moved;
+
+// Uninitialized does not drop.
+let uninitialized: PrintOnDrop;
+
+// After a partial move, only the remaining fields are dropped.
+let mut partial_move = (PrintOnDrop(&quot;first&quot;), PrintOnDrop(&quot;forgotten&quot;));
+// Perform a partial move, leaving only `partial_move.0` initialized.
+core::mem::forget(partial_move.1);
+// When partial_move's scope ends, only the first field is dropped.
+<span class="boring">}</span></code></pre></pre>
+<h2 id="drop-scopes"><a class="header" href="#drop-scopes">Drop scopes</a></h2>
+<p>Each variable or temporary is associated to a <em>drop scope</em>. When control flow
+leaves a drop scope all variables associated to that scope are dropped in
+reverse order of declaration (for variables) or creation (for temporaries).</p>
+<p>Drop scopes are determined after replacing <a href="expressions/loop-expr.html#iterator-loops"><code>for</code></a>, <a href="expressions/if-expr.html#if-let-expressions"><code>if let</code></a>, and
+<a href="expressions/loop-expr.html#predicate-pattern-loops"><code>while let</code></a> expressions with the equivalent expressions using <a href="expressions/match-expr.html"><code>match</code></a>.
+Overloaded operators are not distinguished from built-in operators and <a href="patterns.html#binding-modes">binding
+modes</a> are not considered.</p>
+<p>Given a function, or closure, there are drop scopes for:</p>
+<ul>
+<li>The entire function</li>
+<li>Each <a href="statements.html">statement</a></li>
+<li>Each <a href="expressions.html">expression</a></li>
+<li>Each block, including the function body
+<ul>
+<li>In the case of a <a href="expressions/block-expr.html">block expression</a>, the scope for the block and the
+expression are the same scope.</li>
+</ul>
+</li>
+<li>Each arm of a <code>match</code> expression</li>
+</ul>
+<p>Drop scopes are nested within one another as follows. When multiple scopes are
+left at once, such as when returning from a function, variables are dropped
+from the inside outwards.</p>
+<ul>
+<li>The entire function scope is the outer most scope.</li>
+<li>The function body block is contained within the scope of the entire function.</li>
+<li>The parent of the expression in an expression statement is the scope of the
+statement.</li>
+<li>The parent of the initializer of a <a href="statements.html#let-statements"><code>let</code> statement</a> is the <code>let</code> statement's
+scope.</li>
+<li>The parent of a statement scope is the scope of the block that contains the
+statement.</li>
+<li>The parent of the expression for a <code>match</code> guard is the scope of the arm that
+the guard is for.</li>
+<li>The parent of the expression after the <code>=&gt;</code> in a <code>match</code> expression is the
+scope of the arm that it's in.</li>
+<li>The parent of the arm scope is the scope of the <code>match</code> expression that it
+belongs to.</li>
+<li>The parent of all other scopes is the scope of the immediately enclosing
+expression.</li>
+</ul>
+<h3 id="scopes-of-function-parameters"><a class="header" href="#scopes-of-function-parameters">Scopes of function parameters</a></h3>
+<p>All function parameters are in the scope of the entire function body, so are
+dropped last when evaluating the function. Each actual function parameter is
+dropped after any bindings introduced in that parameter's pattern.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">struct PrintOnDrop(&amp;'static str);
+</span><span class="boring">impl Drop for PrintOnDrop {
+</span><span class="boring">    fn drop(&amp;mut self) {
+</span><span class="boring">        println!(&quot;drop({})&quot;, self.0);
+</span><span class="boring">    }
+</span><span class="boring">}
+</span>// Drops `y`, then the second parameter, then `x`, then the first parameter
+fn patterns_in_parameters(
+    (x, _): (PrintOnDrop, PrintOnDrop),
+    (_, y): (PrintOnDrop, PrintOnDrop),
+) {}
+
+// drop order is 3 2 0 1
+patterns_in_parameters(
+    (PrintOnDrop(&quot;0&quot;), PrintOnDrop(&quot;1&quot;)),
+    (PrintOnDrop(&quot;2&quot;), PrintOnDrop(&quot;3&quot;)),
+);
+<span class="boring">}</span></code></pre></pre>
+<h3 id="scopes-of-local-variables"><a class="header" href="#scopes-of-local-variables">Scopes of local variables</a></h3>
+<p>Local variables declared in a <code>let</code> statement are associated to the scope of
+the block that contains the <code>let</code> statement. Local variables declared in a
+<code>match</code> expression are associated to the arm scope of the <code>match</code> arm that they
+are declared in.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">struct PrintOnDrop(&amp;'static str);
+</span><span class="boring">impl Drop for PrintOnDrop {
+</span><span class="boring">    fn drop(&amp;mut self) {
+</span><span class="boring">        println!(&quot;drop({})&quot;, self.0);
+</span><span class="boring">    }
+</span><span class="boring">}
+</span>let declared_first = PrintOnDrop(&quot;Dropped last in outer scope&quot;);
+{
+    let declared_in_block = PrintOnDrop(&quot;Dropped in inner scope&quot;);
+}
+let declared_last = PrintOnDrop(&quot;Dropped first in outer scope&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p>If multiple patterns are used in the same arm for a <code>match</code> expression, then an
+unspecified pattern will be used to determine the drop order.</p>
+<h3 id="temporary-scopes"><a class="header" href="#temporary-scopes">Temporary scopes</a></h3>
+<p>The <em>temporary scope</em> of an expression is the scope that is used for the
+temporary variable that holds the result of that expression when used in a
+<a href="expressions.html#place-expressions-and-value-expressions">place context</a>, unless it is <a href="destructors.html#constant-promotion">promoted</a>.</p>
+<p>Apart from lifetime extension, the temporary scope of an expression is the
+smallest scope that contains the expression and is one of the following:</p>
+<ul>
+<li>The entire function body.</li>
+<li>A statement.</li>
+<li>The body of an <a href="expressions/if-expr.html#if-expressions"><code>if</code></a>, <a href="expressions/loop-expr.html#predicate-loops"><code>while</code></a> or <a href="expressions/loop-expr.html#infinite-loops"><code>loop</code></a> expression.</li>
+<li>The <code>else</code> block of an <code>if</code> expression.</li>
+<li>The condition expression of an <code>if</code> or <code>while</code> expression, or a <code>match</code>
+guard.</li>
+<li>The body expression for a match arm.</li>
+<li>The second operand of a <a href="expressions/operator-expr.html#lazy-boolean-operators">lazy boolean expression</a>.</li>
+</ul>
+<blockquote>
+<p><strong>Notes</strong>:</p>
+<p>Temporaries that are created in the final expression of a function
+body are dropped <em>after</em> any named variables bound in the function body, as
+there is no smaller enclosing temporary scope.</p>
+<p>The <a href="glossary.html#scrutinee">scrutinee</a> of a <code>match</code> expression is not a temporary scope, so
+temporaries in the scrutinee can be dropped after the <code>match</code> expression. For
+example, the temporary for <code>1</code> in <code>match 1 { ref mut z =&gt; z };</code> lives until
+the end of the statement.</p>
+</blockquote>
+<p>Some examples:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">struct PrintOnDrop(&amp;'static str);
+</span><span class="boring">impl Drop for PrintOnDrop {
+</span><span class="boring">    fn drop(&amp;mut self) {
+</span><span class="boring">        println!(&quot;drop({})&quot;, self.0);
+</span><span class="boring">    }
+</span><span class="boring">}
+</span>let local_var = PrintOnDrop(&quot;local var&quot;);
+
+// Dropped once the condition has been evaluated
+if PrintOnDrop(&quot;If condition&quot;).0 == &quot;If condition&quot; {
+    // Dropped at the end of the block
+    PrintOnDrop(&quot;If body&quot;).0
+} else {
+    unreachable!()
+};
+
+// Dropped at the end of the statement
+(PrintOnDrop(&quot;first operand&quot;).0 == &quot;&quot;
+// Dropped at the )
+|| PrintOnDrop(&quot;second operand&quot;).0 == &quot;&quot;)
+// Dropped at the end of the expression
+|| PrintOnDrop(&quot;third operand&quot;).0 == &quot;&quot;;
+
+// Dropped at the end of the function, after local variables.
+// Changing this to a statement containing a return expression would make the
+// temporary be dropped before the local variables. Binding to a variable
+// which is then returned would also make the temporary be dropped first.
+match PrintOnDrop(&quot;Matched value in final expression&quot;) {
+    // Dropped once the condition has been evaluated
+    _ if PrintOnDrop(&quot;guard condition&quot;).0 == &quot;&quot; =&gt; (),
+    _ =&gt; (),
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="operands"><a class="header" href="#operands">Operands</a></h3>
+<p>Temporaries are also created to hold the result of operands to an expression
+while the other operands are evaluated. The temporaries are associated to the
+scope of the expression with that operand. Since the temporaries are moved from
+once the expression is evaluated, dropping them has no effect unless one of the
+operands to an expression breaks out of the expression, returns, or panics.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">struct PrintOnDrop(&amp;'static str);
+</span><span class="boring">impl Drop for PrintOnDrop {
+</span><span class="boring">    fn drop(&amp;mut self) {
+</span><span class="boring">        println!(&quot;drop({})&quot;, self.0);
+</span><span class="boring">    }
+</span><span class="boring">}
+</span>loop {
+    // Tuple expression doesn't finish evaluating so operands drop in reverse order
+    (
+        PrintOnDrop(&quot;Outer tuple first&quot;),
+        PrintOnDrop(&quot;Outer tuple second&quot;),
+        (
+            PrintOnDrop(&quot;Inner tuple first&quot;),
+            PrintOnDrop(&quot;Inner tuple second&quot;),
+            break,
+        ),
+        PrintOnDrop(&quot;Never created&quot;),
+    );
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="constant-promotion"><a class="header" href="#constant-promotion">Constant promotion</a></h3>
+<p>Promotion of a value expression to a <code>'static</code> slot occurs when the expression
+could be written in a constant and borrowed, and that borrow could be dereferenced
+where
+the expression was originally written, without changing the runtime behavior.
+That is, the promoted expression can be evaluated at compile-time and the
+resulting value does not contain <a href="interior-mutability.html">interior mutability</a> or <a href="destructors.html">destructors</a> (these
+properties are determined based on the value where possible, e.g. <code>&amp;None</code>
+always has the type <code>&amp;'static Option&lt;_&gt;</code>, as it contains nothing disallowed).</p>
+<h3 id="temporary-lifetime-extension"><a class="header" href="#temporary-lifetime-extension">Temporary lifetime extension</a></h3>
+<blockquote>
+<p><strong>Note</strong>: The exact rules for temporary lifetime extension are subject to
+change. This is describing the current behavior only.</p>
+</blockquote>
+<p>The temporary scopes for expressions in <code>let</code> statements are sometimes
+<em>extended</em> to the scope of the block containing the <code>let</code> statement. This is
+done when the usual temporary scope would be too small, based on certain
+syntactic rules. For example:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = &amp;mut 0;
+// Usually a temporary would be dropped by now, but the temporary for `0` lives
+// to the end of the block.
+println!(&quot;{}&quot;, x);
+<span class="boring">}</span></code></pre></pre>
+<p>If a <a href="expressions/operator-expr.html#borrow-operators">borrow</a>, <a href="expressions/operator-expr.html#the-dereference-operator">dereference</a>,
+<a href="expressions/field-expr.html">field</a>, or <a href="expressions/tuple-expr.html#tuple-indexing-expressions">tuple indexing expression</a> has an extended
+temporary scope then so does its operand. If an <a href="expressions/array-expr.html#array-and-slice-indexing-expressions">indexing expression</a> has an
+extended temporary scope then the indexed expression also has an extended
+temporary scope.</p>
+<h4 id="extending-based-on-patterns"><a class="header" href="#extending-based-on-patterns">Extending based on patterns</a></h4>
+<p>An <em>extending pattern</em> is either</p>
+<ul>
+<li>An <a href="patterns.html#identifier-patterns">identifier pattern</a> that binds by reference or mutable reference.</li>
+<li>A <a href="patterns.html#struct-patterns">struct</a>, <a href="patterns.html#tuple-patterns">tuple</a>, <a href="patterns.html#tuple-struct-patterns">tuple struct</a>, or <a href="patterns.html#slice-patterns">slice</a> pattern where at least one of the
+direct subpatterns is a extending pattern.</li>
+</ul>
+<p>So <code>ref x</code>, <code>V(ref x)</code> and <code>[ref x, y]</code> are all extending patterns, but <code>x</code>,
+<code>&amp;ref x</code> and <code>&amp;(ref x,)</code> are not.</p>
+<p>If the pattern in a <code>let</code> statement is an extending pattern then the temporary
+scope of the initializer expression is extended.</p>
+<h4 id="extending-based-on-expressions"><a class="header" href="#extending-based-on-expressions">Extending based on expressions</a></h4>
+<p>For a let statement with an initializer, an <em>extending expression</em> is an
+expression which is one of the following:</p>
+<ul>
+<li>The initializer expression.</li>
+<li>The operand of an extending <a href="expressions/operator-expr.html#borrow-operators">borrow expression</a>.</li>
+<li>The operand(s) of an extending <a href="expressions/array-expr.html#array-expressions">array</a>, <a href="expressions/operator-expr.html#type-cast-expressions">cast</a>, <a href="expressions/struct-expr.html">braced struct</a>, or <a href="expressions/tuple-expr.html#tuple-expressions">tuple</a>
+expression.</li>
+<li>The final expression of any extending <a href="expressions/block-expr.html">block expression</a>.</li>
+</ul>
+<p>So the borrow expressions in <code>&amp;mut 0</code>, <code>(&amp;1, &amp;mut 2)</code>, and <code>Some { 0: &amp;mut 3 }</code>
+are all extending expressions. The borrows in <code>&amp;0 + &amp;1</code> and <code>Some(&amp;mut 0)</code> are
+not: the latter is syntactically a function call expression.</p>
+<p>The operand of any extending borrow expression has its temporary scope
+extended.</p>
+<h4 id="examples"><a class="header" href="#examples">Examples</a></h4>
+<p>Here are some examples where expressions have extended temporary scopes:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn temp() {}
+</span><span class="boring">trait Use { fn use_temp(&amp;self) -&gt; &amp;Self { self } }
+</span><span class="boring">impl Use for () {}
+</span>// The temporary that stores the result of `temp()` lives in the same scope
+// as x in these cases.
+let x = &amp;temp();
+let x = &amp;temp() as &amp;dyn Send;
+let x = (&amp;*&amp;temp(),);
+let x = { [Some { 0: &amp;temp(), }] };
+let ref x = temp();
+let ref x = *&amp;temp();
+<span class="boring">x;
+</span><span class="boring">}</span></code></pre></pre>
+<p>Here are some examples where expressions don't have extended temporary scopes:</p>
+<pre><pre class="playground"><code class="language-rust compile_fail edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn temp() {}
+</span><span class="boring">trait Use { fn use_temp(&amp;self) -&gt; &amp;Self { self } }
+</span><span class="boring">impl Use for () {}
+</span>// The temporary that stores the result of `temp()` only lives until the
+// end of the let statement in these cases.
+
+let x = Some(&amp;temp());         // ERROR
+let x = (&amp;temp()).use_temp();  // ERROR
+<span class="boring">x;
+</span><span class="boring">}</span></code></pre></pre>
+<h2 id="not-running-destructors"><a class="header" href="#not-running-destructors">Not running destructors</a></h2>
+<p><a href="../std/mem/fn.forget.html"><code>std::mem::forget</code></a> can be used to prevent the destructor of a variable from being run,
+and <a href="../std/mem/struct.ManuallyDrop.html"><code>std::mem::ManuallyDrop</code></a> provides a wrapper to prevent a
+variable or field from being dropped automatically.</p>
+<blockquote>
+<p>Note: Preventing a destructor from being run via <a href="../std/mem/fn.forget.html"><code>std::mem::forget</code></a> or other means is safe even if it has a type that isn't <code>'static</code>.
+Besides the places where destructors are guaranteed to run as defined by this document, types may <em>not</em> safely rely on a destructor being run for soundness.</p>
+</blockquote>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="type-coercions.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="lifetime-elision.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="type-coercions.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="lifetime-elision.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

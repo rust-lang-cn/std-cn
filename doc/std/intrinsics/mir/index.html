@@ -1,0 +1,224 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Rustc 用于手写 MIR 的内部工具。"><title>std::intrinsics::mir - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../../std/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../../std/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Module mir</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#functions">Functions</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../../index.html">std</a>::<wbr><a href="../index.html">intrinsics</a>::<wbr><a class="mod" href="#">mir</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../../../src/core/intrinsics.rs.html#61">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><span class="item-info"><div class="stab unstable"><span class="emoji">🔬</span><span>This is a nightly-only experimental API. (<code>custom_mir</code>)</span></div></span><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Rustc 用于手写 MIR 的内部工具。</p>
+<p>如果由于某些原因您没有编写 rustc 测试，并且发现自己正在考虑使用此特性，那么请返回。这是<em>非常</em>不稳定的。
+除了 rustc 测试套件恰好需要的那些东西之外，根本没有尝试使任何东西工作。
+如果您打错字，您可能会 ICE。
+真的，这不是解决您问题的方法。
+考虑改为支持 <a href="https://github.com/rust-lang/project-stable-mir">稳定的 MIR 项目组</a>。</p>
+<p>此模块的文档描述了如何使用此特性。
+如果您有兴趣破解实现，大部分文档都位于 <code>rustc_mir_build/src/build/custom/mod.rs</code>。</p>
+<p>典型用法如下所示:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#![feature(core_intrinsics, custom_mir)]
+
+</span><span class="kw">use </span>core::intrinsics::mir::<span class="kw-2">*</span>;
+
+<span class="attr">#[custom_mir(dialect = <span class="string">&quot;built&quot;</span>)]
+</span><span class="kw">pub fn </span>simple(x: i32) -&gt; i32 {
+    <span class="macro">mir!</span>(
+        <span class="kw">let </span>temp2: i32;
+
+        {
+            <span class="kw">let </span>temp1 = x;
+            Goto(my_second_block)
+        }
+
+        my_second_block = {
+            temp2 = Move(temp1);
+            RET = temp2;
+            Return()
+        }
+    )
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Bfeature(core_intrinsics,+custom_mir)%5D%0A%0Afn+main()+%7B%0Ause+core::intrinsics::mir::*;%0A%0A%23%5Bcustom_mir(dialect+=+%22built%22)%5D%0Apub+fn+simple(x:+i32)+-%3E+i32+%7B%0A++++mir!(%0A++++++++let+temp2:+i32;%0A%0A++++++++%7B%0A++++++++++++let+temp1+=+x;%0A++++++++++++Goto(my_second_block)%0A++++++++%7D%0A%0A++++++++my_second_block+=+%7B%0A++++++++++++temp2+=+Move(temp1);%0A++++++++++++RET+=+temp2;%0A++++++++++++Return()%0A++++++++%7D%0A++++)%0A%7D%0A%7D&amp;version=nightly&amp;edition=2021">Run</a></div>
+<p><code>custom_mir</code> 属性告诉编译器将函数视为自定义 MIR。
+此属性仅适用于函数 - 无法将自定义 MIR 插入另一个函数的中间。
+<code>dialect</code> 和 <code>phase</code> 参数指示您要在此处插入哪个 <a href="https://doc.rust-lang.org/nightly/nightly-rustc/rustc_middle/mir/enum.MirPhase.html">version of MIR</a>。
+一般来说，如果您希望您的 MIR 被完整的 MIR 管道修改，您将希望使用 <code>#![custom_mir(dialect = &quot;built&quot;)]</code>，如果您不希望使用 <code>#![custom_mir(dialect = &quot;runtime&quot;, phase = &quot;optimized&quot;)]</code>。</p>
+<p><a href="macro.mir.html" title="macro std::intrinsics::mir::mir"><code>mir!</code></a> 宏的输入是:</p>
+<ul>
+<li><code>type RET = ...;</code> 形式的可选返回类注解。如果编译器无法推断 RET 的类型，则可能需要这样做。</li>
+<li>一个可能为空的本地声明列表。局部变量也可以通过 <code>let</code> 声明为内联赋值。类型推断通常有效。阴影没有。</li>
+<li>基本块列表。其中第一个是开始块，是执行开始的地方。
+除了起始块之外的所有块都需要命名，以便以后可以引用它们。
+<ul>
+<li>每个块都是一个以分号结尾的语句列表，后跟一个终止符。
+各种语言句法和终止符的语法被设计为与原生 Rust 中类似概念的语法尽可能相似。
+请参见下面的列表。</li>
+</ul>
+</li>
+</ul>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#![feature(core_intrinsics, custom_mir)]
+
+</span><span class="kw">use </span>core::intrinsics::mir::<span class="kw-2">*</span>;
+
+<span class="attr">#[custom_mir(dialect = <span class="string">&quot;built&quot;</span>)]
+</span><span class="kw">pub fn </span>choose_load(a: <span class="kw-2">&amp;</span>i32, b: <span class="kw-2">&amp;</span>i32, c: bool) -&gt; i32 {
+    <span class="macro">mir!</span>(
+        {
+            <span class="kw">match </span>c {
+                <span class="bool-val">true </span>=&gt; t,
+                <span class="kw">_ </span>=&gt; f,
+            }
+        }
+
+        t = {
+            <span class="kw">let </span>temp = a;
+            Goto(load_and_exit)
+        }
+
+        f = {
+            temp = b;
+            Goto(load_and_exit)
+        }
+
+        load_and_exit = {
+            RET = <span class="kw-2">*</span>temp;
+            Return()
+        }
+    )
+}
+
+<span class="attr">#[custom_mir(dialect = <span class="string">&quot;built&quot;</span>)]
+</span><span class="kw">fn </span>unwrap_unchecked&lt;T&gt;(opt: <span class="prelude-ty">Option</span>&lt;T&gt;) -&gt; T {
+    <span class="macro">mir!</span>({
+        RET = Move(Field(Variant(opt, <span class="number">1</span>), <span class="number">0</span>));
+        Return()
+    })
+}
+
+<span class="attr">#[custom_mir(dialect = <span class="string">&quot;runtime&quot;</span>, phase = <span class="string">&quot;optimized&quot;</span>)]
+</span><span class="kw">fn </span>push_and_pop&lt;T&gt;(v: <span class="kw-2">&amp;mut </span>Vec&lt;T&gt;, value: T) {
+    <span class="macro">mir!</span>(
+        <span class="kw">let </span>unused;
+        <span class="kw">let </span>popped;
+
+        {
+            Call(unused, pop, Vec::push(v, value))
+        }
+
+        pop = {
+            Call(popped, drop, Vec::pop(v))
+        }
+
+        drop = {
+            Drop(popped, ret)
+        }
+
+        ret = {
+            Return()
+        }
+    )
+}
+
+<span class="attr">#[custom_mir(dialect = <span class="string">&quot;runtime&quot;</span>, phase = <span class="string">&quot;optimized&quot;</span>)]
+</span><span class="kw">fn </span>annotated_return_type() -&gt; (i32, bool) {
+    <span class="macro">mir!</span>(
+        <span class="kw">type </span>RET = (i32, bool);
+        {
+            RET.<span class="number">0 </span>= <span class="number">1</span>;
+            RET.<span class="number">1 </span>= <span class="bool-val">true</span>;
+            Return()
+        }
+    )
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Bfeature(core_intrinsics,+custom_mir)%5D%0A%0Afn+main()+%7B%0Ause+core::intrinsics::mir::*;%0A%0A%23%5Bcustom_mir(dialect+=+%22built%22)%5D%0Apub+fn+choose_load(a:+%26i32,+b:+%26i32,+c:+bool)+-%3E+i32+%7B%0A++++mir!(%0A++++++++%7B%0A++++++++++++match+c+%7B%0A++++++++++++++++true+=%3E+t,%0A++++++++++++++++_+=%3E+f,%0A++++++++++++%7D%0A++++++++%7D%0A%0A++++++++t+=+%7B%0A++++++++++++let+temp+=+a;%0A++++++++++++Goto(load_and_exit)%0A++++++++%7D%0A%0A++++++++f+=+%7B%0A++++++++++++temp+=+b;%0A++++++++++++Goto(load_and_exit)%0A++++++++%7D%0A%0A++++++++load_and_exit+=+%7B%0A++++++++++++RET+=+*temp;%0A++++++++++++Return()%0A++++++++%7D%0A++++)%0A%7D%0A%0A%23%5Bcustom_mir(dialect+=+%22built%22)%5D%0Afn+unwrap_unchecked%3CT%3E(opt:+Option%3CT%3E)+-%3E+T+%7B%0A++++mir!(%7B%0A++++++++RET+=+Move(Field(Variant(opt,+1),+0));%0A++++++++Return()%0A++++%7D)%0A%7D%0A%0A%23%5Bcustom_mir(dialect+=+%22runtime%22,+phase+=+%22optimized%22)%5D%0Afn+push_and_pop%3CT%3E(v:+%26mut+Vec%3CT%3E,+value:+T)+%7B%0A++++mir!(%0A++++++++let+unused;%0A++++++++let+popped;%0A%0A++++++++%7B%0A++++++++++++Call(unused,+pop,+Vec::push(v,+value))%0A++++++++%7D%0A%0A++++++++pop+=+%7B%0A++++++++++++Call(popped,+drop,+Vec::pop(v))%0A++++++++%7D%0A%0A++++++++drop+=+%7B%0A++++++++++++Drop(popped,+ret)%0A++++++++%7D%0A%0A++++++++ret+=+%7B%0A++++++++++++Return()%0A++++++++%7D%0A++++)%0A%7D%0A%0A%23%5Bcustom_mir(dialect+=+%22runtime%22,+phase+=+%22optimized%22)%5D%0Afn+annotated_return_type()+-%3E+(i32,+bool)+%7B%0A++++mir!(%0A++++++++type+RET+=+(i32,+bool);%0A++++++++%7B%0A++++++++++++RET.0+=+1;%0A++++++++++++RET.1+=+true;%0A++++++++++++Return()%0A++++++++%7D%0A++++)%0A%7D%0A%7D&amp;version=nightly&amp;edition=2021">Run</a></div>
+<p>我们还可以触发在编译器足够晚的阶段发生的编译失败:</p>
+
+<div class="example-wrap compile_fail"><a href="#" class="tooltip" title="This example deliberately fails to compile">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#![feature(core_intrinsics, custom_mir)]
+
+</span><span class="kw">extern crate </span>core;
+<span class="kw">use </span>core::intrinsics::mir::<span class="kw-2">*</span>;
+
+<span class="attr">#[custom_mir(dialect = <span class="string">&quot;built&quot;</span>)]
+</span><span class="kw">fn </span>borrow_error(should_init: bool) -&gt; i32 {
+    <span class="macro">mir!</span>(
+        <span class="kw">let </span>temp: i32;
+
+        {
+            <span class="kw">match </span>should_init {
+                <span class="bool-val">true </span>=&gt; init,
+                <span class="kw">_ </span>=&gt; use_temp,
+            }
+        }
+
+        init = {
+            temp = <span class="number">0</span>;
+            Goto(use_temp)
+        }
+
+        use_temp = {
+            RET = temp;
+            Return()
+        }
+    )
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0A%23!%5Bfeature(core_intrinsics,+custom_mir)%5D%0A%0Aextern+crate+core;%0Afn+main()+%7B%0Ause+core::intrinsics::mir::*;%0A%0A%23%5Bcustom_mir(dialect+=+%22built%22)%5D%0Afn+borrow_error(should_init:+bool)+-%3E+i32+%7B%0A++++mir!(%0A++++++++let+temp:+i32;%0A%0A++++++++%7B%0A++++++++++++match+should_init+%7B%0A++++++++++++++++true+=%3E+init,%0A++++++++++++++++_+=%3E+use_temp,%0A++++++++++++%7D%0A++++++++%7D%0A%0A++++++++init+=+%7B%0A++++++++++++temp+=+0;%0A++++++++++++Goto(use_temp)%0A++++++++%7D%0A%0A++++++++use_temp+=+%7B%0A++++++++++++RET+=+temp;%0A++++++++++++Return()%0A++++++++%7D%0A++++)%0A%7D%0A%7D&amp;version=nightly&amp;edition=2021">Run</a></div>
+<div class="example-wrap"><pre class="language-text"><code>error[E0381]: used binding is possibly-uninitialized
+  --&gt; test.rs:24:13
+   |
+8  | /     mir!(
+9  | |         let temp: i32;
+10 | |
+11 | |         {
+...  |
+19 | |             temp = 0;
+   | |             -------- binding initialized here in some conditions
+...  |
+24 | |             RET = temp;
+   | |             ^^^^^^^^^^ value used here but it is possibly-uninitialized
+25 | |             Return()
+26 | |         }
+27 | |     )
+   | |_____- binding declared here but left uninitialized
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0381`.
+</code></pre></div><h2 id="syntax"><a href="#syntax">Syntax</a></h2>
+<p>下面的列表详尽地描述了如何创建各种 MIR 构造。
+列表中遗漏的任何内容都应假定为不受支持，欢迎 PR。</p>
+<h5 id="locals"><a href="#locals">Locals</a></h5>
+<ul>
+<li><code>_0</code> 返回本地始终可以通过 <code>RET</code> 访问。</li>
+<li>参数可以通过他们的常规名称访问。</li>
+<li>所有其他局部变量都需要在某处用 <code>let</code> 声明，然后才能通过名称访问。</li>
+</ul>
+<h5 id="places"><a href="#places">Places</a></h5>
+<ul>
+<li>本地人隐式转换为地点。</li>
+<li>字段访问、解引用和索引工作正常。</li>
+<li>变体中的字段可以通过 <a href="fn.Variant.html" title="fn std::intrinsics::mir::Variant"><code>Variant</code></a> 和 <a href="fn.Field.html" title="fn std::intrinsics::mir::Field"><code>Field</code></a> 关联函数访问，请参见它们的文档以获取详细信息。</li>
+</ul>
+<h5 id="operands"><a href="#operands">Operands</a></h5>
+<ul>
+<li>地方隐式转换为 <code>Copy</code> 操作数。</li>
+<li><code>Move</code> 操作数可以通过 <a href="fn.Move.html" title="fn std::intrinsics::mir::Move"><code>Move</code></a> 创建。</li>
+<li>Const 块、字面量、命名常量和 const 参数都可以正常工作。</li>
+<li><a href="fn.Static.html" title="fn std::intrinsics::mir::Static"><code>Static</code></a> 和 <a href="fn.StaticMut.html" title="fn std::intrinsics::mir::StaticMut"><code>StaticMut</code></a> 可用于创建 <code>&amp;T</code> 和 <code>*mut T</code> 到静态。这些是 MIR 中的常量，也是访问静态的唯一方法。</li>
+</ul>
+<h5 id="statements"><a href="#statements">Statements</a></h5>
+<ul>
+<li>通过正常的 Rust 分配分配语言句子工作。</li>
+<li><a href="fn.Retag.html" title="fn std::intrinsics::mir::Retag"><code>Retag</code></a>, <a href="fn.StorageLive.html" title="fn std::intrinsics::mir::StorageLive"><code>StorageLive</code></a>, <a href="fn.StorageDead.html" title="fn std::intrinsics::mir::StorageDead"><code>StorageDead</code></a>, <a href="fn.Deinit.html" title="fn std::intrinsics::mir::Deinit"><code>Deinit</code></a> 语句有一个关联函数。</li>
+</ul>
+<h5 id="rvalues"><a href="#rvalues">Rvalues</a></h5>
+<ul>
+<li>操作数隐式转换为 <code>Use</code> 右值。</li>
+<li><code>&amp;</code>、<code>&amp;mut</code>、<code>addr_of!</code> 和 <code>addr_of_mut!</code> 都用于创建其关联的右值。</li>
+<li><a href="fn.Discriminant.html" title="fn std::intrinsics::mir::Discriminant"><code>Discriminant</code></a>、<a href="fn.Len.html" title="fn std::intrinsics::mir::Len"><code>Len</code></a>、<a href="fn.CopyForDeref.html" title="fn std::intrinsics::mir::CopyForDeref"><code>CopyForDeref</code></a> 具有关联的函数。</li>
+<li>一元和二元运算使用其正常的 Rust 语法 –<code>a * b</code>、<code>!c</code> 等。</li>
+<li>二元运算 <code>Offset</code> 可以通过 <a href="fn.Offset.html" title="fn std::intrinsics::mir::Offset"><code>Offset</code></a> 创建。</li>
+<li>已检查的二进制操作通过将关联的 binop 包装在 <a href="fn.Checked.html" title="fn std::intrinsics::mir::Checked"><code>Checked</code></a> 中来表示。</li>
+<li>数组重复语法 (<code>[foo; 10]</code>) 创建关联的右值。</li>
+</ul>
+<h5 id="terminators"><a href="#terminators">Terminators</a></h5>
+<p>自定义 MIR 当前不支持清理块或非平凡展开路径。
+因此，没有恢复和中止终结符，并且，可能展开的终结符没有任何方式指示展开块。</p>
+<ul>
+<li><a href="fn.Goto.html" title="fn std::intrinsics::mir::Goto"><code>Goto</code></a>、<a href="fn.Return.html" title="fn std::intrinsics::mir::Return"><code>Return</code></a>、<a href="fn.Unreachable.html" title="fn std::intrinsics::mir::Unreachable"><code>Unreachable</code></a>、<a href="fn.Drop.html" title="fn std::intrinsics::mir::Drop"><code>Drop</code></a> 有关联函数。</li>
+<li><code>match some_int_operand</code> 变成 <code>SwitchInt</code>。每个 arm 应该是 <code>literal =&gt; basic_block</code>
+<ul>
+<li>例外的是最后一个 arm，它必须是 <code>_ =&gt; basic_block</code>，并且对应于 otherwise 分支。</li>
+</ul>
+</li>
+<li><a href="fn.Call.html" title="fn std::intrinsics::mir::Call"><code>Call</code></a> 也有一个关联函数。该函数的第三个参数是一个普通的函数调用表达式，例如 <code>my_other_function(a, 5)</code>。</li>
+</ul>
+</div></details><h2 id="macros" class="small-section-header"><a href="#macros">Macros</a></h2><ul class="item-table"><li><div class="item-name"><a class="macro" href="macro.mir.html" title="macro std::intrinsics::mir::mir">mir</a><span class="stab unstable" title="">Experimental</span></div><div class="desc docblock-short">用于生成自定义 MIR。</div></li><li><div class="item-name"><a class="macro" href="macro.place.html" title="macro std::intrinsics::mir::place">place</a><span class="stab unstable" title="">Experimental</span></div><div class="desc docblock-short">Helper 宏允许您将值表达式视为位置表达式。</div></li></ul><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.BasicBlock.html" title="struct std::intrinsics::mir::BasicBlock">BasicBlock</a><span class="stab unstable" title="">Experimental</span></div><div class="desc docblock-short">表示基本块的类型。</div></li></ul><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.Call.html" title="fn std::intrinsics::mir::Call">Call</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.CastTransmute.html" title="fn std::intrinsics::mir::CastTransmute">CastTransmute</a><span class="stab unstable" title="">Experimental</span></div><div class="desc docblock-short">触发一个 <code>CastKind::Transmute</code> cast。</div></li><li><div class="item-name"><a class="fn" href="fn.Checked.html" title="fn std::intrinsics::mir::Checked">Checked</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.CopyForDeref.html" title="fn std::intrinsics::mir::CopyForDeref">CopyForDeref</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.Deinit.html" title="fn std::intrinsics::mir::Deinit">Deinit</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.Discriminant.html" title="fn std::intrinsics::mir::Discriminant">Discriminant</a><span class="stab unstable" title="">Experimental</span></div><div class="desc docblock-short">获取一个地方的判别式。</div></li><li><div class="item-name"><a class="fn" href="fn.Drop.html" title="fn std::intrinsics::mir::Drop">Drop</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.Field.html" title="fn std::intrinsics::mir::Field">Field</a><span class="stab unstable" title="">Experimental</span></div><div class="desc docblock-short">访问具有某个地方的给定索引的字段。</div></li><li><div class="item-name"><a class="fn" href="fn.Goto.html" title="fn std::intrinsics::mir::Goto">Goto</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.Len.html" title="fn std::intrinsics::mir::Len">Len</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.Move.html" title="fn std::intrinsics::mir::Move">Move</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.Offset.html" title="fn std::intrinsics::mir::Offset">Offset</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.Retag.html" title="fn std::intrinsics::mir::Retag">Retag</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.Return.html" title="fn std::intrinsics::mir::Return">Return</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.SetDiscriminant.html" title="fn std::intrinsics::mir::SetDiscriminant">SetDiscriminant</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.Static.html" title="fn std::intrinsics::mir::Static">Static</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.StaticMut.html" title="fn std::intrinsics::mir::StaticMut">StaticMut</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.StorageDead.html" title="fn std::intrinsics::mir::StorageDead">StorageDead</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.StorageLive.html" title="fn std::intrinsics::mir::StorageLive">StorageLive</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.Unreachable.html" title="fn std::intrinsics::mir::Unreachable">Unreachable</a><span class="stab unstable" title="">Experimental</span></div></li><li><div class="item-name"><a class="fn" href="fn.Variant.html" title="fn std::intrinsics::mir::Variant">Variant</a><span class="stab unstable" title="">Experimental</span></div><div class="desc docblock-short">将具有给定索引的变体投影添加到该位置。</div></li></ul></section></div></main></body></html>

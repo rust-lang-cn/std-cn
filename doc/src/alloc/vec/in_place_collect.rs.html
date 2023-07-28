@@ -1,0 +1,619 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/alloc/src/vec/in_place_collect.rs`."><title>in_place_collect.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="alloc" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../source-files1.71.0.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../alloc/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<a href="#2" id="2">2</a>
+<a href="#3" id="3">3</a>
+<a href="#4" id="4">4</a>
+<a href="#5" id="5">5</a>
+<a href="#6" id="6">6</a>
+<a href="#7" id="7">7</a>
+<a href="#8" id="8">8</a>
+<a href="#9" id="9">9</a>
+<a href="#10" id="10">10</a>
+<a href="#11" id="11">11</a>
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
+<a href="#48" id="48">48</a>
+<a href="#49" id="49">49</a>
+<a href="#50" id="50">50</a>
+<a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! `Vec` 的就地迭代和收集特化
+//!
+//! Note: 本文档记录了 Vec 内部结构，以下部分解释了实现细节，最好与本模块的源代码一起阅读。
+//!
+//! 本模块的特化适用于 `source.adapter().adapter().adapter().collect::&lt;Vec&lt;U&gt;&gt;()` 形式的迭代器
+//! 其中 `source` 是从 [`Vec&lt;T&gt;`]、[`Box&lt;[T]&gt;`][box] (通过转换为 `Vec`) 或 [`BinaryHeap&lt;T&gt;`] 获得的拥有迭代器，每个适配器每个步骤消耗一个或多个项 (由 [`InPlaceIterable`] 表示)，提供对 `source` 的传递访问 (通过 [`SourceIter`])，从而提供底层分配.
+//! 最后，`T` 和 `U` 的布局必须具有相同的大小和对齐方式，目前通过 const eval 而不是专门的 [`SpecFromIter`] 实现中的 trait bounds 来确保的。
+//!
+//! [`BinaryHeap&lt;T&gt;`]: crate::collections::BinaryHeap
+//! [box]: crate::boxed::Box
+//!
+//! 通过扩展，在其 `FromIterator` 实现中内部使用 `collect::&lt;Vec&lt;_&gt;&gt;()` 的其他一些集合也从中受益。
+//!
+//! 对底层源的访问通过私有 [`AsVecIntoIter`] trait 进行进一步的间接层，以隐藏其他集合可能在内部使用 `vec::IntoIter` 的实现细节。
+//!
+//! 就地迭代取决于几个不安全的 traits 的交互，迭代器管道中多个部分的实现细节，并且通常需要跨多个结构体进行整体推理，因为迭代器是协作执行的，而不是让中央 evaluator/visitor 结构执行所有迭代器组件。
+//!
+//!
+//! # 读取和写入相同的分配
+//!
+//! 就其本质而言，就地收集意味着迭代器的 reader 和 writer 端使用相同的分配。由于 `try_fold()` (在 [`SpecInPlaceCollect`] 中使用) 在迭代期间需要对迭代器的引用，这意味着我们不能交替读取值和获取要写入的引用。
+//! 相反，必须在 reader 和 writer 端使用裸指针。
+//!
+//! [`InPlaceIterable`] 要求确保写入操作永远不会破坏尚未读取的项。
+//!
+//! # 布局约束
+//!
+//! [`Allocator`] 要求 `allocate()` 和 `deallocate()` 具有匹配的对齐方式和大小。
+//! 此外，这种特化对于 ZST 没有意义，因为不需要避免重新分配，而且它会使指针运算更加困难。
+//!
+//! [`Allocator`]: core::alloc::Allocator
+//!
+//! # Drop- 和 panic 安全
+//!
+//! 迭代可能会出现 panic，需要丢弃已写入的部分以及源的其余部分。迭代也可以保留一些必须丢弃的未消耗的源项。
+//! 所有这些丢弃进而会导致 panic，然后必须泄漏分配或中止，以避免双重丢弃。
+//!
+//! 这由 sink 项 (`U`) 的 [`InPlaceDrop`] 守卫和剩余源项 (`T`) 的 [`vec::IntoIter::forget_allocation_drop_remaining()`] 处理。
+//!
+//! 如果丢弃任何剩余的源 (`T`) panic，则 [`InPlaceDstBufDrop`] 将处理项丢弃已收集的 Z0sink2 项 (`T`) 并释放分配。
+//!
+//! [`vec::IntoIter::forget_allocation_drop_remaining()`]: super::IntoIter::forget_allocation_drop_remaining()
+//!
+//! # O(1) 收集
+//!
+//! 当迭代器实现 [`TrustedRandomAccessNoCoerce`] 以让优化器看到它是一个带有单个 [induction variable] 的计数循环时，主迭代本身会进一步特化。这可以将一些迭代器变成一个 noop，也就是说，它将迭代器从 O(n) 减少到 O(1)。
+//! 这种特殊的优化非常易变，并不总是有效，请参见 [#79308]
+//!
+//! [#79308]: https://github.com/rust-lang/rust/issues/79308
+//! [induction variable]: https://en.wikipedia.org/wiki/Induction_variable
+//!
+//! 由于通过该 trait 的未经检查的访问不会推进 `IntoIter` 的读取指针，这将与上述关于丢弃尾部的要求进行不合理的交互。
+//! 但是由于 `IntoIter` 的正常 `Drop` 实现会遇到同样的问题，因此只有在项没有析构函数时才实现 `TrustedRandomAccessNoCoerce` 是正确的。因此，该隐式要求也使特化可以安全地用于就地收集。
+//! 请注意，这个安全问题是关于 `impl Drop for IntoIter` 的正确性，而不是 `InPlaceIterable` 的保证。
+//!
+//! # 适配器实现
+//!
+//! 适配器的不变量记录在 [`SourceIter`] 和 [`InPlaceIterable`] 中，但是由于多种原因，有时是非本地原因，使它们正确可能相当微妙。
+//! 例如，`InPlaceIterable` 对 [`Peekable`] 实现是有效的，除了它是有状态的、可克隆的并且 `IntoIter` 的克隆实现缩短了底层分配，这意味着如果迭代器已被窥视然后被克隆，则不再有足够的空间，从而破坏了不变量 ([#85322])。
+//!
+//! [#85322]: https://github.com/rust-lang/rust/issues/85322
+//! [`Peekable`]: core::iter::Peekable
+//!
+//! # Examples
+//!
+//! 通过这种特化优化的一些案例，可以在 `Vec` 基准测试中找到更多:
+//!
+//! ```rust
+//! # #[allow(dead_code)]
+//! /// 将 usize vec 转换为 isize one。
+//! pub fn cast(vec: Vec&lt;usize&gt;) -&gt; Vec&lt;isize&gt; {
+//!   // 不分配、释放或 panic。在 optlevel&gt;=2 时，它不会循环。
+//!   // 当然，这种特殊情况可以也应该用 `into_raw_parts` 和 `from_raw_parts` 来代替。
+//!   //
+//!   vec.into_iter().map(|u| u as isize).collect()
+//! }
+//! ```
+//!
+//! ```rust
+//! # #[allow(dead_code)]
+//! /// 丢弃 `src` 中的剩余项，如果 `T` 和 `U` 的布局匹配，则返回由原始分配支持的空 Vec。
+//! /// 否则它返回一个新的空 vec。
+//! ///
+//! pub fn recycle_allocation&lt;T, U&gt;(src: Vec&lt;T&gt;) -&gt; Vec&lt;U&gt; {
+//!   src.into_iter().filter_map(|_| None).collect()
+//! }
+//! ```
+//!
+//! ```rust
+//! let vec = vec![13usize; 1024];
+//! let _ = vec.into_iter()
+//!   .enumerate()
+//!   .filter_map(|(idx, val)| if idx % 2 == 0 { Some(val+idx) } else {None})
+//!   .collect::&lt;Vec&lt;_&gt;&gt;();
+//!
+//! // 等效于以下内容，但不需要边界检查
+//!
+//! let mut vec = vec![13usize; 1024];
+//! let mut write_idx = 0;
+//! for idx in 0..vec.len() {
+//!    if idx % 2 == 0 {
+//!       vec[write_idx] = vec[idx] + idx;
+//!       write_idx += 1;
+//!    }
+//! }
+//! vec.truncate(write_idx);
+//! ```
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+//!
+</span><span class="kw">use </span>core::iter::{InPlaceIterable, SourceIter, TrustedRandomAccessNoCoerce};
+<span class="kw">use </span>core::mem::{<span class="self">self</span>, ManuallyDrop, SizedTypeProperties};
+<span class="kw">use </span>core::ptr::{<span class="self">self</span>};
+
+<span class="kw">use super</span>::{InPlaceDrop, InPlaceDstBufDrop, SpecFromIter, SpecFromIterNested, Vec};
+
+<span class="doccomment">/// 专业化标记，用于在重用源分配时将迭代器管道收集到 Vec 中，即
+/// 在适当的位置执行管道。
+</span><span class="attr">#[rustc_unsafe_specialization_marker]
+</span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">trait </span>InPlaceIterableMarker {}
+
+<span class="kw">impl</span>&lt;T&gt; InPlaceIterableMarker <span class="kw">for </span>T <span class="kw">where </span>T: InPlaceIterable {}
+
+<span class="kw">impl</span>&lt;T, I&gt; SpecFromIter&lt;T, I&gt; <span class="kw">for </span>Vec&lt;T&gt;
+<span class="kw">where
+    </span>I: Iterator&lt;Item = T&gt; + SourceIter&lt;Source: AsVecIntoIter&gt; + InPlaceIterableMarker,
+{
+    default <span class="kw">fn </span>from_iter(<span class="kw-2">mut </span>iterator: I) -&gt; <span class="self">Self </span>{
+        <span class="comment">// 请参见模块文档中的 &quot;布局约束&quot; 部分。
+        // 我们在这里依赖常量优化，因为这些条件目前不能表示为 trait bounds
+        </span><span class="kw">if </span>T::IS_ZST
+            || mem::size_of::&lt;T&gt;()
+                != mem::size_of::&lt;&lt;&lt;I <span class="kw">as </span>SourceIter&gt;::Source <span class="kw">as </span>AsVecIntoIter&gt;::Item&gt;()
+            || mem::align_of::&lt;T&gt;()
+                != mem::align_of::&lt;&lt;&lt;I <span class="kw">as </span>SourceIter&gt;::Source <span class="kw">as </span>AsVecIntoIter&gt;::Item&gt;()
+        {
+            <span class="comment">// 回退到更通用的实现
+            </span><span class="kw">return </span>SpecFromIterNested::from_iter(iterator);
+        }
+
+        <span class="kw">let </span>(src_buf, src_ptr, dst_buf, dst_end, cap) = <span class="kw">unsafe </span>{
+            <span class="kw">let </span>inner = iterator.as_inner().as_into_iter();
+            (
+                inner.buf.as_ptr(),
+                inner.ptr,
+                inner.buf.as_ptr() <span class="kw">as </span><span class="kw-2">*mut </span>T,
+                inner.end <span class="kw">as </span><span class="kw-2">*const </span>T,
+                inner.cap,
+            )
+        };
+
+        <span class="comment">// SAFETY: `dst_buf` 和 `dst_end` 是缓冲区的开始和结束。
+        </span><span class="kw">let </span>len = <span class="kw">unsafe </span>{ SpecInPlaceCollect::collect_in_place(<span class="kw-2">&amp;mut </span>iterator, dst_buf, dst_end) };
+
+        <span class="kw">let </span>src = <span class="kw">unsafe </span>{ iterator.as_inner().as_into_iter() };
+        <span class="comment">// 检查 SourceIter 契约是否得到维护警告：如果不是，我们甚至可能无法做到这一点
+        //
+        </span><span class="macro">debug_assert_eq!</span>(src_buf, src.buf.as_ptr());
+        <span class="comment">// 检查 InPlaceIterable 契约。只有迭代器推进了源指针，这才是可能的。
+        // 如果它通过 TrustedRandomAccess 使用未经检查的访问，则源指针将停留在其初始位置，我们不能将其用作引用
+        //
+        </span><span class="kw">if </span>src.ptr != src_ptr {
+            <span class="macro">debug_assert!</span>(
+                <span class="kw">unsafe </span>{ dst_buf.add(len) <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ </span>} &lt;= src.ptr,
+                <span class="string">&quot;InPlaceIterable contract violation, write pointer advanced beyond read pointer&quot;
+            </span>);
+        }
+
+        <span class="comment">// 分配的所有权和新的 `T` 值暂时移至 `dst_guard`。
+        // 这是安全的，因为 `forget_allocation_drop_remaining` 在任何 panic 发生之前立即忘记分配以避免任何重复释放，然后继续丢弃源尾部的任何剩余值。
+        //
+        //
+        // Note: TrustedRandomIteratorNoCoerce 契约 (由下面的 SpecInPlaceCollect 使用) 不允许对源的这种访问。但是请参见模块文档中的 &quot;O(1) collect&quot; 部分，为什么这仍然可以。
+        //
+        //
+        //
+        </span><span class="kw">let </span>dst_guard = InPlaceDstBufDrop { ptr: dst_buf, len, cap };
+        src.forget_allocation_drop_remaining();
+        mem::forget(dst_guard);
+
+        <span class="kw">let </span>vec = <span class="kw">unsafe </span>{ Vec::from_raw_parts(dst_buf, len, cap) };
+
+        vec
+    }
+}
+
+<span class="kw">fn </span>write_in_place_with_drop&lt;T&gt;(
+    src_end: <span class="kw-2">*const </span>T,
+) -&gt; <span class="kw">impl </span>FnMut(InPlaceDrop&lt;T&gt;, T) -&gt; <span class="prelude-ty">Result</span>&lt;InPlaceDrop&lt;T&gt;, !&gt; {
+    <span class="kw">move </span>|<span class="kw-2">mut </span>sink, item| {
+        <span class="kw">unsafe </span>{
+            <span class="comment">// 这里的 InPlaceIterable 契约无法精确验证，因为 try_fold 对源指针有一个唯一的引用，我们所能做的就是检查它是否仍在范围内
+            //
+            //
+            </span><span class="macro">debug_assert!</span>(sink.dst <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ </span>&lt;= src_end, <span class="string">&quot;InPlaceIterable contract violation&quot;</span>);
+            ptr::write(sink.dst, item);
+            <span class="comment">// 由于这会执行用户代码，这可能会导致 panic，因此我们必须在每一步之后 bump 指针。
+            //
+            </span>sink.dst = sink.dst.add(<span class="number">1</span>);
+        }
+        <span class="prelude-val">Ok</span>(sink)
+    }
+}
+
+<span class="doccomment">/// 一个用于保存就地迭代收集循环的专用实现的 Helper trait
+</span><span class="kw">trait </span>SpecInPlaceCollect&lt;T, I&gt;: Iterator&lt;Item = T&gt; {
+    <span class="doccomment">/// 将迭代器 (`self`) 收集到目标缓冲区 (`dst`) 中并返回收集的项数。`end` 是分配的最后一个可写元素，用于边界检查。
+    ///
+    /// 这个方法是专门的，它的一个实现使用 `Iterator::__iterator_get_unchecked` 调用，`TrustedRandomAccessNoCoerce` 绑定在 `I` 上，这意味着这个方法的调用者必须考虑 trait 的安全条件。
+    ///
+    ///
+    ///
+    ///
+    </span><span class="kw">unsafe fn </span>collect_in_place(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dst: <span class="kw-2">*mut </span>T, end: <span class="kw-2">*const </span>T) -&gt; usize;
+}
+
+<span class="kw">impl</span>&lt;T, I&gt; SpecInPlaceCollect&lt;T, I&gt; <span class="kw">for </span>I
+<span class="kw">where
+    </span>I: Iterator&lt;Item = T&gt;,
+{
+    <span class="attr">#[inline]
+    </span>default <span class="kw">unsafe fn </span>collect_in_place(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dst_buf: <span class="kw-2">*mut </span>T, end: <span class="kw-2">*const </span>T) -&gt; usize {
+        <span class="comment">// 使用 try-fold，因为
+        // - 对于某些迭代器适配器，它可以更好地进行矢量化
+        // - 与大多数内部迭代方法不同，它只需要一个 &amp;mut self
+        // - 它让我们把写指针穿进它的内部，最后把它拿回来
+        </span><span class="kw">let </span>sink = InPlaceDrop { inner: dst_buf, dst: dst_buf };
+        <span class="kw">let </span>sink =
+            <span class="self">self</span>.try_fold::&lt;<span class="kw">_</span>, <span class="kw">_</span>, <span class="prelude-ty">Result</span>&lt;<span class="kw">_</span>, !&gt;&gt;(sink, write_in_place_with_drop(end)).unwrap();
+        <span class="comment">// 迭代成功，不要丢弃 head
+        </span><span class="kw">unsafe </span>{ ManuallyDrop::new(sink).dst.sub_ptr(dst_buf) }
+    }
+}
+
+<span class="kw">impl</span>&lt;T, I&gt; SpecInPlaceCollect&lt;T, I&gt; <span class="kw">for </span>I
+<span class="kw">where
+    </span>I: Iterator&lt;Item = T&gt; + TrustedRandomAccessNoCoerce,
+{
+    <span class="attr">#[inline]
+    </span><span class="kw">unsafe fn </span>collect_in_place(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dst_buf: <span class="kw-2">*mut </span>T, end: <span class="kw-2">*const </span>T) -&gt; usize {
+        <span class="kw">let </span>len = <span class="self">self</span>.size();
+        <span class="kw">let </span><span class="kw-2">mut </span>drop_guard = InPlaceDrop { inner: dst_buf, dst: dst_buf };
+        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..len {
+            <span class="comment">// 安全性: InplaceIterable 契约保证，对于我们读取的每个元素，底层存储中的一个插槽将被释放，我们可以立即写回结果。
+            //
+            //
+            </span><span class="kw">unsafe </span>{
+                <span class="kw">let </span>dst = dst_buf.add(i);
+                <span class="macro">debug_assert!</span>(dst <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ </span>&lt;= end, <span class="string">&quot;InPlaceIterable contract violation&quot;</span>);
+                ptr::write(dst, <span class="self">self</span>.__iterator_get_unchecked(i));
+                <span class="comment">// 由于这会执行用户代码，这可能会导致 panic，因此我们必须在每一步之后 bump 指针。
+                //
+                </span>drop_guard.dst = dst.add(<span class="number">1</span>);
+            }
+        }
+        mem::forget(drop_guard);
+        len
+    }
+}
+
+<span class="doccomment">/// 用于就地迭代特化的内部助手 trait。
+///
+/// 目前这仅由 [`vec::IntoIter`] 实现 - 返回对自身的引用 - 并且 [`binary_heap::IntoIter`] 将返回对其内部表示的引用。
+///
+/// 由于这是一个内部 trait，它隐藏了 `binary_heap::IntoIter` 在内部使用 `vec::IntoIter` 的实现细节。
+///
+/// [`vec::IntoIter`]: super::IntoIter
+/// [`binary_heap::IntoIter`]: crate::collections::binary_heap::IntoIter
+///
+/// # Safety
+///
+/// 就地迭代依赖于 `vec::IntoIter` 的实现细节，最重要的是它不会在迭代过程中创建对整个分配的引用，只是创建裸指针
+///
+///
+///
+</span><span class="attr">#[rustc_specialization_trait]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe trait </span>AsVecIntoIter {
+    <span class="kw">type </span>Item;
+    <span class="kw">fn </span>as_into_iter(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span><span class="kw">super</span>::IntoIter&lt;<span class="self">Self</span>::Item&gt;;
+}
+</code></pre></div></section></main></body></html>

@@ -1,0 +1,703 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Type layout - The Rust Reference</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/reference.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="notation.html"><strong aria-hidden="true">1.</strong> Notation</a></li><li class="chapter-item expanded "><a href="lexical-structure.html"><strong aria-hidden="true">2.</strong> Lexical structure</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="input-format.html"><strong aria-hidden="true">2.1.</strong> Input format</a></li><li class="chapter-item expanded "><a href="keywords.html"><strong aria-hidden="true">2.2.</strong> Keywords</a></li><li class="chapter-item expanded "><a href="identifiers.html"><strong aria-hidden="true">2.3.</strong> Identifiers</a></li><li class="chapter-item expanded "><a href="comments.html"><strong aria-hidden="true">2.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="whitespace.html"><strong aria-hidden="true">2.5.</strong> Whitespace</a></li><li class="chapter-item expanded "><a href="tokens.html"><strong aria-hidden="true">2.6.</strong> Tokens</a></li></ol></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="macros-by-example.html"><strong aria-hidden="true">3.1.</strong> Macros By Example</a></li><li class="chapter-item expanded "><a href="procedural-macros.html"><strong aria-hidden="true">3.2.</strong> Procedural Macros</a></li></ol></li><li class="chapter-item expanded "><a href="crates-and-source-files.html"><strong aria-hidden="true">4.</strong> Crates and source files</a></li><li class="chapter-item expanded "><a href="conditional-compilation.html"><strong aria-hidden="true">5.</strong> Conditional compilation</a></li><li class="chapter-item expanded "><a href="items.html"><strong aria-hidden="true">6.</strong> Items</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="items/modules.html"><strong aria-hidden="true">6.1.</strong> Modules</a></li><li class="chapter-item expanded "><a href="items/extern-crates.html"><strong aria-hidden="true">6.2.</strong> Extern crates</a></li><li class="chapter-item expanded "><a href="items/use-declarations.html"><strong aria-hidden="true">6.3.</strong> Use declarations</a></li><li class="chapter-item expanded "><a href="items/functions.html"><strong aria-hidden="true">6.4.</strong> Functions</a></li><li class="chapter-item expanded "><a href="items/type-aliases.html"><strong aria-hidden="true">6.5.</strong> Type aliases</a></li><li class="chapter-item expanded "><a href="items/structs.html"><strong aria-hidden="true">6.6.</strong> Structs</a></li><li class="chapter-item expanded "><a href="items/enumerations.html"><strong aria-hidden="true">6.7.</strong> Enumerations</a></li><li class="chapter-item expanded "><a href="items/unions.html"><strong aria-hidden="true">6.8.</strong> Unions</a></li><li class="chapter-item expanded "><a href="items/constant-items.html"><strong aria-hidden="true">6.9.</strong> Constant items</a></li><li class="chapter-item expanded "><a href="items/static-items.html"><strong aria-hidden="true">6.10.</strong> Static items</a></li><li class="chapter-item expanded "><a href="items/traits.html"><strong aria-hidden="true">6.11.</strong> Traits</a></li><li class="chapter-item expanded "><a href="items/implementations.html"><strong aria-hidden="true">6.12.</strong> Implementations</a></li><li class="chapter-item expanded "><a href="items/external-blocks.html"><strong aria-hidden="true">6.13.</strong> External blocks</a></li><li class="chapter-item expanded "><a href="items/generics.html"><strong aria-hidden="true">6.14.</strong> Generic parameters</a></li><li class="chapter-item expanded "><a href="items/associated-items.html"><strong aria-hidden="true">6.15.</strong> Associated Items</a></li></ol></li><li class="chapter-item expanded "><a href="attributes.html"><strong aria-hidden="true">7.</strong> Attributes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="attributes/testing.html"><strong aria-hidden="true">7.1.</strong> Testing</a></li><li class="chapter-item expanded "><a href="attributes/derive.html"><strong aria-hidden="true">7.2.</strong> Derive</a></li><li class="chapter-item expanded "><a href="attributes/diagnostics.html"><strong aria-hidden="true">7.3.</strong> Diagnostics</a></li><li class="chapter-item expanded "><a href="attributes/codegen.html"><strong aria-hidden="true">7.4.</strong> Code generation</a></li><li class="chapter-item expanded "><a href="attributes/limits.html"><strong aria-hidden="true">7.5.</strong> Limits</a></li><li class="chapter-item expanded "><a href="attributes/type_system.html"><strong aria-hidden="true">7.6.</strong> Type System</a></li><li class="chapter-item expanded "><a href="attributes/debugger.html"><strong aria-hidden="true">7.7.</strong> Debugger</a></li></ol></li><li class="chapter-item expanded "><a href="statements-and-expressions.html"><strong aria-hidden="true">8.</strong> Statements and expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="statements.html"><strong aria-hidden="true">8.1.</strong> Statements</a></li><li class="chapter-item expanded "><a href="expressions.html"><strong aria-hidden="true">8.2.</strong> Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="expressions/literal-expr.html"><strong aria-hidden="true">8.2.1.</strong> Literal expressions</a></li><li class="chapter-item expanded "><a href="expressions/path-expr.html"><strong aria-hidden="true">8.2.2.</strong> Path expressions</a></li><li class="chapter-item expanded "><a href="expressions/block-expr.html"><strong aria-hidden="true">8.2.3.</strong> Block expressions</a></li><li class="chapter-item expanded "><a href="expressions/operator-expr.html"><strong aria-hidden="true">8.2.4.</strong> Operator expressions</a></li><li class="chapter-item expanded "><a href="expressions/grouped-expr.html"><strong aria-hidden="true">8.2.5.</strong> Grouped expressions</a></li><li class="chapter-item expanded "><a href="expressions/array-expr.html"><strong aria-hidden="true">8.2.6.</strong> Array and index expressions</a></li><li class="chapter-item expanded "><a href="expressions/tuple-expr.html"><strong aria-hidden="true">8.2.7.</strong> Tuple and index expressions</a></li><li class="chapter-item expanded "><a href="expressions/struct-expr.html"><strong aria-hidden="true">8.2.8.</strong> Struct expressions</a></li><li class="chapter-item expanded "><a href="expressions/call-expr.html"><strong aria-hidden="true">8.2.9.</strong> Call expressions</a></li><li class="chapter-item expanded "><a href="expressions/method-call-expr.html"><strong aria-hidden="true">8.2.10.</strong> Method call expressions</a></li><li class="chapter-item expanded "><a href="expressions/field-expr.html"><strong aria-hidden="true">8.2.11.</strong> Field access expressions</a></li><li class="chapter-item expanded "><a href="expressions/closure-expr.html"><strong aria-hidden="true">8.2.12.</strong> Closure expressions</a></li><li class="chapter-item expanded "><a href="expressions/loop-expr.html"><strong aria-hidden="true">8.2.13.</strong> Loop expressions</a></li><li class="chapter-item expanded "><a href="expressions/range-expr.html"><strong aria-hidden="true">8.2.14.</strong> Range expressions</a></li><li class="chapter-item expanded "><a href="expressions/if-expr.html"><strong aria-hidden="true">8.2.15.</strong> If and if let expressions</a></li><li class="chapter-item expanded "><a href="expressions/match-expr.html"><strong aria-hidden="true">8.2.16.</strong> Match expressions</a></li><li class="chapter-item expanded "><a href="expressions/return-expr.html"><strong aria-hidden="true">8.2.17.</strong> Return expressions</a></li><li class="chapter-item expanded "><a href="expressions/await-expr.html"><strong aria-hidden="true">8.2.18.</strong> Await expressions</a></li><li class="chapter-item expanded "><a href="expressions/underscore-expr.html"><strong aria-hidden="true">8.2.19.</strong> Underscore expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">9.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="type-system.html"><strong aria-hidden="true">10.</strong> Type system</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="types.html"><strong aria-hidden="true">10.1.</strong> Types</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="types/boolean.html"><strong aria-hidden="true">10.1.1.</strong> Boolean type</a></li><li class="chapter-item expanded "><a href="types/numeric.html"><strong aria-hidden="true">10.1.2.</strong> Numeric types</a></li><li class="chapter-item expanded "><a href="types/textual.html"><strong aria-hidden="true">10.1.3.</strong> Textual types</a></li><li class="chapter-item expanded "><a href="types/never.html"><strong aria-hidden="true">10.1.4.</strong> Never type</a></li><li class="chapter-item expanded "><a href="types/tuple.html"><strong aria-hidden="true">10.1.5.</strong> Tuple types</a></li><li class="chapter-item expanded "><a href="types/array.html"><strong aria-hidden="true">10.1.6.</strong> Array types</a></li><li class="chapter-item expanded "><a href="types/slice.html"><strong aria-hidden="true">10.1.7.</strong> Slice types</a></li><li class="chapter-item expanded "><a href="types/struct.html"><strong aria-hidden="true">10.1.8.</strong> Struct types</a></li><li class="chapter-item expanded "><a href="types/enum.html"><strong aria-hidden="true">10.1.9.</strong> Enumerated types</a></li><li class="chapter-item expanded "><a href="types/union.html"><strong aria-hidden="true">10.1.10.</strong> Union types</a></li><li class="chapter-item expanded "><a href="types/function-item.html"><strong aria-hidden="true">10.1.11.</strong> Function item types</a></li><li class="chapter-item expanded "><a href="types/closure.html"><strong aria-hidden="true">10.1.12.</strong> Closure types</a></li><li class="chapter-item expanded "><a href="types/pointer.html"><strong aria-hidden="true">10.1.13.</strong> Pointer types</a></li><li class="chapter-item expanded "><a href="types/function-pointer.html"><strong aria-hidden="true">10.1.14.</strong> Function pointer types</a></li><li class="chapter-item expanded "><a href="types/trait-object.html"><strong aria-hidden="true">10.1.15.</strong> Trait object types</a></li><li class="chapter-item expanded "><a href="types/impl-trait.html"><strong aria-hidden="true">10.1.16.</strong> Impl trait type</a></li><li class="chapter-item expanded "><a href="types/parameters.html"><strong aria-hidden="true">10.1.17.</strong> Type parameters</a></li><li class="chapter-item expanded "><a href="types/inferred.html"><strong aria-hidden="true">10.1.18.</strong> Inferred type</a></li></ol></li><li class="chapter-item expanded "><a href="dynamically-sized-types.html"><strong aria-hidden="true">10.2.</strong> Dynamically Sized Types</a></li><li class="chapter-item expanded "><a href="type-layout.html" class="active"><strong aria-hidden="true">10.3.</strong> Type layout</a></li><li class="chapter-item expanded "><a href="interior-mutability.html"><strong aria-hidden="true">10.4.</strong> Interior mutability</a></li><li class="chapter-item expanded "><a href="subtyping.html"><strong aria-hidden="true">10.5.</strong> Subtyping and Variance</a></li><li class="chapter-item expanded "><a href="trait-bounds.html"><strong aria-hidden="true">10.6.</strong> Trait and lifetime bounds</a></li><li class="chapter-item expanded "><a href="type-coercions.html"><strong aria-hidden="true">10.7.</strong> Type coercions</a></li><li class="chapter-item expanded "><a href="destructors.html"><strong aria-hidden="true">10.8.</strong> Destructors</a></li><li class="chapter-item expanded "><a href="lifetime-elision.html"><strong aria-hidden="true">10.9.</strong> Lifetime elision</a></li></ol></li><li class="chapter-item expanded "><a href="special-types-and-traits.html"><strong aria-hidden="true">11.</strong> Special types and traits</a></li><li class="chapter-item expanded "><a href="names.html"><strong aria-hidden="true">12.</strong> Names</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="names/namespaces.html"><strong aria-hidden="true">12.1.</strong> Namespaces</a></li><li class="chapter-item expanded "><a href="names/scopes.html"><strong aria-hidden="true">12.2.</strong> Scopes</a></li><li class="chapter-item expanded "><a href="names/preludes.html"><strong aria-hidden="true">12.3.</strong> Preludes</a></li><li class="chapter-item expanded "><a href="paths.html"><strong aria-hidden="true">12.4.</strong> Paths</a></li><li class="chapter-item expanded "><a href="names/name-resolution.html"><strong aria-hidden="true">12.5.</strong> Name resolution</a></li><li class="chapter-item expanded "><a href="visibility-and-privacy.html"><strong aria-hidden="true">12.6.</strong> Visibility and privacy</a></li></ol></li><li class="chapter-item expanded "><a href="memory-model.html"><strong aria-hidden="true">13.</strong> Memory model</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory-allocation-and-lifetime.html"><strong aria-hidden="true">13.1.</strong> Memory allocation and lifetime</a></li><li class="chapter-item expanded "><a href="variables.html"><strong aria-hidden="true">13.2.</strong> Variables</a></li></ol></li><li class="chapter-item expanded "><a href="linkage.html"><strong aria-hidden="true">14.</strong> Linkage</a></li><li class="chapter-item expanded "><a href="inline-assembly.html"><strong aria-hidden="true">15.</strong> Inline assembly</a></li><li class="chapter-item expanded "><a href="unsafety.html"><strong aria-hidden="true">16.</strong> Unsafety</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="unsafe-keyword.html"><strong aria-hidden="true">16.1.</strong> The unsafe keyword</a></li><li class="chapter-item expanded "><a href="behavior-considered-undefined.html"><strong aria-hidden="true">16.2.</strong> Behavior considered undefined</a></li><li class="chapter-item expanded "><a href="behavior-not-considered-unsafe.html"><strong aria-hidden="true">16.3.</strong> Behavior not considered unsafe</a></li></ol></li><li class="chapter-item expanded "><a href="const_eval.html"><strong aria-hidden="true">17.</strong> Constant Evaluation</a></li><li class="chapter-item expanded "><a href="abi.html"><strong aria-hidden="true">18.</strong> Application Binary Interface</a></li><li class="chapter-item expanded "><a href="runtime.html"><strong aria-hidden="true">19.</strong> The Rust runtime</a></li><li class="chapter-item expanded "><a href="appendices.html"><strong aria-hidden="true">20.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="macro-ambiguity.html"><strong aria-hidden="true">20.1.</strong> Macro Follow-Set Ambiguity Formal Specification</a></li><li class="chapter-item expanded "><a href="influences.html"><strong aria-hidden="true">20.2.</strong> Influences</a></li><li class="chapter-item expanded "><a href="glossary.html"><strong aria-hidden="true">20.3.</strong> Glossary</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Reference</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/reference/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/reference/edit/master/src/type-layout.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="type-layout"><a class="header" href="#type-layout">Type Layout</a></h1>
+<p>The layout of a type is its size, alignment, and the relative offsets of its
+fields. For enums, how the discriminant is laid out and interpreted is also part
+of type layout.</p>
+<p>Type layout can be changed with each compilation. Instead of trying to document
+exactly what is done, we only document what is guaranteed today.</p>
+<h2 id="size-and-alignment"><a class="header" href="#size-and-alignment">Size and Alignment</a></h2>
+<p>All values have an alignment and size.</p>
+<p>The <em>alignment</em> of a value specifies what addresses are valid to store the value
+at. A value of alignment <code>n</code> must only be stored at an address that is a
+multiple of n. For example, a value with an alignment of 2 must be stored at an
+even address, while a value with an alignment of 1 can be stored at any address.
+Alignment is measured in bytes, and must be at least 1, and always a power of 2.
+The alignment of a value can be checked with the <a href="../std/mem/fn.align_of_val.html"><code>align_of_val</code></a> function.</p>
+<p>The <em>size</em> of a value is the offset in bytes between successive elements in an
+array with that item type including alignment padding. The size of a value is
+always a multiple of its alignment. Note that some types are zero-sized; 0 is
+considered a multiple of any alignment (for example, on some platforms, the type
+<code>[u16; 0]</code> has size 0 and alignment 2). The size of a value can be checked with
+the <a href="../std/mem/fn.size_of_val.html"><code>size_of_val</code></a> function.</p>
+<p>Types where all values have the same size and alignment, and both are known at
+compile time, implement the <a href="../std/marker/trait.Sized.html"><code>Sized</code></a> trait and can be checked with the
+<a href="../std/mem/fn.size_of.html"><code>size_of</code></a> and <a href="../std/mem/fn.align_of.html"><code>align_of</code></a> functions. Types that are not <a href="../std/marker/trait.Sized.html"><code>Sized</code></a> are known
+as <a href="dynamically-sized-types.html">dynamically sized types</a>. Since all values of a <code>Sized</code> type share the same
+size and alignment, we refer to those shared values as the size of the type and
+the alignment of the type respectively.</p>
+<h2 id="primitive-data-layout"><a class="header" href="#primitive-data-layout">Primitive Data Layout</a></h2>
+<p>The size of most primitives is given in this table.</p>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th><code>size_of::&lt;Type&gt;()</code></th></tr></thead><tbody>
+<tr><td><code>bool</code></td><td>1</td></tr>
+<tr><td><code>u8</code> / <code>i8</code></td><td>1</td></tr>
+<tr><td><code>u16</code> / <code>i16</code></td><td>2</td></tr>
+<tr><td><code>u32</code> / <code>i32</code></td><td>4</td></tr>
+<tr><td><code>u64</code> / <code>i64</code></td><td>8</td></tr>
+<tr><td><code>u128</code> / <code>i128</code></td><td>16</td></tr>
+<tr><td><code>f32</code></td><td>4</td></tr>
+<tr><td><code>f64</code></td><td>8</td></tr>
+<tr><td><code>char</code></td><td>4</td></tr>
+</tbody></table>
+</div>
+<p><code>usize</code> and <code>isize</code> have a size big enough to contain every address on the
+target platform. For example, on a 32 bit target, this is 4 bytes and on a 64
+bit target, this is 8 bytes.</p>
+<p>Most primitives are generally aligned to their size, although this is
+platform-specific behavior. In particular, on x86 u64 and f64 are only
+aligned to 32 bits.</p>
+<h2 id="pointers-and-references-layout"><a class="header" href="#pointers-and-references-layout">Pointers and References Layout</a></h2>
+<p>Pointers and references have the same layout. Mutability of the pointer or
+reference does not change the layout.</p>
+<p>Pointers to sized types have the same size and alignment as <code>usize</code>.</p>
+<p>Pointers to unsized types are sized. The size and alignment is guaranteed to be
+at least equal to the size and alignment of a pointer.</p>
+<blockquote>
+<p>Note: Though you should not rely on this, all pointers to
+<abbr title="Dynamically Sized Types">DSTs</abbr> are currently twice the
+size of the size of <code>usize</code> and have the same alignment.</p>
+</blockquote>
+<h2 id="array-layout"><a class="header" href="#array-layout">Array Layout</a></h2>
+<p>An array of <code>[T; N]</code> has a size of <code>size_of::&lt;T&gt;() * N</code> and the same alignment
+of <code>T</code>. Arrays are laid out so that the zero-based <code>nth</code> element of the array
+is offset from the start of the array by <code>n * size_of::&lt;T&gt;()</code> bytes.</p>
+<h2 id="slice-layout"><a class="header" href="#slice-layout">Slice Layout</a></h2>
+<p>Slices have the same layout as the section of the array they slice.</p>
+<blockquote>
+<p>Note: This is about the raw <code>[T]</code> type, not pointers (<code>&amp;[T]</code>, <code>Box&lt;[T]&gt;</code>,
+etc.) to slices.</p>
+</blockquote>
+<h2 id="str-layout"><a class="header" href="#str-layout"><code>str</code> Layout</a></h2>
+<p>String slices are a UTF-8 representation of characters that have the same layout as slices of type <code>[u8]</code>.</p>
+<h2 id="tuple-layout"><a class="header" href="#tuple-layout">Tuple Layout</a></h2>
+<p>Tuples are laid out according to the <a href="#the-default-representation">default representation</a>.</p>
+<p>The exception to this is the unit tuple (<code>()</code>), which is guaranteed as a
+zero-sized type to have a size of 0 and an alignment of 1.</p>
+<h2 id="trait-object-layout"><a class="header" href="#trait-object-layout">Trait Object Layout</a></h2>
+<p>Trait objects have the same layout as the value the trait object is of.</p>
+<blockquote>
+<p>Note: This is about the raw trait object types, not pointers (<code>&amp;dyn Trait</code>,
+<code>Box&lt;dyn Trait&gt;</code>, etc.) to trait objects.</p>
+</blockquote>
+<h2 id="closure-layout"><a class="header" href="#closure-layout">Closure Layout</a></h2>
+<p>Closures have no layout guarantees.</p>
+<h2 id="representations"><a class="header" href="#representations">Representations</a></h2>
+<p>All user-defined composite types (<code>struct</code>s, <code>enum</code>s, and <code>union</code>s) have a
+<em>representation</em> that specifies what the layout is for the type. The possible
+representations for a type are:</p>
+<ul>
+<li><a href="#the-default-representation">Default</a></li>
+<li><a href="#the-c-representation"><code>C</code></a></li>
+<li>The <a href="#primitive-representations">primitive representations</a></li>
+<li><a href="#the-transparent-representation"><code>transparent</code></a></li>
+</ul>
+<p>The representation of a type can be changed by applying the <code>repr</code> attribute
+to it. The following example shows a struct with a <code>C</code> representation.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[repr(C)]
+struct ThreeInts {
+    first: i16,
+    second: i8,
+    third: i32
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The alignment may be raised or lowered with the <code>align</code> and <code>packed</code> modifiers
+respectively. They alter the representation specified in the attribute.
+If no representation is specified, the default one is altered.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Default representation, alignment lowered to 2.
+#[repr(packed(2))]
+struct PackedStruct {
+    first: i16,
+    second: i8,
+    third: i32
+}
+
+// C representation, alignment raised to 8
+#[repr(C, align(8))]
+struct AlignedStruct {
+    first: i16,
+    second: i8,
+    third: i32
+}
+<span class="boring">}</span></code></pre></pre>
+<blockquote>
+<p>Note: As a consequence of the representation being an attribute on the item,
+the representation does not depend on generic parameters. Any two types with
+the same name have the same representation. For example, <code>Foo&lt;Bar&gt;</code> and
+<code>Foo&lt;Baz&gt;</code> both have the same representation.</p>
+</blockquote>
+<p>The representation of a type can change the padding between fields, but does
+not change the layout of the fields themselves. For example, a struct with a
+<code>C</code> representation that contains a struct <code>Inner</code> with the default
+representation will not change the layout of <code>Inner</code>.</p>
+<h3 id="the-default-representation"><a class="header" href="#the-default-representation">The Default Representation</a></h3>
+<p>Nominal types without a <code>repr</code> attribute have the default representation.
+Informally, this representation is also called the <code>rust</code> representation.</p>
+<p>The only data layout guarantees made by this representation are those required
+for soundness. They are:</p>
+<ol>
+<li>The fields are properly aligned.</li>
+<li>The fields do not overlap.</li>
+<li>The alignment of the type is at least the maximum alignment of its fields.</li>
+</ol>
+<p>Formally, the first guarantee means that the offset of any field is divisible by
+that field's alignment. The second guarantee means that the fields can be
+ordered such that the offset plus the size of any field is less than or equal to
+the offset of the next field in the ordering. The ordering does not have to be
+the same as the order in which the fields are specified in the declaration of
+the type.</p>
+<p>Be aware that the second guarantee does not imply that the fields have distinct
+addresses: zero-sized types may have the same address as other fields in the
+same struct.</p>
+<p>There are no other guarantees of data layout made by this representation.</p>
+<h3 id="the-c-representation"><a class="header" href="#the-c-representation">The <code>C</code> Representation</a></h3>
+<p>The <code>C</code> representation is designed for dual purposes. One purpose is for
+creating types that are interoperable with the C Language. The second purpose is
+to create types that you can soundly perform operations on that rely on data
+layout such as reinterpreting values as a different type.</p>
+<p>Because of this dual purpose, it is possible to create types that are not useful
+for interfacing with the C programming language.</p>
+<p>This representation can be applied to structs, unions, and enums. The exception
+is <a href="items/enumerations.html#zero-variant-enums">zero-variant enums</a> for which the <code>C</code> representation is an error.</p>
+<h4 id="reprc-structs"><a class="header" href="#reprc-structs"><code>#[repr(C)]</code> Structs</a></h4>
+<p>The alignment of the struct is the alignment of the most-aligned field in it.</p>
+<p>The size and offset of fields is determined by the following algorithm.</p>
+<p>Start with a current offset of 0 bytes.</p>
+<p>For each field in declaration order in the struct, first determine the size and
+alignment of the field. If the current offset is not a multiple of the field's
+alignment, then add padding bytes to the current offset until it is a multiple
+of the field's alignment. The offset for the field is what the current offset
+is now. Then increase the current offset by the size of the field.</p>
+<p>Finally, the size of the struct is the current offset rounded up to the nearest
+multiple of the struct's alignment.</p>
+<p>Here is this algorithm described in pseudocode.</p>
+<!-- ignore: pseudocode -->
+<pre><code class="language-rust ignore">/// Returns the amount of padding needed after `offset` to ensure that the
+/// following address will be aligned to `alignment`.
+fn padding_needed_for(offset: usize, alignment: usize) -&gt; usize {
+    let misalignment = offset % alignment;
+    if misalignment &gt; 0 {
+        // round up to next multiple of `alignment`
+        alignment - misalignment
+    } else {
+        // already a multiple of `alignment`
+        0
+    }
+}
+
+struct.alignment = struct.fields().map(|field| field.alignment).max();
+
+let current_offset = 0;
+
+for field in struct.fields_in_declaration_order() {
+    // Increase the current offset so that it's a multiple of the alignment
+    // of this field. For the first field, this will always be zero.
+    // The skipped bytes are called padding bytes.
+    current_offset += padding_needed_for(current_offset, field.alignment);
+
+    struct[field].offset = current_offset;
+
+    current_offset += field.size;
+}
+
+struct.size = current_offset + padding_needed_for(current_offset, struct.alignment);</code></pre>
+<div class="warning">
+<p>Warning: This pseudocode uses a naive algorithm that ignores overflow issues for
+the sake of clarity. To perform memory layout computations in actual code, use
+<a href="../std/alloc/struct.Layout.html"><code>Layout</code></a>.</p>
+</div>
+<blockquote>
+<p>Note: This algorithm can produce zero-sized structs. In C, an empty struct
+declaration like <code>struct Foo { }</code> is illegal. However, both gcc and clang
+support options to enable such structs, and assign them size zero. C++, in
+contrast, gives empty structs a size of 1, unless they are inherited from or
+they are fields that have the <code>[[no_unique_address]]</code> attribute, in which
+case they do not increase the overall size of the struct.</p>
+</blockquote>
+<h4 id="reprc-unions"><a class="header" href="#reprc-unions"><code>#[repr(C)]</code> Unions</a></h4>
+<p>A union declared with <code>#[repr(C)]</code> will have the same size and alignment as an
+equivalent C union declaration in the C language for the target platform.
+The union will have a size of the maximum size of all of its fields rounded to
+its alignment, and an alignment of the maximum alignment of all of its fields.
+These maximums may come from different fields.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[repr(C)]
+union Union {
+    f1: u16,
+    f2: [u8; 4],
+}
+
+assert_eq!(std::mem::size_of::&lt;Union&gt;(), 4);  // From f2
+assert_eq!(std::mem::align_of::&lt;Union&gt;(), 2); // From f1
+
+#[repr(C)]
+union SizeRoundedUp {
+   a: u32,
+   b: [u16; 3],
+}
+
+assert_eq!(std::mem::size_of::&lt;SizeRoundedUp&gt;(), 8);  // Size of 6 from b,
+                                                      // rounded up to 8 from
+                                                      // alignment of a.
+assert_eq!(std::mem::align_of::&lt;SizeRoundedUp&gt;(), 4); // From a
+<span class="boring">}</span></code></pre></pre>
+<h4 id="reprc-field-less-enums"><a class="header" href="#reprc-field-less-enums"><code>#[repr(C)]</code> Field-less Enums</a></h4>
+<p>For <a href="items/enumerations.html#field-less-enum">field-less enums</a>, the <code>C</code> representation has the size and alignment of
+the default <code>enum</code> size and alignment for the target platform's C ABI.</p>
+<blockquote>
+<p>Note: The enum representation in C is implementation defined, so this is
+really a &quot;best guess&quot;. In particular, this may be incorrect when the C code
+of interest is compiled with certain flags.</p>
+</blockquote>
+<div class="warning">
+<p>Warning: There are crucial differences between an <code>enum</code> in the C language and
+Rust's <a href="items/enumerations.html#field-less-enum">field-less enums</a> with this representation. An <code>enum</code> in C is
+mostly a <code>typedef</code> plus some named constants; in other words, an object of an
+<code>enum</code> type can hold any integer value. For example, this is often used for
+bitflags in <code>C</code>. In contrast, Rust’s <a href="items/enumerations.html#field-less-enum">field-less enums</a> can only legally hold
+the discriminant values, everything else is <a href="behavior-considered-undefined.html">undefined behavior</a>. Therefore,
+using a field-less enum in FFI to model a C <code>enum</code> is often wrong.</p>
+</div>
+<h4 id="reprc-enums-with-fields"><a class="header" href="#reprc-enums-with-fields"><code>#[repr(C)]</code> Enums With Fields</a></h4>
+<p>The representation of a <code>repr(C)</code> enum with fields is a <code>repr(C)</code> struct with
+two fields, also called a &quot;tagged union&quot; in C:</p>
+<ul>
+<li>a <code>repr(C)</code> version of the enum with all fields removed (&quot;the tag&quot;)</li>
+<li>a <code>repr(C)</code> union of <code>repr(C)</code> structs for the fields of each variant that had
+them (&quot;the payload&quot;)</li>
+</ul>
+<blockquote>
+<p>Note: Due to the representation of <code>repr(C)</code> structs and unions, if a variant
+has a single field there is no difference between putting that field directly
+in the union or wrapping it in a struct; any system which wishes to manipulate
+such an <code>enum</code>'s representation may therefore use whichever form is more
+convenient or consistent for them.</p>
+</blockquote>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This Enum has the same representation as ...
+#[repr(C)]
+enum MyEnum {
+    A(u32),
+    B(f32, u64),
+    C { x: u32, y: u8 },
+    D,
+ }
+
+// ... this struct.
+#[repr(C)]
+struct MyEnumRepr {
+    tag: MyEnumDiscriminant,
+    payload: MyEnumFields,
+}
+
+// This is the discriminant enum.
+#[repr(C)]
+enum MyEnumDiscriminant { A, B, C, D }
+
+// This is the variant union.
+#[repr(C)]
+union MyEnumFields {
+    A: MyAFields,
+    B: MyBFields,
+    C: MyCFields,
+    D: MyDFields,
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+struct MyAFields(u32);
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+struct MyBFields(f32, u64);
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+struct MyCFields { x: u32, y: u8 }
+
+// This struct could be omitted (it is a zero-sized type), and it must be in
+// C/C++ headers.
+#[repr(C)]
+#[derive(Copy, Clone)]
+struct MyDFields;
+<span class="boring">}</span></code></pre></pre>
+<blockquote>
+<p>Note: <code>union</code>s with non-<code>Copy</code> fields are unstable, see <a href="https://github.com/rust-lang/rust/issues/55149">55149</a>.</p>
+</blockquote>
+<h3 id="primitive-representations"><a class="header" href="#primitive-representations">Primitive representations</a></h3>
+<p>The <em>primitive representations</em> are the representations with the same names as
+the primitive integer types. That is: <code>u8</code>, <code>u16</code>, <code>u32</code>, <code>u64</code>, <code>u128</code>,
+<code>usize</code>, <code>i8</code>, <code>i16</code>, <code>i32</code>, <code>i64</code>, <code>i128</code>, and <code>isize</code>.</p>
+<p>Primitive representations can only be applied to enumerations and have
+different behavior whether the enum has fields or no fields. It is an error
+for <a href="items/enumerations.html#zero-variant-enums">zero-variant enums</a> to have a primitive representation. Combining
+two primitive representations together is an error.</p>
+<h4 id="primitive-representation-of-field-less-enums"><a class="header" href="#primitive-representation-of-field-less-enums">Primitive Representation of Field-less Enums</a></h4>
+<p>For <a href="items/enumerations.html#field-less-enum">field-less enums</a>, primitive representations set the size and alignment to
+be the same as the primitive type of the same name. For example, a field-less
+enum with a <code>u8</code> representation can only have discriminants between 0 and 255
+inclusive.</p>
+<h4 id="primitive-representation-of-enums-with-fields"><a class="header" href="#primitive-representation-of-enums-with-fields">Primitive Representation of Enums With Fields</a></h4>
+<p>The representation of a primitive representation enum is a <code>repr(C)</code> union of
+<code>repr(C)</code> structs for each variant with a field. The first field of each struct
+in the union is the primitive representation version of the enum with all fields
+removed (&quot;the tag&quot;) and the remaining fields are the fields of that variant.</p>
+<blockquote>
+<p>Note: This representation is unchanged if the tag is given its own member in
+the union, should that make manipulation more clear for you (although to
+follow the C++ standard the tag member should be wrapped in a <code>struct</code>).</p>
+</blockquote>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This enum has the same representation as ...
+#[repr(u8)]
+enum MyEnum {
+    A(u32),
+    B(f32, u64),
+    C { x: u32, y: u8 },
+    D,
+ }
+
+// ... this union.
+#[repr(C)]
+union MyEnumRepr {
+    A: MyVariantA,
+    B: MyVariantB,
+    C: MyVariantC,
+    D: MyVariantD,
+}
+
+// This is the discriminant enum.
+#[repr(u8)]
+#[derive(Copy, Clone)]
+enum MyEnumDiscriminant { A, B, C, D }
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct MyVariantA(MyEnumDiscriminant, u32);
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct MyVariantB(MyEnumDiscriminant, f32, u64);
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct MyVariantC { tag: MyEnumDiscriminant, x: u32, y: u8 }
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct MyVariantD(MyEnumDiscriminant);
+<span class="boring">}</span></code></pre></pre>
+<blockquote>
+<p>Note: <code>union</code>s with non-<code>Copy</code> fields are unstable, see <a href="https://github.com/rust-lang/rust/issues/55149">55149</a>.</p>
+</blockquote>
+<h4 id="combining-primitive-representations-of-enums-with-fields-and-reprc"><a class="header" href="#combining-primitive-representations-of-enums-with-fields-and-reprc">Combining primitive representations of enums with fields and <code>#[repr(C)]</code></a></h4>
+<p>For enums with fields, it is also possible to combine <code>repr(C)</code> and a
+primitive representation (e.g., <code>repr(C, u8)</code>). This modifies the <a href="#reprc-enums-with-fields"><code>repr(C)</code></a> by
+changing the representation of the discriminant enum to the chosen primitive
+instead. So, if you chose the <code>u8</code> representation, then the discriminant enum
+would have a size and alignment of 1 byte.</p>
+<p>The discriminant enum from the example <a href="#reprc-enums-with-fields">earlier</a> then becomes:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[repr(C, u8)] // `u8` was added
+enum MyEnum {
+    A(u32),
+    B(f32, u64),
+    C { x: u32, y: u8 },
+    D,
+ }
+
+// ...
+
+#[repr(u8)] // So `u8` is used here instead of `C`
+enum MyEnumDiscriminant { A, B, C, D }
+
+// ...
+<span class="boring">}</span></code></pre></pre>
+<p>For example, with a <code>repr(C, u8)</code> enum it is not possible to have 257 unique
+discriminants (&quot;tags&quot;) whereas the same enum with only a <code>repr(C)</code> attribute
+will compile without any problems.</p>
+<p>Using a primitive representation in addition to <code>repr(C)</code> can change the size of
+an enum from the <code>repr(C)</code> form:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[repr(C)]
+enum EnumC {
+    Variant0(u8),
+    Variant1,
+}
+
+#[repr(C, u8)]
+enum Enum8 {
+    Variant0(u8),
+    Variant1,
+}
+
+#[repr(C, u16)]
+enum Enum16 {
+    Variant0(u8),
+    Variant1,
+}
+
+// The size of the C representation is platform dependant
+assert_eq!(std::mem::size_of::&lt;EnumC&gt;(), 8);
+// One byte for the discriminant and one byte for the value in Enum8::Variant0
+assert_eq!(std::mem::size_of::&lt;Enum8&gt;(), 2);
+// Two bytes for the discriminant and one byte for the value in Enum16::Variant0
+// plus one byte of padding.
+assert_eq!(std::mem::size_of::&lt;Enum16&gt;(), 4);
+<span class="boring">}</span></code></pre></pre>
+<h3 id="the-alignment-modifiers"><a class="header" href="#the-alignment-modifiers">The alignment modifiers</a></h3>
+<p>The <code>align</code> and <code>packed</code> modifiers can be used to respectively raise or lower
+the alignment of <code>struct</code>s and <code>union</code>s. <code>packed</code> may also alter the padding
+between fields (although it will not alter the padding inside of any field).</p>
+<p>The alignment is specified as an integer parameter in the form of
+<code>#[repr(align(x))]</code> or <code>#[repr(packed(x))]</code>. The alignment value must be a
+power of two from 1 up to 2<sup>29</sup>. For <code>packed</code>, if no value is given,
+as in <code>#[repr(packed)]</code>, then the value is 1.</p>
+<p>For <code>align</code>, if the specified alignment is less than the alignment of the type
+without the <code>align</code> modifier, then the alignment is unaffected.</p>
+<p>For <code>packed</code>, if the specified alignment is greater than the type's alignment
+without the <code>packed</code> modifier, then the alignment and layout is unaffected.
+The alignments of each field, for the purpose of positioning fields, is the
+smaller of the specified alignment and the alignment of the field's type.
+Inter-field padding is guaranteed to be the minimum required in order to
+satisfy each field's (possibly altered) alignment (although note that, on its
+own, <code>packed</code> does not provide any guarantee about field ordering). An
+important consequence of these rules is that a type with <code>#[repr(packed(1))]</code>
+(or <code>#[repr(packed)]</code>) will have no inter-field padding.</p>
+<p>The <code>align</code> and <code>packed</code> modifiers cannot be applied on the same type and a
+<code>packed</code> type cannot transitively contain another <code>align</code>ed type. <code>align</code> and
+<code>packed</code> may only be applied to the <a href="#the-default-representation">default</a> and <a href="#the-c-representation"><code>C</code></a> representations.</p>
+<p>The <code>align</code> modifier can also be applied on an <code>enum</code>.
+When it is, the effect on the <code>enum</code>'s alignment is the same as if the <code>enum</code>
+was wrapped in a newtype <code>struct</code> with the same <code>align</code> modifier.</p>
+<div class="warning">
+<p><em><strong>Warning:</strong></em> Dereferencing an unaligned pointer is <a href="behavior-considered-undefined.html">undefined behavior</a> and
+it is possible to <a href="https://github.com/rust-lang/rust/issues/27060">safely create unaligned pointers to <code>packed</code> fields</a>.
+Like all ways to create undefined behavior in safe Rust, this is a bug.</p>
+</div>
+<h3 id="the-transparent-representation"><a class="header" href="#the-transparent-representation">The <code>transparent</code> Representation</a></h3>
+<p>The <code>transparent</code> representation can only be used on a <a href="items/structs.html"><code>struct</code></a>
+or an <a href="items/enumerations.html"><code>enum</code></a> with a single variant that has:</p>
+<ul>
+<li>a single field with non-zero size, and</li>
+<li>any number of fields with size 0 and alignment 1 (e.g. <a href="special-types-and-traits.html#phantomdatat"><code>PhantomData&lt;T&gt;</code></a>).</li>
+</ul>
+<p>Structs and enums with this representation have the same layout and ABI
+as the single non-zero sized field.</p>
+<p>This is different than the <code>C</code> representation because
+a struct with the <code>C</code> representation will always have the ABI of a <code>C</code> <code>struct</code>
+while, for example, a struct with the <code>transparent</code> representation with a
+primitive field will have the ABI of the primitive field.</p>
+<p>Because this representation delegates type layout to another type, it cannot be
+used with any other representation.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="dynamically-sized-types.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="interior-mutability.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="dynamically-sized-types.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="interior-mutability.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

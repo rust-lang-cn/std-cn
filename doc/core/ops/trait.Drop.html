@@ -1,6 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="析构函数中的自定义代码。"><meta name="keywords" content="rust, rustlang, rust-lang, Drop"><title>Drop in core::ops - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../../storage1.58.0.js"></script><script src="../../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../../down-arrow1.58.0.svg");}</style></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../core/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo1.58.0.png' alt='logo'></div></a><h2 class="location">Trait Drop</h2><div class="sidebar-elems"><div class="block items"><h3 class="sidebar-title"><a href="#required-methods">Required Methods</a></h3><div class="sidebar-links"><a href="#tymethod.drop">drop</a></div><h3 class="sidebar-title"><a href="#implementors">Implementors</a></h3></div><h2 class="location">Other items in<br><a href="../index.html">core</a>::<wbr><a href="index.html">ops</a></h2><div id="sidebar-vars" data-name="Drop" data-ty="trait" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Trait <a href="../index.html">core</a>::<wbr><a href="index.html">ops</a>::<wbr><a class="trait" href="#">Drop</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard1.58.0.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span class="since" title="Stable since Rust version 1.0.0">1.0.0</span><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/core/ops/drop.rs.html#137-165" title="goto source code">[src]</a></span></h1><div class="docblock type-decl"><pre class="rust trait"><code>pub trait Drop {
-    fn <a href="#tymethod.drop" class="fnname">drop</a>(&amp;mut self);
-}</code></pre></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>析构函数中的自定义代码。</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="析构函数中的自定义代码。"><title>Drop in core::ops - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="sidebar-items1.71.0.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../core/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../core/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Drop</a></h2><div class="sidebar-elems"><section><h3><a href="#required-methods">Required Methods</a></h3><ul class="block"><li><a href="#tymethod.drop">drop</a></li></ul><h3><a href="#implementors">Implementors</a></h3></section><h2><a href="index.html">In core::ops</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Trait <a href="../index.html">core</a>::<wbr><a href="index.html">ops</a>::<wbr><a class="trait" href="#">Drop</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><span class="since" title="Stable since Rust version 1.0.0">1.0.0</span> · <a class="srclink" href="../../src/core/ops/drop.rs.html#206-234">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub trait Drop {
+    // Required method
+    fn <a href="#tymethod.drop" class="fn">drop</a>(&amp;mut self);
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>析构函数中的自定义代码。</p>
 <p>当不再需要某个值时，Rust 将对该值运行 “析构函数”。
 不再需要值的最常见方法是离开作用域。析构函数可能仍在其他情况下运行，但是在这里的示例中，我们将重点关注作用域。
 要了解其他一些情况，请参见析构函数的 <a href="https://doc.rust-lang.org/reference/destructors.html">参考</a> 部分。</p>
@@ -9,95 +10,140 @@
 <li>如果为此类型实现了特殊的 <code>Drop</code> trait，则对该值调用 <code>Drop::drop</code>。</li>
 <li>自动生成的 “drop glue” 递归调用该值的所有字段的析构函数。</li>
 </ul>
-<p>由于 Rust 自动调用所有包含字段的析构函数，因此在大多数情况下，您无需实现 <code>Drop</code>。
-但是在某些情况下它很有用，例如对于直接管理资源的类型。
+<p>由于 Rust 自动调用所有包含字段的析构函数，因此在大多数情况下，您无需实现 <code>Drop</code>。但是在某些情况下它很有用，例如对于直接管理资源的类型。
 该资源可能是内存，可能是文件描述符，可能是网络套接字。
-一旦不再使用该类型的值，则应通过释放内存或关闭文件或套接字 “clean up” 资源。
-这是析构函数的工作，因此也是 <code>Drop::drop</code> 的工作。</p>
-<h3 id="examples" class="section-header"><a href="#examples">Examples</a></h3>
+一旦不再使用该类型的值，则应通过释放内存或关闭文件或套接字 “clean up” 资源。这是析构函数的工作，因此也是 <code>Drop::drop</code> 的工作。</p>
+<h3 id="examples"><a href="#examples">Examples</a></h3>
 <p>要查看析构函数的作用，让我们看一下以下程序：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">struct</span> <span class="ident">HasDrop</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">struct </span>HasDrop;
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">HasDrop</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+<span class="kw">impl </span>Drop <span class="kw">for </span>HasDrop {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="macro">println!</span>(<span class="string">&quot;Dropping HasDrop!&quot;</span>);
     }
 }
 
-<span class="kw">struct</span> <span class="ident">HasTwoDrops</span> {
-    <span class="ident">one</span>: <span class="ident">HasDrop</span>,
-    <span class="ident">two</span>: <span class="ident">HasDrop</span>,
+<span class="kw">struct </span>HasTwoDrops {
+    one: HasDrop,
+    two: HasDrop,
 }
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">HasTwoDrops</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+<span class="kw">impl </span>Drop <span class="kw">for </span>HasTwoDrops {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="macro">println!</span>(<span class="string">&quot;Dropping HasTwoDrops!&quot;</span>);
     }
 }
 
-<span class="kw">fn</span> <span class="ident">main</span>() {
-    <span class="kw">let</span> <span class="ident">_x</span> <span class="op">=</span> <span class="ident">HasTwoDrops</span> { <span class="ident">one</span>: <span class="ident">HasDrop</span>, <span class="ident">two</span>: <span class="ident">HasDrop</span> };
+<span class="kw">fn </span>main() {
+    <span class="kw">let </span>_x = HasTwoDrops { one: HasDrop, two: HasDrop };
     <span class="macro">println!</span>(<span class="string">&quot;Running!&quot;</span>);
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Astruct%20HasDrop%3B%0A%0Aimpl%20Drop%20for%20HasDrop%20%7B%0A%20%20%20%20fn%20drop(%26mut%20self)%20%7B%0A%20%20%20%20%20%20%20%20println!(%22Dropping%20HasDrop!%22)%3B%0A%20%20%20%20%7D%0A%7D%0A%0Astruct%20HasTwoDrops%20%7B%0A%20%20%20%20one%3A%20HasDrop%2C%0A%20%20%20%20two%3A%20HasDrop%2C%0A%7D%0A%0Aimpl%20Drop%20for%20HasTwoDrops%20%7B%0A%20%20%20%20fn%20drop(%26mut%20self)%20%7B%0A%20%20%20%20%20%20%20%20println!(%22Dropping%20HasTwoDrops!%22)%3B%0A%20%20%20%20%7D%0A%7D%0A%0Afn%20main()%20%7B%0A%20%20%20%20let%20_x%20%3D%20HasTwoDrops%20%7B%20one%3A%20HasDrop%2C%20two%3A%20HasDrop%20%7D%3B%0A%20%20%20%20println!(%22Running!%22)%3B%0A%7D&amp;edition=2018">Run</a></div>
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Astruct+HasDrop;%0A%0Aimpl+Drop+for+HasDrop+%7B%0A++++fn+drop(%26mut+self)+%7B%0A++++++++println!(%22Dropping+HasDrop!%22);%0A++++%7D%0A%7D%0A%0Astruct+HasTwoDrops+%7B%0A++++one:+HasDrop,%0A++++two:+HasDrop,%0A%7D%0A%0Aimpl+Drop+for+HasTwoDrops+%7B%0A++++fn+drop(%26mut+self)+%7B%0A++++++++println!(%22Dropping+HasTwoDrops!%22);%0A++++%7D%0A%7D%0A%0Afn+main()+%7B%0A++++let+_x+=+HasTwoDrops+%7B+one:+HasDrop,+two:+HasDrop+%7D;%0A++++println!(%22Running!%22);%0A%7D&amp;edition=2021">Run</a></div>
 <p>Rust 将首先为 <code>_x</code> 调用 <code>Drop::drop</code>，然后为 <code>_x.one</code> 和 <code>_x.two</code> 调用，这意味着运行此命令将打印</p>
 <div class="example-wrap"><pre class="language-text"><code>Running!
 Dropping HasTwoDrops!
 Dropping HasDrop!
-Dropping HasDrop!</code></pre></div>
+Dropping HasDrop!
+</code></pre></div>
 <p>即使我们删除了针对 <code>HasTwoDrop</code> 的 <code>Drop</code> 的实现，其字段的析构函数仍然会被调用。
 这将导致</p>
 <div class="example-wrap"><pre class="language-test"><code>Running!
 Dropping HasDrop!
-Dropping HasDrop!</code></pre></div><h3 id="您不能自己调用-dropdrop" class="section-header"><a href="#您不能自己调用-dropdrop">您不能自己调用 <code>Drop::drop</code></a></h3>
+Dropping HasDrop!
+</code></pre></div><h3 id="您不能自己调用-dropdrop"><a href="#您不能自己调用-dropdrop">您不能自己调用 <code>Drop::drop</code></a></h3>
 <p>因为 <code>Drop::drop</code> 是用来清理一个值的，所以在调用方法后使用该值可能很危险。
 由于 <code>Drop::drop</code> 不拥有其输入的所有权，因此 Rust 通过不允许您直接调用 <code>Drop::drop</code> 来防止误用。</p>
 <p>换句话说，如果您在上面的示例中尝试显式调用 <code>Drop::drop</code>，则会出现编译器错误。</p>
-<p>如果您想显式调用一个值的析构函数，可以使用 <a href="../mem/fn.drop.html"><code>mem::drop</code></a> 代替。</p>
-<h3 id="drop-指令" class="section-header"><a href="#drop-指令">Drop 指令</a></h3>
+<p>如果您想显式调用一个值的析构函数，可以使用 <a href="../mem/fn.drop.html" title="fn core::mem::drop"><code>mem::drop</code></a> 代替。</p>
+<h3 id="drop-指令"><a href="#drop-指令">Drop 指令</a></h3>
 <p>但是，我们的两个 <code>HasDrop</code> 哪个先丢弃掉？ 对于结构体，其声明顺序相同：首先是 <code>one</code>，然后是 <code>two</code>。
 如果您想自己尝试一下，可以修改上面的 <code>HasDrop</code> 以包含一些数据 (例如整数)，然后在 <code>Drop</code> 内部的 <code>println!</code> 中使用它。
 此行为由语言保证。</p>
 <p>与结构体不同，局部变量以相反的顺序丢弃：</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">struct</span> <span class="ident">Foo</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">struct </span>Foo;
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Foo</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+<span class="kw">impl </span>Drop <span class="kw">for </span>Foo {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="macro">println!</span>(<span class="string">&quot;Dropping Foo!&quot;</span>)
     }
 }
 
-<span class="kw">struct</span> <span class="ident">Bar</span>;
+<span class="kw">struct </span>Bar;
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Bar</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+<span class="kw">impl </span>Drop <span class="kw">for </span>Bar {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="macro">println!</span>(<span class="string">&quot;Dropping Bar!&quot;</span>)
     }
 }
 
-<span class="kw">fn</span> <span class="ident">main</span>() {
-    <span class="kw">let</span> <span class="ident">_foo</span> <span class="op">=</span> <span class="ident">Foo</span>;
-    <span class="kw">let</span> <span class="ident">_bar</span> <span class="op">=</span> <span class="ident">Bar</span>;
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Astruct%20Foo%3B%0A%0Aimpl%20Drop%20for%20Foo%20%7B%0A%20%20%20%20fn%20drop(%26mut%20self)%20%7B%0A%20%20%20%20%20%20%20%20println!(%22Dropping%20Foo!%22)%0A%20%20%20%20%7D%0A%7D%0A%0Astruct%20Bar%3B%0A%0Aimpl%20Drop%20for%20Bar%20%7B%0A%20%20%20%20fn%20drop(%26mut%20self)%20%7B%0A%20%20%20%20%20%20%20%20println!(%22Dropping%20Bar!%22)%0A%20%20%20%20%7D%0A%7D%0A%0Afn%20main()%20%7B%0A%20%20%20%20let%20_foo%20%3D%20Foo%3B%0A%20%20%20%20let%20_bar%20%3D%20Bar%3B%0A%7D&amp;edition=2018">Run</a></div>
+<span class="kw">fn </span>main() {
+    <span class="kw">let </span>_foo = Foo;
+    <span class="kw">let </span>_bar = Bar;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Astruct+Foo;%0A%0Aimpl+Drop+for+Foo+%7B%0A++++fn+drop(%26mut+self)+%7B%0A++++++++println!(%22Dropping+Foo!%22)%0A++++%7D%0A%7D%0A%0Astruct+Bar;%0A%0Aimpl+Drop+for+Bar+%7B%0A++++fn+drop(%26mut+self)+%7B%0A++++++++println!(%22Dropping+Bar!%22)%0A++++%7D%0A%7D%0A%0Afn+main()+%7B%0A++++let+_foo+=+Foo;%0A++++let+_bar+=+Bar;%0A%7D&amp;edition=2021">Run</a></div>
 <p>这将打印</p>
 <div class="example-wrap"><pre class="language-text"><code>Dropping Bar!
-Dropping Foo!</code></pre></div>
+Dropping Foo!
+</code></pre></div>
 <p>有关完整规则，请参见 <a href="https://doc.rust-lang.org/reference/destructors.html">the reference</a>。</p>
-<h3 id="copy-和-drop-是排他的" class="section-header"><a href="#copy-和-drop-是排他的"><code>Copy</code> 和 <code>Drop</code> 是排他的</a></h3>
-<p>您不能在同一类型上同时实现 <a href="../marker/trait.Copy.html" title="Copy"><code>Copy</code></a> 和 <code>Drop</code>。<code>Copy</code> 类型被编译器隐式复制，这使得很难预测何时以及将执行析构函数的频率。</p>
-<p>因此，这些类型不能有析构函数。</p>
-</div></details><h2 id="required-methods" class="small-section-header">Required methods<a href="#required-methods" class="anchor"></a></h2><div class="methods"><details class="rustdoc-toggle" open><summary><div id="tymethod.drop" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/core/ops/drop.rs.html#164" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.drop" class="fnname">drop</a>(&amp;mut self)</h4></div></summary><div class="docblock"><p>执行此类型的析构函数。</p>
-<p>当值离开作用域时隐式调用此方法，并且不能显式调用此方法 (会得到编译器 <a href="../../error-index.html#E0040">E0040</a> 错误)。
-但是，prelude 中的 <a href="../mem/fn.drop.html"><code>mem::drop</code></a> 函数可用于调用参数的 <code>Drop</code> 实现。</p>
+<h3 id="copy-和-drop-是排他的"><a href="#copy-和-drop-是排他的"><code>Copy</code> 和 <code>Drop</code> 是排他的</a></h3>
+<p>您不能在同一类型上同时实现 <a href="../marker/trait.Copy.html" title="trait core::marker::Copy"><code>Copy</code></a> 和 <code>Drop</code>。<code>Copy</code> 类型被编译器隐式复制，这使得很难预测何时以及将执行析构函数的频率。
+因此，这些类型不能有析构函数。</p>
+<h3 id="丢弃检查"><a href="#丢弃检查">丢弃检查</a></h3>
+<p>丢弃以微妙的方式与借用检查器交互: 当类型 <code>T</code> 被隐式丢弃为这种类型的某个变量时离开作用域，借用检查器需要确保此时调用 <code>T</code> 的析构函数是安全的。</p>
+<p>特别是，还需要安全地递归丢弃 <code>T</code> 的所有字段。
+例如，拒绝像下面这样的代码是至关重要的:</p>
+
+<div class="example-wrap compile_fail"><a href="#" class="tooltip" title="This example deliberately fails to compile">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::cell::Cell;
+
+<span class="kw">struct </span>S&lt;<span class="lifetime">&#39;a</span>&gt;(Cell&lt;<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>S&lt;<span class="lifetime">&#39;a</span>&gt;&gt;&gt;, Box&lt;i32&gt;);
+<span class="kw">impl </span>Drop <span class="kw">for </span>S&lt;<span class="lifetime">&#39;_</span>&gt; {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(r) = <span class="self">self</span>.<span class="number">0</span>.get() {
+            <span class="comment">// 在 `r` 中打印 `Box` 的内容。
+            </span><span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, r.<span class="number">1</span>);
+        }
+    }
+}
+
+<span class="kw">fn </span>main() {
+    <span class="comment">// 设置两个相互指向的 `S`。
+    </span><span class="kw">let </span>s1 = S(Cell::new(<span class="prelude-val">None</span>), Box::new(<span class="number">42</span>));
+    <span class="kw">let </span>s2 = S(Cell::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>s1)), Box::new(<span class="number">42</span>));
+    s1.<span class="number">0</span>.set(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>s2));
+    <span class="comment">// 现在他们都丢弃了。
+    // 但是第 2 个丢掉的那个会在第一个中访问 `Box`，这是一个 use-after-free!
+</span>}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::cell::Cell;%0A%0Astruct+S%3C'a%3E(Cell%3COption%3C%26'a+S%3C'a%3E%3E%3E,+Box%3Ci32%3E);%0Aimpl+Drop+for+S%3C'_%3E+%7B%0A++++fn+drop(%26mut+self)+%7B%0A++++++++if+let+Some(r)+=+self.0.get()+%7B%0A++++++++++++//+%E5%9C%A8+%60r%60+%E4%B8%AD%E6%89%93%E5%8D%B0+%60Box%60+%E7%9A%84%E5%86%85%E5%AE%B9%E3%80%82%0A++++++++++++println!(%22%7B%7D%22,+r.1);%0A++++++++%7D%0A++++%7D%0A%7D%0A%0Afn+main()+%7B%0A++++//+%E8%AE%BE%E7%BD%AE%E4%B8%A4%E4%B8%AA%E7%9B%B8%E4%BA%92%E6%8C%87%E5%90%91%E7%9A%84+%60S%60%E3%80%82%0A++++let+s1+=+S(Cell::new(None),+Box::new(42));%0A++++let+s2+=+S(Cell::new(Some(%26s1)),+Box::new(42));%0A++++s1.0.set(Some(%26s2));%0A++++//+%E7%8E%B0%E5%9C%A8%E4%BB%96%E4%BB%AC%E9%83%BD%E4%B8%A2%E5%BC%83%E4%BA%86%E3%80%82%0A++++//+%E4%BD%86%E6%98%AF%E7%AC%AC+2+%E4%B8%AA%E4%B8%A2%E6%8E%89%E7%9A%84%E9%82%A3%E4%B8%AA%E4%BC%9A%E5%9C%A8%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%B8%AD%E8%AE%BF%E9%97%AE+%60Box%60%EF%BC%8C%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA+use-after-free!%0A%7D&amp;edition=2021">Run</a></div>
+<p>Nomicon 讨论了对 <a href="../../nomicon/dropck.html">drop check in more detail</a> 的需求。</p>
+<p>为了拒绝这样的代码，“drop check” 分析确定当 <code>T</code> 得到弃弃时哪些类型和生命周期需要仍然存在。此分析的确切细节尚未得到稳定保证，并且<strong>可能会发生变化</strong>。
+目前，分析工作如下:</p>
+<ul>
+<li>如果 <code>T</code> 没有抛弃胶水，那么什么都不需要活着。如果 <code>T</code> 及其任何 (recursive) 字段都没有析构函数 (<code>impl Drop</code>)，就会出现这种情况。
+<a href="../marker/struct.PhantomData.html" title="struct core::marker::PhantomData"><code>PhantomData</code></a> 和 <a href="../mem/struct.ManuallyDrop.html" title="struct core::mem::ManuallyDrop"><code>ManuallyDrop</code></a> 被认为永远没有析构函数，无论它们的字段类型如何。</li>
+<li>如果 <code>T</code> 有丢弃胶水，那么，对于 <code>T</code> 的任何字段<em>拥有</em>的所有类型 <code>U</code>，递归添加 <code>U</code> 获得丢弃时需要存活的类型和生命周期。拥有类型的集合是通过递归遍历 <code>T</code> 来确定的:
+<ul>
+<li>通过 <code>PhantomData</code>、<code>Box</code>、元组和数组 (包括长度为 0 的数组) 递归下降。</li>
+<li>停在引用和裸指针类型以及函数指针和函数项上;
+他们不拥有任何东西。</li>
+<li>停在非复合类型 (当前上下文中保留泛型的类型参数和整数、<code>bool</code> 等基类型) ; 这些类型是拥有所有权的。</li>
+<li>当用 <code>impl Drop</code> 击中 ADT 时，停在那里; 这种类型是拥有所有权的。</li>
+<li>在没有 <code>impl Drop</code> 的情况下命中 ADT 时，递归下降到它的字段。
+(对于 <code>enum</code>，考虑所有变体的所有字段。)</li>
+</ul>
+</li>
+<li>此外，如果 <code>T</code> 实现 <code>Drop</code>，则 <code>T</code> 的所有泛型 (生命周期和类型) 参数都必须有效。</li>
+</ul>
+<p>在上面的例子中，最后一个子句暗示当 <code>S&lt;'a&gt;</code> 是丢弃时 <code>'a</code> 必须是 live，因此该例子被拒绝。如果我们删除 <code>impl Drop</code>，则活性要求消失并且该示例被接受。</p>
+<p>存在一种类型选择退出最后一个子句的不稳定方式; 这称为 “drop check eyepatch” 或 <code>may_dangle</code>。有关此仅限夜间，的更多详细信息，请参见 <a href="../../nomicon/phantom-data.html#an-exception-the-special-case-of-the-standard-library-and-its-unstable-may_dangle">discussion in the Nomicon</a>。</p>
+</div></details><h2 id="required-methods" class="small-section-header">Required Methods<a href="#required-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="tymethod.drop" class="method"><a class="srclink rightside" href="../../src/core/ops/drop.rs.html#233">source</a><h4 class="code-header">fn <a href="#tymethod.drop" class="fn">drop</a>(&amp;mut self)</h4></section></summary><div class="docblock"><p>执行此类型的析构函数。</p>
+<p>当值离开作用域时隐式调用此方法，并且不能显式调用此方法 (会得到编译器 <a href="../../error_codes/E0040.html">E0040</a> 错误)。
+但是，prelude 中的 <a href="../mem/fn.drop.html" title="fn core::mem::drop"><code>mem::drop</code></a> 函数可用于调用参数的 <code>Drop</code> 实现。</p>
 <p>当这个方法被调用时，<code>self</code> 还没有被释放。
 只有在方法结束后才会发生这种情况。
 如果不是这种情况，那么 <code>self</code> 将是悬垂引用。</p>
-<h5 id="panics" class="section-header"><a href="#panics">Panics</a></h5>
-<p>考虑到 <a href="../macro.panic.html"><code>panic!</code></a> 在展开时将调用 <code>drop</code>，因此 <code>drop</code> 实现中的任何 <a href="../macro.panic.html"><code>panic!</code></a> 都可能会终止。</p>
+<h5 id="panics"><a href="#panics">Panics</a></h5>
+<p>考虑到 <a href="../macro.panic.html" title="macro core::panic"><code>panic!</code></a> 将在展开时调用 <code>drop</code>，因此 <code>drop</code> 实现中的任何 <a href="../macro.panic.html" title="macro core::panic"><code>panic!</code></a> 都可能会中止。</p>
 <p>请注意，即使此 panics，该值也被视为已丢弃；
 您不得再次调用 <code>drop</code>。
-这通常由编译器自动处理，但是在使用不安全的代码时，有时可能会无意间发生，尤其是在使用 <a href="../ptr/fn.drop_in_place.html"><code>ptr::drop_in_place</code></a> 时。</p>
-</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor"></a></h2><div class="item-list" id="implementors-list"><div id="impl-Drop" class="impl has-srclink"><div class="rightside"><span class="since" title="Stable since Rust version 1.36.0">1.36.0</span><a class="srclink" href="../../src/core/task/wake.rs.html#279-287" title="goto source code">[src]</a></div><a href="#impl-Drop" class="anchor"></a><h3 class="code-header in-band">impl <a class="trait" href="trait.Drop.html" title="trait core::ops::Drop">Drop</a> for <a class="struct" href="../task/struct.Waker.html" title="struct core::task::Waker">Waker</a></h3></div><div id="impl-Drop-1" class="impl has-srclink"><div class="rightside"><a class="srclink" href="../../src/core/ffi.rs.html#380-393" title="goto source code">[src]</a></div><a href="#impl-Drop-1" class="anchor"></a><h3 class="code-header in-band">impl&lt;'f&gt; <a class="trait" href="trait.Drop.html" title="trait core::ops::Drop">Drop</a> for <a class="struct" href="../ffi/struct.VaListImpl.html" title="struct core::ffi::VaListImpl">VaListImpl</a>&lt;'f&gt;</h3></div><div id="impl-Drop-2" class="impl has-srclink"><div class="rightside"><span class="since" title="Stable since Rust version 1.40.0">1.40.0</span><a class="srclink" href="../../src/core/array/iter.rs.html#176-183" title="goto source code">[src]</a></div><a href="#impl-Drop-2" class="anchor"></a><h3 class="code-header in-band">impl&lt;T, const N:&nbsp;<a class="primitive" href="../primitive.usize.html">usize</a>&gt; <a class="trait" href="trait.Drop.html" title="trait core::ops::Drop">Drop</a> for <a class="struct" href="../array/struct.IntoIter.html" title="struct core::array::IntoIter">IntoIter</a>&lt;T, N&gt;</h3></div></div><script type="text/javascript" src="../../implementors/core/ops/trait.Drop.js" async></script></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="core" data-search-index-js="../../search-index1.58.0.js" data-search-js="../../search1.58.0.js"></div>
-    <script src="../../main1.58.0.js"></script>
-</body></html>
+这通常由编译器自动处理，但是在使用不安全的代码时，有时可能会无意间发生，尤其是在使用 <a href="../ptr/fn.drop_in_place.html" title="fn core::ptr::drop_in_place"><code>ptr::drop_in_place</code></a> 时。</p>
+</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><section id="impl-Drop-for-Waker" class="impl"><span class="rightside"><span class="since" title="Stable since Rust version 1.36.0">1.36.0</span> · <a class="srclink" href="../../src/core/task/wake.rs.html#348-356">source</a></span><a href="#impl-Drop-for-Waker" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Drop.html" title="trait core::ops::Drop">Drop</a> for <a class="struct" href="../task/struct.Waker.html" title="struct core::task::Waker">Waker</a></h3></section><section id="impl-Drop-for-VaListImpl%3C'f%3E" class="impl"><a class="srclink rightside" href="../../src/core/ffi/mod.rs.html#604-617">source</a><a href="#impl-Drop-for-VaListImpl%3C'f%3E" class="anchor">§</a><h3 class="code-header">impl&lt;'f&gt; <a class="trait" href="trait.Drop.html" title="trait core::ops::Drop">Drop</a> for <a class="struct" href="../ffi/struct.VaListImpl.html" title="struct core::ffi::VaListImpl">VaListImpl</a>&lt;'f&gt;</h3></section><section id="impl-Drop-for-IntoIter%3CT,+N%3E" class="impl"><span class="rightside"><span class="since" title="Stable since Rust version 1.40.0">1.40.0</span> · <a class="srclink" href="../../src/core/array/iter.rs.html#348-355">source</a></span><a href="#impl-Drop-for-IntoIter%3CT,+N%3E" class="anchor">§</a><h3 class="code-header">impl&lt;T, const N: <a class="primitive" href="../primitive.usize.html">usize</a>&gt; <a class="trait" href="trait.Drop.html" title="trait core::ops::Drop">Drop</a> for <a class="struct" href="../array/struct.IntoIter.html" title="struct core::array::IntoIter">IntoIter</a>&lt;T, N&gt;</h3></section></div><script src="../../implementors/core/ops/drop/trait.Drop.js" async></script></section></div></main></body></html>

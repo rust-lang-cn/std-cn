@@ -1,0 +1,338 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Advanced migrations - The Rust Edition Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../editions/index.html"><strong aria-hidden="true">1.</strong> What are editions?</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editions/creating-a-new-project.html"><strong aria-hidden="true">1.1.</strong> Creating a new project</a></li><li class="chapter-item expanded "><a href="../editions/transitioning-an-existing-project-to-a-new-edition.html"><strong aria-hidden="true">1.2.</strong> Transitioning an existing project to a new edition</a></li><li class="chapter-item expanded "><a href="../editions/advanced-migrations.html" class="active"><strong aria-hidden="true">1.3.</strong> Advanced migrations</a></li></ol></li><li class="chapter-item expanded "><a href="../rust-2015/index.html"><strong aria-hidden="true">2.</strong> Rust 2015</a></li><li class="chapter-item expanded "><a href="../rust-2018/index.html"><strong aria-hidden="true">3.</strong> Rust 2018</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rust-2018/path-changes.html"><strong aria-hidden="true">3.1.</strong> Path and module system changes</a></li><li class="chapter-item expanded "><a href="../rust-2018/trait-fn-parameters.html"><strong aria-hidden="true">3.2.</strong> Anonymous trait function parameters deprecated</a></li><li class="chapter-item expanded "><a href="../rust-2018/new-keywords.html"><strong aria-hidden="true">3.3.</strong> New keywords</a></li><li class="chapter-item expanded "><a href="../rust-2018/tyvar-behind-raw-pointer.html"><strong aria-hidden="true">3.4.</strong> Method dispatch for raw pointers to inference variables</a></li><li class="chapter-item expanded "><a href="../rust-2018/cargo.html"><strong aria-hidden="true">3.5.</strong> Cargo changes</a></li></ol></li><li class="chapter-item expanded "><a href="../rust-2021/index.html"><strong aria-hidden="true">4.</strong> Rust 2021</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rust-2021/prelude.html"><strong aria-hidden="true">4.1.</strong> Additions to the prelude</a></li><li class="chapter-item expanded "><a href="../rust-2021/default-cargo-resolver.html"><strong aria-hidden="true">4.2.</strong> Default Cargo feature resolver</a></li><li class="chapter-item expanded "><a href="../rust-2021/IntoIterator-for-arrays.html"><strong aria-hidden="true">4.3.</strong> IntoIterator for arrays</a></li><li class="chapter-item expanded "><a href="../rust-2021/disjoint-capture-in-closures.html"><strong aria-hidden="true">4.4.</strong> Disjoint capture in closures</a></li><li class="chapter-item expanded "><a href="../rust-2021/panic-macro-consistency.html"><strong aria-hidden="true">4.5.</strong> Panic macro consistency</a></li><li class="chapter-item expanded "><a href="../rust-2021/reserving-syntax.html"><strong aria-hidden="true">4.6.</strong> Reserving syntax</a></li><li class="chapter-item expanded "><a href="../rust-2021/warnings-promoted-to-error.html"><strong aria-hidden="true">4.7.</strong> Warnings promoted to errors</a></li><li class="chapter-item expanded "><a href="../rust-2021/or-patterns-macro-rules.html"><strong aria-hidden="true">4.8.</strong> Or patterns in macro-rules</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Edition Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/edition-guide" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="advanced-migration-strategies"><a class="header" href="#advanced-migration-strategies">Advanced migration strategies</a></h1>
+<h2 id="how-migrations-work"><a class="header" href="#how-migrations-work">How migrations work</a></h2>
+<p><a href="../../cargo/commands/cargo-fix.html"><code>cargo fix --edition</code></a> works by running the equivalent of <a href="../../cargo/commands/cargo-check.html"><code>cargo check</code></a> on your project with special <a href="../../rustc/lints/index.html">lints</a> enabled which will detect code that may not compile in the next edition.
+These lints include instructions on how to modify the code to make it compatible on both the current and the next edition.
+<code>cargo fix</code> applies these changes to the source code, and then runs <code>cargo check</code> again to verify that the fixes work.
+If the fixes fail, then it will back out the changes and display a warning.</p>
+<p>Changing the code to be simultaneously compatible with both the current and next edition makes it easier to incrementally migrate the code.
+If the automated migration does not completely succeed, or requires manual help, you can iterate while staying on the original edition before changing <code>Cargo.toml</code> to use the next edition.</p>
+<p>The lints that <code>cargo fix --edition</code> apply are part of a <a href="../../rustc/lints/groups.html">lint group</a>.
+For example, when migrating from 2018 to 2021, Cargo uses the <code>rust-2021-compatibility</code> group of lints to fix the code.
+Check the <a href="#partial-migration-with-broken-code">Partial migration</a> section below for tips on using individual lints to help with migration.</p>
+<p><code>cargo fix</code> may run <code>cargo check</code> multiple times.
+For example, after applying one set of fixes, this may trigger new warnings which require further fixes.
+Cargo repeats this until no new warnings are generated.</p>
+<h2 id="migrating-multiple-configurations"><a class="header" href="#migrating-multiple-configurations">Migrating multiple configurations</a></h2>
+<p><code>cargo fix</code> can only work with a single configuration at a time.
+If you use <a href="../../cargo/reference/features.html">Cargo features</a> or <a href="../../reference/conditional-compilation.html">conditional compilation</a>, then you may need to run <code>cargo fix</code> multiple times with different flags.</p>
+<p>For example, if you have code that uses <code>#[cfg]</code> attributes to include different code for different platforms, you may need to run <code>cargo fix</code> with the <code>--target</code> option to fix for different targets.
+This may require moving your code between machines if you don't have cross-compiling available.</p>
+<p>Similarly, if you have conditions on Cargo features, like <code>#[cfg(feature = &quot;my-optional-thing&quot;)]</code>, it is recommended to use the <code>--all-features</code> flag to allow <code>cargo fix</code> to migrate all the code behind those feature gates.
+If you want to migrate feature code individually, you can use the <code>--features</code> flag to migrate one at a time.</p>
+<h2 id="migrating-a-large-project-or-workspace"><a class="header" href="#migrating-a-large-project-or-workspace">Migrating a large project or workspace</a></h2>
+<p>You can migrate a large project incrementally to make the process easier if you run into problems.</p>
+<p>In a <a href="../../cargo/reference/workspaces.html">Cargo workspace</a>, each package defines its own edition, so the process naturally involves migrating one package at a time.</p>
+<p>Within a <a href="../../cargo/reference/manifest.html#the-package-section">Cargo package</a>, you can either migrate the entire package at once, or migrate individual <a href="../../cargo/reference/cargo-targets.html">Cargo targets</a> one at a time.
+For example, if you have multiple binaries, tests, and examples, you can use specific target selection flags with <code>cargo fix --edition</code> to migrate just that one target.
+By default, <code>cargo fix</code> uses <code>--all-targets</code>.</p>
+<p>For even more advanced cases, you can specify the edition for each individual target in <code>Cargo.toml</code> like this:</p>
+<pre><code class="language-toml">[[bin]]
+name = &quot;my-binary&quot;
+edition = &quot;2018&quot;
+</code></pre>
+<p>This usually should not be required, but is an option if you have a lot of targets and are having difficulty migrating them all together.</p>
+<h2 id="partial-migration-with-broken-code"><a class="header" href="#partial-migration-with-broken-code">Partial migration with broken code</a></h2>
+<p>Sometimes the fixes suggested by the compiler may fail to work.
+When this happens, Cargo will report a warning indicating what happened and what the error was.
+However, by default it will automatically back out the changes it made.
+It can be helpful to keep the code in the broken state and manually resolve the issue.
+Some of the fixes may have been correct, and the broken fix maybe be <em>mostly</em> correct, but just need minor tweaking.</p>
+<p>In this situation, use the <code>--broken-code</code> option with <code>cargo fix</code> to tell Cargo not to back out the changes.
+Then, you can go manually inspect the error and investigate what is needed to fix it.</p>
+<p>Another option to incrementally migrate a project is to apply individual fixes separately, one at a time.
+You can do this by adding the individual lints as warnings, and then either running <code>cargo fix</code> (without the <code>--edition</code> flag) or using your editor or IDE to apply its suggestions if it supports &quot;Quick Fixes&quot;.</p>
+<p>For example, the 2018 edition uses the <a href="../../rustc/lints/listing/allowed-by-default.html#keyword-idents"><code>keyword-idents</code></a> lint to fix any conflicting keywords.
+You can add <code>#![warn(keyword_idents)]</code> to the top of each crate (like at the top of <code>src/lib.rs</code> or <code>src/main.rs</code>).
+Then, running <code>cargo fix</code> will apply just the suggestions for that lint.</p>
+<p>You can see the list of lints enabled for each edition in the <a href="../../rustc/lints/groups.html">lint group</a> page, or run the <code>rustc -Whelp</code> command.</p>
+<h2 id="migrating-macros"><a class="header" href="#migrating-macros">Migrating macros</a></h2>
+<p>Some macros may require manual work to fix them for the next edition.
+For example, <code>cargo fix --edition</code> may not be able to automatically fix a macro that generates syntax that does not work in the next edition.</p>
+<p>This may be a problem for both <a href="../../reference/procedural-macros.html">proc macros</a> and <code>macro_rules</code>-style macros.
+<code>macro_rules</code> macros can sometimes be automatically updated if the macro is used within the same crate, but there are several situations where it cannot.
+Proc macros in general cannot be automatically fixed at all.</p>
+<p>For example, if we migrate a crate containing this (contrived) macro <code>foo</code> from 2015 to 2018, <code>foo</code> would not be automatically fixed.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[macro_export]
+macro_rules! foo {
+    () =&gt; {
+        let dyn = 1;
+        println!(&quot;it is {}&quot;, dyn);
+    };
+}
+<span class="boring">}</span></code></pre></pre>
+<p>When this macro is defined in a 2015 crate, it can be used from a crate of any other edition due to macro hygiene (discussed below).
+In 2015, <code>dyn</code> is a normal identifier and can be used without restriction.</p>
+<p>However, in 2018, <code>dyn</code> is no longer a valid identifier.
+When using <code>cargo fix --edition</code> to migrate to 2018, Cargo won't display any warnings or errors at all.
+However, <code>foo</code> won't work when called from any crate.</p>
+<p>If you have macros, you are encouraged to make sure you have tests that fully cover the macro's syntax.
+You may also want to test the macros by importing and using them in crates from multiple editions, just to ensure it works correctly everywhere.
+If you run into issues, you'll need to read through the chapters of this guide to understand how the code can be changed to work across all editions.</p>
+<h3 id="macro-hygiene"><a class="header" href="#macro-hygiene">Macro hygiene</a></h3>
+<p>Macros use a system called &quot;edition hygiene&quot; where the tokens within a macro are marked with which edition they come from.
+This allows external macros to be called from crates of varying editions without needing to worry about which edition it is called from.</p>
+<p>Let's take a closer look at the example above that defines a <code>macro_rules</code> macro using <code>dyn</code> as an identifier.
+If that macro was defined in a crate using the 2015 edition, then that macro works fine, even if it were called from a 2018 crate where <code>dyn</code> is a keyword and that would normally be a syntax error.
+The <code>let dyn = 1;</code> tokens are marked as being from 2015, and the compiler will remember that wherever that code gets expanded.
+The parser looks at the edition of the tokens to know how to interpret it.</p>
+<p>The problem arises when changing the edition to 2018 in the crate where it is defined.
+Now, those tokens are tagged with the 2018 edition, and those will fail to parse.
+However, since we never called the macro from our crate, <code>cargo fix --edition</code> never had a chance to inspect the macro and fix it.</p>
+<!-- TODO: hopefully someday, the reference will have chapters on how expansion works, and this can link there for actual details. -->
+<h2 id="documentation-tests"><a class="header" href="#documentation-tests">Documentation tests</a></h2>
+<p>At this time, <code>cargo fix</code> is not able to update <a href="../../rustdoc/documentation-tests.html">documentation tests</a>.
+After updating the edition in <code>Cargo.toml</code>, you should run <code>cargo test</code> to ensure everything still passes.
+If your documentation tests use syntax that is not supported in the new edition, you will need to update them manually.</p>
+<p>In rare cases, you can manually set the edition for each test.
+For example, you can use the <a href="../../rustdoc/documentation-tests.html#attributes"><code>edition2018</code> annotation</a> on the triple backticks to tell <code>rustdoc</code> which edition to use.</p>
+<h2 id="generated-code"><a class="header" href="#generated-code">Generated code</a></h2>
+<p>Another area where the automated fixes cannot apply is if you have a build script which generates Rust code at compile time (see <a href="../../cargo/reference/build-script-examples.html#code-generation">Code generation</a> for an example).
+In this situation, if you end up with code that doesn't work in the next edition, you will need to manually change the build script to generate code that is compatible.</p>
+<h2 id="migrating-non-cargo-projects"><a class="header" href="#migrating-non-cargo-projects">Migrating non-Cargo projects</a></h2>
+<p>If your project is not using Cargo as a build system, it may still be possible to make use of the automated lints to assist migrating to the next edition.
+You can enable the migration lints as described above by enabling the appropriate <a href="../../rustc/lints/groups.html">lint group</a>.
+For example, you can use the <code>#![warn(rust_2021_compatibility)]</code> attribute or the <code>-Wrust-2021-compatibility</code> or <code>--force-warns=rust-2021-compatibility</code> <a href="../../rustc/lints/levels.html#via-compiler-flag">CLI flag</a>.</p>
+<p>The next step is to apply those lints to your code.
+There are several options here:</p>
+<ul>
+<li>Manually read the warnings and apply the suggestions recommended by the compiler.</li>
+<li>Use an editor or IDE that supports automatically applying suggestions.
+For example, <a href="https://code.visualstudio.com/">Visual Studio Code</a> with the <a href="https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer">Rust Analyzer extension</a> has the ability to use the &quot;Quick Fix&quot; links to automatically apply suggestions.
+Many other editors and IDEs have similar functionality.</li>
+<li>Write a migration tool using the <a href="https://github.com/rust-lang/rustfix"><code>rustfix</code></a> library.
+This is the library that Cargo uses internally to take the <a href="../../rustc/json.html">JSON messages</a> from the compiler and modify the source code.
+Check the <a href="https://github.com/rust-lang/rustfix/tree/master/examples"><code>examples</code> directory</a> for examples of how to use the library.</li>
+</ul>
+<h2 id="writing-idiomatic-code-in-a-new-edition"><a class="header" href="#writing-idiomatic-code-in-a-new-edition">Writing idiomatic code in a new edition</a></h2>
+<p>Editions are not only about new features and removing old ones.
+In any programming language, idioms change over time, and Rust is no exception.
+While old code will continue to compile, it might be written with different idioms today.</p>
+<p>For example, in Rust 2015, external crates must be listed with <code>extern crate</code> like this:</p>
+<pre><code class="language-rust ignore">// src/lib.rs
+extern crate rand;</code></pre>
+<p>In Rust 2018, it is <a href="../rust-2018/path-changes.html#no-more-extern-crate">no longer necessary</a> to include these items.</p>
+<p><code>cargo fix</code> has the <code>--edition-idioms</code> option to automatically transition some of these idioms to the new syntax.</p>
+<blockquote>
+<p><strong>Warning</strong>: The current <em>&quot;idiom lints&quot;</em> are known to have some problems.
+They may make incorrect suggestions which may fail to compile.
+The current lints are:</p>
+<ul>
+<li>Edition 2018:
+<ul>
+<li><a href="../../rustc/lints/listing/allowed-by-default.html#unused-extern-crates"><code>unused-extern-crates</code></a></li>
+<li><a href="../../rustc/lints/listing/allowed-by-default.html#explicit-outlives-requirements"><code>explicit-outlives-requirements</code></a></li>
+</ul>
+</li>
+<li>Edition 2021 does not have any idiom lints.</li>
+</ul>
+<p>The following instructions are recommended only for the intrepid who are willing to work through a few compiler/Cargo bugs!
+If you run into problems, you can try the <code>--broken-code</code> option <a href="#partial-migration-with-broken-code">described above</a> to make as much progress as possible, and then resolve the remaining issues manually.</p>
+</blockquote>
+<p>With that out of the way, we can instruct Cargo to fix our code snippet with:</p>
+<pre><code class="language-console">cargo fix --edition-idioms
+</code></pre>
+<p>Afterwards, the line with <code>extern crate rand;</code> in <code>src/lib.rs</code> will be removed.</p>
+<p>We're now more idiomatic, and we didn't have to fix our code manually!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../editions/transitioning-an-existing-project-to-a-new-edition.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../rust-2015/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../editions/transitioning-an-existing-project-to-a-new-edition.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../rust-2015/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

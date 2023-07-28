@@ -6,8 +6,7 @@
     <meta name="generator" content="rustdoc">
     <title>Rust Documentation</title>
 
-    <link rel="stylesheet" type="text/css" href="rust.css">
-
+    <link rel="stylesheet" href="rust.css">
     
 </head>
 <body class="rustdoc">
@@ -24,6 +23,20 @@
 nav {
     display: none;
 }
+body {
+    font-family: serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: sans-serif;
+}
+h3 {
+    font-size: 1.35rem;
+}
+h4 {
+    font-size: 1.1rem;
+}
+
+/* Formatting for docs search bar */
 #search-input {
     width: calc(100% - 58px);
 }
@@ -41,39 +54,55 @@ nav {
 #search-but:hover, #search-input:focus {
     border-color: #55a9ff;
 }
-h2 {
-    font-size: 18px;
+
+/* Formatting for external link icon */
+svg.external-link {
+  display: inline-block;
+  position: relative;
+  vertical-align: super;
+  width: 0.7rem;
+  height: 0.7rem;
+  padding-left: 2px;
+  top: 3px;
 }
 </style>
-<p>Welcome to an overview of the documentation provided by the <a href="https://www.rust-lang.org">Rust project</a>.
-All of these projects are managed by the Docs Team; there are other
-unofficial documentation resources as well!</p>
-<p>Many of these resources take the form of “books”; we collectively call these
-“The Rust Bookshelf.” Some are large, some are small.</p>
-<h1 id="learn-rust" class="section-header"><a href="#learn-rust">Learn Rust</a></h1>
-<p>If you’d like to learn Rust, this is the spot for you! All of these resources
+<p>Welcome to an overview of the documentation provided by the <a href="https://www.rust-lang.org">Rust
+project</a>. This page contains links to various helpful references,
+most of which are available offline (if opened with <code>rustup doc</code>). Many of these
+resources take the form of “books”; we collectively call these “The Rust
+Bookshelf.” Some are large, some are small.</p>
+<p>All of these books are managed by the Rust Organization, but other unofficial
+documentation resources are included here as well!</p>
+<p>If you’re just looking for the standard library reference, here it is:
+<a href="std/index.html">Rust API documentation</a></p>
+<h2 id="learning-rust"><a href="#learning-rust">Learning Rust</a></h2>
+<p>If you’d like to learn Rust, this is the section for you! All of these resources
 assume that you have programmed before, but not in any specific language:</p>
-<h2 id="the-rust-programming-language" class="section-header"><a href="#the-rust-programming-language">The Rust Programming Language</a></h2>
-<p>Affectionately nicknamed “the book,” <a href="book/index.html">The Rust Programming
-Language</a> will give you an overview of the language from
-first principles. You’ll build a few projects along the way, and by the end,
-you’ll have a solid grasp of the language.</p>
-<h2 id="rust-by-example" class="section-header"><a href="#rust-by-example">Rust By Example</a></h2>
+<h3 id="the-rust-programming-language"><a href="#the-rust-programming-language">The Rust Programming Language</a></h3>
+<p>Affectionately nicknamed “the book,” <a href="book/index.html">The Rust Programming Language</a>
+will give you an overview of the language from first principles. You’ll build a
+few projects along the way, and by the end, you’ll have a solid grasp of how to
+use the language.</p>
+<h3 id="rust-by-example"><a href="#rust-by-example">Rust By Example</a></h3>
 <p>If reading multiple hundreds of pages about a language isn’t your style, then
-<a href="rust-by-example/index.html">Rust By Example</a> has you covered. While the book talks about code with
-a lot of words, RBE shows off a bunch of code, and keeps the talking to a
-minimum. It also includes exercises!</p>
-<h2 id="rustlings" class="section-header"><a href="#rustlings">Rustlings</a></h2>
-<p><a href="https://github.com/rust-lang/rustlings">Rustlings</a> guides you through downloading and setting up the Rust toolchain,
-and teaches you the basics of reading and writing Rust syntax. It’s an
-alternative to Rust by Example that works with your own environment.</p>
-<h1 id="use-rust" class="section-header"><a href="#use-rust">Use Rust</a></h1>
-<p>Once you’ve gotten familiar with the language, these resources can help you
-when you’re actually using it day-to-day.</p>
-<h2 id="the-standard-library" class="section-header"><a href="#the-standard-library">The Standard Library</a></h2>
-<p>Rust’s standard library has <a href="std/index.html">extensive API documentation</a>,
-with explanations of how to use various things, as well as example code for
-accomplishing various tasks.</p>
+<a href="rust-by-example/index.html">Rust By Example</a> has you covered. RBE shows off a
+bunch of code without using a lot of words. It also includes exercises!</p>
+<h3 id="rustlings"><a href="#rustlings">Rustlings</a></h3>
+<p><a href="https://github.com/rust-lang/rustlings">Rustlings</a> guides you
+through downloading and setting up the Rust toolchain, then provides an
+interactive tool that teaches you how to solve coding challenges in Rust.</p>
+<h3 id="rust-playground"><a href="#rust-playground">Rust Playground</a></h3>
+<p>The <a href="https://play.rust-lang.org">Rust Playground</a> is a great place
+to try out and share small bits of code, or experiment with some of the most
+popular crates.</p>
+<h2 id="using-rust"><a href="#using-rust">Using Rust</a></h2>
+<p>Once you’ve gotten familiar with the language, these resources can help you put
+it to work.</p>
+<h3 id="the-standard-library"><a href="#the-standard-library">The Standard Library</a></h3>
+<p>Rust’s standard library has <a href="std/index.html">extensive API documentation</a>, with
+explanations of how to use various things, as well as example code for
+accomplishing various tasks. Code examples have a “Run” button on hover that
+opens the sample in the playground.</p>
 <div>
   <form action="std/index.html" method="get">
     <input id="search-input" type="search" name="search"
@@ -81,39 +110,107 @@ accomplishing various tasks.</p>
     <button id="search-but">Search</button>
   </form>
 </div>
-<h2 id="the-edition-guide" class="section-header"><a href="#the-edition-guide">The Edition Guide</a></h2>
-<p><a href="edition-guide/index.html">The Edition Guide</a> describes the Rust editions.</p>
-<h2 id="the-rustc-book" class="section-header"><a href="#the-rustc-book">The Rustc Book</a></h2>
-<p><a href="rustc/index.html">The Rustc Book</a> describes the Rust compiler, <code>rustc</code>.</p>
-<h2 id="the-cargo-book" class="section-header"><a href="#the-cargo-book">The Cargo Book</a></h2>
-<p><a href="cargo/index.html">The Cargo Book</a> is a guide to Cargo, Rust’s build tool and dependency manager.</p>
-<h2 id="the-rustdoc-book" class="section-header"><a href="#the-rustdoc-book">The Rustdoc Book</a></h2>
+<h3 id="your-personal-documentation"><a href="#your-personal-documentation">Your Personal Documentation</a></h3>
+<p>Whenever you are working in a crate, <code>cargo doc --open</code> will generate
+documentation for your project <em>and</em> all its dependencies in their correct
+version, and open it in your browser. Add the flag <code>--document-private-items</code> to
+also show items not marked <code>pub</code>.</p>
+<h3 id="the-edition-guide"><a href="#the-edition-guide">The Edition Guide</a></h3>
+<p><a href="edition-guide/index.html">The Edition Guide</a> describes the Rust editions and
+their differences.</p>
+<h3 id="the-rustc-book"><a href="#the-rustc-book">The <code>rustc</code> Book</a></h3>
+<p><a href="rustc/index.html">The <code>rustc</code> Book</a> describes the Rust compiler, <code>rustc</code>.</p>
+<h3 id="the-cargo-book"><a href="#the-cargo-book">The Cargo Book</a></h3>
+<p><a href="cargo/index.html">The Cargo Book</a> is a guide to Cargo, Rust’s build tool and
+dependency manager.</p>
+<h3 id="the-rustdoc-book"><a href="#the-rustdoc-book">The Rustdoc Book</a></h3>
 <p><a href="rustdoc/index.html">The Rustdoc Book</a> describes our documentation tool, <code>rustdoc</code>.</p>
-<h2 id="extended-error-listing" class="section-header"><a href="#extended-error-listing">Extended Error Listing</a></h2>
+<h3 id="the-clippy-book"><a href="#the-clippy-book">The Clippy Book</a></h3>
+<p><a href="clippy/index.html">The Clippy Book</a> describes our static analyzer, Clippy.</p>
+<h3 id="extended-error-listing"><a href="#extended-error-listing">Extended Error Listing</a></h3>
 <p>Many of Rust’s errors come with error codes, and you can request extended
-diagnostics from the compiler on those errors. You can also <a href="error-index.html">read them
-here</a>, if you prefer to read them that way.</p>
-<h1 id="master-rust" class="section-header"><a href="#master-rust">Master Rust</a></h1>
+diagnostics from the compiler on those errors (with <code>rustc --explain</code>). You can
+also read them here if you prefer: <a href="error_codes/index.html">rustc error codes</a></p>
+<h2 id="mastering-rust"><a href="#mastering-rust">Mastering Rust</a></h2>
 <p>Once you’re quite familiar with the language, you may find these advanced
 resources useful.</p>
-<h2 id="the-reference" class="section-header"><a href="#the-reference">The Reference</a></h2>
-<p><a href="reference/index.html">The Reference</a> is not a formal spec, but is more detailed and
-comprehensive than the book.</p>
-<h2 id="the-rustonomicon" class="section-header"><a href="#the-rustonomicon">The Rustonomicon</a></h2>
-<p><a href="nomicon/index.html">The Rustonomicon</a> is your guidebook to the dark arts of unsafe
-Rust. It’s also sometimes called “the ’nomicon.”</p>
-<h2 id="the-unstable-book" class="section-header"><a href="#the-unstable-book">The Unstable Book</a></h2>
-<p><a href="unstable-book/index.html">The Unstable Book</a> has documentation for unstable features.</p>
-<h2 id="the-rustc-contribution-guide" class="section-header"><a href="#the-rustc-contribution-guide">The <code>rustc</code> Contribution Guide</a></h2>
-<p><a href="https://rustc-dev-guide.rust-lang.org/">The <code>rustc</code> Guide</a> documents how
-the compiler works and how to contribute to it. This is useful if you want to build
-or modify the Rust compiler from source (e.g. to target something non-standard).</p>
-<h1 id="specialize-rust" class="section-header"><a href="#specialize-rust">Specialize Rust</a></h1>
-<p>When using Rust in specific domain areas, consider using the following resources tailored to each domain.</p>
-<h2 id="embedded-systems" class="section-header"><a href="#embedded-systems">Embedded Systems</a></h2>
-<p>When developing for Bare Metal or Embedded Linux systems, you may find these resources maintained by the <a href="https://github.com/rust-embedded">Embedded Working Group</a> useful.</p>
-<h3 id="the-embedded-rust-book" class="section-header"><a href="#the-embedded-rust-book">The Embedded Rust Book</a></h3>
-<p><a href="embedded-book/index.html">The Embedded Rust Book</a> is targeted at developers familiar with embedded development and familiar with Rust, but have not used Rust for embedded development.</p>
+<h3 id="the-reference"><a href="#the-reference">The Reference</a></h3>
+<p><a href="reference/index.html">The Reference</a> is not a formal spec, but is more detailed
+and comprehensive than the book.</p>
+<h3 id="the-style-guide"><a href="#the-style-guide">The Style Guide</a></h3>
+<p><a href="style-guide/index.html">The Rust Style Guide</a> describes the standard formatting
+of Rust code. Most developers use <code>cargo fmt</code> to invoke <code>rustfmt</code> and format the
+code automatically (the result matches this style guide).</p>
+<h3 id="the-rustonomicon"><a href="#the-rustonomicon">The Rustonomicon</a></h3>
+<p><a href="nomicon/index.html">The Rustonomicon</a> is your guidebook to the dark arts of
+unsafe Rust. It’s also sometimes called “the ’nomicon.”</p>
+<h3 id="the-unstable-book"><a href="#the-unstable-book">The Unstable Book</a></h3>
+<p><a href="unstable-book/index.html">The Unstable Book</a> has documentation for unstable
+features.</p>
+<h3 id="the-rustc-contribution-guide"><a href="#the-rustc-contribution-guide">The <code>rustc</code> Contribution Guide</a></h3>
+<p><a href="https://rustc-dev-guide.rust-lang.org/">The <code>rustc</code> Guide</a>
+documents how the compiler works and how to contribute to it. This is useful if
+you want to build or modify the Rust compiler from source (e.g. to target
+something non-standard).</p>
+<h2 id="specialized-rust"><a href="#specialized-rust">Specialized Rust</a></h2>
+<p>When using Rust in specific domains, consider using the following resources
+tailored to each area.</p>
+<h3 id="embedded-systems"><a href="#embedded-systems">Embedded Systems</a></h3>
+<p>When developing for Bare Metal or Embedded Linux systems, you may find these
+resources maintained by the <a href="https://github.com/rust-embedded">Embedded Working Group</a> useful.</p>
+<h4 id="the-embedded-rust-book"><a href="#the-embedded-rust-book">The Embedded Rust Book</a></h4>
+<p><a href="embedded-book/index.html">The Embedded Rust Book</a> is targeted at developers familiar with embedded
+development and familiar with Rust, but have not used Rust for embedded
+development.</p>
+<script>
+// check if a given link is external
+function isExternalLink(url) {
+  const tmp = document.createElement('a');
+  tmp.href = url;
+  return tmp.host !== window.location.host;
+}
+
+// Add the `external` class to all <a> tags with external links and append the external link SVG
+function updateExternalAnchors() {
+  /*
+    External link SVG from Font-Awesome
+    CC BY-SA 3.0 https://creativecommons.org/licenses/by-sa/3.0
+    via Wikimedia Commons
+  */
+  const svgText = `<svg
+     class='external-link'
+     xmlns='http://www.w3.org/2000/svg'
+     viewBox='0 -256 1850 1850'
+     width='100%'
+     height='100%'>
+       <g transform='matrix(1,0,0,-1,30,1427)'>
+         <path d='M 1408,608 V 288 Q 1408,169 1323.5,84.5 1239,0 1120,
+           0 H 288 Q 169,0 84.5,84.5 0,169 0,288 v 832 Q 0,1239 84.5,1323.5 169,
+           1408 288,1408 h 704 q 14,0 23,-9 9,-9 9,-23 v -64 q 0,-14 -9,-23 -9,
+           -9 -23,-9 H 288 q -66,0 -113,-47 -47,-47 -47,-113 V 288 q 0,-66 47,
+           -113 47,-47 113,-47 h 832 q 66,0 113,47 47,47 47,113 v 320 q 0,14 9,
+           23 9,9 23,9 h 64 q 14,0 23,-9 9,-9 9,-23 z m 384,864 V 960 q 0,
+           -26 -19,-45 -19,-19 -45,-19 -26,0 -45,19 L 1507,1091 855,439 q -10,
+           -10 -23,-10 -13,0 -23,10 L 695,553 q -10,10 -10,23 0,13 10,23 l 652,
+           652 -176,176 q -19,19 -19,45 0,26 19,45 19,19 45,19 h 512 q 26,0 45,
+           -19 19,-19 19,-45 z' style='fill:currentColor' />
+         </g>
+     </svg>`;
+  let allAnchors = document.getElementsByTagName("a");
+
+  for (var i = 0; i < allAnchors.length; ++i) {
+    let anchor = allAnchors[i];
+    if (isExternalLink(anchor.href)) {
+      anchor.classList.add("external");
+      anchor.innerHTML += svgText;
+    }
+  }
+}
+
+// on page load, update external anchors
+document.addEventListener("DOMContentLoaded", updateExternalAnchors);
+
+</script>
 
     
 </body>

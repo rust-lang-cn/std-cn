@@ -1,202 +1,201 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="特定于 Unix 的 [`fs::Metadata`] 扩展。"><meta name="keywords" content="rust, rustlang, rust-lang, MetadataExt"><title>MetadataExt in std::os::unix::fs - Rust</title><link rel="stylesheet" type="text/css" href="../../../../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../../../../storage1.58.0.js"></script><script src="../../../../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../../../../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow1.58.0.svg");}</style></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../std/index.html'><div class='logo-container rust-logo'><img src='../../../../rust-logo1.58.0.png' alt='logo'></div></a><h2 class="location">Trait MetadataExt</h2><div class="sidebar-elems"><div class="block items"><h3 class="sidebar-title"><a href="#required-methods">Required Methods</a></h3><div class="sidebar-links"><a href="#tymethod.atime">atime</a><a href="#tymethod.atime_nsec">atime_nsec</a><a href="#tymethod.blksize">blksize</a><a href="#tymethod.blocks">blocks</a><a href="#tymethod.ctime">ctime</a><a href="#tymethod.ctime_nsec">ctime_nsec</a><a href="#tymethod.dev">dev</a><a href="#tymethod.gid">gid</a><a href="#tymethod.ino">ino</a><a href="#tymethod.mode">mode</a><a href="#tymethod.mtime">mtime</a><a href="#tymethod.mtime_nsec">mtime_nsec</a><a href="#tymethod.nlink">nlink</a><a href="#tymethod.rdev">rdev</a><a href="#tymethod.size">size</a><a href="#tymethod.uid">uid</a></div><h3 class="sidebar-title"><a href="#implementors">Implementors</a></h3></div><h2 class="location">Other items in<br><a href="../../../index.html">std</a>::<wbr><a href="../../index.html">os</a>::<wbr><a href="../index.html">unix</a>::<wbr><a href="index.html">fs</a></h2><div id="sidebar-vars" data-name="MetadataExt" data-ty="trait" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Trait <a href="../../../index.html">std</a>::<wbr><a href="../../index.html">os</a>::<wbr><a href="../index.html">unix</a>::<wbr><a href="index.html">fs</a>::<wbr><a class="trait" href="#">MetadataExt</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../../../clipboard1.58.0.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span class="since" title="Stable since Rust version 1.1.0">1.1.0</span><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#373-661" title="goto source code">[src]</a></span></h1><div class="docblock type-decl"><pre class="rust trait"><code>pub trait MetadataExt {
-<details class="rustdoc-toggle type-contents-toggle"><summary class="hideme"><span>Show 16 methods</span></summary>    fn <a href="#tymethod.dev" class="fnname">dev</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.ino" class="fnname">ino</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.mode" class="fnname">mode</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u32.html">u32</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.nlink" class="fnname">nlink</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.uid" class="fnname">uid</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u32.html">u32</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.gid" class="fnname">gid</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u32.html">u32</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.rdev" class="fnname">rdev</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.size" class="fnname">size</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.atime" class="fnname">atime</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.atime_nsec" class="fnname">atime_nsec</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.mtime" class="fnname">mtime</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.mtime_nsec" class="fnname">mtime_nsec</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.ctime" class="fnname">ctime</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.ctime_nsec" class="fnname">ctime_nsec</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.blksize" class="fnname">blksize</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
-<div class="item-spacer"></div>    fn <a href="#tymethod.blocks" class="fnname">blocks</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
-</details>}</code></pre></div><div class="item-info"><div class="stab portability">This is supported on <strong>Unix</strong> only.</div></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>特定于 Unix 的 <a href="../../../fs/struct.Metadata.html" title="fs::Metadata"><code>fs::Metadata</code></a> 扩展。</p>
-</div></details><h2 id="required-methods" class="small-section-header">Required methods<a href="#required-methods" class="anchor"></a></h2><div class="methods"><details class="rustdoc-toggle" open><summary><div id="tymethod.dev" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#390" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.dev" class="fnname">dev</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></div></summary><div class="docblock"><p>返回包含文件的设备的 ID。</p>
-<h5 id="examples" class="section-header"><a href="#examples">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>;
-<span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="特定于 Unix 的 `fs::Metadata` 扩展。"><title>MetadataExt in std::os::unix::fs - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="sidebar-items1.71.0.js"></script><script defer src="../../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../../../std/index.html"><img class="rust-logo" src="../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../../../std/index.html"><img class="rust-logo" src="../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">MetadataExt</a></h2><div class="sidebar-elems"><section><h3><a href="#required-methods">Required Methods</a></h3><ul class="block"><li><a href="#tymethod.atime">atime</a></li><li><a href="#tymethod.atime_nsec">atime_nsec</a></li><li><a href="#tymethod.blksize">blksize</a></li><li><a href="#tymethod.blocks">blocks</a></li><li><a href="#tymethod.ctime">ctime</a></li><li><a href="#tymethod.ctime_nsec">ctime_nsec</a></li><li><a href="#tymethod.dev">dev</a></li><li><a href="#tymethod.gid">gid</a></li><li><a href="#tymethod.ino">ino</a></li><li><a href="#tymethod.mode">mode</a></li><li><a href="#tymethod.mtime">mtime</a></li><li><a href="#tymethod.mtime_nsec">mtime_nsec</a></li><li><a href="#tymethod.nlink">nlink</a></li><li><a href="#tymethod.rdev">rdev</a></li><li><a href="#tymethod.size">size</a></li><li><a href="#tymethod.uid">uid</a></li></ul><h3><a href="#implementors">Implementors</a></h3></section><h2><a href="index.html">In std::os::unix::fs</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Trait <a href="../../../index.html">std</a>::<wbr><a href="../../index.html">os</a>::<wbr><a href="../index.html">unix</a>::<wbr><a href="index.html">fs</a>::<wbr><a class="trait" href="#">MetadataExt</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><span class="since" title="Stable since Rust version 1.1.0">1.1.0</span> · <a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#403-691">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub trait MetadataExt {
+<details class="toggle type-contents-toggle"><summary class="hideme"><span>Show 16 methods</span></summary>    // Required methods
+    fn <a href="#tymethod.dev" class="fn">dev</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.ino" class="fn">ino</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.mode" class="fn">mode</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u32.html">u32</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.nlink" class="fn">nlink</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.uid" class="fn">uid</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u32.html">u32</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.gid" class="fn">gid</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u32.html">u32</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.rdev" class="fn">rdev</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.size" class="fn">size</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.atime" class="fn">atime</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.atime_nsec" class="fn">atime_nsec</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.mtime" class="fn">mtime</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.mtime_nsec" class="fn">mtime_nsec</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.ctime" class="fn">ctime</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.ctime_nsec" class="fn">ctime_nsec</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.blksize" class="fn">blksize</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.blocks" class="fn">blocks</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a>;
+</details>}</code></pre><span class="item-info"><div class="stab portability">Available on <strong>Unix</strong> only.</div></span><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>特定于 Unix 的 <a href="../../../fs/struct.Metadata.html" title="struct std::fs::Metadata"><code>fs::Metadata</code></a> 扩展。</p>
+</div></details><h2 id="required-methods" class="small-section-header">Required Methods<a href="#required-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="tymethod.dev" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#420">source</a><h4 class="code-header">fn <a href="#tymethod.dev" class="fn">dev</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></section></summary><div class="docblock"><p>返回包含文件的设备的 ID。</p>
+<h5 id="examples"><a href="#examples">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io;
+<span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">dev_id</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">dev</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>dev_id = meta.dev();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Aio%3B%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20dev_id%20%3D%20meta.dev()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.ino" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#407" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.ino" class="fnname">ino</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></div></summary><div class="docblock"><p>返回索引节点号。</p>
-<h5 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::io;%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+dev_id+=+meta.dev();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.ino" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#437">source</a><h4 class="code-header">fn <a href="#tymethod.ino" class="fn">ino</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></section></summary><div class="docblock"><p>返回索引节点号。</p>
+<h5 id="examples-1"><a href="#examples-1">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">inode</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">ino</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>inode = meta.ino();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20inode%20%3D%20meta.ino()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.mode" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#428" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.mode" class="fnname">mode</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u32.html">u32</a></h4></div></summary><div class="docblock"><p>返回应用于此文件的权限。</p>
-<h5 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+inode+=+meta.ino();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.mode" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#458">source</a><h4 class="code-header">fn <a href="#tymethod.mode" class="fn">mode</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u32.html">u32</a></h4></section></summary><div class="docblock"><p>返回应用于此文件的权限。</p>
+<h5 id="examples-2"><a href="#examples-2">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">mode</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">mode</span>();
-    <span class="kw">let</span> <span class="ident">user_has_write_access</span>      <span class="op">=</span> <span class="ident">mode</span> <span class="op">&amp;</span> <span class="number">0o200</span>;
-    <span class="kw">let</span> <span class="ident">user_has_read_write_access</span> <span class="op">=</span> <span class="ident">mode</span> <span class="op">&amp;</span> <span class="number">0o600</span>;
-    <span class="kw">let</span> <span class="ident">group_has_read_access</span>      <span class="op">=</span> <span class="ident">mode</span> <span class="op">&amp;</span> <span class="number">0o040</span>;
-    <span class="kw">let</span> <span class="ident">others_have_exec_access</span>    <span class="op">=</span> <span class="ident">mode</span> <span class="op">&amp;</span> <span class="number">0o001</span>;
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>mode = meta.mode();
+    <span class="kw">let </span>user_has_write_access      = mode &amp; <span class="number">0o200</span>;
+    <span class="kw">let </span>user_has_read_write_access = mode &amp; <span class="number">0o600</span>;
+    <span class="kw">let </span>group_has_read_access      = mode &amp; <span class="number">0o040</span>;
+    <span class="kw">let </span>others_have_exec_access    = mode &amp; <span class="number">0o001</span>;
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20mode%20%3D%20meta.mode()%3B%0A%20%20%20%20let%20user_has_write_access%20%20%20%20%20%20%3D%20mode%20%26%200o200%3B%0A%20%20%20%20let%20user_has_read_write_access%20%3D%20mode%20%26%200o600%3B%0A%20%20%20%20let%20group_has_read_access%20%20%20%20%20%20%3D%20mode%20%26%200o040%3B%0A%20%20%20%20let%20others_have_exec_access%20%20%20%20%3D%20mode%20%26%200o001%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.nlink" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#445" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.nlink" class="fnname">nlink</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></div></summary><div class="docblock"><p>返回指向该文件的硬链接数。</p>
-<h5 id="examples-3" class="section-header"><a href="#examples-3">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+mode+=+meta.mode();%0A++++let+user_has_write_access++++++=+mode+%26+0o200;%0A++++let+user_has_read_write_access+=+mode+%26+0o600;%0A++++let+group_has_read_access++++++=+mode+%26+0o040;%0A++++let+others_have_exec_access++++=+mode+%26+0o001;%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.nlink" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#475">source</a><h4 class="code-header">fn <a href="#tymethod.nlink" class="fn">nlink</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></section></summary><div class="docblock"><p>返回指向该文件的硬链接数。</p>
+<h5 id="examples-3"><a href="#examples-3">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">nb_hard_links</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">nlink</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>nb_hard_links = meta.nlink();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20nb_hard_links%20%3D%20meta.nlink()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.uid" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#462" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.uid" class="fnname">uid</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u32.html">u32</a></h4></div></summary><div class="docblock"><p>返回此文件所有者的用户标识。</p>
-<h5 id="examples-4" class="section-header"><a href="#examples-4">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+nb_hard_links+=+meta.nlink();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.uid" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#492">source</a><h4 class="code-header">fn <a href="#tymethod.uid" class="fn">uid</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u32.html">u32</a></h4></section></summary><div class="docblock"><p>返回此文件所有者的用户标识。</p>
+<h5 id="examples-4"><a href="#examples-4">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">user_id</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">uid</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>user_id = meta.uid();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20user_id%20%3D%20meta.uid()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.gid" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#479" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.gid" class="fnname">gid</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u32.html">u32</a></h4></div></summary><div class="docblock"><p>返回此文件所有者的组 ID。</p>
-<h5 id="examples-5" class="section-header"><a href="#examples-5">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+user_id+=+meta.uid();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.gid" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#509">source</a><h4 class="code-header">fn <a href="#tymethod.gid" class="fn">gid</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u32.html">u32</a></h4></section></summary><div class="docblock"><p>返回此文件所有者的组 ID。</p>
+<h5 id="examples-5"><a href="#examples-5">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">group_id</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">gid</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>group_id = meta.gid();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20group_id%20%3D%20meta.gid()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.rdev" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#496" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.rdev" class="fnname">rdev</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></div></summary><div class="docblock"><p>返回此文件的设备 ID (如果是特殊文件)。</p>
-<h5 id="examples-6" class="section-header"><a href="#examples-6">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+group_id+=+meta.gid();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.rdev" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#526">source</a><h4 class="code-header">fn <a href="#tymethod.rdev" class="fn">rdev</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></section></summary><div class="docblock"><p>返回此文件的设备 ID (如果是特殊文件)。</p>
+<h5 id="examples-6"><a href="#examples-6">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">device_id</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">rdev</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>device_id = meta.rdev();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20device_id%20%3D%20meta.rdev()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.size" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#513" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.size" class="fnname">size</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></div></summary><div class="docblock"><p>返回此文件的总大小 (以字节为单位)。</p>
-<h5 id="examples-7" class="section-header"><a href="#examples-7">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+device_id+=+meta.rdev();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.size" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#543">source</a><h4 class="code-header">fn <a href="#tymethod.size" class="fn">size</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></section></summary><div class="docblock"><p>返回此文件的总大小 (以字节为单位)。</p>
+<h5 id="examples-7"><a href="#examples-7">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">file_size</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">size</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>file_size = meta.size();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20file_size%20%3D%20meta.size()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.atime" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#530" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.atime" class="fnname">atime</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a></h4></div></summary><div class="docblock"><p>返回文件的最后访问时间，以自 Unix 纪元以来的秒数为单位。</p>
-<h5 id="examples-8" class="section-header"><a href="#examples-8">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+file_size+=+meta.size();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.atime" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#560">source</a><h4 class="code-header">fn <a href="#tymethod.atime" class="fn">atime</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>返回文件的最后访问时间，以自 Unix 纪元以来的秒数为单位。</p>
+<h5 id="examples-8"><a href="#examples-8">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">last_access_time</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">atime</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>last_access_time = meta.atime();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20last_access_time%20%3D%20meta.atime()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.atime_nsec" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#549" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.atime_nsec" class="fnname">atime_nsec</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a></h4></div></summary><div class="docblock"><p>返回文件的最后访问时间，自 <a href="trait.MetadataExt.html#tymethod.atime"><code>atime</code></a> 起以纳秒为单位。</p>
-<h5 id="examples-9" class="section-header"><a href="#examples-9">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+last_access_time+=+meta.atime();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.atime_nsec" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#579">source</a><h4 class="code-header">fn <a href="#tymethod.atime_nsec" class="fn">atime_nsec</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>返回文件的最后访问时间，自 <a href="trait.MetadataExt.html#tymethod.atime" title="method std::os::unix::fs::MetadataExt::atime"><code>atime</code></a> 起以纳秒为单位。</p>
+<h5 id="examples-9"><a href="#examples-9">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">nano_last_access_time</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">atime_nsec</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>nano_last_access_time = meta.atime_nsec();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20nano_last_access_time%20%3D%20meta.atime_nsec()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.mtime" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#566" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.mtime" class="fnname">mtime</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a></h4></div></summary><div class="docblock"><p>返回文件的最后修改时间，以自 Unix 纪元以来的秒数为单位。</p>
-<h5 id="examples-10" class="section-header"><a href="#examples-10">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+nano_last_access_time+=+meta.atime_nsec();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.mtime" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#596">source</a><h4 class="code-header">fn <a href="#tymethod.mtime" class="fn">mtime</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>返回文件的最后修改时间，以自 Unix 纪元以来的秒数为单位。</p>
+<h5 id="examples-10"><a href="#examples-10">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">last_modification_time</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">mtime</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>last_modification_time = meta.mtime();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20last_modification_time%20%3D%20meta.mtime()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.mtime_nsec" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#585" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.mtime_nsec" class="fnname">mtime_nsec</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a></h4></div></summary><div class="docblock"><p>返回文件的最后修改时间，自 <a href="trait.MetadataExt.html#tymethod.mtime"><code>mtime</code></a> 起以纳秒为单位。</p>
-<h5 id="examples-11" class="section-header"><a href="#examples-11">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+last_modification_time+=+meta.mtime();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.mtime_nsec" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#615">source</a><h4 class="code-header">fn <a href="#tymethod.mtime_nsec" class="fn">mtime_nsec</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>返回文件的最后修改时间，自 <a href="trait.MetadataExt.html#tymethod.mtime" title="method std::os::unix::fs::MetadataExt::mtime"><code>mtime</code></a> 起以纳秒为单位。</p>
+<h5 id="examples-11"><a href="#examples-11">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">nano_last_modification_time</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">mtime_nsec</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>nano_last_modification_time = meta.mtime_nsec();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20nano_last_modification_time%20%3D%20meta.mtime_nsec()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.ctime" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#602" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.ctime" class="fnname">ctime</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a></h4></div></summary><div class="docblock"><p>返回文件的最后状态更改时间，以自 Unix 纪元以来的秒数为单位。</p>
-<h5 id="examples-12" class="section-header"><a href="#examples-12">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+nano_last_modification_time+=+meta.mtime_nsec();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.ctime" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#632">source</a><h4 class="code-header">fn <a href="#tymethod.ctime" class="fn">ctime</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>返回文件的最后状态更改时间，以自 Unix 纪元以来的秒数为单位。</p>
+<h5 id="examples-12"><a href="#examples-12">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">last_status_change_time</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">ctime</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>last_status_change_time = meta.ctime();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20last_status_change_time%20%3D%20meta.ctime()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.ctime_nsec" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#621" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.ctime_nsec" class="fnname">ctime_nsec</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a></h4></div></summary><div class="docblock"><p>返回文件的最后状态更改时间，自 <a href="trait.MetadataExt.html#tymethod.ctime"><code>ctime</code></a> 起以纳秒为单位。</p>
-<h5 id="examples-13" class="section-header"><a href="#examples-13">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+last_status_change_time+=+meta.ctime();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.ctime_nsec" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#651">source</a><h4 class="code-header">fn <a href="#tymethod.ctime_nsec" class="fn">ctime_nsec</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>返回文件的最后状态更改时间，自 <a href="trait.MetadataExt.html#tymethod.ctime" title="method std::os::unix::fs::MetadataExt::ctime"><code>ctime</code></a> 起以纳秒为单位。</p>
+<h5 id="examples-13"><a href="#examples-13">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">nano_last_status_change_time</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">ctime_nsec</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>nano_last_status_change_time = meta.ctime_nsec();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20nano_last_status_change_time%20%3D%20meta.ctime_nsec()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.blksize" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#638" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.blksize" class="fnname">blksize</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></div></summary><div class="docblock"><p>返回文件系统 I/O 的块大小。</p>
-<h5 id="examples-14" class="section-header"><a href="#examples-14">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+nano_last_status_change_time+=+meta.ctime_nsec();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.blksize" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#668">source</a><h4 class="code-header">fn <a href="#tymethod.blksize" class="fn">blksize</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></section></summary><div class="docblock"><p>返回文件系统 I/O 的块大小。</p>
+<h5 id="examples-14"><a href="#examples-14">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">block_size</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">blksize</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>block_size = meta.blksize();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20block_size%20%3D%20meta.blksize()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details><details class="rustdoc-toggle" open><summary><div id="tymethod.blocks" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#657" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#tymethod.blocks" class="fnname">blocks</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></div></summary><div class="docblock"><p>返回以 512 字节为单位分配给文件的块数。</p>
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+block_size+=+meta.blksize();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.blocks" class="method"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#687">source</a><h4 class="code-header">fn <a href="#tymethod.blocks" class="fn">blocks</a>(&amp;self) -&gt; <a class="primitive" href="../../../primitive.u64.html">u64</a></h4></section></summary><div class="docblock"><p>返回以 512 字节为单位分配给文件的块数。</p>
 <p>请注意，当文件有 holes 时，这个值可能小于 <code>st_size / 512</code>。</p>
-<h5 id="examples-15" class="section-header"><a href="#examples-15">Examples</a></h5>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">use</span> <span class="ident">std::os::unix::fs::MetadataExt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
+<h5 id="examples-15"><a href="#examples-15">Examples</a></h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::os::unix::fs::MetadataExt;
+<span class="kw">use </span>std::io;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">fs::metadata</span>(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let</span> <span class="ident">blocks</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">blocks</span>();
+<span class="kw">fn </span>main() -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>meta = fs::metadata(<span class="string">&quot;some_file&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>blocks = meta.blocks();
     <span class="prelude-val">Ok</span>(())
-}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause%20std%3A%3Afs%3B%0Ause%20std%3A%3Aos%3A%3Aunix%3A%3Afs%3A%3AMetadataExt%3B%0Ause%20std%3A%3Aio%3B%0A%0Afn%20main()%20-%3E%20io%3A%3AResult%3C()%3E%20%7B%0A%20%20%20%20let%20meta%20%3D%20fs%3A%3Ametadata(%22some_file%22)%3F%3B%0A%20%20%20%20let%20blocks%20%3D%20meta.blocks()%3B%0A%20%20%20%20Ok(())%0A%7D&amp;edition=2018">Run</a></div>
-</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor"></a></h2><div class="item-list" id="implementors-list"><div id="impl-MetadataExt" class="impl has-srclink"><div class="rightside"><a class="srclink" href="../../../../src/std/os/unix/fs.rs.html#664-717" title="goto source code">[src]</a></div><a href="#impl-MetadataExt" class="anchor"></a><h3 class="code-header in-band">impl <a class="trait" href="trait.MetadataExt.html" title="trait std::os::unix::fs::MetadataExt">MetadataExt</a> for <a class="struct" href="../../../fs/struct.Metadata.html" title="struct std::fs::Metadata">Metadata</a></h3></div></div><script type="text/javascript" src="../../../../implementors/std/os/unix/fs/trait.MetadataExt.js" async></script></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="std" data-search-index-js="../../../../search-index1.58.0.js" data-search-js="../../../../search1.58.0.js"></div>
-    <script src="../../../../main1.58.0.js"></script>
-</body></html>
+}</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Ause+std::fs;%0Ause+std::os::unix::fs::MetadataExt;%0Ause+std::io;%0A%0Afn+main()+-%3E+io::Result%3C()%3E+%7B%0A++++let+meta+=+fs::metadata(%22some_file%22)?;%0A++++let+blocks+=+meta.blocks();%0A++++Ok(())%0A%7D&amp;edition=2021">Run</a></div>
+</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><section id="impl-MetadataExt-for-Metadata" class="impl"><a class="srclink rightside" href="../../../../src/std/os/unix/fs.rs.html#694-747">source</a><a href="#impl-MetadataExt-for-Metadata" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.MetadataExt.html" title="trait std::os::unix::fs::MetadataExt">MetadataExt</a> for <a class="struct" href="../../../fs/struct.Metadata.html" title="struct std::fs::Metadata">Metadata</a></h3></section></div><script src="../../../../implementors/std/os/unix/fs/trait.MetadataExt.js" async></script></section></div></main></body></html>

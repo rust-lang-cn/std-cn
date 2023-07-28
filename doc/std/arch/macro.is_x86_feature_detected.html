@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="一个在运行时测试 x86/x86-64 平台上是否具有 CPU 特性的宏。"><title>is_x86_feature_detected in std::arch - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="sidebar-items1.71.0.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../std/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../std/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><div class="sidebar-elems"><h2><a href="index.html">In std::arch</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="../index.html">std</a>::<wbr><a href="index.html">arch</a>::<wbr><a class="macro" href="#">is_x86_feature_detected</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><span class="since" title="Stable since Rust version 1.27.0">1.27.0</span> · <a class="srclink" href="https://doc.rust-lang.org/nightly/src/std_detect/detect/arch/x86.rs.html#18-206">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><span class="macro">macro_rules! </span>is_x86_feature_detected {
+    (<span class="string">&quot;aes&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;pclmulqdq&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;rdrand&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;rdseed&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;tsc&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;mmx&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sse&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sse2&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sse3&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;ssse3&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sse4.1&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sse4.2&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sse4a&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sha&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx2&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512f&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512cd&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512er&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512pf&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512bw&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512dq&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512vl&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512ifma&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512vbmi&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512vpopcntdq&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512vbmi2&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;gfni&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;vaes&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;vpclmulqdq&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512vnni&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512bitalg&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512bf16&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512vp2intersect&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;f16c&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;fma&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;bmi1&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;bmi2&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;lzcnt&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;tbm&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;popcnt&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;fxsr&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;xsave&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;xsaveopt&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;xsaves&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;xsavec&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;cmpxchg16b&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;adx&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;rtm&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;movbe&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;ermsb&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;abm&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512gfni&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512vaes&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;avx512vpclmulqdq&quot;</span>) =&gt; { ... };
+    (<span class="macro-nonterminal">$t</span>:tt,) =&gt; { ... };
+    (<span class="macro-nonterminal">$t</span>:tt) =&gt; { ... };
+}</pre><span class="item-info"><div class="stab portability">Available on <strong>x86 or x86-64</strong> only.</div></span><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>一个在运行时测试 x86/x86-64 平台上是否具有 CPU 特性的宏。</p>
+<p>标准库中提供了此宏，它将在运行时检测是否检测到指定的 CPU 特性。</p>
+<p>除非在整个 crate 中启用了指定特性，否则在编译时不会解析。
+当前，运行时检测主要依赖于 <code>cpuid</code> 指令。</p>
+<p>该宏仅使用一个参数，该参数是要测试的特性的字符串字面量。
+支持的特性名称是 <a href="https://software.intel.com/sites/landingpage/IntrinsicsGuide">their 文档</a> 中 Intel 定义的特性的小写版本。</p>
+<h3 id="支持的参数"><a href="#支持的参数">支持的参数</a></h3>
+<p>该宏支持 <code>#[target_feature]</code> 支持的相同名称。
+但是，与 <code>#[target_feature]</code> 不同，此宏不支持用逗号分隔的名称。
+相反，现在必须通过单独的宏调用来测试多个特性。</p>
+<p>支持的参数有：</p>
+<ul>
+<li><code>&quot;aes&quot;</code></li>
+<li><code>&quot;pclmulqdq&quot;</code></li>
+<li><code>&quot;rdrand&quot;</code></li>
+<li><code>&quot;rdseed&quot;</code></li>
+<li><code>&quot;tsc&quot;</code></li>
+<li><code>&quot;mmx&quot;</code></li>
+<li><code>&quot;sse&quot;</code></li>
+<li><code>&quot;sse2&quot;</code></li>
+<li><code>&quot;sse3&quot;</code></li>
+<li><code>&quot;ssse3&quot;</code></li>
+<li><code>&quot;sse4.1&quot;</code></li>
+<li><code>&quot;sse4.2&quot;</code></li>
+<li><code>&quot;sse4a&quot;</code></li>
+<li><code>&quot;sha&quot;</code></li>
+<li><code>&quot;avx&quot;</code></li>
+<li><code>&quot;avx2&quot;</code></li>
+<li><code>&quot;avx512f&quot;</code></li>
+<li><code>&quot;avx512cd&quot;</code></li>
+<li><code>&quot;avx512er&quot;</code></li>
+<li><code>&quot;avx512pf&quot;</code></li>
+<li><code>&quot;avx512bw&quot;</code></li>
+<li><code>&quot;avx512dq&quot;</code></li>
+<li><code>&quot;avx512vl&quot;</code></li>
+<li><code>&quot;avx512ifma&quot;</code></li>
+<li><code>&quot;avx512vbmi&quot;</code></li>
+<li><code>&quot;avx512vpopcntdq&quot;</code></li>
+<li><code>&quot;avx512vbmi2&quot;</code></li>
+<li><code>&quot;gfni&quot;</code></li>
+<li><code>&quot;vaes&quot;</code></li>
+<li><code>&quot;vpclmulqdq&quot;</code></li>
+<li><code>&quot;avx512vnni&quot;</code></li>
+<li><code>&quot;avx512bitalg&quot;</code></li>
+<li><code>&quot;avx512bf16&quot;</code></li>
+<li><code>&quot;avx512vp2intersect&quot;</code></li>
+<li><code>&quot;f16c&quot;</code></li>
+<li><code>&quot;fma&quot;</code></li>
+<li><code>&quot;bmi1&quot;</code></li>
+<li><code>&quot;bmi2&quot;</code></li>
+<li><code>&quot;abm&quot;</code></li>
+<li><code>&quot;lzcnt&quot;</code></li>
+<li><code>&quot;tbm&quot;</code></li>
+<li><code>&quot;popcnt&quot;</code></li>
+<li><code>&quot;fxsr&quot;</code></li>
+<li><code>&quot;xsave&quot;</code></li>
+<li><code>&quot;xsaveopt&quot;</code></li>
+<li><code>&quot;xsaves&quot;</code></li>
+<li><code>&quot;xsavec&quot;</code></li>
+<li><code>&quot;cmpxchg16b&quot;</code></li>
+<li><code>&quot;adx&quot;</code></li>
+<li><code>&quot;rtm&quot;</code></li>
+<li><code>&quot;movbe&quot;</code></li>
+<li><code>&quot;ermsb&quot;</code></li>
+</ul>
+</div></details></section></div></main></body></html>

@@ -1,0 +1,641 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Dependency Resolution - The Cargo Book</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+            dd {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/first-steps.html"><strong aria-hidden="true">1.2.</strong> First Steps with Cargo</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Cargo Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-cargo-exists.html"><strong aria-hidden="true">2.1.</strong> Why Cargo Exists</a></li><li class="chapter-item expanded "><a href="../guide/creating-a-new-project.html"><strong aria-hidden="true">2.2.</strong> Creating a New Package</a></li><li class="chapter-item expanded "><a href="../guide/working-on-an-existing-project.html"><strong aria-hidden="true">2.3.</strong> Working on an Existing Package</a></li><li class="chapter-item expanded "><a href="../guide/dependencies.html"><strong aria-hidden="true">2.4.</strong> Dependencies</a></li><li class="chapter-item expanded "><a href="../guide/project-layout.html"><strong aria-hidden="true">2.5.</strong> Package Layout</a></li><li class="chapter-item expanded "><a href="../guide/cargo-toml-vs-cargo-lock.html"><strong aria-hidden="true">2.6.</strong> Cargo.toml vs Cargo.lock</a></li><li class="chapter-item expanded "><a href="../guide/tests.html"><strong aria-hidden="true">2.7.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../guide/continuous-integration.html"><strong aria-hidden="true">2.8.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../guide/cargo-home.html"><strong aria-hidden="true">2.9.</strong> Cargo Home</a></li><li class="chapter-item expanded "><a href="../guide/build-cache.html"><strong aria-hidden="true">2.10.</strong> Build Cache</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">3.</strong> Cargo Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/specifying-dependencies.html"><strong aria-hidden="true">3.1.</strong> Specifying Dependencies</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/overriding-dependencies.html"><strong aria-hidden="true">3.1.1.</strong> Overriding Dependencies</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/manifest.html"><strong aria-hidden="true">3.2.</strong> The Manifest Format</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/cargo-targets.html"><strong aria-hidden="true">3.2.1.</strong> Cargo Targets</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/workspaces.html"><strong aria-hidden="true">3.3.</strong> Workspaces</a></li><li class="chapter-item expanded "><a href="../reference/features.html"><strong aria-hidden="true">3.4.</strong> Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/features-examples.html"><strong aria-hidden="true">3.4.1.</strong> Features Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/profiles.html"><strong aria-hidden="true">3.5.</strong> Profiles</a></li><li class="chapter-item expanded "><a href="../reference/config.html"><strong aria-hidden="true">3.6.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../reference/environment-variables.html"><strong aria-hidden="true">3.7.</strong> Environment Variables</a></li><li class="chapter-item expanded "><a href="../reference/build-scripts.html"><strong aria-hidden="true">3.8.</strong> Build Scripts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/build-script-examples.html"><strong aria-hidden="true">3.8.1.</strong> Build Script Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/publishing.html"><strong aria-hidden="true">3.9.</strong> Publishing on crates.io</a></li><li class="chapter-item expanded "><a href="../reference/pkgid-spec.html"><strong aria-hidden="true">3.10.</strong> Package ID Specifications</a></li><li class="chapter-item expanded "><a href="../reference/source-replacement.html"><strong aria-hidden="true">3.11.</strong> Source Replacement</a></li><li class="chapter-item expanded "><a href="../reference/external-tools.html"><strong aria-hidden="true">3.12.</strong> External Tools</a></li><li class="chapter-item expanded "><a href="../reference/registries.html"><strong aria-hidden="true">3.13.</strong> Registries</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/running-a-registry.html"><strong aria-hidden="true">3.13.1.</strong> Running a Registry</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/registry-index.html"><strong aria-hidden="true">3.13.1.1.</strong> Registry Index</a></li><li class="chapter-item expanded "><a href="../reference/registry-web-api.html"><strong aria-hidden="true">3.13.1.2.</strong> Registry Web API</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../reference/resolver.html" class="active"><strong aria-hidden="true">3.14.</strong> Dependency Resolution</a></li><li class="chapter-item expanded "><a href="../reference/semver.html"><strong aria-hidden="true">3.15.</strong> SemVer Compatibility</a></li><li class="chapter-item expanded "><a href="../reference/future-incompat-report.html"><strong aria-hidden="true">3.16.</strong> Future incompat report</a></li><li class="chapter-item expanded "><a href="../reference/timings.html"><strong aria-hidden="true">3.17.</strong> Reporting build timings</a></li><li class="chapter-item expanded "><a href="../reference/unstable.html"><strong aria-hidden="true">3.18.</strong> Unstable Features</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/index.html"><strong aria-hidden="true">4.</strong> Cargo Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/general-commands.html"><strong aria-hidden="true">4.1.</strong> General Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo.html"><strong aria-hidden="true">4.1.1.</strong> cargo</a></li><li class="chapter-item expanded "><a href="../commands/cargo-help.html"><strong aria-hidden="true">4.1.2.</strong> cargo help</a></li><li class="chapter-item expanded "><a href="../commands/cargo-version.html"><strong aria-hidden="true">4.1.3.</strong> cargo version</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/build-commands.html"><strong aria-hidden="true">4.2.</strong> Build Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-bench.html"><strong aria-hidden="true">4.2.1.</strong> cargo bench</a></li><li class="chapter-item expanded "><a href="../commands/cargo-build.html"><strong aria-hidden="true">4.2.2.</strong> cargo build</a></li><li class="chapter-item expanded "><a href="../commands/cargo-check.html"><strong aria-hidden="true">4.2.3.</strong> cargo check</a></li><li class="chapter-item expanded "><a href="../commands/cargo-clean.html"><strong aria-hidden="true">4.2.4.</strong> cargo clean</a></li><li class="chapter-item expanded "><a href="../commands/cargo-doc.html"><strong aria-hidden="true">4.2.5.</strong> cargo doc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fetch.html"><strong aria-hidden="true">4.2.6.</strong> cargo fetch</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fix.html"><strong aria-hidden="true">4.2.7.</strong> cargo fix</a></li><li class="chapter-item expanded "><a href="../commands/cargo-run.html"><strong aria-hidden="true">4.2.8.</strong> cargo run</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustc.html"><strong aria-hidden="true">4.2.9.</strong> cargo rustc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustdoc.html"><strong aria-hidden="true">4.2.10.</strong> cargo rustdoc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-test.html"><strong aria-hidden="true">4.2.11.</strong> cargo test</a></li><li class="chapter-item expanded "><a href="../commands/cargo-report.html"><strong aria-hidden="true">4.2.12.</strong> cargo report</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/manifest-commands.html"><strong aria-hidden="true">4.3.</strong> Manifest Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-add.html"><strong aria-hidden="true">4.3.1.</strong> cargo add</a></li><li class="chapter-item expanded "><a href="../commands/cargo-generate-lockfile.html"><strong aria-hidden="true">4.3.2.</strong> cargo generate-lockfile</a></li><li class="chapter-item expanded "><a href="../commands/cargo-locate-project.html"><strong aria-hidden="true">4.3.3.</strong> cargo locate-project</a></li><li class="chapter-item expanded "><a href="../commands/cargo-metadata.html"><strong aria-hidden="true">4.3.4.</strong> cargo metadata</a></li><li class="chapter-item expanded "><a href="../commands/cargo-pkgid.html"><strong aria-hidden="true">4.3.5.</strong> cargo pkgid</a></li><li class="chapter-item expanded "><a href="../commands/cargo-remove.html"><strong aria-hidden="true">4.3.6.</strong> cargo remove</a></li><li class="chapter-item expanded "><a href="../commands/cargo-tree.html"><strong aria-hidden="true">4.3.7.</strong> cargo tree</a></li><li class="chapter-item expanded "><a href="../commands/cargo-update.html"><strong aria-hidden="true">4.3.8.</strong> cargo update</a></li><li class="chapter-item expanded "><a href="../commands/cargo-vendor.html"><strong aria-hidden="true">4.3.9.</strong> cargo vendor</a></li><li class="chapter-item expanded "><a href="../commands/cargo-verify-project.html"><strong aria-hidden="true">4.3.10.</strong> cargo verify-project</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/package-commands.html"><strong aria-hidden="true">4.4.</strong> Package Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-init.html"><strong aria-hidden="true">4.4.1.</strong> cargo init</a></li><li class="chapter-item expanded "><a href="../commands/cargo-install.html"><strong aria-hidden="true">4.4.2.</strong> cargo install</a></li><li class="chapter-item expanded "><a href="../commands/cargo-new.html"><strong aria-hidden="true">4.4.3.</strong> cargo new</a></li><li class="chapter-item expanded "><a href="../commands/cargo-search.html"><strong aria-hidden="true">4.4.4.</strong> cargo search</a></li><li class="chapter-item expanded "><a href="../commands/cargo-uninstall.html"><strong aria-hidden="true">4.4.5.</strong> cargo uninstall</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/publishing-commands.html"><strong aria-hidden="true">4.5.</strong> Publishing Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-login.html"><strong aria-hidden="true">4.5.1.</strong> cargo login</a></li><li class="chapter-item expanded "><a href="../commands/cargo-logout.html"><strong aria-hidden="true">4.5.2.</strong> cargo logout</a></li><li class="chapter-item expanded "><a href="../commands/cargo-owner.html"><strong aria-hidden="true">4.5.3.</strong> cargo owner</a></li><li class="chapter-item expanded "><a href="../commands/cargo-package.html"><strong aria-hidden="true">4.5.4.</strong> cargo package</a></li><li class="chapter-item expanded "><a href="../commands/cargo-publish.html"><strong aria-hidden="true">4.5.5.</strong> cargo publish</a></li><li class="chapter-item expanded "><a href="../commands/cargo-yank.html"><strong aria-hidden="true">4.5.6.</strong> cargo yank</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">5.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">6.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/git-authentication.html"><strong aria-hidden="true">7.</strong> Appendix: Git Authentication</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Cargo Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/tree/master/src/doc/src" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/edit/master/src/doc/src/reference/resolver.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="dependency-resolution"><a class="header" href="#dependency-resolution">Dependency Resolution</a></h1>
+<p>One of Cargo’s primary tasks is to determine the versions of dependencies to
+use based on the version requirements specified in each package. This process
+is called “dependency resolution” and is performed by the “resolver”. The
+result of the resolution is stored in the <code>Cargo.lock</code> file which “locks” the
+dependencies to specific versions, and keeps them fixed over time.</p>
+<p>The resolver attempts to unify common dependencies while considering possibly
+conflicting requirements. It turns out, however, that in many cases there is no
+single “best” dependency resolution, and so the resolver must use heuristics to
+choose a preferred solution. The sections below provide some details on how
+requirements are handled, and how to work with the resolver.</p>
+<p>See the chapter <a href="specifying-dependencies.html">Specifying Dependencies</a> for more details about how
+dependency requirements are specified.</p>
+<p>The <a href="../commands/cargo-tree.html"><code>cargo tree</code></a> command can be used to visualize the result of the
+resolver.</p>
+<h2 id="semver-compatibility"><a class="header" href="#semver-compatibility">SemVer compatibility</a></h2>
+<p>Cargo uses <a href="https://semver.org/">SemVer</a> for specifying version numbers. This establishes a common
+convention for what is compatible between different versions of a package. See
+the <a href="semver.html">SemVer Compatibility</a> chapter for guidance on what is considered a
+“compatible” change. This notion of “compatibility” is important because Cargo
+assumes it should be safe to update a dependency within a compatibility range
+without breaking the build.</p>
+<p>Versions are considered compatible if their left-most non-zero
+major/minor/patch component is the same. For example, <code>1.0.3</code> and <code>1.1.0</code> are
+considered compatible, and thus it should be safe to update from the older
+release to the newer one. However, an update from <code>1.1.0</code> to <code>2.0.0</code> would not
+be allowed to be made automatically. This convention also applies to versions
+with leading zeros. For example, <code>0.1.0</code> and <code>0.1.2</code> are compatible, but
+<code>0.1.0</code> and <code>0.2.0</code> are not. Similarly, <code>0.0.1</code> and <code>0.0.2</code> are not
+compatible.</p>
+<p>As a quick refresher, the
+<a href="specifying-dependencies.html"><em>version requirement</em> syntax</a> Cargo uses for
+dependencies is:</p>
+<div class="table-wrapper"><table><thead><tr><th>Requirement</th><th>Example</th><th>Equivalence</th><th>Description</th></tr></thead><tbody>
+<tr><td>Caret</td><td><code>1.2.3</code> or <code>^1.2.3</code></td><td><code>&gt;=1.2.3, &lt;2.0.0</code></td><td>Any SemVer-compatible version of at least the given value.</td></tr>
+<tr><td>Tilde</td><td><code>~1.2</code></td><td><code>&gt;=1.2.0, &lt;1.3.0</code></td><td>Minimum version, with restricted compatibility range.</td></tr>
+<tr><td>Wildcard</td><td><code>1.*</code></td><td><code>&gt;=1.0.0, &lt;2.0.0</code></td><td>Any version in the <code>*</code> position.</td></tr>
+<tr><td>Equals</td><td><code>=1.2.3</code></td><td><code>=1.2.3</code></td><td>Exactly the specified version only.</td></tr>
+<tr><td>Comparison</td><td><code>&gt;1.1</code></td><td><code>&gt;=1.2.0</code></td><td>Naive numeric comparison of specified digits.</td></tr>
+<tr><td>Compound</td><td><code>&gt;=1.2, &lt;1.5</code></td><td><code>&gt;1.2.0, &lt;1.5.0</code></td><td>Multiple requirements that must be simultaneously satisfied.</td></tr>
+</tbody></table>
+</div>
+<p>When multiple packages specify a dependency for a common package, the resolver
+attempts to ensure that they use the same version of that common package, as
+long as they are within a SemVer compatibility range. It also attempts to use
+the greatest version currently available within that compatibility range. For
+example, if there are two packages in the resolve graph with the following
+requirements:</p>
+<pre><code class="language-toml"># Package A
+[dependencies]
+bitflags = &quot;1.0&quot;
+
+# Package B
+[dependencies]
+bitflags = &quot;1.1&quot;
+</code></pre>
+<p>If at the time the <code>Cargo.lock</code> file is generated, the greatest version of
+<code>bitflags</code> is <code>1.2.1</code>, then both packages will use <code>1.2.1</code> because it is the
+greatest within the compatibility range. If <code>2.0.0</code> is published, it will
+still use <code>1.2.1</code> because <code>2.0.0</code> is considered incompatible.</p>
+<p>If multiple packages have a common dependency with semver-incompatible
+versions, then Cargo will allow this, but will build two separate copies of
+the dependency. For example:</p>
+<pre><code class="language-toml"># Package A
+[dependencies]
+rand = &quot;0.7&quot;
+
+# Package B
+[dependencies]
+rand = &quot;0.6&quot;
+</code></pre>
+<p>The above will result in Package A using the greatest <code>0.7</code> release (<code>0.7.3</code>
+at the time of this writing) and Package B will use the greatest <code>0.6</code> release
+(<code>0.6.5</code> for example). This can lead to potential problems, see the
+<a href="#version-incompatibility-hazards">Version-incompatibility hazards</a> section for more details.</p>
+<p>Multiple versions within the same compatibility range are not allowed and will
+result in a resolver error if it is constrained to two different versions
+within a compatibility range. For example, if there are two packages in the
+resolve graph with the following requirements:</p>
+<pre><code class="language-toml"># Package A
+[dependencies]
+log = &quot;=0.4.11&quot;
+
+# Package B
+[dependencies]
+log = &quot;=0.4.8&quot;
+</code></pre>
+<p>The above will fail because it is not allowed to have two separate copies of
+the <code>0.4</code> release of the <code>log</code> package.</p>
+<h3 id="version-incompatibility-hazards"><a class="header" href="#version-incompatibility-hazards">Version-incompatibility hazards</a></h3>
+<p>When multiple versions of a crate appear in the resolve graph, this can cause
+problems when types from those crates are exposed by the crates using them.
+This is because the types and items are considered different by the Rust
+compiler, even if they have the same name. Libraries should take care when
+publishing a SemVer-incompatible version (for example, publishing <code>2.0.0</code>
+after <code>1.0.0</code> has been in use), particularly for libraries that are widely
+used.</p>
+<p>The “<a href="https://github.com/dtolnay/semver-trick">semver trick</a>” is a workaround for this problem of publishing a breaking
+change while retaining compatibility with older versions. The linked page goes
+into detail about what the problem is and how to address it. In short, when a
+library wants to publish a SemVer-breaking release, publish the new release,
+and also publish a point release of the previous version that reexports the
+types from the newer version.</p>
+<p>These incompatibilities usually manifest as a compile-time error, but
+sometimes they will only appear as a runtime misbehavior. For example, let’s
+say there is a common library named <code>foo</code> that ends up appearing with both
+version <code>1.0.0</code> and <code>2.0.0</code> in the resolve graph. If <a href="../../std/any/trait.Any.html#method.downcast_ref"><code>downcast_ref</code></a> is used
+on a object created by a library using version <code>1.0.0</code>, and the code calling
+<code>downcast_ref</code> is downcasting to a type from version <code>2.0.0</code>, the downcast
+will fail at runtime.</p>
+<p>It is important to make sure that if you have multiple versions of a library
+that you are properly using them, especially if it is ever possible for the
+types from different versions to be used together. The <a href="../commands/cargo-tree.html"><code>cargo tree -d</code></a> command can be used to identify duplicate versions and
+where they come from. Similarly, it is important to consider the impact on the
+ecosystem if you publish a SemVer-incompatible version of a popular library.</p>
+<h3 id="pre-releases"><a class="header" href="#pre-releases">Pre-releases</a></h3>
+<p>SemVer has the concept of “pre-releases” with a dash in the version, such as
+<code>1.0.0-alpha</code>, or <code>1.0.0-beta</code>. Cargo will avoid automatically using
+pre-releases unless explicitly asked. For example, if <code>1.0.0-alpha</code> of package
+<code>foo</code> is published, then a requirement of <code>foo = &quot;1.0&quot;</code> will <em>not</em> match, and
+will return an error. The pre-release must be specified, such as <code>foo = &quot;1.0.0-alpha&quot;</code>. Similarly <a href="../commands/cargo-install.html"><code>cargo install</code></a> will avoid pre-releases unless
+explicitly asked to install one.</p>
+<p>Cargo allows “newer” pre-releases to be used automatically. For example, if
+<code>1.0.0-beta</code> is published, then a requirement <code>foo = &quot;1.0.0-alpha&quot;</code> will allow
+updating to the <code>beta</code> version. Beware that pre-release versions can be
+unstable, and as such care should be taken when using them. Some projects may
+choose to publish breaking changes between pre-release versions. It is
+recommended to not use pre-release dependencies in a library if your library
+is not also a pre-release. Care should also be taken when updating your
+<code>Cargo.lock</code>, and be prepared if a pre-release update causes issues.</p>
+<p>The pre-release tag may be separated with periods to distinguish separate
+components. Numeric components will use numeric comparison. For example,
+<code>1.0.0-alpha.4</code> will use numeric comparison for the <code>4</code> component. That means
+that if <code>1.0.0-alpha.11</code> is published, that will be chosen as the greatest
+release. Non-numeric components are compared lexicographically.</p>
+<h3 id="version-metadata"><a class="header" href="#version-metadata">Version metadata</a></h3>
+<p>SemVer has the concept of “version metadata” with a plus in the version, such
+as <code>1.0.0+21AF26D3</code>. This metadata is usually ignored, and should not be used
+in a version requirement. You should never publish multiple versions that
+differ only in the metadata tag (note, this is a <a href="https://github.com/rust-lang/crates.io/issues/1059">known issue</a> with
+<a href="https://crates.io/">crates.io</a> that currently permits this).</p>
+<h2 id="other-constraints"><a class="header" href="#other-constraints">Other constraints</a></h2>
+<p>Version requirements aren’t the only constraint that the resolver considers
+when selecting and unifying dependencies. The following sections cover some of
+the other constraints that can affect resolution.</p>
+<h3 id="features"><a class="header" href="#features">Features</a></h3>
+<p>For the purpose of generating <code>Cargo.lock</code>, the resolver builds the dependency
+graph as-if all <a href="features.html">features</a> of all <a href="workspaces.html">workspace</a> members are enabled. This
+ensures that any optional dependencies are available and properly resolved
+with the rest of the graph when features are added or removed with the
+<a href="features.html#command-line-feature-options"><code>--features</code> command-line flag</a>.
+The resolver runs a second time to determine the actual features used when
+<em>compiling</em> a crate, based on the features selected on the command-line.</p>
+<p>Dependencies are resolved with the union of all features enabled on them. For
+example, if one package depends on the <a href="https://crates.io/crates/im"><code>im</code></a> package with the <a href="https://github.com/bodil/im-rs/blob/v15.0.0/Cargo.toml#L46"><code>serde</code>
+dependency</a> enabled and another package depends on it with the <a href="https://github.com/bodil/im-rs/blob/v15.0.0/Cargo.toml#L47"><code>rayon</code>
+dependency</a> enabled, then <code>im</code> will be built with both features enabled, and
+the <code>serde</code> and <code>rayon</code> crates will be included in the resolve graph. If no
+packages depend on <code>im</code> with those features, then those optional dependencies
+will be ignored, and they will not affect resolution.</p>
+<p>When building multiple packages in a workspace (such as with <code>--workspace</code> or
+multiple <code>-p</code> flags), the features of the dependencies of all of those
+packages are unified. If you have a circumstance where you want to avoid that
+unification for different workspace members, you will need to build them via
+separate <code>cargo</code> invocations.</p>
+<p>The resolver will skip over versions of packages that are missing required
+features. For example, if a package depends on version <code>^1</code> of <a href="https://crates.io/crates/regex"><code>regex</code></a> with
+the <a href="https://github.com/rust-lang/regex/blob/1.3.0/Cargo.toml#L56"><code>perf</code> feature</a>, then the oldest version it can select is <code>1.3.0</code>,
+because versions prior to that did not contain the <code>perf</code> feature. Similarly,
+if a feature is removed from a new release, then packages that require that
+feature will be stuck on the older releases that contain that feature. It is
+discouraged to remove features in a SemVer-compatible release. Beware that
+optional dependencies also define an implicit feature, so removing an optional
+dependency or making it non-optional can cause problems, see <a href="semver.html#cargo-remove-opt-dep">removing an
+optional dependency</a>.</p>
+<h4 id="feature-resolver-version-2"><a class="header" href="#feature-resolver-version-2">Feature resolver version 2</a></h4>
+<p>When <code>resolver = &quot;2&quot;</code> is specified in <code>Cargo.toml</code> (see <a href="#resolver-versions">resolver
+versions</a> below), a different feature resolver is used
+which uses a different algorithm for unifying features. The version <code>&quot;1&quot;</code>
+resolver will unify features for a package no matter where it is specified.
+The version <code>&quot;2&quot;</code> resolver will avoid unifying features in the following
+situations:</p>
+<ul>
+<li>
+<p>Features for target-specific dependencies are not enabled if the target is
+not currently being built. For example:</p>
+<pre><code class="language-toml">[dependencies.common]
+version = &quot;1.0&quot;
+features = [&quot;f1&quot;]
+
+[target.'cfg(windows)'.dependencies.common]
+version = &quot;1.0&quot;
+features = [&quot;f2&quot;]
+</code></pre>
+<p>When building this example for a non-Windows platform, the <code>f2</code> feature will
+<em>not</em> be enabled.</p>
+</li>
+<li>
+<p>Features enabled on <a href="specifying-dependencies.html#build-dependencies">build-dependencies</a> or proc-macros will not be unified
+when those same dependencies are used as a normal dependency. For example:</p>
+<pre><code class="language-toml">[dependencies]
+log = &quot;0.4&quot;
+
+[build-dependencies]
+log = {version = &quot;0.4&quot;, features=['std']}
+</code></pre>
+<p>When building the build script, the <code>log</code> crate will be built with the <code>std</code>
+feature. When building the library of your package, it will not enable the
+feature.</p>
+</li>
+<li>
+<p>Features enabled on <a href="specifying-dependencies.html#development-dependencies">dev-dependencies</a> will not be unified when those same
+dependencies are used as a normal dependency, unless those dev-dependencies
+are currently being built. For example:</p>
+<pre><code class="language-toml">[dependencies]
+serde = {version = &quot;1.0&quot;, default-features = false}
+
+[dev-dependencies]
+serde = {version = &quot;1.0&quot;, features = [&quot;std&quot;]}
+</code></pre>
+<p>In this example, the library will normally link against <code>serde</code> without the
+<code>std</code> feature. However, when built as a test or example, it will include the
+<code>std</code> feature. For example, <code>cargo test</code> or <code>cargo build --all-targets</code> will
+unify these features. Note that dev-dependencies in dependencies are always
+ignored, this is only relevant for the top-level package or workspace
+members.</p>
+</li>
+</ul>
+<h3 id="links"><a class="header" href="#links"><code>links</code></a></h3>
+<p>The <a href="manifest.html#the-links-field"><code>links</code> field</a> is used to ensure only one copy of a native library is
+linked into a binary. The resolver will attempt to find a graph where there is
+only one instance of each <code>links</code> name. If it is unable to find a graph that
+satisfies that constraint, it will return an error.</p>
+<p>For example, it is an error if one package depends on <a href="https://crates.io/crates/libgit2-sys"><code>libgit2-sys</code></a> version
+<code>0.11</code> and another depends on <code>0.12</code>, because Cargo is unable to unify those,
+but they both link to the <code>git2</code> native library. Due to this requirement, it
+is encouraged to be very careful when making SemVer-incompatible releases with
+the <code>links</code> field if your library is in common use.</p>
+<h3 id="yanked-versions"><a class="header" href="#yanked-versions">Yanked versions</a></h3>
+<p><a href="publishing.html#cargo-yank">Yanked releases</a> are those that are marked that they should not be
+used. When the resolver is building the graph, it will ignore all yanked
+releases unless they already exist in the <code>Cargo.lock</code> file.</p>
+<h2 id="dependency-updates"><a class="header" href="#dependency-updates">Dependency updates</a></h2>
+<p>Dependency resolution is automatically performed by all Cargo commands that
+need to know about the dependency graph. For example, <a href="../commands/cargo-build.html"><code>cargo build</code></a> will run
+the resolver to discover all the dependencies to build. After the first time
+it runs, the result is stored in the <code>Cargo.lock</code> file. Subsequent commands
+will run the resolver, keeping dependencies locked to the versions in
+<code>Cargo.lock</code> <em>if it can</em>.</p>
+<p>If the dependency list in <code>Cargo.toml</code> has been modified, for example changing
+the version of a dependency from <code>1.0</code> to <code>2.0</code>, then the resolver will select
+a new version for that dependency that matches the new requirements. If that
+new dependency introduces new requirements, those new requirements may also
+trigger additional updates. The <code>Cargo.lock</code> file will be updated with the new
+result. The <code>--locked</code> or <code>--frozen</code> flags can be used to change this behavior
+to prevent automatic updates when requirements change, and return an error
+instead.</p>
+<p><a href="../commands/cargo-update.html"><code>cargo update</code></a> can be used to update the entries in <code>Cargo.lock</code> when new
+versions are published. Without any options, it will attempt to update all
+packages in the lock file. The <code>-p</code> flag can be used to target the update for
+a specific package, and other flags such as <code>--aggressive</code> or <code>--precise</code> can
+be used to control how versions are selected.</p>
+<h2 id="overrides"><a class="header" href="#overrides">Overrides</a></h2>
+<p>Cargo has several mechanisms to override dependencies within the graph. The
+<a href="overriding-dependencies.html">Overriding Dependencies</a> chapter goes into detail on how to use overrides.
+The overrides appear as an overlay to a registry, replacing the patched
+version with the new entry. Otherwise, resolution is performed like normal.</p>
+<h2 id="dependency-kinds"><a class="header" href="#dependency-kinds">Dependency kinds</a></h2>
+<p>There are three kinds of dependencies in a package: normal, <a href="specifying-dependencies.html#build-dependencies">build</a>, and
+<a href="specifying-dependencies.html#development-dependencies">dev</a>. For the most part these are all treated the same from
+the perspective of the resolver. One difference is that dev-dependencies for
+non-workspace members are always ignored, and do not influence resolution.</p>
+<p><a href="specifying-dependencies.html#platform-specific-dependencies">Platform-specific dependencies</a> with the <code>[target]</code> table are resolved as-if
+all platforms are enabled. In other words, the resolver ignores the platform
+or <code>cfg</code> expression.</p>
+<h3 id="dev-dependency-cycles"><a class="header" href="#dev-dependency-cycles">dev-dependency cycles</a></h3>
+<p>Usually the resolver does not allow cycles in the graph, but it does allow
+them for <a href="specifying-dependencies.html#development-dependencies">dev-dependencies</a>. For example, project “foo” has a dev-dependency
+on “bar”, which has a normal dependency on “foo” (usually as a “path”
+dependency). This is allowed because there isn’t really a cycle from the
+perspective of the build artifacts. In this example, the “foo” library is
+built (which does not need “bar” because “bar” is only used for tests), and
+then “bar” can be built depending on “foo”, then the “foo” tests can be built
+linking to “bar”.</p>
+<p>Beware that this can lead to confusing errors. In the case of building library
+unit tests, there are actually two copies of the library linked into the final
+test binary: the one that was linked with “bar”, and the one built that
+contains the unit tests. Similar to the issues highlighted in the
+<a href="#version-incompatibility-hazards">Version-incompatibility hazards</a> section, the types between the two are not
+compatible. Be careful when exposing types of “foo” from “bar” in this
+situation, since the “foo” unit tests won’t treat them the same as the local
+types.</p>
+<p>If possible, try to split your package into multiple packages and restructure
+it so that it remains strictly acyclic.</p>
+<h2 id="resolver-versions"><a class="header" href="#resolver-versions">Resolver versions</a></h2>
+<p>A different feature resolver algorithm can be used by specifying the resolver
+version in <code>Cargo.toml</code> like this:</p>
+<pre><code class="language-toml">[package]
+name = &quot;my-package&quot;
+version = &quot;1.0.0&quot;
+resolver = &quot;2&quot;
+</code></pre>
+<p>The version <code>&quot;1&quot;</code> resolver is the original resolver that shipped with Cargo up to version 1.50.
+The default is <code>&quot;2&quot;</code> if the root package specifies <a href="manifest.html#the-edition-field"><code>edition = &quot;2021&quot;</code></a> or a newer edition.
+Otherwise the default is <code>&quot;1&quot;</code>.</p>
+<p>The version <code>&quot;2&quot;</code> resolver introduces changes in <a href="#features">feature
+unification</a>. See the <a href="features.html#feature-resolver-version-2">features chapter</a> for more
+details.</p>
+<p>The resolver is a global option that affects the entire workspace. The
+<code>resolver</code> version in dependencies is ignored, only the value in the top-level
+package will be used. If using a <a href="workspaces.html#virtual-workspace">virtual workspace</a>, the version should be
+specified in the <code>[workspace]</code> table, for example:</p>
+<pre><code class="language-toml">[workspace]
+members = [&quot;member1&quot;, &quot;member2&quot;]
+resolver = &quot;2&quot;
+</code></pre>
+<h2 id="recommendations"><a class="header" href="#recommendations">Recommendations</a></h2>
+<p>The following are some recommendations for setting the version within your
+package, and for specifying dependency requirements. These are general
+guidelines that should apply to common situations, but of course some
+situations may require specifying unusual requirements.</p>
+<ul>
+<li>
+<p>Follow the <a href="semver.html">SemVer guidelines</a> when deciding how to update your version
+number, and whether or not you will need to make a SemVer-incompatible
+version change.</p>
+</li>
+<li>
+<p>Use caret requirements for dependencies, such as <code>&quot;1.2.3&quot;</code>, for most
+situations. This ensures that the resolver can be maximally flexible in
+choosing a version while maintaining build compatibility.</p>
+<ul>
+<li>Specify all three components with the version you are currently using.
+This helps set the minimum version that will be used, and ensures that
+other users won’t end up with an older version of the dependency that
+might be missing something that your package requires.</li>
+<li>Avoid <code>*</code> requirements, as they are not allowed on <a href="https://crates.io/">crates.io</a>, and they
+can pull in SemVer-breaking changes during a normal <code>cargo update</code>.</li>
+<li>Avoid overly broad version requirements. For example, <code>&gt;=2.0.0</code> can pull
+in any SemVer-incompatible version, like version <code>5.0.0</code>, which can result
+in broken builds in the future.</li>
+<li>Avoid overly narrow version requirements if possible. For example, if you
+specify a tilde requirement like <code>bar=&quot;~1.3&quot;</code>, and another package
+specifies a requirement of <code>bar=&quot;1.4&quot;</code>, this will fail to resolve, even
+though minor releases should be compatible.</li>
+</ul>
+</li>
+<li>
+<p>Try to keep the dependency versions up-to-date with the actual minimum
+versions that your library requires. For example, if you have a requirement
+of <code>bar=&quot;1.0.12&quot;</code>, and then in a future release you start using new features
+added in the <code>1.1.0</code> release of “bar”, update your dependency requirement to
+<code>bar=&quot;1.1.0&quot;</code>.</p>
+<p>If you fail to do this, it may not be immediately obvious because Cargo can
+opportunistically choose the newest version when you run a blanket <code>cargo update</code>. However, if another user depends on your library, and runs <code>cargo update -p your-library</code>, it will <em>not</em> automatically update “bar” if it is
+locked in their <code>Cargo.lock</code>. It will only update “bar” in that situation if
+the dependency declaration is also updated. Failure to do so can cause
+confusing build errors for the user using <code>cargo update -p</code>.</p>
+</li>
+<li>
+<p>If two packages are tightly coupled, then an <code>=</code> dependency requirement may
+help ensure that they stay in sync. For example, a library with a companion
+proc-macro library will sometimes make assumptions between the two libraries
+that won’t work well if the two are out of sync (and it is never expected to
+use the two libraries independently). The parent library can use an <code>=</code>
+requirement on the proc-macro, and re-export the macros for easy access.</p>
+</li>
+<li>
+<p><code>0.0.x</code> versions can be used for packages that are permanently unstable.</p>
+</li>
+</ul>
+<p>In general, the stricter you make the dependency requirements, the more likely
+it will be for the resolver to fail. Conversely, if you use requirements that
+are too loose, it may be possible for new versions to be published that will
+break the build.</p>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<p>The following illustrates some problems you may experience, and some possible
+solutions.</p>
+<h3 id="unexpected-dependency-duplication"><a class="header" href="#unexpected-dependency-duplication">Unexpected dependency duplication</a></h3>
+<p>The resolver algorithm may converge on a solution that includes two copies of a
+dependency when one would suffice. For example:</p>
+<pre><code class="language-toml"># Package A
+[dependencies]
+rand = &quot;0.7&quot;
+
+# Package B
+[dependencies]
+rand = &quot;&gt;=0.6&quot;  # note: open requirements such as this are discouraged
+</code></pre>
+<p>In this example, Cargo may build two copies of the <code>rand</code> crate, even though a
+single copy at version <code>0.7.3</code> would meet all requirements. This is because the
+resolver’s algorithm favors building the latest available version of <code>rand</code> for
+Package B, which is <code>0.8.5</code> at the time of this writing, and that is
+incompatible with Package A’s specification. The resolver’s algorithm does not
+currently attempt to “deduplicate” in this situation.</p>
+<p>The use of open-ended version requirements like <code>&gt;=0.6</code> is discouraged in Cargo.
+But, if you run into this situation, the <a href="../commands/cargo-update.html"><code>cargo update</code></a> command with the
+<code>--precise</code> flag can be used to manually remove such duplications.</p>
+<h3 id="semver-breaking-patch-release-breaks-the-build"><a class="header" href="#semver-breaking-patch-release-breaks-the-build">SemVer-breaking patch release breaks the build</a></h3>
+<p>Sometimes a project may inadvertently publish a point release with a
+SemVer-breaking change. When users update with <code>cargo update</code>, they will pick
+up this new release, and then their build may break. In this situation, it is
+recommended that the project should <a href="publishing.html#cargo-yank">yank</a> the release, and either remove the
+SemVer-breaking change, or publish it as a new SemVer-major version increase.</p>
+<p>If the change happened in a third-party project, if possible try to
+(politely!) work with the project to resolve the issue.</p>
+<p>While waiting for the release to be yanked, some workarounds depend on the
+circumstances:</p>
+<ul>
+<li>If your project is the end product (such as a binary executable), just avoid
+updating the offending package in <code>Cargo.lock</code>. This can be done with the
+<code>--precise</code> flag in <a href="../commands/cargo-update.html"><code>cargo update</code></a>.</li>
+<li>If you publish a binary on <a href="https://crates.io/">crates.io</a>, then you can temporarily add an <code>=</code>
+requirement to force the dependency to a specific good version.
+<ul>
+<li>Binary projects can alternatively recommend users to use the <code>--locked</code>
+flag with <a href="../commands/cargo-install.html"><code>cargo install</code></a> to use the original <code>Cargo.lock</code> that contains
+the known good version.</li>
+</ul>
+</li>
+<li>Libraries may also consider publishing a temporary new release with stricter
+requirements that avoid the troublesome dependency. You may want to consider
+using range requirements (instead of <code>=</code>) to avoid overly-strict
+requirements that may conflict with other packages using the same
+dependency. Once the problem has been resolved, you can publish another
+point release that relaxes the dependency back to a caret requirement.</li>
+<li>If it looks like the third-party project is unable or unwilling to yank the
+release, then one option is to update your code to be compatible with the
+changes, and update the dependency requirement to set the minimum version to
+the new release. You will also need to consider if this is a SemVer-breaking
+change of your own library, for example if it exposes types from the
+dependency.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/registry-web-api.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../reference/semver.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/registry-web-api.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../reference/semver.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

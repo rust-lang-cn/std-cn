@@ -1,0 +1,403 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Linkage - The Rust Reference</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/reference.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="notation.html"><strong aria-hidden="true">1.</strong> Notation</a></li><li class="chapter-item expanded "><a href="lexical-structure.html"><strong aria-hidden="true">2.</strong> Lexical structure</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="input-format.html"><strong aria-hidden="true">2.1.</strong> Input format</a></li><li class="chapter-item expanded "><a href="keywords.html"><strong aria-hidden="true">2.2.</strong> Keywords</a></li><li class="chapter-item expanded "><a href="identifiers.html"><strong aria-hidden="true">2.3.</strong> Identifiers</a></li><li class="chapter-item expanded "><a href="comments.html"><strong aria-hidden="true">2.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="whitespace.html"><strong aria-hidden="true">2.5.</strong> Whitespace</a></li><li class="chapter-item expanded "><a href="tokens.html"><strong aria-hidden="true">2.6.</strong> Tokens</a></li></ol></li><li class="chapter-item expanded "><a href="macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="macros-by-example.html"><strong aria-hidden="true">3.1.</strong> Macros By Example</a></li><li class="chapter-item expanded "><a href="procedural-macros.html"><strong aria-hidden="true">3.2.</strong> Procedural Macros</a></li></ol></li><li class="chapter-item expanded "><a href="crates-and-source-files.html"><strong aria-hidden="true">4.</strong> Crates and source files</a></li><li class="chapter-item expanded "><a href="conditional-compilation.html"><strong aria-hidden="true">5.</strong> Conditional compilation</a></li><li class="chapter-item expanded "><a href="items.html"><strong aria-hidden="true">6.</strong> Items</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="items/modules.html"><strong aria-hidden="true">6.1.</strong> Modules</a></li><li class="chapter-item expanded "><a href="items/extern-crates.html"><strong aria-hidden="true">6.2.</strong> Extern crates</a></li><li class="chapter-item expanded "><a href="items/use-declarations.html"><strong aria-hidden="true">6.3.</strong> Use declarations</a></li><li class="chapter-item expanded "><a href="items/functions.html"><strong aria-hidden="true">6.4.</strong> Functions</a></li><li class="chapter-item expanded "><a href="items/type-aliases.html"><strong aria-hidden="true">6.5.</strong> Type aliases</a></li><li class="chapter-item expanded "><a href="items/structs.html"><strong aria-hidden="true">6.6.</strong> Structs</a></li><li class="chapter-item expanded "><a href="items/enumerations.html"><strong aria-hidden="true">6.7.</strong> Enumerations</a></li><li class="chapter-item expanded "><a href="items/unions.html"><strong aria-hidden="true">6.8.</strong> Unions</a></li><li class="chapter-item expanded "><a href="items/constant-items.html"><strong aria-hidden="true">6.9.</strong> Constant items</a></li><li class="chapter-item expanded "><a href="items/static-items.html"><strong aria-hidden="true">6.10.</strong> Static items</a></li><li class="chapter-item expanded "><a href="items/traits.html"><strong aria-hidden="true">6.11.</strong> Traits</a></li><li class="chapter-item expanded "><a href="items/implementations.html"><strong aria-hidden="true">6.12.</strong> Implementations</a></li><li class="chapter-item expanded "><a href="items/external-blocks.html"><strong aria-hidden="true">6.13.</strong> External blocks</a></li><li class="chapter-item expanded "><a href="items/generics.html"><strong aria-hidden="true">6.14.</strong> Generic parameters</a></li><li class="chapter-item expanded "><a href="items/associated-items.html"><strong aria-hidden="true">6.15.</strong> Associated Items</a></li></ol></li><li class="chapter-item expanded "><a href="attributes.html"><strong aria-hidden="true">7.</strong> Attributes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="attributes/testing.html"><strong aria-hidden="true">7.1.</strong> Testing</a></li><li class="chapter-item expanded "><a href="attributes/derive.html"><strong aria-hidden="true">7.2.</strong> Derive</a></li><li class="chapter-item expanded "><a href="attributes/diagnostics.html"><strong aria-hidden="true">7.3.</strong> Diagnostics</a></li><li class="chapter-item expanded "><a href="attributes/codegen.html"><strong aria-hidden="true">7.4.</strong> Code generation</a></li><li class="chapter-item expanded "><a href="attributes/limits.html"><strong aria-hidden="true">7.5.</strong> Limits</a></li><li class="chapter-item expanded "><a href="attributes/type_system.html"><strong aria-hidden="true">7.6.</strong> Type System</a></li><li class="chapter-item expanded "><a href="attributes/debugger.html"><strong aria-hidden="true">7.7.</strong> Debugger</a></li></ol></li><li class="chapter-item expanded "><a href="statements-and-expressions.html"><strong aria-hidden="true">8.</strong> Statements and expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="statements.html"><strong aria-hidden="true">8.1.</strong> Statements</a></li><li class="chapter-item expanded "><a href="expressions.html"><strong aria-hidden="true">8.2.</strong> Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="expressions/literal-expr.html"><strong aria-hidden="true">8.2.1.</strong> Literal expressions</a></li><li class="chapter-item expanded "><a href="expressions/path-expr.html"><strong aria-hidden="true">8.2.2.</strong> Path expressions</a></li><li class="chapter-item expanded "><a href="expressions/block-expr.html"><strong aria-hidden="true">8.2.3.</strong> Block expressions</a></li><li class="chapter-item expanded "><a href="expressions/operator-expr.html"><strong aria-hidden="true">8.2.4.</strong> Operator expressions</a></li><li class="chapter-item expanded "><a href="expressions/grouped-expr.html"><strong aria-hidden="true">8.2.5.</strong> Grouped expressions</a></li><li class="chapter-item expanded "><a href="expressions/array-expr.html"><strong aria-hidden="true">8.2.6.</strong> Array and index expressions</a></li><li class="chapter-item expanded "><a href="expressions/tuple-expr.html"><strong aria-hidden="true">8.2.7.</strong> Tuple and index expressions</a></li><li class="chapter-item expanded "><a href="expressions/struct-expr.html"><strong aria-hidden="true">8.2.8.</strong> Struct expressions</a></li><li class="chapter-item expanded "><a href="expressions/call-expr.html"><strong aria-hidden="true">8.2.9.</strong> Call expressions</a></li><li class="chapter-item expanded "><a href="expressions/method-call-expr.html"><strong aria-hidden="true">8.2.10.</strong> Method call expressions</a></li><li class="chapter-item expanded "><a href="expressions/field-expr.html"><strong aria-hidden="true">8.2.11.</strong> Field access expressions</a></li><li class="chapter-item expanded "><a href="expressions/closure-expr.html"><strong aria-hidden="true">8.2.12.</strong> Closure expressions</a></li><li class="chapter-item expanded "><a href="expressions/loop-expr.html"><strong aria-hidden="true">8.2.13.</strong> Loop expressions</a></li><li class="chapter-item expanded "><a href="expressions/range-expr.html"><strong aria-hidden="true">8.2.14.</strong> Range expressions</a></li><li class="chapter-item expanded "><a href="expressions/if-expr.html"><strong aria-hidden="true">8.2.15.</strong> If and if let expressions</a></li><li class="chapter-item expanded "><a href="expressions/match-expr.html"><strong aria-hidden="true">8.2.16.</strong> Match expressions</a></li><li class="chapter-item expanded "><a href="expressions/return-expr.html"><strong aria-hidden="true">8.2.17.</strong> Return expressions</a></li><li class="chapter-item expanded "><a href="expressions/await-expr.html"><strong aria-hidden="true">8.2.18.</strong> Await expressions</a></li><li class="chapter-item expanded "><a href="expressions/underscore-expr.html"><strong aria-hidden="true">8.2.19.</strong> Underscore expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">9.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="type-system.html"><strong aria-hidden="true">10.</strong> Type system</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="types.html"><strong aria-hidden="true">10.1.</strong> Types</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="types/boolean.html"><strong aria-hidden="true">10.1.1.</strong> Boolean type</a></li><li class="chapter-item expanded "><a href="types/numeric.html"><strong aria-hidden="true">10.1.2.</strong> Numeric types</a></li><li class="chapter-item expanded "><a href="types/textual.html"><strong aria-hidden="true">10.1.3.</strong> Textual types</a></li><li class="chapter-item expanded "><a href="types/never.html"><strong aria-hidden="true">10.1.4.</strong> Never type</a></li><li class="chapter-item expanded "><a href="types/tuple.html"><strong aria-hidden="true">10.1.5.</strong> Tuple types</a></li><li class="chapter-item expanded "><a href="types/array.html"><strong aria-hidden="true">10.1.6.</strong> Array types</a></li><li class="chapter-item expanded "><a href="types/slice.html"><strong aria-hidden="true">10.1.7.</strong> Slice types</a></li><li class="chapter-item expanded "><a href="types/struct.html"><strong aria-hidden="true">10.1.8.</strong> Struct types</a></li><li class="chapter-item expanded "><a href="types/enum.html"><strong aria-hidden="true">10.1.9.</strong> Enumerated types</a></li><li class="chapter-item expanded "><a href="types/union.html"><strong aria-hidden="true">10.1.10.</strong> Union types</a></li><li class="chapter-item expanded "><a href="types/function-item.html"><strong aria-hidden="true">10.1.11.</strong> Function item types</a></li><li class="chapter-item expanded "><a href="types/closure.html"><strong aria-hidden="true">10.1.12.</strong> Closure types</a></li><li class="chapter-item expanded "><a href="types/pointer.html"><strong aria-hidden="true">10.1.13.</strong> Pointer types</a></li><li class="chapter-item expanded "><a href="types/function-pointer.html"><strong aria-hidden="true">10.1.14.</strong> Function pointer types</a></li><li class="chapter-item expanded "><a href="types/trait-object.html"><strong aria-hidden="true">10.1.15.</strong> Trait object types</a></li><li class="chapter-item expanded "><a href="types/impl-trait.html"><strong aria-hidden="true">10.1.16.</strong> Impl trait type</a></li><li class="chapter-item expanded "><a href="types/parameters.html"><strong aria-hidden="true">10.1.17.</strong> Type parameters</a></li><li class="chapter-item expanded "><a href="types/inferred.html"><strong aria-hidden="true">10.1.18.</strong> Inferred type</a></li></ol></li><li class="chapter-item expanded "><a href="dynamically-sized-types.html"><strong aria-hidden="true">10.2.</strong> Dynamically Sized Types</a></li><li class="chapter-item expanded "><a href="type-layout.html"><strong aria-hidden="true">10.3.</strong> Type layout</a></li><li class="chapter-item expanded "><a href="interior-mutability.html"><strong aria-hidden="true">10.4.</strong> Interior mutability</a></li><li class="chapter-item expanded "><a href="subtyping.html"><strong aria-hidden="true">10.5.</strong> Subtyping and Variance</a></li><li class="chapter-item expanded "><a href="trait-bounds.html"><strong aria-hidden="true">10.6.</strong> Trait and lifetime bounds</a></li><li class="chapter-item expanded "><a href="type-coercions.html"><strong aria-hidden="true">10.7.</strong> Type coercions</a></li><li class="chapter-item expanded "><a href="destructors.html"><strong aria-hidden="true">10.8.</strong> Destructors</a></li><li class="chapter-item expanded "><a href="lifetime-elision.html"><strong aria-hidden="true">10.9.</strong> Lifetime elision</a></li></ol></li><li class="chapter-item expanded "><a href="special-types-and-traits.html"><strong aria-hidden="true">11.</strong> Special types and traits</a></li><li class="chapter-item expanded "><a href="names.html"><strong aria-hidden="true">12.</strong> Names</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="names/namespaces.html"><strong aria-hidden="true">12.1.</strong> Namespaces</a></li><li class="chapter-item expanded "><a href="names/scopes.html"><strong aria-hidden="true">12.2.</strong> Scopes</a></li><li class="chapter-item expanded "><a href="names/preludes.html"><strong aria-hidden="true">12.3.</strong> Preludes</a></li><li class="chapter-item expanded "><a href="paths.html"><strong aria-hidden="true">12.4.</strong> Paths</a></li><li class="chapter-item expanded "><a href="names/name-resolution.html"><strong aria-hidden="true">12.5.</strong> Name resolution</a></li><li class="chapter-item expanded "><a href="visibility-and-privacy.html"><strong aria-hidden="true">12.6.</strong> Visibility and privacy</a></li></ol></li><li class="chapter-item expanded "><a href="memory-model.html"><strong aria-hidden="true">13.</strong> Memory model</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memory-allocation-and-lifetime.html"><strong aria-hidden="true">13.1.</strong> Memory allocation and lifetime</a></li><li class="chapter-item expanded "><a href="variables.html"><strong aria-hidden="true">13.2.</strong> Variables</a></li></ol></li><li class="chapter-item expanded "><a href="linkage.html" class="active"><strong aria-hidden="true">14.</strong> Linkage</a></li><li class="chapter-item expanded "><a href="inline-assembly.html"><strong aria-hidden="true">15.</strong> Inline assembly</a></li><li class="chapter-item expanded "><a href="unsafety.html"><strong aria-hidden="true">16.</strong> Unsafety</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="unsafe-keyword.html"><strong aria-hidden="true">16.1.</strong> The unsafe keyword</a></li><li class="chapter-item expanded "><a href="behavior-considered-undefined.html"><strong aria-hidden="true">16.2.</strong> Behavior considered undefined</a></li><li class="chapter-item expanded "><a href="behavior-not-considered-unsafe.html"><strong aria-hidden="true">16.3.</strong> Behavior not considered unsafe</a></li></ol></li><li class="chapter-item expanded "><a href="const_eval.html"><strong aria-hidden="true">17.</strong> Constant Evaluation</a></li><li class="chapter-item expanded "><a href="abi.html"><strong aria-hidden="true">18.</strong> Application Binary Interface</a></li><li class="chapter-item expanded "><a href="runtime.html"><strong aria-hidden="true">19.</strong> The Rust runtime</a></li><li class="chapter-item expanded "><a href="appendices.html"><strong aria-hidden="true">20.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="macro-ambiguity.html"><strong aria-hidden="true">20.1.</strong> Macro Follow-Set Ambiguity Formal Specification</a></li><li class="chapter-item expanded "><a href="influences.html"><strong aria-hidden="true">20.2.</strong> Influences</a></li><li class="chapter-item expanded "><a href="glossary.html"><strong aria-hidden="true">20.3.</strong> Glossary</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Reference</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/reference/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/reference/edit/master/src/linkage.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="linkage"><a class="header" href="#linkage">Linkage</a></h1>
+<blockquote>
+<p>Note: This section is described more in terms of the compiler than of
+the language.</p>
+</blockquote>
+<p>The compiler supports various methods to link crates together both
+statically and dynamically. This section will explore the various methods to
+link crates together, and more information about native libraries can be
+found in the <a href="../book/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code">FFI section of the book</a>.</p>
+<p>In one session of compilation, the compiler can generate multiple artifacts
+through the usage of either command line flags or the <code>crate_type</code> attribute.
+If one or more command line flags are specified, all <code>crate_type</code> attributes will
+be ignored in favor of only building the artifacts specified by command line.</p>
+<ul>
+<li>
+<p><code>--crate-type=bin</code>, <code>#![crate_type = &quot;bin&quot;]</code> - A runnable executable will be
+produced. This requires that there is a <code>main</code> function in the crate which
+will be run when the program begins executing. This will link in all Rust and
+native dependencies, producing a single distributable binary.
+This is the default crate type.</p>
+</li>
+<li>
+<p><code>--crate-type=lib</code>, <code>#![crate_type = &quot;lib&quot;]</code> - A Rust library will be produced.
+This is an ambiguous concept as to what exactly is produced because a library
+can manifest itself in several forms. The purpose of this generic <code>lib</code> option
+is to generate the &quot;compiler recommended&quot; style of library. The output library
+will always be usable by rustc, but the actual type of library may change from
+time-to-time. The remaining output types are all different flavors of
+libraries, and the <code>lib</code> type can be seen as an alias for one of them (but the
+actual one is compiler-defined).</p>
+</li>
+<li>
+<p><code>--crate-type=dylib</code>, <code>#![crate_type = &quot;dylib&quot;]</code> - A dynamic Rust library will
+be produced. This is different from the <code>lib</code> output type in that this forces
+dynamic library generation. The resulting dynamic library can be used as a
+dependency for other libraries and/or executables. This output type will
+create <code>*.so</code> files on Linux, <code>*.dylib</code> files on macOS, and <code>*.dll</code> files on
+Windows.</p>
+</li>
+<li>
+<p><code>--crate-type=staticlib</code>, <code>#![crate_type = &quot;staticlib&quot;]</code> - A static system
+library will be produced. This is different from other library outputs in that
+the compiler will never attempt to link to <code>staticlib</code> outputs. The
+purpose of this output type is to create a static library containing all of
+the local crate's code along with all upstream dependencies. This output type
+will create <code>*.a</code> files on Linux, macOS and Windows (MinGW), and <code>*.lib</code> files
+on Windows (MSVC). This format is recommended for use in situations such as
+linking Rust code into an existing non-Rust application
+because it will not have dynamic dependencies on other Rust code.</p>
+</li>
+<li>
+<p><code>--crate-type=cdylib</code>, <code>#![crate_type = &quot;cdylib&quot;]</code> - A dynamic system
+library will be produced.  This is used when compiling
+a dynamic library to be loaded from another language.  This output type will
+create <code>*.so</code> files on Linux, <code>*.dylib</code> files on macOS, and <code>*.dll</code> files on
+Windows.</p>
+</li>
+<li>
+<p><code>--crate-type=rlib</code>, <code>#![crate_type = &quot;rlib&quot;]</code> - A &quot;Rust library&quot; file will be
+produced. This is used as an intermediate artifact and can be thought of as a
+&quot;static Rust library&quot;. These <code>rlib</code> files, unlike <code>staticlib</code> files, are
+interpreted by the compiler in future linkage. This essentially means
+that <code>rustc</code> will look for metadata in <code>rlib</code> files like it looks for metadata
+in dynamic libraries. This form of output is used to produce statically linked
+executables as well as <code>staticlib</code> outputs.</p>
+</li>
+<li>
+<p><code>--crate-type=proc-macro</code>, <code>#![crate_type = &quot;proc-macro&quot;]</code> - The output
+produced is not specified, but if a <code>-L</code> path is provided to it then the
+compiler will recognize the output artifacts as a macro and it can be loaded
+for a program. Crates compiled with this crate type  must only export
+<a href="procedural-macros.html">procedural macros</a>. The compiler will automatically set the <code>proc_macro</code>
+<a href="conditional-compilation.html">configuration option</a>. The crates are always compiled with the same target
+that the compiler itself was built with. For example, if you are executing
+the compiler from Linux with an <code>x86_64</code> CPU, the target will be
+<code>x86_64-unknown-linux-gnu</code> even if the crate is a dependency of another crate
+being built for a different target.</p>
+</li>
+</ul>
+<p>Note that these outputs are stackable in the sense that if multiple are
+specified, then the compiler will produce each form of output without
+having to recompile. However, this only applies for outputs specified by the
+same method. If only <code>crate_type</code> attributes are specified, then they will all
+be built, but if one or more <code>--crate-type</code> command line flags are specified,
+then only those outputs will be built.</p>
+<p>With all these different kinds of outputs, if crate A depends on crate B, then
+the compiler could find B in various different forms throughout the system. The
+only forms looked for by the compiler, however, are the <code>rlib</code> format and the
+dynamic library format. With these two options for a dependent library, the
+compiler must at some point make a choice between these two formats. With this
+in mind, the compiler follows these rules when determining what format of
+dependencies will be used:</p>
+<ol>
+<li>
+<p>If a static library is being produced, all upstream dependencies are
+required to be available in <code>rlib</code> formats. This requirement stems from the
+reason that a dynamic library cannot be converted into a static format.</p>
+<p>Note that it is impossible to link in native dynamic dependencies to a static
+library, and in this case warnings will be printed about all unlinked native
+dynamic dependencies.</p>
+</li>
+<li>
+<p>If an <code>rlib</code> file is being produced, then there are no restrictions on what
+format the upstream dependencies are available in. It is simply required that
+all upstream dependencies be available for reading metadata from.</p>
+<p>The reason for this is that <code>rlib</code> files do not contain any of their upstream
+dependencies. It wouldn't be very efficient for all <code>rlib</code> files to contain a
+copy of <code>libstd.rlib</code>!</p>
+</li>
+<li>
+<p>If an executable is being produced and the <code>-C prefer-dynamic</code> flag is not
+specified, then dependencies are first attempted to be found in the <code>rlib</code>
+format. If some dependencies are not available in an rlib format, then
+dynamic linking is attempted (see below).</p>
+</li>
+<li>
+<p>If a dynamic library or an executable that is being dynamically linked is
+being produced, then the compiler will attempt to reconcile the available
+dependencies in either the rlib or dylib format to create a final product.</p>
+<p>A major goal of the compiler is to ensure that a library never appears more
+than once in any artifact. For example, if dynamic libraries B and C were
+each statically linked to library A, then a crate could not link to B and C
+together because there would be two copies of A. The compiler allows mixing
+the rlib and dylib formats, but this restriction must be satisfied.</p>
+<p>The compiler currently implements no method of hinting what format a library
+should be linked with. When dynamically linking, the compiler will attempt to
+maximize dynamic dependencies while still allowing some dependencies to be
+linked in via an rlib.</p>
+<p>For most situations, having all libraries available as a dylib is recommended
+if dynamically linking. For other situations, the compiler will emit a
+warning if it is unable to determine which formats to link each library with.</p>
+</li>
+</ol>
+<p>In general, <code>--crate-type=bin</code> or <code>--crate-type=lib</code> should be sufficient for
+all compilation needs, and the other options are just available if more
+fine-grained control is desired over the output format of a crate.</p>
+<h2 id="static-and-dynamic-c-runtimes"><a class="header" href="#static-and-dynamic-c-runtimes">Static and dynamic C runtimes</a></h2>
+<p>The standard library in general strives to support both statically linked and
+dynamically linked C runtimes for targets as appropriate. For example the
+<code>x86_64-pc-windows-msvc</code> and <code>x86_64-unknown-linux-musl</code> targets typically come
+with both runtimes and the user selects which one they'd like. All targets in
+the compiler have a default mode of linking to the C runtime. Typically targets
+are linked dynamically by default, but there are exceptions which are static by
+default such as:</p>
+<ul>
+<li><code>arm-unknown-linux-musleabi</code></li>
+<li><code>arm-unknown-linux-musleabihf</code></li>
+<li><code>armv7-unknown-linux-musleabihf</code></li>
+<li><code>i686-unknown-linux-musl</code></li>
+<li><code>x86_64-unknown-linux-musl</code></li>
+</ul>
+<p>The linkage of the C runtime is configured to respect the <code>crt-static</code> target
+feature. These target features are typically configured from the command line
+via flags to the compiler itself. For example to enable a static runtime you
+would execute:</p>
+<pre><code class="language-sh">rustc -C target-feature=+crt-static foo.rs
+</code></pre>
+<p>whereas to link dynamically to the C runtime you would execute:</p>
+<pre><code class="language-sh">rustc -C target-feature=-crt-static foo.rs
+</code></pre>
+<p>Targets which do not support switching between linkage of the C runtime will
+ignore this flag. It's recommended to inspect the resulting binary to ensure
+that it's linked as you would expect after the compiler succeeds.</p>
+<p>Crates may also learn about how the C runtime is being linked. Code on MSVC, for
+example, needs to be compiled differently (e.g. with <code>/MT</code> or <code>/MD</code>) depending
+on the runtime being linked. This is exported currently through the
+<a href="conditional-compilation.html#target_feature"><code>cfg</code> attribute <code>target_feature</code> option</a>:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg(target_feature = &quot;crt-static&quot;)]
+fn foo() {
+    println!(&quot;the C runtime should be statically linked&quot;);
+}
+
+#[cfg(not(target_feature = &quot;crt-static&quot;))]
+fn foo() {
+    println!(&quot;the C runtime should be dynamically linked&quot;);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Also note that Cargo build scripts can learn about this feature through
+<a href="../cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts">environment variables</a>. In a build script you can detect the linkage
+via:</p>
+<pre><pre class="playground"><code class="language-rust edition2021">use std::env;
+
+fn main() {
+    let linkage = env::var(&quot;CARGO_CFG_TARGET_FEATURE&quot;).unwrap_or(String::new());
+
+    if linkage.contains(&quot;crt-static&quot;) {
+        println!(&quot;the C runtime will be statically linked&quot;);
+    } else {
+        println!(&quot;the C runtime will be dynamically linked&quot;);
+    }
+}</code></pre></pre>
+<p>To use this feature locally, you typically will use the <code>RUSTFLAGS</code> environment
+variable to specify flags to the compiler through Cargo. For example to compile
+a statically linked binary on MSVC you would execute:</p>
+<pre><code class="language-sh">RUSTFLAGS='-C target-feature=+crt-static' cargo build --target x86_64-pc-windows-msvc
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="variables.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="inline-assembly.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="variables.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="inline-assembly.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

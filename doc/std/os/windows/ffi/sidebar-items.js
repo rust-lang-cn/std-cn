@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["EncodeWide","为潜在的格式不正确的 UTF-16 生成宽字符序列。"]],"trait":[["OsStrExt","特定于 Windows 的 [`OsStr`] 扩展。"],["OsStringExt","特定于 Windows 的 [`OsString`] 扩展。"]]});

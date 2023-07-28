@@ -1,364 +1,63 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library&#x2F;std&#x2F;src&#x2F;os&#x2F;raw&#x2F;mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="stylesheet" type="text/css" href="../../../../normalize1.58.0.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc1.58.0.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../light1.58.0.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark1.58.0.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../ayu1.58.0.css" disabled ><script id="default-settings" ></script><script src="../../../../storage1.58.0.js"></script><script src="../../../../crates1.58.0.js"></script><noscript><link rel="stylesheet" href="../../../../noscript1.58.0.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x161.58.0.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x321.58.0.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon1.58.0.svg"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow1.58.0.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../std/index.html'><div class='logo-container rust-logo'><img src='../../../../rust-logo1.58.0.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../../brush1.58.0.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../../wheel1.58.0.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
-<span id="100">100</span>
-<span id="101">101</span>
-<span id="102">102</span>
-<span id="103">103</span>
-<span id="104">104</span>
-<span id="105">105</span>
-<span id="106">106</span>
-<span id="107">107</span>
-<span id="108">108</span>
-<span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
-<span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
-<span id="124">124</span>
-<span id="125">125</span>
-<span id="126">126</span>
-<span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
-<span id="130">130</span>
-<span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
-</pre><pre class="rust"><code><span class="doccomment">//! 特定于平台的类型，由 C 定义。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 通过 FFI 进行交互的代码几乎肯定会使用 C 提供的原始类型，而这些原始类型的定义不如 Rust 的原始类型好。</span>
-<span class="doccomment">//! 该模块提供的类型将与 C 定义的类型匹配，以便与 C 交互的代码将引用正确的类型。</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library/std/src/os/raw/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../../source-files1.71.0.js"></script><script defer src="../../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../../std/index.html"><img class="rust-logo" src="../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<a href="#2" id="2">2</a>
+<a href="#3" id="3">3</a>
+<a href="#4" id="4">4</a>
+<a href="#5" id="5">5</a>
+<a href="#6" id="6">6</a>
+<a href="#7" id="7">7</a>
+<a href="#8" id="8">8</a>
+<a href="#9" id="9">9</a>
+<a href="#10" id="10">10</a>
+<a href="#11" id="11">11</a>
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! C 平台特定类型的兼容性模块。请改用 [`core::ffi`]。
 
-<span class="attribute">#![<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;raw_os&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.1.0&quot;</span>)]</span>
+</span><span class="attr">#![stable(feature = <span class="string">&quot;raw_os&quot;</span>, since = <span class="string">&quot;1.1.0&quot;</span>)]
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span>;
+#[cfg(test)]
+</span><span class="kw">mod </span>tests;
 
-<span class="kw">use</span> <span class="ident">core::num</span>::<span class="kw-2">*</span>;
-
-<span class="macro">macro_rules!</span> <span class="ident">type_alias_no_nz</span> {
-    {
-      <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Docfile</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Alias</span>:<span class="ident">ident</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Real</span>:<span class="ident">ty</span>;
-      $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Cfg</span>:<span class="ident">tt</span> )<span class="op">*</span>
-    } =&gt; {
-        <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Docfile</span>)]</span>
-        $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Cfg</span> )<span class="op">*</span>
-        <span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;raw_os&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.1.0&quot;</span>)]</span>
-        <span class="kw">pub</span> <span class="kw">type</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Alias</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Real</span>;
-    }
+<span class="macro">macro_rules! </span>alias_core_ffi {
+    ($(<span class="macro-nonterminal">$t</span>:ident)<span class="kw-2">*</span>) =&gt; {$(
+        <span class="attr">#[stable(feature = <span class="string">&quot;raw_os&quot;</span>, since = <span class="string">&quot;1.1.0&quot;</span>)]
+        #[doc = <span class="macro">include_str!</span>(<span class="macro">concat!</span>(<span class="string">&quot;../../../../core/src/ffi/&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$t</span>), <span class="string">&quot;.md&quot;</span>))]
+        </span><span class="comment">// 使此类型别名显示为依赖于 cfg，以便 Clippy 不建议将 `0 as c_char` 之类的表达式替换为 `0_i8`/`0_u8`。
+        // 这个 #[cfg(all())] 可以是
+        // removed after the false positive in https://github.com/rust-lang/rust-clippy/issues/8093
+        // 是固定的。
+        </span><span class="attr">#[cfg(all())]
+        #[doc(cfg(all()))]
+        </span><span class="kw">pub type </span><span class="macro-nonterminal">$t </span>= core::ffi::<span class="macro-nonterminal">$t</span>;
+    )<span class="kw-2">*</span>}
 }
 
-<span class="comment">// 验证此文件的宏调用中的 NonZero 类型是否对应</span>
-<span class="comment">//</span>
-<span class="comment">//  perl -n &lt; library/std/src/os/raw/mod.rs -e &#39;next unless m/type_alias\!/;  die &quot;$_ ?&quot; unless m/, (c_\w+) = (\w+), NonZero_(\w+) = NonZero(\w+)/;  die &quot;$_ ?&quot; unless $3 eq $1 and $4 eq ucfirst $2&#39;</span>
-<span class="comment">//</span>
-<span class="comment">// NB 这不会检查主要的 c_* 类型是否正确。</span>
-
-<span class="macro">macro_rules!</span> <span class="ident">type_alias</span> {
-    {
-      <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Docfile</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Alias</span>:<span class="ident">ident</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Real</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">NZAlias</span>:<span class="ident">ident</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">NZReal</span>:<span class="ident">ty</span>;
-      $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Cfg</span>:<span class="ident">tt</span> )<span class="op">*</span>
-    } =&gt; {
-        <span class="macro">type_alias_no_nz!</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Docfile</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Alias</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Real</span>; $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Cfg</span> )<span class="op">*</span> }
-
-        <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(<span class="string">&quot;Type alias for `NonZero` version of [`&quot;</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Alias</span>), <span class="string">&quot;`]&quot;</span>)]</span>
-        <span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;raw_os_nonzero&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;82363&quot;</span>)]</span>
-        $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">Cfg</span> )<span class="op">*</span>
-        <span class="kw">pub</span> <span class="kw">type</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">NZAlias</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">NZReal</span>;
-    }
+<span class="macro">alias_core_ffi! </span>{
+    c_char c_schar c_uchar
+    c_short c_ushort
+    c_int c_uint
+    c_long c_ulong
+    c_longlong c_ulonglong
+    c_float
+    c_double
+    c_void
 }
-
-<span class="macro">type_alias!</span> { <span class="string">&quot;char.md&quot;</span>, <span class="ident">c_char</span> <span class="op">=</span> <span class="ident">u8</span>, <span class="ident">NonZero_c_char</span> <span class="op">=</span> <span class="ident">NonZeroU8</span>;
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">all</span>()))]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(
-    <span class="ident">all</span>(
-        <span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;linux&quot;</span>,
-        <span class="ident">any</span>(
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;hexagon&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc64&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;s390x&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;riscv64&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;riscv32&quot;</span>
-        )
-    ),
-    <span class="ident">all</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;android&quot;</span>, <span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>)),
-    <span class="ident">all</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;l4re&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>),
-    <span class="ident">all</span>(
-        <span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;freebsd&quot;</span>,
-        <span class="ident">any</span>(
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc64&quot;</span>
-        )
-    ),
-    <span class="ident">all</span>(
-        <span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;netbsd&quot;</span>,
-        <span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc&quot;</span>)
-    ),
-    <span class="ident">all</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;openbsd&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>),
-    <span class="ident">all</span>(
-        <span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;vxworks&quot;</span>,
-        <span class="ident">any</span>(
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc64&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc&quot;</span>
-        )
-    ),
-    <span class="ident">all</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;fuchsia&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>)
-))]</span>}
-<span class="macro">type_alias!</span> { <span class="string">&quot;char.md&quot;</span>, <span class="ident">c_char</span> <span class="op">=</span> <span class="ident">i8</span>, <span class="ident">NonZero_c_char</span> <span class="op">=</span> <span class="ident">NonZeroI8</span>;
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">all</span>()))]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">any</span>(
-    <span class="ident">all</span>(
-        <span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;linux&quot;</span>,
-        <span class="ident">any</span>(
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;hexagon&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc64&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;s390x&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;riscv64&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;riscv32&quot;</span>
-        )
-    ),
-    <span class="ident">all</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;android&quot;</span>, <span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>)),
-    <span class="ident">all</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;l4re&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86_64&quot;</span>),
-    <span class="ident">all</span>(
-        <span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;freebsd&quot;</span>,
-        <span class="ident">any</span>(
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc64&quot;</span>
-        )
-    ),
-    <span class="ident">all</span>(
-        <span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;netbsd&quot;</span>,
-        <span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc&quot;</span>)
-    ),
-    <span class="ident">all</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;openbsd&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>),
-    <span class="ident">all</span>(
-        <span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;vxworks&quot;</span>,
-        <span class="ident">any</span>(
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc64&quot;</span>,
-            <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;powerpc&quot;</span>
-        )
-    ),
-    <span class="ident">all</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;fuchsia&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;aarch64&quot;</span>)
-)))]</span>}
-<span class="macro">type_alias!</span> { <span class="string">&quot;schar.md&quot;</span>, <span class="ident">c_schar</span> <span class="op">=</span> <span class="ident">i8</span>, <span class="ident">NonZero_c_schar</span> <span class="op">=</span> <span class="ident">NonZeroI8</span>; }
-<span class="macro">type_alias!</span> { <span class="string">&quot;uchar.md&quot;</span>, <span class="ident">c_uchar</span> <span class="op">=</span> <span class="ident">u8</span>, <span class="ident">NonZero_c_uchar</span> <span class="op">=</span> <span class="ident">NonZeroU8</span>; }
-<span class="macro">type_alias!</span> { <span class="string">&quot;short.md&quot;</span>, <span class="ident">c_short</span> <span class="op">=</span> <span class="ident">i16</span>, <span class="ident">NonZero_c_short</span> <span class="op">=</span> <span class="ident">NonZeroI16</span>; }
-<span class="macro">type_alias!</span> { <span class="string">&quot;ushort.md&quot;</span>, <span class="ident">c_ushort</span> <span class="op">=</span> <span class="ident">u16</span>, <span class="ident">NonZero_c_ushort</span> <span class="op">=</span> <span class="ident">NonZeroU16</span>; }
-<span class="macro">type_alias!</span> { <span class="string">&quot;int.md&quot;</span>, <span class="ident">c_int</span> <span class="op">=</span> <span class="ident">i32</span>, <span class="ident">NonZero_c_int</span> <span class="op">=</span> <span class="ident">NonZeroI32</span>; }
-<span class="macro">type_alias!</span> { <span class="string">&quot;uint.md&quot;</span>, <span class="ident">c_uint</span> <span class="op">=</span> <span class="ident">u32</span>, <span class="ident">NonZero_c_uint</span> <span class="op">=</span> <span class="ident">NonZeroU32</span>; }
-<span class="macro">type_alias!</span> { <span class="string">&quot;long.md&quot;</span>, <span class="ident">c_long</span> <span class="op">=</span> <span class="ident">i32</span>, <span class="ident">NonZero_c_long</span> <span class="op">=</span> <span class="ident">NonZeroI32</span>;
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">all</span>()))]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_pointer_width</span> <span class="op">=</span> <span class="string">&quot;32&quot;</span>, <span class="ident">windows</span>))]</span> }
-<span class="macro">type_alias!</span> { <span class="string">&quot;ulong.md&quot;</span>, <span class="ident">c_ulong</span> <span class="op">=</span> <span class="ident">u32</span>, <span class="ident">NonZero_c_ulong</span> <span class="op">=</span> <span class="ident">NonZeroU32</span>;
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">all</span>()))]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_pointer_width</span> <span class="op">=</span> <span class="string">&quot;32&quot;</span>, <span class="ident">windows</span>))]</span> }
-<span class="macro">type_alias!</span> { <span class="string">&quot;long.md&quot;</span>, <span class="ident">c_long</span> <span class="op">=</span> <span class="ident">i64</span>, <span class="ident">NonZero_c_long</span> <span class="op">=</span> <span class="ident">NonZeroI64</span>;
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">all</span>()))]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">target_pointer_width</span> <span class="op">=</span> <span class="string">&quot;64&quot;</span>, <span class="ident">not</span>(<span class="ident">windows</span>)))]</span> }
-<span class="macro">type_alias!</span> { <span class="string">&quot;ulong.md&quot;</span>, <span class="ident">c_ulong</span> <span class="op">=</span> <span class="ident">u64</span>, <span class="ident">NonZero_c_ulong</span> <span class="op">=</span> <span class="ident">NonZeroU64</span>;
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">all</span>()))]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">target_pointer_width</span> <span class="op">=</span> <span class="string">&quot;64&quot;</span>, <span class="ident">not</span>(<span class="ident">windows</span>)))]</span> }
-<span class="macro">type_alias!</span> { <span class="string">&quot;longlong.md&quot;</span>, <span class="ident">c_longlong</span> <span class="op">=</span> <span class="ident">i64</span>, <span class="ident">NonZero_c_longlong</span> <span class="op">=</span> <span class="ident">NonZeroI64</span>; }
-<span class="macro">type_alias!</span> { <span class="string">&quot;ulonglong.md&quot;</span>, <span class="ident">c_ulonglong</span> <span class="op">=</span> <span class="ident">u64</span>, <span class="ident">NonZero_c_ulonglong</span> <span class="op">=</span> <span class="ident">NonZeroU64</span>; }
-<span class="macro">type_alias_no_nz!</span> { <span class="string">&quot;float.md&quot;</span>, <span class="ident">c_float</span> <span class="op">=</span> <span class="ident">f32</span>; }
-<span class="macro">type_alias_no_nz!</span> { <span class="string">&quot;double.md&quot;</span>, <span class="ident">c_double</span> <span class="op">=</span> <span class="ident">f64</span>; }
-
-<span class="attribute">#[<span class="ident">stable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;raw_os&quot;</span>, <span class="ident">since</span> <span class="op">=</span> <span class="string">&quot;1.1.0&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">no_inline</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">core::ffi::c_void</span>;
-
-<span class="doccomment">/// 相当于 C 的 `size_t` 类型，来自 `stddef.h` (或 `cstddef` for C++)。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 此类型当前始终为 [`usize`]，但在 future 中可能存在并非如此的平台。</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;c_size_t&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;88345&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">c_size_t</span> <span class="op">=</span> <span class="ident">usize</span>;
-
-<span class="doccomment">/// 相当于 C 的 `ptrdiff_t` 类型，来自 `stddef.h` (或 C++ 的 `cstddef`)。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 此类型当前始终为 [`isize`]，但在 future 中可能存在并非如此的平台。</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;c_size_t&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;88345&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">c_ptrdiff_t</span> <span class="op">=</span> <span class="ident">isize</span>;
-
-<span class="doccomment">/// 相当于 C 的 `ssize_t` (在 POSIX 上) 或 `SSIZE_T` 类型 (在 Windows 上)。</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 此类型当前始终为 [`isize`]，但在 future 中可能存在并非如此的平台。</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">unstable</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;c_size_t&quot;</span>, <span class="ident">issue</span> <span class="op">=</span> <span class="string">&quot;88345&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">c_ssize_t</span> <span class="op">=</span> <span class="ident">isize</span>;
-</code></pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="std" data-search-index-js="../../../../search-index1.58.0.js" data-search-js="../../../../search1.58.0.js"></div>
-    <script src="../../../../main1.58.0.js"></script><script src="../../../../source-script1.58.0.js"></script><script src="../../../../source-files1.58.0.js"></script>
-</body></html>
+</code></pre></div></section></main></body></html>

@@ -1,0 +1,306 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>What is rustdoc? - The rustdoc book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="what-is-rustdoc.html" class="active"><strong aria-hidden="true">1.</strong> What is rustdoc?</a></li><li class="chapter-item expanded "><a href="command-line-arguments.html"><strong aria-hidden="true">2.</strong> Command-line arguments</a></li><li class="chapter-item expanded "><a href="how-to-read-rustdoc.html"><strong aria-hidden="true">3.</strong> How to read rustdoc output</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="read-documentation/in-doc-settings.html"><strong aria-hidden="true">3.1.</strong> In-doc settings</a></li></ol></li><li class="chapter-item expanded "><a href="how-to-write-documentation.html"><strong aria-hidden="true">4.</strong> How to write documentation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="write-documentation/what-to-include.html"><strong aria-hidden="true">4.1.</strong> What to include (and exclude)</a></li><li class="chapter-item expanded "><a href="write-documentation/the-doc-attribute.html"><strong aria-hidden="true">4.2.</strong> The #[doc] attribute</a></li><li class="chapter-item expanded "><a href="write-documentation/linking-to-items-by-name.html"><strong aria-hidden="true">4.3.</strong> Linking to items by name</a></li><li class="chapter-item expanded "><a href="write-documentation/documentation-tests.html"><strong aria-hidden="true">4.4.</strong> Documentation tests</a></li></ol></li><li class="chapter-item expanded "><a href="lints.html"><strong aria-hidden="true">5.</strong> Rustdoc-specific lints</a></li><li class="chapter-item expanded "><a href="scraped-examples.html"><strong aria-hidden="true">6.</strong> Scraped examples</a></li><li class="chapter-item expanded "><a href="advanced-features.html"><strong aria-hidden="true">7.</strong> Advanced features</a></li><li class="chapter-item expanded "><a href="unstable-features.html"><strong aria-hidden="true">8.</strong> Unstable features</a></li><li class="chapter-item expanded "><a href="deprecated-features.html"><strong aria-hidden="true">9.</strong> Deprecated features</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">10.</strong> References</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The rustdoc book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/rust/tree/master/src/doc/rustdoc" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="what-is-rustdoc"><a class="header" href="#what-is-rustdoc">What is rustdoc?</a></h1>
+<p>The standard Rust distribution ships with a tool called <code>rustdoc</code>. Its job is
+to generate documentation for Rust projects. On a fundamental level, Rustdoc
+takes as an argument either a crate root or a Markdown file, and produces HTML,
+CSS, and JavaScript.</p>
+<h2 id="basic-usage"><a class="header" href="#basic-usage">Basic usage</a></h2>
+<p>Let's give it a try! Create a new project with Cargo:</p>
+<pre><code class="language-bash">$ cargo new docs --lib
+$ cd docs
+</code></pre>
+<p>In <code>src/lib.rs</code>, Cargo has generated some sample code. Delete
+it and replace it with this:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// foo is a function
+fn foo() {}
+<span class="boring">}</span></code></pre></pre>
+<p>Let's run <code>rustdoc</code> on our code. To do so, we can call it with the path to
+our crate root like this:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs
+</code></pre>
+<p>This will create a new directory, <code>doc</code>, with a website inside! In our case,
+the main page is located in <code>doc/lib/index.html</code>. If you open that up in
+a web browser, you will see a page with a search bar, and &quot;Crate lib&quot; at the
+top, with no contents.</p>
+<h2 id="configuring-rustdoc"><a class="header" href="#configuring-rustdoc">Configuring rustdoc</a></h2>
+<p>There are two problems with this: first, why does it
+think that our package is named &quot;lib&quot;? Second, why does it not have any
+contents?</p>
+<p>The first problem is due to <code>rustdoc</code> trying to be helpful; like <code>rustc</code>,
+it assumes that our crate's name is the name of the file for the crate
+root. To fix this, we can pass in a command-line flag:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs --crate-name docs
+</code></pre>
+<p>Now, <code>doc/docs/index.html</code> will be generated, and the page says &quot;Crate docs.&quot;</p>
+<p>For the second issue, it is because our function <code>foo</code> is not public; <code>rustdoc</code>
+defaults to generating documentation for only public functions. If we change
+our code...</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// foo is a function
+pub fn foo() {}
+<span class="boring">}</span></code></pre></pre>
+<p>... and then re-run <code>rustdoc</code>:</p>
+<pre><code class="language-bash">$ rustdoc src/lib.rs --crate-name docs
+</code></pre>
+<p>We now have some generated documentation. Open up <code>doc/docs/index.html</code> and
+check it out! It should show a link to the <code>foo</code> function's page, which
+is located at <code>doc/docs/fn.foo.html</code>. On that page, you'll see the &quot;foo is
+a function&quot; we put inside the documentation comment in our crate.</p>
+<h2 id="using-rustdoc-with-cargo"><a class="header" href="#using-rustdoc-with-cargo">Using rustdoc with Cargo</a></h2>
+<p>Cargo also has integration with <code>rustdoc</code> to make it easier to generate
+docs. Instead of the <code>rustdoc</code> command, we could have done this:</p>
+<pre><code class="language-bash">$ cargo doc
+</code></pre>
+<p>Internally, this calls out to <code>rustdoc</code> like this:</p>
+<pre><code class="language-bash">$ rustdoc --crate-name docs src/lib.rs -o &lt;path&gt;/docs/target/doc -L
+dependency=&lt;path&gt;/docs/target/debug/deps
+</code></pre>
+<p>You can see this with <code>cargo doc --verbose</code>.</p>
+<p>It generates the correct <code>--crate-name</code> for us, as well as pointing to
+<code>src/lib.rs</code>. But what about those other arguments?</p>
+<ul>
+<li><code>-o</code> controls the <em>o</em>utput of our docs. Instead of a top-level
+<code>doc</code> directory, notice that Cargo puts generated documentation under
+<code>target</code>. That is the idiomatic place for generated files in Cargo projects.</li>
+<li><code>-L</code> flag helps rustdoc find the dependencies your code relies on.
+If our project used dependencies, we would get documentation for them as well!</li>
+</ul>
+<h2 id="outer-and-inner-documentation"><a class="header" href="#outer-and-inner-documentation">Outer and inner documentation</a></h2>
+<p>The <code>///</code> syntax is used to document the item present after it.
+That's why it is called an outer documentation.
+There is another syntax: <code>//!</code>, which is used to document the
+item it is present inside. It is called an inner documentation.
+It is often used when documenting the entire crate,
+because nothing comes before it: it is the root of the crate.
+So in order to document an entire crate, you need to use <code>//!</code> syntax.
+For example:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//! This is my first rust crate
+<span class="boring">}</span></code></pre></pre>
+<p>When used in the crate root, it documents the item it is inside,
+which is the crate itself.</p>
+<p>For more information about the <code>//!</code> syntax, see <a href="https://doc.rust-lang.org/book/ch14-02-publishing-to-crates-io.html#commenting-contained-items">the Book</a>.</p>
+<h2 id="using-standalone-markdown-files"><a class="header" href="#using-standalone-markdown-files">Using standalone Markdown files</a></h2>
+<p><code>rustdoc</code> can also generate HTML from standalone Markdown files. Let' s
+give it a try: create a <code>README.md</code> file with these contents:</p>
+<pre><code class="language-text"># Docs
+
+This is a project to test out `rustdoc`.
+
+[Here is a link!](https://www.rust-lang.org)
+
+## Example
+
+```rust
+fn foo() -&gt; i32 {
+    1 + 1
+}
+```
+</code></pre>
+<p>And call <code>rustdoc</code> on it:</p>
+<pre><code class="language-bash">$ rustdoc README.md
+</code></pre>
+<p>You will find an HTML file in <code>docs/doc/README.html</code> generated from its
+Markdown contents.</p>
+<p>Cargo currently does not understand standalone Markdown files, unfortunately.</p>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>This covers the simplest use-cases of <code>rustdoc</code>. The rest of this book will
+explain all of the options that <code>rustdoc</code> has, and how to use them.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next" href="command-line-arguments.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next" href="command-line-arguments.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

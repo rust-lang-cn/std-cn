@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="这个宏在运行时测试 `aarch64` 特性是否在 aarch64 平台上启用。 目前大多数特性仅在基于 linux 的平台上受支持。"><title>is_aarch64_feature_detected in std::arch - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.71.0" data-rustdoc-version="1.71.0-dev" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="sidebar-items1.71.0.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../std/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../std/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><div class="sidebar-elems"><h2><a href="index.html">In std::arch</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="../index.html">std</a>::<wbr><a href="index.html">arch</a>::<wbr><a class="macro" href="#">is_aarch64_feature_detected</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><span class="since" title="Stable since Rust version 1.60.0">1.60.0</span> · <a class="srclink" href="https://doc.rust-lang.org/nightly/src/std_detect/detect/arch/aarch64.rs.html#3-153">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><span class="macro">macro_rules! </span>is_aarch64_feature_detected {
+    (<span class="string">&quot;neon&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;pmull&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;fp&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;fp16&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sve&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;crc&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;lse&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;lse2&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;rdm&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;rcpc&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;rcpc2&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;dotprod&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;tme&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;fhm&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;dit&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;flagm&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;ssbs&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sb&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;paca&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;pacg&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;dpb&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;dpb2&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sve2&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sve2-aes&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sve2-sm4&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sve2-sha3&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sve2-bitperm&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;frintts&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;i8mm&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;f32mm&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;f64mm&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;bf16&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;rand&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;bti&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;mte&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;jsconv&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;fcma&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;aes&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sha2&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sha3&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;sm4&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;asimd&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;ras&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;v8.1a&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;v8.2a&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;v8.3a&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;v8.4a&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;v8.5a&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;v8.6a&quot;</span>) =&gt; { ... };
+    (<span class="string">&quot;v8.7a&quot;</span>) =&gt; { ... };
+    (<span class="macro-nonterminal">$t</span>:tt,) =&gt; { ... };
+    (<span class="macro-nonterminal">$t</span>:tt) =&gt; { ... };
+}</pre><span class="item-info"><div class="stab portability">Available on <strong>AArch64</strong> only.</div></span><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>这个宏在运行时测试 <code>aarch64</code> 特性是否在 aarch64 平台上启用。
+目前大多数特性仅在基于 linux 的平台上受支持。</p>
+<p>这个宏需要一个参数，该参数是正在测试的特性的字符串文字。
+特性名大多取自 <a href="https://developer.arm.com/documentation/ddi0487/latest">ARM 架构参考手册</a> 中的 FEAT_* 定义。</p>
+<h3 id="支持的参数"><a href="#支持的参数">支持的参数</a></h3>
+<ul>
+<li><code>&quot;asimd&quot;</code> 或 “neon”-FEAT_AdvSIMD</li>
+<li><code>&quot;pmull&quot;</code> - FEAT_PMULL</li>
+<li><code>&quot;fp&quot;</code> - FEAT_FP</li>
+<li><code>&quot;fp16&quot;</code> - FEAT_FP16</li>
+<li><code>&quot;sve&quot;</code> - FEAT_SVE</li>
+<li><code>&quot;crc&quot;</code> - FEAT_CRC</li>
+<li><code>&quot;lse&quot;</code> - FEAT_LSE</li>
+<li><code>&quot;lse2&quot;</code> - FEAT_LSE2</li>
+<li><code>&quot;rdm&quot;</code> - FEAT_RDM</li>
+<li><code>&quot;rcpc&quot;</code> - FEAT_LRCPC</li>
+<li><code>&quot;rcpc2&quot;</code> - FEAT_LRCPC2</li>
+<li><code>&quot;dotprod&quot;</code> - FEAT_DotProd</li>
+<li><code>&quot;tme&quot;</code> - FEAT_TME</li>
+<li><code>&quot;fhm&quot;</code> - FEAT_FHM</li>
+<li><code>&quot;dit&quot;</code> - FEAT_DIT</li>
+<li><code>&quot;flagm&quot;</code> - FEAT_FLAGM</li>
+<li><code>&quot;ssbs&quot;</code> - FEAT_SSBS</li>
+<li><code>&quot;sb&quot;</code> - FEAT_SB</li>
+<li><code>&quot;paca&quot;</code>-FEAT_PAuth (地址认证)</li>
+<li><code>&quot;pacg&quot;</code>-FEAT_Pauth (通用身份验证)</li>
+<li><code>&quot;dpb&quot;</code> - FEAT_DPB</li>
+<li><code>&quot;dpb2&quot;</code> - FEAT_DPB2</li>
+<li><code>&quot;sve2&quot;</code> - FEAT_SVE2</li>
+<li><code>&quot;sve2-aes&quot;</code> - FEAT_SVE2_AES</li>
+<li><code>&quot;sve2-sm4&quot;</code> - FEAT_SVE2_SM4</li>
+<li><code>&quot;sve2-sha3&quot;</code> - FEAT_SVE2_SHA3</li>
+<li><code>&quot;sve2-bitperm&quot;</code> - FEAT_SVE2_BitPerm</li>
+<li><code>&quot;frintts&quot;</code> - FEAT_FRINTTS</li>
+<li><code>&quot;i8mm&quot;</code> - FEAT_I8MM</li>
+<li><code>&quot;f32mm&quot;</code> - FEAT_F32MM</li>
+<li><code>&quot;f64mm&quot;</code> - FEAT_F64MM</li>
+<li><code>&quot;bf16&quot;</code> - FEAT_BF16</li>
+<li><code>&quot;rand&quot;</code> - FEAT_RNG</li>
+<li><code>&quot;bti&quot;</code> - FEAT_BTI</li>
+<li><code>&quot;mte&quot;</code> - FEAT_MTE</li>
+<li><code>&quot;jsconv&quot;</code> - FEAT_JSCVT</li>
+<li><code>&quot;fcma&quot;</code> - FEAT_FCMA</li>
+<li><code>&quot;aes&quot;</code> - FEAT_AES</li>
+<li><code>&quot;sha2&quot;</code> - FEAT_SHA1 &amp; FEAT_SHA256</li>
+<li><code>&quot;sha3&quot;</code> - FEAT_SHA512 &amp; FEAT_SHA3</li>
+<li><code>&quot;sm4&quot;</code> - FEAT_SM3 &amp; FEAT_SM4</li>
+</ul>
+</div></details></section></div></main></body></html>

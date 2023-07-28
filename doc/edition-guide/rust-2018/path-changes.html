@@ -1,0 +1,494 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Path and module system changes - The Rust Edition Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../editions/index.html"><strong aria-hidden="true">1.</strong> What are editions?</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editions/creating-a-new-project.html"><strong aria-hidden="true">1.1.</strong> Creating a new project</a></li><li class="chapter-item expanded "><a href="../editions/transitioning-an-existing-project-to-a-new-edition.html"><strong aria-hidden="true">1.2.</strong> Transitioning an existing project to a new edition</a></li><li class="chapter-item expanded "><a href="../editions/advanced-migrations.html"><strong aria-hidden="true">1.3.</strong> Advanced migrations</a></li></ol></li><li class="chapter-item expanded "><a href="../rust-2015/index.html"><strong aria-hidden="true">2.</strong> Rust 2015</a></li><li class="chapter-item expanded "><a href="../rust-2018/index.html"><strong aria-hidden="true">3.</strong> Rust 2018</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rust-2018/path-changes.html" class="active"><strong aria-hidden="true">3.1.</strong> Path and module system changes</a></li><li class="chapter-item expanded "><a href="../rust-2018/trait-fn-parameters.html"><strong aria-hidden="true">3.2.</strong> Anonymous trait function parameters deprecated</a></li><li class="chapter-item expanded "><a href="../rust-2018/new-keywords.html"><strong aria-hidden="true">3.3.</strong> New keywords</a></li><li class="chapter-item expanded "><a href="../rust-2018/tyvar-behind-raw-pointer.html"><strong aria-hidden="true">3.4.</strong> Method dispatch for raw pointers to inference variables</a></li><li class="chapter-item expanded "><a href="../rust-2018/cargo.html"><strong aria-hidden="true">3.5.</strong> Cargo changes</a></li></ol></li><li class="chapter-item expanded "><a href="../rust-2021/index.html"><strong aria-hidden="true">4.</strong> Rust 2021</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../rust-2021/prelude.html"><strong aria-hidden="true">4.1.</strong> Additions to the prelude</a></li><li class="chapter-item expanded "><a href="../rust-2021/default-cargo-resolver.html"><strong aria-hidden="true">4.2.</strong> Default Cargo feature resolver</a></li><li class="chapter-item expanded "><a href="../rust-2021/IntoIterator-for-arrays.html"><strong aria-hidden="true">4.3.</strong> IntoIterator for arrays</a></li><li class="chapter-item expanded "><a href="../rust-2021/disjoint-capture-in-closures.html"><strong aria-hidden="true">4.4.</strong> Disjoint capture in closures</a></li><li class="chapter-item expanded "><a href="../rust-2021/panic-macro-consistency.html"><strong aria-hidden="true">4.5.</strong> Panic macro consistency</a></li><li class="chapter-item expanded "><a href="../rust-2021/reserving-syntax.html"><strong aria-hidden="true">4.6.</strong> Reserving syntax</a></li><li class="chapter-item expanded "><a href="../rust-2021/warnings-promoted-to-error.html"><strong aria-hidden="true">4.7.</strong> Warnings promoted to errors</a></li><li class="chapter-item expanded "><a href="../rust-2021/or-patterns-macro-rules.html"><strong aria-hidden="true">4.8.</strong> Or patterns in macro-rules</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Edition Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/edition-guide" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="path-and-module-system-changes"><a class="header" href="#path-and-module-system-changes">Path and module system changes</a></h1>
+<p><img src="https://img.shields.io/badge/Minimum%20Rust%20Version-1.31-brightgreen.svg" alt="Minimum Rust version: 1.31" /></p>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<ul>
+<li>Paths in <code>use</code> declarations now work the same as other paths.</li>
+<li>Paths starting with <code>::</code> must now be followed with an external crate.</li>
+<li>Paths in <code>pub(in path)</code> visibility modifiers must now start with <code>crate</code>, <code>self</code>, or <code>super</code>.</li>
+</ul>
+<h2 id="motivation"><a class="header" href="#motivation">Motivation</a></h2>
+<p>The module system is often one of the hardest things for people new to Rust. Everyone
+has their own things that take time to master, of course, but there's a root
+cause for why it's so confusing to many: while there are simple and
+consistent rules defining the module system, their consequences can feel
+inconsistent, counterintuitive and mysterious.</p>
+<p>As such, the 2018 edition of Rust introduces a few new module system
+features, but they end up <em>simplifying</em> the module system, to make it more
+clear as to what is going on.</p>
+<p>Here's a brief summary:</p>
+<ul>
+<li><code>extern crate</code> is no longer needed in 99% of circumstances.</li>
+<li>The <code>crate</code> keyword refers to the current crate.</li>
+<li>Paths may start with a crate name, even within submodules.</li>
+<li>Paths starting with <code>::</code> must reference an external crate.</li>
+<li>A <code>foo.rs</code> and <code>foo/</code> subdirectory may coexist; <code>mod.rs</code> is no longer needed
+when placing submodules in a subdirectory.</li>
+<li>Paths in <code>use</code> declarations work the same as other paths.</li>
+</ul>
+<p>These may seem like arbitrary new rules when put this way, but the mental
+model is now significantly simplified overall. Read on for more details!</p>
+<h2 id="more-details"><a class="header" href="#more-details">More details</a></h2>
+<p>Let's talk about each new feature in turn.</p>
+<h3 id="no-more-extern-crate"><a class="header" href="#no-more-extern-crate">No more <code>extern crate</code></a></h3>
+<p>This one is quite straightforward: you no longer need to write <code>extern crate</code> to
+import a crate into your project. Before:</p>
+<pre><code class="language-rust ignore">// Rust 2015
+
+extern crate futures;
+
+mod submodule {
+    use futures::Future;
+}</code></pre>
+<p>After:</p>
+<pre><code class="language-rust ignore">// Rust 2018
+
+mod submodule {
+    use futures::Future;
+}</code></pre>
+<p>Now, to add a new crate to your project, you can add it to your <code>Cargo.toml</code>,
+and then there is no step two. If you're not using Cargo, you already had to pass
+<code>--extern</code> flags to give <code>rustc</code> the location of external crates, so you'd just
+keep doing what you were doing there as well.</p>
+<blockquote>
+<p>One small note here: <code>cargo fix</code> will not currently automate this change. We may
+have it do this for you in the future.</p>
+</blockquote>
+<h4 id="an-exception"><a class="header" href="#an-exception">An exception</a></h4>
+<p>There's one exception to this rule, and that's the &quot;sysroot&quot; crates. These are the
+crates distributed with Rust itself.</p>
+<p>Usually these are only needed in very specialized situations. Starting in
+1.41, <code>rustc</code> accepts the <code>--extern=CRATE_NAME</code> flag which automatically adds
+the given crate name in a way similar to <code>extern crate</code>. Build tools may use
+this to inject sysroot crates into the crate's prelude. Cargo does not have a
+general way to express this, though it uses it for <code>proc_macro</code> crates.</p>
+<p>Some examples of needing to explicitly import sysroot crates are:</p>
+<ul>
+<li><a href="../../std/index.html"><code>std</code></a>: Usually this is not necessary, because <code>std</code> is automatically
+imported unless the crate is marked with <a href="../../reference/names/preludes.html#the-no_std-attribute"><code>#![no_std]</code></a>.</li>
+<li><a href="../../core/index.html"><code>core</code></a>: Usually this is not necessary, because <code>core</code> is automatically
+imported, unless the crate is marked with <a href="https://github.com/rust-lang/rust/issues/29639"><code>#![no_core]</code></a>. For
+example, some of the internal crates used by the standard library itself
+need this.</li>
+<li><a href="../../proc_macro/index.html"><code>proc_macro</code></a>: This is automatically imported by Cargo if it is a
+proc-macro crate starting in 1.42. <code>extern crate proc_macro;</code> would be
+needed if you want to support older releases, or if using another build tool
+that does not pass the appropriate <code>--extern</code> flags to <code>rustc</code>.</li>
+<li><a href="../../alloc/index.html"><code>alloc</code></a>: Items in the <code>alloc</code> crate are usually accessed via re-exports in
+the <code>std</code> crate. If you are working with a <code>no_std</code> crate that supports
+allocation, then you may need to explicitly import <code>alloc</code>.</li>
+<li><a href="../../test/index.html"><code>test</code></a>: This is only available on the <a href="../../book/appendix-07-nightly-rust.html">nightly channel</a>, and is usually
+only used for the unstable benchmark support.</li>
+</ul>
+<h4 id="macros"><a class="header" href="#macros">Macros</a></h4>
+<p>One other use for <code>extern crate</code> was to import macros; that's no longer needed.
+Macros may be imported with <code>use</code> like any other item. For example, the
+following use of <code>extern crate</code>:</p>
+<pre><code class="language-rust ignore">#[macro_use]
+extern crate bar;
+
+fn main() {
+    baz!();
+}</code></pre>
+<p>Can be changed to something like the following:</p>
+<pre><code class="language-rust ignore">use bar::baz;
+
+fn main() {
+    baz!();
+}</code></pre>
+<h4 id="renaming-crates"><a class="header" href="#renaming-crates">Renaming crates</a></h4>
+<p>If you've been using <code>as</code> to rename your crate like this:</p>
+<pre><code class="language-rust ignore">extern crate futures as f;
+
+use f::Future;</code></pre>
+<p>then removing the <code>extern crate</code> line on its own won't work. You'll need to do this:</p>
+<pre><code class="language-rust ignore">use futures as f;
+
+use self::f::Future;</code></pre>
+<p>This change will need to happen in any module that uses <code>f</code>.</p>
+<h3 id="the-crate-keyword-refers-to-the-current-crate"><a class="header" href="#the-crate-keyword-refers-to-the-current-crate">The <code>crate</code> keyword refers to the current crate</a></h3>
+<p>In <code>use</code> declarations and in other code, you can refer to the root of the
+current crate with the <code>crate::</code> prefix. For instance, <code>crate::foo::bar</code> will
+always refer to the name <code>bar</code> inside the module <code>foo</code>, from anywhere else in
+the same crate.</p>
+<p>The prefix <code>::</code> previously referred to either the crate root or an external
+crate; it now unambiguously refers to an external crate. For instance,
+<code>::foo::bar</code> always refers to the name <code>bar</code> inside the external crate <code>foo</code>.</p>
+<h3 id="extern-crate-paths"><a class="header" href="#extern-crate-paths">Extern crate paths</a></h3>
+<p>Previously, using an external crate in a module without a <code>use</code> import
+required a leading <code>::</code> on the path.</p>
+<pre><code class="language-rust ignore">// Rust 2015
+
+extern crate chrono;
+
+fn foo() {
+    // this works in the crate root
+    let x = chrono::Utc::now();
+}
+
+mod submodule {
+    fn function() {
+        // but in a submodule it requires a leading :: if not imported with `use`
+        let x = ::chrono::Utc::now();
+    }
+}</code></pre>
+<p>Now, extern crate names are in scope in the entire crate, including
+submodules.</p>
+<pre><code class="language-rust ignore">// Rust 2018
+
+fn foo() {
+    // this works in the crate root
+    let x = chrono::Utc::now();
+}
+
+mod submodule {
+    fn function() {
+        // crates may be referenced directly, even in submodules
+        let x = chrono::Utc::now();
+    }
+}</code></pre>
+<h3 id="no-more-modrs"><a class="header" href="#no-more-modrs">No more <code>mod.rs</code></a></h3>
+<p>In Rust 2015, if you have a submodule:</p>
+<pre><code class="language-rust ignore">// This `mod` declaration looks for the `foo` module in
+// `foo.rs` or `foo/mod.rs`.
+mod foo;</code></pre>
+<p>It can live in <code>foo.rs</code> or <code>foo/mod.rs</code>. If it has submodules of its own, it
+<em>must</em> be <code>foo/mod.rs</code>. So a <code>bar</code> submodule of <code>foo</code> would live at
+<code>foo/bar.rs</code>.</p>
+<p>In Rust 2018 the restriction that a module with submodules must be named
+<code>mod.rs</code> is lifted. <code>foo.rs</code> can just be <code>foo.rs</code>,
+and the submodule is still <code>foo/bar.rs</code>. This eliminates the special
+name, and if you have a bunch of files open in your editor, you can clearly
+see their names, instead of having a bunch of tabs named <code>mod.rs</code>.</p>
+<table>
+  <thead>
+    <tr>
+      <th>Rust 2015</th>
+      <th>Rust 2018</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+<pre>
+.
+├── lib.rs
+└── foo/
+    ├── mod.rs
+    └── bar.rs
+</pre>
+    </td>
+    <td>
+<pre>
+.
+├── lib.rs
+├── foo.rs
+└── foo/
+    └── bar.rs
+</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="use-paths"><a class="header" href="#use-paths"><code>use</code> paths</a></h3>
+<p><img src="https://img.shields.io/badge/Minimum%20Rust%20Version-1.32-brightgreen.svg" alt="Minimum Rust version: 1.32" /></p>
+<p>Rust 2018 simplifies and unifies path handling compared to Rust 2015. In Rust
+2015, paths work differently in <code>use</code> declarations than they do elsewhere. In
+particular, paths in <code>use</code> declarations would always start from the crate
+root, while paths in other code implicitly started from the current scope.
+Those differences didn't have any effect in the top-level module, which meant
+that everything would seem straightforward until working on a project large
+enough to have submodules.</p>
+<p>In Rust 2018, paths in <code>use</code> declarations and in other code work the same way,
+both in the top-level module and in any submodule. You can use a relative path
+from the current scope, a path starting from an external crate name, or a path
+starting with <code>crate</code>, <code>super</code>, or <code>self</code>.</p>
+<p>Code that looked like this:</p>
+<pre><code class="language-rust ignore">// Rust 2015
+
+extern crate futures;
+
+use futures::Future;
+
+mod foo {
+    pub struct Bar;
+}
+
+use foo::Bar;
+
+fn my_poll() -&gt; futures::Poll { ... }
+
+enum SomeEnum {
+    V1(usize),
+    V2(String),
+}
+
+fn func() {
+    let five = std::sync::Arc::new(5);
+    use SomeEnum::*;
+    match ... {
+        V1(i) =&gt; { ... }
+        V2(s) =&gt; { ... }
+    }
+}</code></pre>
+<p>will look exactly the same in Rust 2018, except that you can delete the <code>extern crate</code> line:</p>
+<pre><code class="language-rust ignore">// Rust 2018
+
+use futures::Future;
+
+mod foo {
+    pub struct Bar;
+}
+
+use foo::Bar;
+
+fn my_poll() -&gt; futures::Poll { ... }
+
+enum SomeEnum {
+    V1(usize),
+    V2(String),
+}
+
+fn func() {
+    let five = std::sync::Arc::new(5);
+    use SomeEnum::*;
+    match ... {
+        V1(i) =&gt; { ... }
+        V2(s) =&gt; { ... }
+    }
+}</code></pre>
+<p>The same code will also work completely unmodified in a submodule:</p>
+<pre><code class="language-rust ignore">// Rust 2018
+
+mod submodule {
+    use futures::Future;
+
+    mod foo {
+        pub struct Bar;
+    }
+
+    use foo::Bar;
+
+    fn my_poll() -&gt; futures::Poll { ... }
+
+    enum SomeEnum {
+        V1(usize),
+        V2(String),
+    }
+
+    fn func() {
+        let five = std::sync::Arc::new(5);
+        use SomeEnum::*;
+        match ... {
+            V1(i) =&gt; { ... }
+            V2(s) =&gt; { ... }
+        }
+    }
+}</code></pre>
+<p>This makes it easy to move code around in a project, and avoids introducing
+additional complexity to multi-module projects.</p>
+<p>If a path is ambiguous, such as if you have an external crate and a local
+module or item with the same name, you'll get an error, and you'll need to
+either rename one of the conflicting names or explicitly disambiguate the path.
+To explicitly disambiguate a path, use <code>::name</code> for an external crate name, or
+<code>self::name</code> for a local module or item.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../rust-2018/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../rust-2018/trait-fn-parameters.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../rust-2018/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../rust-2018/trait-fn-parameters.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Profiles - The Cargo Book</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+            dd {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/first-steps.html"><strong aria-hidden="true">1.2.</strong> First Steps with Cargo</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Cargo Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-cargo-exists.html"><strong aria-hidden="true">2.1.</strong> Why Cargo Exists</a></li><li class="chapter-item expanded "><a href="../guide/creating-a-new-project.html"><strong aria-hidden="true">2.2.</strong> Creating a New Package</a></li><li class="chapter-item expanded "><a href="../guide/working-on-an-existing-project.html"><strong aria-hidden="true">2.3.</strong> Working on an Existing Package</a></li><li class="chapter-item expanded "><a href="../guide/dependencies.html"><strong aria-hidden="true">2.4.</strong> Dependencies</a></li><li class="chapter-item expanded "><a href="../guide/project-layout.html"><strong aria-hidden="true">2.5.</strong> Package Layout</a></li><li class="chapter-item expanded "><a href="../guide/cargo-toml-vs-cargo-lock.html"><strong aria-hidden="true">2.6.</strong> Cargo.toml vs Cargo.lock</a></li><li class="chapter-item expanded "><a href="../guide/tests.html"><strong aria-hidden="true">2.7.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../guide/continuous-integration.html"><strong aria-hidden="true">2.8.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../guide/cargo-home.html"><strong aria-hidden="true">2.9.</strong> Cargo Home</a></li><li class="chapter-item expanded "><a href="../guide/build-cache.html"><strong aria-hidden="true">2.10.</strong> Build Cache</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">3.</strong> Cargo Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/specifying-dependencies.html"><strong aria-hidden="true">3.1.</strong> Specifying Dependencies</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/overriding-dependencies.html"><strong aria-hidden="true">3.1.1.</strong> Overriding Dependencies</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/manifest.html"><strong aria-hidden="true">3.2.</strong> The Manifest Format</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/cargo-targets.html"><strong aria-hidden="true">3.2.1.</strong> Cargo Targets</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/workspaces.html"><strong aria-hidden="true">3.3.</strong> Workspaces</a></li><li class="chapter-item expanded "><a href="../reference/features.html"><strong aria-hidden="true">3.4.</strong> Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/features-examples.html"><strong aria-hidden="true">3.4.1.</strong> Features Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/profiles.html" class="active"><strong aria-hidden="true">3.5.</strong> Profiles</a></li><li class="chapter-item expanded "><a href="../reference/config.html"><strong aria-hidden="true">3.6.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../reference/environment-variables.html"><strong aria-hidden="true">3.7.</strong> Environment Variables</a></li><li class="chapter-item expanded "><a href="../reference/build-scripts.html"><strong aria-hidden="true">3.8.</strong> Build Scripts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/build-script-examples.html"><strong aria-hidden="true">3.8.1.</strong> Build Script Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/publishing.html"><strong aria-hidden="true">3.9.</strong> Publishing on crates.io</a></li><li class="chapter-item expanded "><a href="../reference/pkgid-spec.html"><strong aria-hidden="true">3.10.</strong> Package ID Specifications</a></li><li class="chapter-item expanded "><a href="../reference/source-replacement.html"><strong aria-hidden="true">3.11.</strong> Source Replacement</a></li><li class="chapter-item expanded "><a href="../reference/external-tools.html"><strong aria-hidden="true">3.12.</strong> External Tools</a></li><li class="chapter-item expanded "><a href="../reference/registries.html"><strong aria-hidden="true">3.13.</strong> Registries</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/running-a-registry.html"><strong aria-hidden="true">3.13.1.</strong> Running a Registry</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/registry-index.html"><strong aria-hidden="true">3.13.1.1.</strong> Registry Index</a></li><li class="chapter-item expanded "><a href="../reference/registry-web-api.html"><strong aria-hidden="true">3.13.1.2.</strong> Registry Web API</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../reference/resolver.html"><strong aria-hidden="true">3.14.</strong> Dependency Resolution</a></li><li class="chapter-item expanded "><a href="../reference/semver.html"><strong aria-hidden="true">3.15.</strong> SemVer Compatibility</a></li><li class="chapter-item expanded "><a href="../reference/future-incompat-report.html"><strong aria-hidden="true">3.16.</strong> Future incompat report</a></li><li class="chapter-item expanded "><a href="../reference/timings.html"><strong aria-hidden="true">3.17.</strong> Reporting build timings</a></li><li class="chapter-item expanded "><a href="../reference/unstable.html"><strong aria-hidden="true">3.18.</strong> Unstable Features</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/index.html"><strong aria-hidden="true">4.</strong> Cargo Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/general-commands.html"><strong aria-hidden="true">4.1.</strong> General Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo.html"><strong aria-hidden="true">4.1.1.</strong> cargo</a></li><li class="chapter-item expanded "><a href="../commands/cargo-help.html"><strong aria-hidden="true">4.1.2.</strong> cargo help</a></li><li class="chapter-item expanded "><a href="../commands/cargo-version.html"><strong aria-hidden="true">4.1.3.</strong> cargo version</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/build-commands.html"><strong aria-hidden="true">4.2.</strong> Build Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-bench.html"><strong aria-hidden="true">4.2.1.</strong> cargo bench</a></li><li class="chapter-item expanded "><a href="../commands/cargo-build.html"><strong aria-hidden="true">4.2.2.</strong> cargo build</a></li><li class="chapter-item expanded "><a href="../commands/cargo-check.html"><strong aria-hidden="true">4.2.3.</strong> cargo check</a></li><li class="chapter-item expanded "><a href="../commands/cargo-clean.html"><strong aria-hidden="true">4.2.4.</strong> cargo clean</a></li><li class="chapter-item expanded "><a href="../commands/cargo-doc.html"><strong aria-hidden="true">4.2.5.</strong> cargo doc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fetch.html"><strong aria-hidden="true">4.2.6.</strong> cargo fetch</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fix.html"><strong aria-hidden="true">4.2.7.</strong> cargo fix</a></li><li class="chapter-item expanded "><a href="../commands/cargo-run.html"><strong aria-hidden="true">4.2.8.</strong> cargo run</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustc.html"><strong aria-hidden="true">4.2.9.</strong> cargo rustc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustdoc.html"><strong aria-hidden="true">4.2.10.</strong> cargo rustdoc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-test.html"><strong aria-hidden="true">4.2.11.</strong> cargo test</a></li><li class="chapter-item expanded "><a href="../commands/cargo-report.html"><strong aria-hidden="true">4.2.12.</strong> cargo report</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/manifest-commands.html"><strong aria-hidden="true">4.3.</strong> Manifest Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-add.html"><strong aria-hidden="true">4.3.1.</strong> cargo add</a></li><li class="chapter-item expanded "><a href="../commands/cargo-generate-lockfile.html"><strong aria-hidden="true">4.3.2.</strong> cargo generate-lockfile</a></li><li class="chapter-item expanded "><a href="../commands/cargo-locate-project.html"><strong aria-hidden="true">4.3.3.</strong> cargo locate-project</a></li><li class="chapter-item expanded "><a href="../commands/cargo-metadata.html"><strong aria-hidden="true">4.3.4.</strong> cargo metadata</a></li><li class="chapter-item expanded "><a href="../commands/cargo-pkgid.html"><strong aria-hidden="true">4.3.5.</strong> cargo pkgid</a></li><li class="chapter-item expanded "><a href="../commands/cargo-remove.html"><strong aria-hidden="true">4.3.6.</strong> cargo remove</a></li><li class="chapter-item expanded "><a href="../commands/cargo-tree.html"><strong aria-hidden="true">4.3.7.</strong> cargo tree</a></li><li class="chapter-item expanded "><a href="../commands/cargo-update.html"><strong aria-hidden="true">4.3.8.</strong> cargo update</a></li><li class="chapter-item expanded "><a href="../commands/cargo-vendor.html"><strong aria-hidden="true">4.3.9.</strong> cargo vendor</a></li><li class="chapter-item expanded "><a href="../commands/cargo-verify-project.html"><strong aria-hidden="true">4.3.10.</strong> cargo verify-project</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/package-commands.html"><strong aria-hidden="true">4.4.</strong> Package Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-init.html"><strong aria-hidden="true">4.4.1.</strong> cargo init</a></li><li class="chapter-item expanded "><a href="../commands/cargo-install.html"><strong aria-hidden="true">4.4.2.</strong> cargo install</a></li><li class="chapter-item expanded "><a href="../commands/cargo-new.html"><strong aria-hidden="true">4.4.3.</strong> cargo new</a></li><li class="chapter-item expanded "><a href="../commands/cargo-search.html"><strong aria-hidden="true">4.4.4.</strong> cargo search</a></li><li class="chapter-item expanded "><a href="../commands/cargo-uninstall.html"><strong aria-hidden="true">4.4.5.</strong> cargo uninstall</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/publishing-commands.html"><strong aria-hidden="true">4.5.</strong> Publishing Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-login.html"><strong aria-hidden="true">4.5.1.</strong> cargo login</a></li><li class="chapter-item expanded "><a href="../commands/cargo-logout.html"><strong aria-hidden="true">4.5.2.</strong> cargo logout</a></li><li class="chapter-item expanded "><a href="../commands/cargo-owner.html"><strong aria-hidden="true">4.5.3.</strong> cargo owner</a></li><li class="chapter-item expanded "><a href="../commands/cargo-package.html"><strong aria-hidden="true">4.5.4.</strong> cargo package</a></li><li class="chapter-item expanded "><a href="../commands/cargo-publish.html"><strong aria-hidden="true">4.5.5.</strong> cargo publish</a></li><li class="chapter-item expanded "><a href="../commands/cargo-yank.html"><strong aria-hidden="true">4.5.6.</strong> cargo yank</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">5.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">6.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/git-authentication.html"><strong aria-hidden="true">7.</strong> Appendix: Git Authentication</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Cargo Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/tree/master/src/doc/src" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/edit/master/src/doc/src/reference/profiles.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="profiles"><a class="header" href="#profiles">Profiles</a></h2>
+<p>Profiles provide a way to alter the compiler settings, influencing things like
+optimizations and debugging symbols.</p>
+<p>Cargo has 4 built-in profiles: <code>dev</code>, <code>release</code>, <code>test</code>, and <code>bench</code>. The
+profile is automatically chosen based on which command is being run if a
+profile is not specified on the command-line. In addition to the built-in
+profiles, custom user-defined profiles can also be specified.</p>
+<p>Profile settings can be changed in <a href="manifest.html"><code>Cargo.toml</code></a> with the
+<code>[profile]</code> table. Within each named profile, individual settings can be changed
+with key/value pairs like this:</p>
+<pre><code class="language-toml">[profile.dev]
+opt-level = 1               # Use slightly better optimizations.
+overflow-checks = false     # Disable integer overflow checks.
+</code></pre>
+<p>Cargo only looks at the profile settings in the <code>Cargo.toml</code> manifest at the
+root of the workspace. Profile settings defined in dependencies will be
+ignored.</p>
+<p>Additionally, profiles can be overridden from a <a href="config.html">config</a> definition.
+Specifying a profile in a config file or environment variable will override
+the settings from <code>Cargo.toml</code>.</p>
+<h3 id="profile-settings"><a class="header" href="#profile-settings">Profile settings</a></h3>
+<p>The following is a list of settings that can be controlled in a profile.</p>
+<h4 id="opt-level"><a class="header" href="#opt-level">opt-level</a></h4>
+<p>The <code>opt-level</code> setting controls the <a href="../../rustc/codegen-options/index.html#opt-level"><code>-C opt-level</code> flag</a> which controls the level
+of optimization. Higher optimization levels may produce faster runtime code at
+the expense of longer compiler times. Higher levels may also change and
+rearrange the compiled code which may make it harder to use with a debugger.</p>
+<p>The valid options are:</p>
+<ul>
+<li><code>0</code>: no optimizations</li>
+<li><code>1</code>: basic optimizations</li>
+<li><code>2</code>: some optimizations</li>
+<li><code>3</code>: all optimizations</li>
+<li><code>&quot;s&quot;</code>: optimize for binary size</li>
+<li><code>&quot;z&quot;</code>: optimize for binary size, but also turn off loop vectorization.</li>
+</ul>
+<p>It is recommended to experiment with different levels to find the right
+balance for your project. There may be surprising results, such as level <code>3</code>
+being slower than <code>2</code>, or the <code>&quot;s&quot;</code> and <code>&quot;z&quot;</code> levels not being necessarily
+smaller. You may also want to reevaluate your settings over time as newer
+versions of <code>rustc</code> changes optimization behavior.</p>
+<p>See also <a href="../../rustc/profile-guided-optimization.html">Profile Guided Optimization</a> for more advanced optimization
+techniques.</p>
+<h4 id="debug"><a class="header" href="#debug">debug</a></h4>
+<p>The <code>debug</code> setting controls the <a href="../../rustc/codegen-options/index.html#debuginfo"><code>-C debuginfo</code> flag</a> which controls the
+amount of debug information included in the compiled binary.</p>
+<p>The valid options are:</p>
+<ul>
+<li><code>0</code>, <code>false</code>, or <code>&quot;none&quot;</code>: no debug info at all, default for <a href="#release"><code>release</code></a></li>
+<li><code>&quot;line-directives-only&quot;</code>: line info directives only. For the nvptx* targets this enables <a href="https://reviews.llvm.org/D46061">profiling</a>. For other use cases, <code>line-tables-only</code> is the better, more compatible choice.</li>
+<li><code>&quot;line-tables-only&quot;</code>: line tables only. Generates the minimal amount of debug info for backtraces with filename/line number info, but not anything else, i.e. no variable or function parameter info.</li>
+<li><code>1</code> or <code>&quot;limited&quot;</code>: debug info without type or variable-level information. Generates more detailed module-level info than <code>line-tables-only</code>.</li>
+<li><code>2</code>, <code>true</code>, or <code>&quot;full&quot;</code>: full debug info, default for <a href="#dev"><code>dev</code></a></li>
+</ul>
+<p>For more information on what each option does see <code>rustc</code>’s docs on <a href="../../rustc/codegen-options/index.html#debuginfo">debuginfo</a>.</p>
+<p>You may wish to also configure the <a href="#split-debuginfo"><code>split-debuginfo</code></a> option
+depending on your needs as well.</p>
+<h4 id="split-debuginfo"><a class="header" href="#split-debuginfo">split-debuginfo</a></h4>
+<p>The <code>split-debuginfo</code> setting controls the <a href="../../rustc/codegen-options/index.html#split-debuginfo"><code>-C split-debuginfo</code> flag</a> which
+controls whether debug information, if generated, is either placed in the
+executable itself or adjacent to it.</p>
+<p>This option is a string and acceptable values are the same as those the
+<a href="../../rustc/codegen-options/index.html#split-debuginfo">compiler accepts</a>. The default value for this option
+is <code>unpacked</code> on macOS for profiles that have debug information otherwise
+enabled. Otherwise the default for this option is <a href="../../rustc/codegen-options/index.html#split-debuginfo">documented with rustc</a> and is platform-specific. Some options are only
+available on the <a href="../../book/appendix-07-nightly-rust.html">nightly channel</a>. The Cargo default may change in the future
+once more testing has been performed, and support for DWARF is stabilized.</p>
+<h4 id="strip"><a class="header" href="#strip">strip</a></h4>
+<p>The <code>strip</code> option controls the <a href="../../rustc/codegen-options/index.html#strip"><code>-C strip</code> flag</a>, which directs rustc to
+strip either symbols or debuginfo from a binary. This can be enabled like so:</p>
+<pre><code class="language-toml">[package]
+# ...
+
+[profile.release]
+strip = &quot;debuginfo&quot;
+</code></pre>
+<p>Possible string values of <code>strip</code> are <code>&quot;none&quot;</code>, <code>&quot;debuginfo&quot;</code>, and <code>&quot;symbols&quot;</code>.
+The default is <code>&quot;none&quot;</code>.</p>
+<p>You can also configure this option with the boolean values <code>true</code> or <code>false</code>.
+<code>strip = true</code> is equivalent to <code>strip = &quot;symbols&quot;</code>. <code>strip = false</code> is
+equivalent to <code>strip = &quot;none&quot;</code> and disables <code>strip</code> completely.</p>
+<h4 id="debug-assertions"><a class="header" href="#debug-assertions">debug-assertions</a></h4>
+<p>The <code>debug-assertions</code> setting controls the <a href="../../rustc/codegen-options/index.html#debug-assertions"><code>-C debug-assertions</code> flag</a> which
+turns <code>cfg(debug_assertions)</code> <a href="../../reference/conditional-compilation.html#debug_assertions">conditional compilation</a> on or off. Debug
+assertions are intended to include runtime validation which is only available
+in debug/development builds. These may be things that are too expensive or
+otherwise undesirable in a release build. Debug assertions enables the
+<a href="../../std/macro.debug_assert.html"><code>debug_assert!</code> macro</a> in the standard library.</p>
+<p>The valid options are:</p>
+<ul>
+<li><code>true</code>: enabled</li>
+<li><code>false</code>: disabled</li>
+</ul>
+<h4 id="overflow-checks"><a class="header" href="#overflow-checks">overflow-checks</a></h4>
+<p>The <code>overflow-checks</code> setting controls the <a href="../../rustc/codegen-options/index.html#overflow-checks"><code>-C overflow-checks</code> flag</a> which
+controls the behavior of <a href="../../reference/expressions/operator-expr.html#overflow">runtime integer overflow</a>. When overflow-checks are
+enabled, a panic will occur on overflow.</p>
+<p>The valid options are:</p>
+<ul>
+<li><code>true</code>: enabled</li>
+<li><code>false</code>: disabled</li>
+</ul>
+<h4 id="lto"><a class="header" href="#lto">lto</a></h4>
+<p>The <code>lto</code> setting controls the <a href="../../rustc/codegen-options/index.html#lto"><code>-C lto</code> flag</a> which controls LLVM’s <a href="https://llvm.org/docs/LinkTimeOptimization.html">link
+time optimizations</a>. LTO can produce better optimized code, using
+whole-program analysis, at the cost of longer linking time.</p>
+<p>The valid options are:</p>
+<ul>
+<li><code>false</code>: Performs “thin local LTO” which performs “thin” LTO on the local
+crate only across its <a href="#codegen-units">codegen units</a>. No LTO is performed
+if codegen units is 1 or <a href="#opt-level">opt-level</a> is 0.</li>
+<li><code>true</code> or <code>&quot;fat&quot;</code>: Performs “fat” LTO which attempts to perform
+optimizations across all crates within the dependency graph.</li>
+<li><code>&quot;thin&quot;</code>: Performs <a href="http://blog.llvm.org/2016/06/thinlto-scalable-and-incremental-lto.html">“thin” LTO</a>. This is similar to “fat”, but takes
+substantially less time to run while still achieving performance gains
+similar to “fat”.</li>
+<li><code>&quot;off&quot;</code>: Disables LTO.</li>
+</ul>
+<p>See also the <a href="../../rustc/codegen-options/index.html#linker-plugin-lto"><code>-C linker-plugin-lto</code></a> <code>rustc</code> flag for cross-language LTO.</p>
+<h4 id="panic"><a class="header" href="#panic">panic</a></h4>
+<p>The <code>panic</code> setting controls the <a href="../../rustc/codegen-options/index.html#panic"><code>-C panic</code> flag</a> which controls which panic
+strategy to use.</p>
+<p>The valid options are:</p>
+<ul>
+<li><code>&quot;unwind&quot;</code>: Unwind the stack upon panic.</li>
+<li><code>&quot;abort&quot;</code>: Terminate the process upon panic.</li>
+</ul>
+<p>When set to <code>&quot;unwind&quot;</code>, the actual value depends on the default of the target
+platform. For example, the NVPTX platform does not support unwinding, so it
+always uses <code>&quot;abort&quot;</code>.</p>
+<p>Tests, benchmarks, build scripts, and proc macros ignore the <code>panic</code> setting.
+The <code>rustc</code> test harness currently requires <code>unwind</code> behavior. See the
+<a href="unstable.html#panic-abort-tests"><code>panic-abort-tests</code></a> unstable flag which enables <code>abort</code> behavior.</p>
+<p>Additionally, when using the <code>abort</code> strategy and building a test, all of the
+dependencies will also be forced to build with the <code>unwind</code> strategy.</p>
+<h4 id="incremental"><a class="header" href="#incremental">incremental</a></h4>
+<p>The <code>incremental</code> setting controls the <a href="../../rustc/codegen-options/index.html#incremental"><code>-C incremental</code> flag</a> which controls
+whether or not incremental compilation is enabled. Incremental compilation
+causes <code>rustc</code> to save additional information to disk which will be reused
+when recompiling the crate, improving re-compile times. The additional
+information is stored in the <code>target</code> directory.</p>
+<p>The valid options are:</p>
+<ul>
+<li><code>true</code>: enabled</li>
+<li><code>false</code>: disabled</li>
+</ul>
+<p>Incremental compilation is only used for workspace members and “path”
+dependencies.</p>
+<p>The incremental value can be overridden globally with the <code>CARGO_INCREMENTAL</code>
+<a href="environment-variables.html">environment variable</a> or the <a href="config.html#buildincremental"><code>build.incremental</code></a> config variable.</p>
+<h4 id="codegen-units"><a class="header" href="#codegen-units">codegen-units</a></h4>
+<p>The <code>codegen-units</code> setting controls the <a href="../../rustc/codegen-options/index.html#codegen-units"><code>-C codegen-units</code> flag</a> which
+controls how many “code generation units” a crate will be split into. More
+code generation units allows more of a crate to be processed in parallel
+possibly reducing compile time, but may produce slower code.</p>
+<p>This option takes an integer greater than 0.</p>
+<p>The default is 256 for <a href="#incremental">incremental</a> builds, and 16 for
+non-incremental builds.</p>
+<h4 id="rpath"><a class="header" href="#rpath">rpath</a></h4>
+<p>The <code>rpath</code> setting controls the <a href="../../rustc/codegen-options/index.html#rpath"><code>-C rpath</code> flag</a> which controls
+whether or not <a href="https://en.wikipedia.org/wiki/Rpath"><code>rpath</code></a> is enabled.</p>
+<h3 id="default-profiles"><a class="header" href="#default-profiles">Default profiles</a></h3>
+<h4 id="dev"><a class="header" href="#dev">dev</a></h4>
+<p>The <code>dev</code> profile is used for normal development and debugging. It is the
+default for build commands like <a href="../commands/cargo-build.html"><code>cargo build</code></a>, and is used for <code>cargo install --debug</code>.</p>
+<p>The default settings for the <code>dev</code> profile are:</p>
+<pre><code class="language-toml">[profile.dev]
+opt-level = 0
+debug = true
+split-debuginfo = '...'  # Platform-specific.
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = 'unwind'
+incremental = true
+codegen-units = 256
+rpath = false
+</code></pre>
+<h4 id="release"><a class="header" href="#release">release</a></h4>
+<p>The <code>release</code> profile is intended for optimized artifacts used for releases
+and in production. This profile is used when the <code>--release</code> flag is used, and
+is the default for <a href="../commands/cargo-install.html"><code>cargo install</code></a>.</p>
+<p>The default settings for the <code>release</code> profile are:</p>
+<pre><code class="language-toml">[profile.release]
+opt-level = 3
+debug = false
+split-debuginfo = '...'  # Platform-specific.
+debug-assertions = false
+overflow-checks = false
+lto = false
+panic = 'unwind'
+incremental = false
+codegen-units = 16
+rpath = false
+</code></pre>
+<h4 id="test"><a class="header" href="#test">test</a></h4>
+<p>The <code>test</code> profile is the default profile used by <a href="../commands/cargo-test.html"><code>cargo test</code></a>.
+The <code>test</code> profile inherits the settings from the <a href="#dev"><code>dev</code></a> profile.</p>
+<h4 id="bench"><a class="header" href="#bench">bench</a></h4>
+<p>The <code>bench</code> profile is the default profile used by <a href="../commands/cargo-bench.html"><code>cargo bench</code></a>.
+The <code>bench</code> profile inherits the settings from the <a href="#release"><code>release</code></a> profile.</p>
+<h4 id="build-dependencies"><a class="header" href="#build-dependencies">Build Dependencies</a></h4>
+<p>To compile quickly, all profiles, by default, do not optimize build
+dependencies (build scripts, proc macros, and their dependencies), and avoid
+computing debug info when a build dependency is not used as a runtime
+dependency. The default settings for build overrides are:</p>
+<pre><code class="language-toml">[profile.dev.build-override]
+opt-level = 0
+codegen-units = 256
+debug = false # when possible
+
+[profile.release.build-override]
+opt-level = 0
+codegen-units = 256
+</code></pre>
+<p>However, if errors occur while running build dependencies, turning full debug
+info on will improve backtraces and debuggability when needed:</p>
+<pre><code class="language-toml">debug = true
+</code></pre>
+<p>Build dependencies otherwise inherit settings from the active profile in use, as
+described in <a href="#profile-selection">Profile selection</a>.</p>
+<h3 id="custom-profiles"><a class="header" href="#custom-profiles">Custom profiles</a></h3>
+<p>In addition to the built-in profiles, additional custom profiles can be
+defined. These may be useful for setting up multiple workflows and build
+modes. When defining a custom profile, you must specify the <code>inherits</code> key to
+specify which profile the custom profile inherits settings from when the
+setting is not specified.</p>
+<p>For example, let’s say you want to compare a normal release build with a
+release build with <a href="#lto">LTO</a> optimizations, you can specify something like
+the following in <code>Cargo.toml</code>:</p>
+<pre><code class="language-toml">[profile.release-lto]
+inherits = &quot;release&quot;
+lto = true
+</code></pre>
+<p>The <code>--profile</code> flag can then be used to choose this custom profile:</p>
+<pre><code class="language-console">cargo build --profile release-lto
+</code></pre>
+<p>The output for each profile will be placed in a directory of the same name
+as the profile in the <a href="../guide/build-cache.html"><code>target</code> directory</a>. As in the example above, the
+output would go into the <code>target/release-lto</code> directory.</p>
+<h3 id="profile-selection"><a class="header" href="#profile-selection">Profile selection</a></h3>
+<p>The profile used depends on the command, the command-line flags like
+<code>--release</code> or <code>--profile</code>, and the package (in the case of
+<a href="#overrides">overrides</a>). The default profile if none is specified is:</p>
+<div class="table-wrapper"><table><thead><tr><th>Command</th><th>Default Profile</th></tr></thead><tbody>
+<tr><td><a href="../commands/cargo-run.html"><code>cargo run</code></a>, <a href="../commands/cargo-build.html"><code>cargo build</code></a>,<br><a href="../commands/cargo-check.html"><code>cargo check</code></a>, <a href="../commands/cargo-rustc.html"><code>cargo rustc</code></a></td><td><a href="#dev"><code>dev</code> profile</a></td></tr>
+<tr><td><a href="../commands/cargo-test.html"><code>cargo test</code></a></td><td><a href="#test"><code>test</code> profile</a></td></tr>
+<tr><td><a href="../commands/cargo-bench.html"><code>cargo bench</code></a></td><td><a href="#bench"><code>bench</code> profile</a></td></tr>
+<tr><td><a href="../commands/cargo-install.html"><code>cargo install</code></a></td><td><a href="#release"><code>release</code> profile</a></td></tr>
+</tbody></table>
+</div>
+<p>You can switch to a different profile using the <code>--profile=NAME</code> option which will used the given profile.
+The <code>--release</code> flag is equivalent to <code>--profile=release</code>.</p>
+<p>The selected profile applies to all Cargo targets, 
+including <a href="./cargo-targets.html#library">library</a>,
+<a href="./cargo-targets.html#binaries">binary</a>, 
+<a href="./cargo-targets.html#examples">example</a>, 
+<a href="./cargo-targets.html#tests">test</a>, 
+and <a href="./cargo-targets.html#benchmarks">benchmark</a>.</p>
+<p>The profile for specific packages can be specified with
+<a href="#overrides">overrides</a>, described below.</p>
+<h3 id="overrides"><a class="header" href="#overrides">Overrides</a></h3>
+<p>Profile settings can be overridden for specific packages and build-time
+crates. To override the settings for a specific package, use the <code>package</code>
+table to change the settings for the named package:</p>
+<pre><code class="language-toml"># The `foo` package will use the -Copt-level=3 flag.
+[profile.dev.package.foo]
+opt-level = 3
+</code></pre>
+<p>The package name is actually a <a href="pkgid-spec.html">Package ID Spec</a>, so you can
+target individual versions of a package with syntax such as
+<code>[profile.dev.package.&quot;foo:2.1.0&quot;]</code>.</p>
+<p>To override the settings for all dependencies (but not any workspace member),
+use the <code>&quot;*&quot;</code> package name:</p>
+<pre><code class="language-toml"># Set the default for dependencies.
+[profile.dev.package.&quot;*&quot;]
+opt-level = 2
+</code></pre>
+<p>To override the settings for build scripts, proc macros, and their
+dependencies, use the <code>build-override</code> table:</p>
+<pre><code class="language-toml"># Set the settings for build scripts and proc-macros.
+[profile.dev.build-override]
+opt-level = 3
+</code></pre>
+<blockquote>
+<p>Note: When a dependency is both a normal dependency and a build dependency,
+Cargo will try to only build it once when <code>--target</code> is not specified. When
+using <code>build-override</code>, the dependency may need to be built twice, once as a
+normal dependency and once with the overridden build settings. This may
+increase initial build times.</p>
+</blockquote>
+<p>The precedence for which value is used is done in the following order (first
+match wins):</p>
+<ol>
+<li><code>[profile.dev.package.name]</code> — A named package.</li>
+<li><code>[profile.dev.package.&quot;*&quot;]</code> — For any non-workspace member.</li>
+<li><code>[profile.dev.build-override]</code> — Only for build scripts, proc macros, and
+their dependencies.</li>
+<li><code>[profile.dev]</code> — Settings in <code>Cargo.toml</code>.</li>
+<li>Default values built-in to Cargo.</li>
+</ol>
+<p>Overrides cannot specify the <code>panic</code>, <code>lto</code>, or <code>rpath</code> settings.</p>
+<h4 id="overrides-and-generics"><a class="header" href="#overrides-and-generics">Overrides and generics</a></h4>
+<p>The location where generic code is instantiated will influence the
+optimization settings used for that generic code. This can cause subtle
+interactions when using profile overrides to change the optimization level of
+a specific crate. If you attempt to raise the optimization level of a
+dependency which defines generic functions, those generic functions may not be
+optimized when used in your local crate. This is because the code may be
+generated in the crate where it is instantiated, and thus may use the
+optimization settings of that crate.</p>
+<p>For example, <a href="https://crates.io/crates/nalgebra">nalgebra</a> is a library which defines vectors and matrices making
+heavy use of generic parameters. If your local code defines concrete nalgebra
+types like <code>Vector4&lt;f64&gt;</code> and uses their methods, the corresponding nalgebra
+code will be instantiated and built within your crate. Thus, if you attempt to
+increase the optimization level of <code>nalgebra</code> using a profile override, it may
+not result in faster performance.</p>
+<p>Further complicating the issue, <code>rustc</code> has some optimizations where it will
+attempt to share monomorphized generics between crates. If the opt-level is 2
+or 3, then a crate will not use monomorphized generics from other crates, nor
+will it export locally defined monomorphized items to be shared with other
+crates. When experimenting with optimizing dependencies for development,
+consider trying opt-level 1, which will apply some optimizations while still
+allowing monomorphized items to be shared.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/features-examples.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../reference/config.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/features-examples.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../reference/config.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

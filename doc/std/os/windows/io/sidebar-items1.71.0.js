@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["BorrowedHandle","BorrowedSocket","HandleOrInvalid","HandleOrNull","InvalidHandleError","NullHandleError","OwnedHandle","OwnedSocket"],"trait":["AsHandle","AsRawHandle","AsRawSocket","AsSocket","FromRawHandle","FromRawSocket","IntoRawHandle","IntoRawSocket"],"type":["RawHandle","RawSocket"]};

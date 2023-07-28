@@ -1,0 +1,408 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Publishing on crates.io - The Cargo Book</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+            dd {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/first-steps.html"><strong aria-hidden="true">1.2.</strong> First Steps with Cargo</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Cargo Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-cargo-exists.html"><strong aria-hidden="true">2.1.</strong> Why Cargo Exists</a></li><li class="chapter-item expanded "><a href="../guide/creating-a-new-project.html"><strong aria-hidden="true">2.2.</strong> Creating a New Package</a></li><li class="chapter-item expanded "><a href="../guide/working-on-an-existing-project.html"><strong aria-hidden="true">2.3.</strong> Working on an Existing Package</a></li><li class="chapter-item expanded "><a href="../guide/dependencies.html"><strong aria-hidden="true">2.4.</strong> Dependencies</a></li><li class="chapter-item expanded "><a href="../guide/project-layout.html"><strong aria-hidden="true">2.5.</strong> Package Layout</a></li><li class="chapter-item expanded "><a href="../guide/cargo-toml-vs-cargo-lock.html"><strong aria-hidden="true">2.6.</strong> Cargo.toml vs Cargo.lock</a></li><li class="chapter-item expanded "><a href="../guide/tests.html"><strong aria-hidden="true">2.7.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../guide/continuous-integration.html"><strong aria-hidden="true">2.8.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../guide/cargo-home.html"><strong aria-hidden="true">2.9.</strong> Cargo Home</a></li><li class="chapter-item expanded "><a href="../guide/build-cache.html"><strong aria-hidden="true">2.10.</strong> Build Cache</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">3.</strong> Cargo Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/specifying-dependencies.html"><strong aria-hidden="true">3.1.</strong> Specifying Dependencies</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/overriding-dependencies.html"><strong aria-hidden="true">3.1.1.</strong> Overriding Dependencies</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/manifest.html"><strong aria-hidden="true">3.2.</strong> The Manifest Format</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/cargo-targets.html"><strong aria-hidden="true">3.2.1.</strong> Cargo Targets</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/workspaces.html"><strong aria-hidden="true">3.3.</strong> Workspaces</a></li><li class="chapter-item expanded "><a href="../reference/features.html"><strong aria-hidden="true">3.4.</strong> Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/features-examples.html"><strong aria-hidden="true">3.4.1.</strong> Features Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/profiles.html"><strong aria-hidden="true">3.5.</strong> Profiles</a></li><li class="chapter-item expanded "><a href="../reference/config.html"><strong aria-hidden="true">3.6.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../reference/environment-variables.html"><strong aria-hidden="true">3.7.</strong> Environment Variables</a></li><li class="chapter-item expanded "><a href="../reference/build-scripts.html"><strong aria-hidden="true">3.8.</strong> Build Scripts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/build-script-examples.html"><strong aria-hidden="true">3.8.1.</strong> Build Script Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/publishing.html" class="active"><strong aria-hidden="true">3.9.</strong> Publishing on crates.io</a></li><li class="chapter-item expanded "><a href="../reference/pkgid-spec.html"><strong aria-hidden="true">3.10.</strong> Package ID Specifications</a></li><li class="chapter-item expanded "><a href="../reference/source-replacement.html"><strong aria-hidden="true">3.11.</strong> Source Replacement</a></li><li class="chapter-item expanded "><a href="../reference/external-tools.html"><strong aria-hidden="true">3.12.</strong> External Tools</a></li><li class="chapter-item expanded "><a href="../reference/registries.html"><strong aria-hidden="true">3.13.</strong> Registries</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/running-a-registry.html"><strong aria-hidden="true">3.13.1.</strong> Running a Registry</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/registry-index.html"><strong aria-hidden="true">3.13.1.1.</strong> Registry Index</a></li><li class="chapter-item expanded "><a href="../reference/registry-web-api.html"><strong aria-hidden="true">3.13.1.2.</strong> Registry Web API</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../reference/resolver.html"><strong aria-hidden="true">3.14.</strong> Dependency Resolution</a></li><li class="chapter-item expanded "><a href="../reference/semver.html"><strong aria-hidden="true">3.15.</strong> SemVer Compatibility</a></li><li class="chapter-item expanded "><a href="../reference/future-incompat-report.html"><strong aria-hidden="true">3.16.</strong> Future incompat report</a></li><li class="chapter-item expanded "><a href="../reference/timings.html"><strong aria-hidden="true">3.17.</strong> Reporting build timings</a></li><li class="chapter-item expanded "><a href="../reference/unstable.html"><strong aria-hidden="true">3.18.</strong> Unstable Features</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/index.html"><strong aria-hidden="true">4.</strong> Cargo Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/general-commands.html"><strong aria-hidden="true">4.1.</strong> General Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo.html"><strong aria-hidden="true">4.1.1.</strong> cargo</a></li><li class="chapter-item expanded "><a href="../commands/cargo-help.html"><strong aria-hidden="true">4.1.2.</strong> cargo help</a></li><li class="chapter-item expanded "><a href="../commands/cargo-version.html"><strong aria-hidden="true">4.1.3.</strong> cargo version</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/build-commands.html"><strong aria-hidden="true">4.2.</strong> Build Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-bench.html"><strong aria-hidden="true">4.2.1.</strong> cargo bench</a></li><li class="chapter-item expanded "><a href="../commands/cargo-build.html"><strong aria-hidden="true">4.2.2.</strong> cargo build</a></li><li class="chapter-item expanded "><a href="../commands/cargo-check.html"><strong aria-hidden="true">4.2.3.</strong> cargo check</a></li><li class="chapter-item expanded "><a href="../commands/cargo-clean.html"><strong aria-hidden="true">4.2.4.</strong> cargo clean</a></li><li class="chapter-item expanded "><a href="../commands/cargo-doc.html"><strong aria-hidden="true">4.2.5.</strong> cargo doc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fetch.html"><strong aria-hidden="true">4.2.6.</strong> cargo fetch</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fix.html"><strong aria-hidden="true">4.2.7.</strong> cargo fix</a></li><li class="chapter-item expanded "><a href="../commands/cargo-run.html"><strong aria-hidden="true">4.2.8.</strong> cargo run</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustc.html"><strong aria-hidden="true">4.2.9.</strong> cargo rustc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustdoc.html"><strong aria-hidden="true">4.2.10.</strong> cargo rustdoc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-test.html"><strong aria-hidden="true">4.2.11.</strong> cargo test</a></li><li class="chapter-item expanded "><a href="../commands/cargo-report.html"><strong aria-hidden="true">4.2.12.</strong> cargo report</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/manifest-commands.html"><strong aria-hidden="true">4.3.</strong> Manifest Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-add.html"><strong aria-hidden="true">4.3.1.</strong> cargo add</a></li><li class="chapter-item expanded "><a href="../commands/cargo-generate-lockfile.html"><strong aria-hidden="true">4.3.2.</strong> cargo generate-lockfile</a></li><li class="chapter-item expanded "><a href="../commands/cargo-locate-project.html"><strong aria-hidden="true">4.3.3.</strong> cargo locate-project</a></li><li class="chapter-item expanded "><a href="../commands/cargo-metadata.html"><strong aria-hidden="true">4.3.4.</strong> cargo metadata</a></li><li class="chapter-item expanded "><a href="../commands/cargo-pkgid.html"><strong aria-hidden="true">4.3.5.</strong> cargo pkgid</a></li><li class="chapter-item expanded "><a href="../commands/cargo-remove.html"><strong aria-hidden="true">4.3.6.</strong> cargo remove</a></li><li class="chapter-item expanded "><a href="../commands/cargo-tree.html"><strong aria-hidden="true">4.3.7.</strong> cargo tree</a></li><li class="chapter-item expanded "><a href="../commands/cargo-update.html"><strong aria-hidden="true">4.3.8.</strong> cargo update</a></li><li class="chapter-item expanded "><a href="../commands/cargo-vendor.html"><strong aria-hidden="true">4.3.9.</strong> cargo vendor</a></li><li class="chapter-item expanded "><a href="../commands/cargo-verify-project.html"><strong aria-hidden="true">4.3.10.</strong> cargo verify-project</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/package-commands.html"><strong aria-hidden="true">4.4.</strong> Package Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-init.html"><strong aria-hidden="true">4.4.1.</strong> cargo init</a></li><li class="chapter-item expanded "><a href="../commands/cargo-install.html"><strong aria-hidden="true">4.4.2.</strong> cargo install</a></li><li class="chapter-item expanded "><a href="../commands/cargo-new.html"><strong aria-hidden="true">4.4.3.</strong> cargo new</a></li><li class="chapter-item expanded "><a href="../commands/cargo-search.html"><strong aria-hidden="true">4.4.4.</strong> cargo search</a></li><li class="chapter-item expanded "><a href="../commands/cargo-uninstall.html"><strong aria-hidden="true">4.4.5.</strong> cargo uninstall</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/publishing-commands.html"><strong aria-hidden="true">4.5.</strong> Publishing Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-login.html"><strong aria-hidden="true">4.5.1.</strong> cargo login</a></li><li class="chapter-item expanded "><a href="../commands/cargo-logout.html"><strong aria-hidden="true">4.5.2.</strong> cargo logout</a></li><li class="chapter-item expanded "><a href="../commands/cargo-owner.html"><strong aria-hidden="true">4.5.3.</strong> cargo owner</a></li><li class="chapter-item expanded "><a href="../commands/cargo-package.html"><strong aria-hidden="true">4.5.4.</strong> cargo package</a></li><li class="chapter-item expanded "><a href="../commands/cargo-publish.html"><strong aria-hidden="true">4.5.5.</strong> cargo publish</a></li><li class="chapter-item expanded "><a href="../commands/cargo-yank.html"><strong aria-hidden="true">4.5.6.</strong> cargo yank</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">5.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">6.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/git-authentication.html"><strong aria-hidden="true">7.</strong> Appendix: Git Authentication</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Cargo Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/tree/master/src/doc/src" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/edit/master/src/doc/src/reference/publishing.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="publishing-on-cratesio"><a class="header" href="#publishing-on-cratesio">Publishing on crates.io</a></h2>
+<p>Once you’ve got a library that you’d like to share with the world, it’s time to
+publish it on <a href="https://crates.io/">crates.io</a>! Publishing a crate is when a specific
+version is uploaded to be hosted on <a href="https://crates.io/">crates.io</a>.</p>
+<p>Take care when publishing a crate, because a publish is <strong>permanent</strong>. The
+version can never be overwritten, and the code cannot be deleted. There is no
+limit to the number of versions which can be published, however.</p>
+<h3 id="before-your-first-publish"><a class="header" href="#before-your-first-publish">Before your first publish</a></h3>
+<p>First things first, you’ll need an account on <a href="https://crates.io/">crates.io</a> to acquire
+an API token. To do so, <a href="https://crates.io/">visit the home page</a> and log in via a GitHub
+account (required for now). You will also need to provide and verify your email
+address on the <a href="https://crates.io/settings/profile">Account Settings</a> page. Once
+that is done <a href="https://crates.io/settings/tokens">create an API token</a>, make sure
+you copy it. Once you leave the page you will not be able to see it again.</p>
+<p>Then run the <a href="../commands/cargo-login.html"><code>cargo login</code></a> command.</p>
+<pre><code class="language-console">$ cargo login
+</code></pre>
+<p>Then at the prompt put in the token specified.</p>
+<pre><code class="language-console">please paste the API Token found on https://crates.io/me below
+abcdefghijklmnopqrstuvwxyz012345
+</code></pre>
+<p>This command will inform Cargo of your API token and store it locally in your
+<code>~/.cargo/credentials.toml</code>. Note that this token is a <strong>secret</strong> and should not be
+shared with anyone else. If it leaks for any reason, you should revoke it
+immediately.</p>
+<blockquote>
+<p><strong>Note</strong>: The <a href="../commands/cargo-logout.html"><code>cargo logout</code></a> command can be used to remove the token from
+<code>credentials.toml</code>. This can be useful if you no longer need it stored on
+the local machine.</p>
+</blockquote>
+<h3 id="before-publishing-a-new-crate"><a class="header" href="#before-publishing-a-new-crate">Before publishing a new crate</a></h3>
+<p>Keep in mind that crate names on <a href="https://crates.io/">crates.io</a> are allocated on a first-come-first-serve
+basis. Once a crate name is taken, it cannot be used for another crate.</p>
+<p>Check out the <a href="manifest.html">metadata you can specify</a> in <code>Cargo.toml</code> to
+ensure your crate can be discovered more easily! Before publishing, make sure
+you have filled out the following fields:</p>
+<ul>
+<li><a href="manifest.html#the-license-and-license-file-fields"><code>license</code> or <code>license-file</code></a></li>
+<li><a href="manifest.html#the-description-field"><code>description</code></a></li>
+<li><a href="manifest.html#the-homepage-field"><code>homepage</code></a></li>
+<li><a href="manifest.html#the-documentation-field"><code>documentation</code></a></li>
+<li><a href="manifest.html#the-repository-field"><code>repository</code></a></li>
+<li><a href="manifest.html#the-readme-field"><code>readme</code></a></li>
+</ul>
+<p>It would also be a good idea to include some <a href="manifest.html#the-keywords-field"><code>keywords</code></a> and <a href="manifest.html#the-categories-field"><code>categories</code></a>,
+though they are not required.</p>
+<p>If you are publishing a library, you may also want to consult the <a href="https://rust-lang.github.io/api-guidelines/">Rust API
+Guidelines</a>.</p>
+<h4 id="packaging-a-crate"><a class="header" href="#packaging-a-crate">Packaging a crate</a></h4>
+<p>The next step is to package up your crate and upload it to <a href="https://crates.io/">crates.io</a>. For
+this we’ll use the <a href="../commands/cargo-publish.html"><code>cargo publish</code></a> subcommand. This command performs the following
+steps:</p>
+<ol>
+<li>Perform some verification checks on your package.</li>
+<li>Compress your source code into a <code>.crate</code> file.</li>
+<li>Extract the <code>.crate</code> file into a temporary directory and verify that it
+compiles.</li>
+<li>Upload the <code>.crate</code> file to <a href="https://crates.io/">crates.io</a>.</li>
+<li>The registry will perform some additional checks on the uploaded package
+before adding it.</li>
+</ol>
+<p>It is recommended that you first run <code>cargo publish --dry-run</code> (or <a href="../commands/cargo-package.html"><code>cargo package</code></a> which is equivalent) to ensure there aren’t any warnings or errors
+before publishing. This will perform the first three steps listed above.</p>
+<pre><code class="language-console">$ cargo publish --dry-run
+</code></pre>
+<p>You can inspect the generated <code>.crate</code> file in the <code>target/package</code> directory.
+<a href="https://crates.io/">crates.io</a> currently has a 10MB size limit on the <code>.crate</code> file. You may want
+to check the size of the <code>.crate</code> file to ensure you didn’t accidentally
+package up large assets that are not required to build your package, such as
+test data, website documentation, or code generation. You can check which
+files are included with the following command:</p>
+<pre><code class="language-console">$ cargo package --list
+</code></pre>
+<p>Cargo will automatically ignore files ignored by your version control system
+when packaging, but if you want to specify an extra set of files to ignore you
+can use the <a href="manifest.html#the-exclude-and-include-fields"><code>exclude</code> key</a> in the
+manifest:</p>
+<pre><code class="language-toml">[package]
+# ...
+exclude = [
+    &quot;public/assets/*&quot;,
+    &quot;videos/*&quot;,
+]
+</code></pre>
+<p>If you’d rather explicitly list the files to include, Cargo also supports an
+<code>include</code> key, which if set, overrides the <code>exclude</code> key:</p>
+<pre><code class="language-toml">[package]
+# ...
+include = [
+    &quot;**/*.rs&quot;,
+    &quot;Cargo.toml&quot;,
+]
+</code></pre>
+<h3 id="uploading-the-crate"><a class="header" href="#uploading-the-crate">Uploading the crate</a></h3>
+<p>When you are ready to publish, use the <a href="../commands/cargo-publish.html"><code>cargo publish</code></a> command
+to upload to <a href="https://crates.io/">crates.io</a>:</p>
+<pre><code class="language-console">$ cargo publish
+</code></pre>
+<p>And that’s it, you’ve now published your first crate!</p>
+<h3 id="publishing-a-new-version-of-an-existing-crate"><a class="header" href="#publishing-a-new-version-of-an-existing-crate">Publishing a new version of an existing crate</a></h3>
+<p>In order to release a new version, change <a href="manifest.html#the-version-field">the <code>version</code> value</a> specified in your <code>Cargo.toml</code> manifest.
+Keep in mind <a href="semver.html">the SemVer rules</a> which provide guidelines on what is a compatible change.
+Then run <a href="../commands/cargo-publish.html"><code>cargo publish</code></a> as described above to upload the new version.</p>
+<h3 id="managing-a-cratesio-based-crate"><a class="header" href="#managing-a-cratesio-based-crate">Managing a crates.io-based crate</a></h3>
+<p>Management of crates is primarily done through the command line <code>cargo</code> tool
+rather than the <a href="https://crates.io/">crates.io</a> web interface. For this, there are a few subcommands
+to manage a crate.</p>
+<h4 id="cargo-yank"><a class="header" href="#cargo-yank"><code>cargo yank</code></a></h4>
+<p>Occasions may arise where you publish a version of a crate that actually ends up
+being broken for one reason or another (syntax error, forgot to include a file,
+etc.). For situations such as this, Cargo supports a “yank” of a version of a
+crate.</p>
+<pre><code class="language-console">$ cargo yank --version 1.0.1
+$ cargo yank --version 1.0.1 --undo
+</code></pre>
+<p>A yank <strong>does not</strong> delete any code. This feature is not intended for deleting
+accidentally uploaded secrets, for example. If that happens, you must reset
+those secrets immediately.</p>
+<p>The semantics of a yanked version are that no new dependencies can be created
+against that version, but all existing dependencies continue to work. One of the
+major goals of <a href="https://crates.io/">crates.io</a> is to act as a permanent archive of crates that does
+not change over time, and allowing deletion of a version would go against this
+goal. Essentially a yank means that all packages with a <code>Cargo.lock</code> will not
+break, while any future <code>Cargo.lock</code> files generated will not list the yanked
+version.</p>
+<h4 id="cargo-owner"><a class="header" href="#cargo-owner"><code>cargo owner</code></a></h4>
+<p>A crate is often developed by more than one person, or the primary maintainer
+may change over time! The owner of a crate is the only person allowed to publish
+new versions of the crate, but an owner may designate additional owners.</p>
+<pre><code class="language-console">$ cargo owner --add github-handle
+$ cargo owner --remove github-handle
+$ cargo owner --add github:rust-lang:owners
+$ cargo owner --remove github:rust-lang:owners
+</code></pre>
+<p>The owner IDs given to these commands must be GitHub user names or GitHub teams.</p>
+<p>If a user name is given to <code>--add</code>, that user is invited as a “named” owner, with
+full rights to the crate. In addition to being able to publish or yank versions
+of the crate, they have the ability to add or remove owners, <em>including</em> the
+owner that made <em>them</em> an owner. Needless to say, you shouldn’t make people you
+don’t fully trust into a named owner. In order to become a named owner, a user
+must have logged into <a href="https://crates.io/">crates.io</a> previously.</p>
+<p>If a team name is given to <code>--add</code>, that team is invited as a “team” owner, with
+restricted right to the crate. While they have permission to publish or yank
+versions of the crate, they <em>do not</em> have the ability to add or remove owners.
+In addition to being more convenient for managing groups of owners, teams are
+just a bit more secure against owners becoming malicious.</p>
+<p>The syntax for teams is currently <code>github:org:team</code> (see examples above).
+In order to invite a team as an owner one must be a member of that team. No
+such restriction applies to removing a team as an owner.</p>
+<h3 id="github-permissions"><a class="header" href="#github-permissions">GitHub permissions</a></h3>
+<p>Team membership is not something GitHub provides simple public access to, and it
+is likely for you to encounter the following message when working with them:</p>
+<blockquote>
+<p>It looks like you don’t have permission to query a necessary property from
+GitHub to complete this request. You may need to re-authenticate on <a href="https://crates.io/">crates.io</a>
+to grant permission to read GitHub org memberships.</p>
+</blockquote>
+<p>This is basically a catch-all for “you tried to query a team, and one of the
+five levels of membership access control denied this”. That is not an
+exaggeration. GitHub’s support for team access control is Enterprise Grade.</p>
+<p>The most likely cause of this is simply that you last logged in before this
+feature was added. We originally requested <em>no</em> permissions from GitHub when
+authenticating users, because we didn’t actually ever use the user’s token for
+anything other than logging them in. However to query team membership on your
+behalf, we now require <a href="https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/">the <code>read:org</code> scope</a>.</p>
+<p>You are free to deny us this scope, and everything that worked before teams
+were introduced will keep working. However you will never be able to add a team
+as an owner, or publish a crate as a team owner. If you ever attempt to do this,
+you will get the error above. You may also see this error if you ever try to
+publish a crate that you don’t own at all, but otherwise happens to have a team.</p>
+<p>If you ever change your mind, or just aren’t sure if <a href="https://crates.io/">crates.io</a> has sufficient
+permission, you can always go to <a href="https://crates.io/">https://crates.io/</a> and re-authenticate,
+which will prompt you for permission if <a href="https://crates.io/">crates.io</a> doesn’t have all the scopes
+it would like to.</p>
+<p>An additional barrier to querying GitHub is that the organization may be
+actively denying third party access. To check this, you can go to:</p>
+<pre><code class="language-text">https://github.com/organizations/:org/settings/oauth_application_policy
+</code></pre>
+<p>where <code>:org</code> is the name of the organization (e.g., <code>rust-lang</code>). You may see
+something like:</p>
+<p><img src="../images/org-level-acl.png" alt="Organization Access Control" /></p>
+<p>Where you may choose to explicitly remove <a href="https://crates.io/">crates.io</a> from your organization’s
+blacklist, or simply press the “Remove Restrictions” button to allow all third
+party applications to access this data.</p>
+<p>Alternatively, when <a href="https://crates.io/">crates.io</a> requested the <code>read:org</code> scope, you could have
+explicitly whitelisted <a href="https://crates.io/">crates.io</a> querying the org in question by pressing
+the “Grant Access” button next to its name:</p>
+<p><img src="../images/auth-level-acl.png" alt="Authentication Access Control" /></p>
+<h4 id="troubleshooting-github-team-access-errors"><a class="header" href="#troubleshooting-github-team-access-errors">Troubleshooting GitHub team access errors</a></h4>
+<p>When trying to add a GitHub team as crate owner, you may see an error like:</p>
+<pre><code class="language-text">error: failed to invite owners to crate &lt;crate_name&gt;: api errors (status 200 OK): could not find the github team org/repo
+</code></pre>
+<p>In that case, you should go to <a href="https://github.com/settings/applications">the GitHub Application settings page</a> and
+check if crates.io is listed in the <code>Authorized OAuth Apps</code> tab.
+If it isn’t, you should go to <a href="https://crates.io/">https://crates.io/</a> and authorize it.
+Then go back to the Application Settings page on GitHub, click on the
+crates.io application in the list, and make sure you or your organization is
+listed in the “Organization access” list with a green check mark. If there’s
+a button labeled <code>Grant</code> or <code>Request</code>, you should grant the access or
+request the org owner to do so.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/build-script-examples.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../reference/pkgid-spec.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/build-script-examples.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../reference/pkgid-spec.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

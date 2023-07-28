@@ -1,0 +1,599 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Features - The Cargo Book</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+            dd {
+                margin-bottom: 1em;
+            }
+        </style>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting-started/index.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/first-steps.html"><strong aria-hidden="true">1.2.</strong> First Steps with Cargo</a></li></ol></li><li class="chapter-item expanded "><a href="../guide/index.html"><strong aria-hidden="true">2.</strong> Cargo Guide</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guide/why-cargo-exists.html"><strong aria-hidden="true">2.1.</strong> Why Cargo Exists</a></li><li class="chapter-item expanded "><a href="../guide/creating-a-new-project.html"><strong aria-hidden="true">2.2.</strong> Creating a New Package</a></li><li class="chapter-item expanded "><a href="../guide/working-on-an-existing-project.html"><strong aria-hidden="true">2.3.</strong> Working on an Existing Package</a></li><li class="chapter-item expanded "><a href="../guide/dependencies.html"><strong aria-hidden="true">2.4.</strong> Dependencies</a></li><li class="chapter-item expanded "><a href="../guide/project-layout.html"><strong aria-hidden="true">2.5.</strong> Package Layout</a></li><li class="chapter-item expanded "><a href="../guide/cargo-toml-vs-cargo-lock.html"><strong aria-hidden="true">2.6.</strong> Cargo.toml vs Cargo.lock</a></li><li class="chapter-item expanded "><a href="../guide/tests.html"><strong aria-hidden="true">2.7.</strong> Tests</a></li><li class="chapter-item expanded "><a href="../guide/continuous-integration.html"><strong aria-hidden="true">2.8.</strong> Continuous Integration</a></li><li class="chapter-item expanded "><a href="../guide/cargo-home.html"><strong aria-hidden="true">2.9.</strong> Cargo Home</a></li><li class="chapter-item expanded "><a href="../guide/build-cache.html"><strong aria-hidden="true">2.10.</strong> Build Cache</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">3.</strong> Cargo Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/specifying-dependencies.html"><strong aria-hidden="true">3.1.</strong> Specifying Dependencies</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/overriding-dependencies.html"><strong aria-hidden="true">3.1.1.</strong> Overriding Dependencies</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/manifest.html"><strong aria-hidden="true">3.2.</strong> The Manifest Format</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/cargo-targets.html"><strong aria-hidden="true">3.2.1.</strong> Cargo Targets</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/workspaces.html"><strong aria-hidden="true">3.3.</strong> Workspaces</a></li><li class="chapter-item expanded "><a href="../reference/features.html" class="active"><strong aria-hidden="true">3.4.</strong> Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/features-examples.html"><strong aria-hidden="true">3.4.1.</strong> Features Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/profiles.html"><strong aria-hidden="true">3.5.</strong> Profiles</a></li><li class="chapter-item expanded "><a href="../reference/config.html"><strong aria-hidden="true">3.6.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../reference/environment-variables.html"><strong aria-hidden="true">3.7.</strong> Environment Variables</a></li><li class="chapter-item expanded "><a href="../reference/build-scripts.html"><strong aria-hidden="true">3.8.</strong> Build Scripts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/build-script-examples.html"><strong aria-hidden="true">3.8.1.</strong> Build Script Examples</a></li></ol></li><li class="chapter-item expanded "><a href="../reference/publishing.html"><strong aria-hidden="true">3.9.</strong> Publishing on crates.io</a></li><li class="chapter-item expanded "><a href="../reference/pkgid-spec.html"><strong aria-hidden="true">3.10.</strong> Package ID Specifications</a></li><li class="chapter-item expanded "><a href="../reference/source-replacement.html"><strong aria-hidden="true">3.11.</strong> Source Replacement</a></li><li class="chapter-item expanded "><a href="../reference/external-tools.html"><strong aria-hidden="true">3.12.</strong> External Tools</a></li><li class="chapter-item expanded "><a href="../reference/registries.html"><strong aria-hidden="true">3.13.</strong> Registries</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/running-a-registry.html"><strong aria-hidden="true">3.13.1.</strong> Running a Registry</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/registry-index.html"><strong aria-hidden="true">3.13.1.1.</strong> Registry Index</a></li><li class="chapter-item expanded "><a href="../reference/registry-web-api.html"><strong aria-hidden="true">3.13.1.2.</strong> Registry Web API</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../reference/resolver.html"><strong aria-hidden="true">3.14.</strong> Dependency Resolution</a></li><li class="chapter-item expanded "><a href="../reference/semver.html"><strong aria-hidden="true">3.15.</strong> SemVer Compatibility</a></li><li class="chapter-item expanded "><a href="../reference/future-incompat-report.html"><strong aria-hidden="true">3.16.</strong> Future incompat report</a></li><li class="chapter-item expanded "><a href="../reference/timings.html"><strong aria-hidden="true">3.17.</strong> Reporting build timings</a></li><li class="chapter-item expanded "><a href="../reference/unstable.html"><strong aria-hidden="true">3.18.</strong> Unstable Features</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/index.html"><strong aria-hidden="true">4.</strong> Cargo Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/general-commands.html"><strong aria-hidden="true">4.1.</strong> General Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo.html"><strong aria-hidden="true">4.1.1.</strong> cargo</a></li><li class="chapter-item expanded "><a href="../commands/cargo-help.html"><strong aria-hidden="true">4.1.2.</strong> cargo help</a></li><li class="chapter-item expanded "><a href="../commands/cargo-version.html"><strong aria-hidden="true">4.1.3.</strong> cargo version</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/build-commands.html"><strong aria-hidden="true">4.2.</strong> Build Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-bench.html"><strong aria-hidden="true">4.2.1.</strong> cargo bench</a></li><li class="chapter-item expanded "><a href="../commands/cargo-build.html"><strong aria-hidden="true">4.2.2.</strong> cargo build</a></li><li class="chapter-item expanded "><a href="../commands/cargo-check.html"><strong aria-hidden="true">4.2.3.</strong> cargo check</a></li><li class="chapter-item expanded "><a href="../commands/cargo-clean.html"><strong aria-hidden="true">4.2.4.</strong> cargo clean</a></li><li class="chapter-item expanded "><a href="../commands/cargo-doc.html"><strong aria-hidden="true">4.2.5.</strong> cargo doc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fetch.html"><strong aria-hidden="true">4.2.6.</strong> cargo fetch</a></li><li class="chapter-item expanded "><a href="../commands/cargo-fix.html"><strong aria-hidden="true">4.2.7.</strong> cargo fix</a></li><li class="chapter-item expanded "><a href="../commands/cargo-run.html"><strong aria-hidden="true">4.2.8.</strong> cargo run</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustc.html"><strong aria-hidden="true">4.2.9.</strong> cargo rustc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-rustdoc.html"><strong aria-hidden="true">4.2.10.</strong> cargo rustdoc</a></li><li class="chapter-item expanded "><a href="../commands/cargo-test.html"><strong aria-hidden="true">4.2.11.</strong> cargo test</a></li><li class="chapter-item expanded "><a href="../commands/cargo-report.html"><strong aria-hidden="true">4.2.12.</strong> cargo report</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/manifest-commands.html"><strong aria-hidden="true">4.3.</strong> Manifest Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-add.html"><strong aria-hidden="true">4.3.1.</strong> cargo add</a></li><li class="chapter-item expanded "><a href="../commands/cargo-generate-lockfile.html"><strong aria-hidden="true">4.3.2.</strong> cargo generate-lockfile</a></li><li class="chapter-item expanded "><a href="../commands/cargo-locate-project.html"><strong aria-hidden="true">4.3.3.</strong> cargo locate-project</a></li><li class="chapter-item expanded "><a href="../commands/cargo-metadata.html"><strong aria-hidden="true">4.3.4.</strong> cargo metadata</a></li><li class="chapter-item expanded "><a href="../commands/cargo-pkgid.html"><strong aria-hidden="true">4.3.5.</strong> cargo pkgid</a></li><li class="chapter-item expanded "><a href="../commands/cargo-remove.html"><strong aria-hidden="true">4.3.6.</strong> cargo remove</a></li><li class="chapter-item expanded "><a href="../commands/cargo-tree.html"><strong aria-hidden="true">4.3.7.</strong> cargo tree</a></li><li class="chapter-item expanded "><a href="../commands/cargo-update.html"><strong aria-hidden="true">4.3.8.</strong> cargo update</a></li><li class="chapter-item expanded "><a href="../commands/cargo-vendor.html"><strong aria-hidden="true">4.3.9.</strong> cargo vendor</a></li><li class="chapter-item expanded "><a href="../commands/cargo-verify-project.html"><strong aria-hidden="true">4.3.10.</strong> cargo verify-project</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/package-commands.html"><strong aria-hidden="true">4.4.</strong> Package Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-init.html"><strong aria-hidden="true">4.4.1.</strong> cargo init</a></li><li class="chapter-item expanded "><a href="../commands/cargo-install.html"><strong aria-hidden="true">4.4.2.</strong> cargo install</a></li><li class="chapter-item expanded "><a href="../commands/cargo-new.html"><strong aria-hidden="true">4.4.3.</strong> cargo new</a></li><li class="chapter-item expanded "><a href="../commands/cargo-search.html"><strong aria-hidden="true">4.4.4.</strong> cargo search</a></li><li class="chapter-item expanded "><a href="../commands/cargo-uninstall.html"><strong aria-hidden="true">4.4.5.</strong> cargo uninstall</a></li></ol></li><li class="chapter-item expanded "><a href="../commands/publishing-commands.html"><strong aria-hidden="true">4.5.</strong> Publishing Commands</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands/cargo-login.html"><strong aria-hidden="true">4.5.1.</strong> cargo login</a></li><li class="chapter-item expanded "><a href="../commands/cargo-logout.html"><strong aria-hidden="true">4.5.2.</strong> cargo logout</a></li><li class="chapter-item expanded "><a href="../commands/cargo-owner.html"><strong aria-hidden="true">4.5.3.</strong> cargo owner</a></li><li class="chapter-item expanded "><a href="../commands/cargo-package.html"><strong aria-hidden="true">4.5.4.</strong> cargo package</a></li><li class="chapter-item expanded "><a href="../commands/cargo-publish.html"><strong aria-hidden="true">4.5.5.</strong> cargo publish</a></li><li class="chapter-item expanded "><a href="../commands/cargo-yank.html"><strong aria-hidden="true">4.5.6.</strong> cargo yank</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../faq.html"><strong aria-hidden="true">5.</strong> FAQ</a></li><li class="chapter-item expanded "><a href="../appendix/glossary.html"><strong aria-hidden="true">6.</strong> Appendix: Glossary</a></li><li class="chapter-item expanded "><a href="../appendix/git-authentication.html"><strong aria-hidden="true">7.</strong> Appendix: Git Authentication</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Cargo Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/tree/master/src/doc/src" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/cargo/edit/master/src/doc/src/reference/features.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="features"><a class="header" href="#features">Features</a></h2>
+<p>Cargo “features” provide a mechanism to express <a href="../../reference/conditional-compilation.html">conditional compilation</a> and
+<a href="#optional-dependencies">optional dependencies</a>. A package defines a set of
+named features in the <code>[features]</code> table of <code>Cargo.toml</code>, and each feature can
+either be enabled or disabled. Features for the package being built can be
+enabled on the command-line with flags such as <code>--features</code>. Features for
+dependencies can be enabled in the dependency declaration in <code>Cargo.toml</code>.</p>
+<p>See also the <a href="features-examples.html">Features Examples</a> chapter for some examples of how features can
+be used.</p>
+<h3 id="the-features-section"><a class="header" href="#the-features-section">The <code>[features]</code> section</a></h3>
+<p>Features are defined in the <code>[features]</code> table in <code>Cargo.toml</code>. Each feature
+specifies an array of other features or optional dependencies that it enables.
+The following examples illustrate how features could be used for a 2D image
+processing library where support for different image formats can be optionally
+included:</p>
+<pre><code class="language-toml">[features]
+# Defines a feature named `webp` that does not enable any other features.
+webp = []
+</code></pre>
+<p>With this feature defined, <a href="../../reference/conditional-compilation.html"><code>cfg</code> expressions</a> can be used to conditionally
+include code to support the requested feature at compile time. For example,
+inside <code>lib.rs</code> of the package could include this:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This conditionally includes a module which implements WEBP support.
+#[cfg(feature = &quot;webp&quot;)]
+pub mod webp;
+<span class="boring">}</span></code></pre></pre>
+<p>Cargo sets features in the package using the <code>rustc</code> <a href="../../rustc/command-line-arguments.html#option-cfg"><code>--cfg</code> flag</a>, and code
+can test for their presence with the <a href="../../reference/conditional-compilation.html#the-cfg-attribute"><code>cfg</code> attribute</a> or the <a href="../../std/macro.cfg.html"><code>cfg</code> macro</a>.</p>
+<p>Features can list other features to enable. For example, the ICO image format
+can contain BMP and PNG images, so when it is enabled, it should make sure
+those other features are enabled, too:</p>
+<pre><code class="language-toml">[features]
+bmp = []
+png = []
+ico = [&quot;bmp&quot;, &quot;png&quot;]
+webp = []
+</code></pre>
+<p>Feature names may include characters from the <a href="https://unicode.org/reports/tr31/">Unicode XID standard</a> (which
+includes most letters), and additionally allows starting with <code>_</code> or digits
+<code>0</code> through <code>9</code>, and after the first character may also contain <code>-</code>, <code>+</code>, or
+<code>.</code>.</p>
+<blockquote>
+<p><strong>Note</strong>: <a href="https://crates.io/">crates.io</a> imposes additional constraints on feature name syntax
+that they must only be <a href="../../std/primitive.char.html#method.is_ascii_alphanumeric">ASCII alphanumeric</a> characters or <code>_</code>, <code>-</code>, or <code>+</code>.</p>
+</blockquote>
+<h3 id="the-default-feature"><a class="header" href="#the-default-feature">The <code>default</code> feature</a></h3>
+<p>By default, all features are disabled unless explicitly enabled. This can be
+changed by specifying the <code>default</code> feature:</p>
+<pre><code class="language-toml">[features]
+default = [&quot;ico&quot;, &quot;webp&quot;]
+bmp = []
+png = []
+ico = [&quot;bmp&quot;, &quot;png&quot;]
+webp = []
+</code></pre>
+<p>When the package is built, the <code>default</code> feature is enabled which in turn
+enables the listed features. This behavior can be changed by:</p>
+<ul>
+<li>The <code>--no-default-features</code> <a href="#command-line-feature-options">command-line
+flag</a> disables the default features of the
+package.</li>
+<li>The <code>default-features = false</code> option can be specified in a <a href="#dependency-features">dependency
+declaration</a>.</li>
+</ul>
+<blockquote>
+<p><strong>Note</strong>: Be careful about choosing the default feature set. The default
+features are a convenience that make it easier to use a package without
+forcing the user to carefully select which features to enable for common
+use, but there are some drawbacks. Dependencies automatically enable default
+features unless <code>default-features = false</code> is specified. This can make it
+difficult to ensure that the default features are not enabled, especially
+for a dependency that appears multiple times in the dependency graph. Every
+package must ensure that <code>default-features = false</code> is specified to avoid
+enabling them.</p>
+<p>Another issue is that it can be a <a href="#semver-compatibility">SemVer incompatible
+change</a> to remove a feature from the default set, so
+you should be confident that you will keep those features.</p>
+</blockquote>
+<h3 id="optional-dependencies"><a class="header" href="#optional-dependencies">Optional dependencies</a></h3>
+<p>Dependencies can be marked “optional”, which means they will not be compiled
+by default. For example, let’s say that our 2D image processing library uses
+an external package to handle GIF images. This can be expressed like this:</p>
+<pre><code class="language-toml">[dependencies]
+gif = { version = &quot;0.11.1&quot;, optional = true }
+</code></pre>
+<p>By default, this optional dependency implicitly defines a feature that looks
+like this:</p>
+<pre><code class="language-toml">[features]
+gif = [&quot;dep:gif&quot;]
+</code></pre>
+<p>This means that this dependency will only be included if the <code>gif</code>
+feature is enabled.
+The same <code>cfg(feature = &quot;gif&quot;)</code> syntax can be used in the code, and the
+dependency can be enabled just like any feature such as <code>--features gif</code> (see
+<a href="#command-line-feature-options">Command-line feature options</a> below).</p>
+<p>In some cases, you may not want to expose a feature that has the same name
+as the optional dependency.
+For example, perhaps the optional dependency is an internal detail, or you
+want to group multiple optional dependencies together, or you just want to use
+a better name.
+If you specify the optional dependency with the <code>dep:</code> prefix anywhere
+in the <code>[features]</code> table, that disables the implicit feature.</p>
+<blockquote>
+<p><strong>Note</strong>: The <code>dep:</code> syntax is only available starting with Rust 1.60.
+Previous versions can only use the implicit feature name.</p>
+</blockquote>
+<p>For example, let’s say in order to support the AVIF image format, our library
+needs two other dependencies to be enabled:</p>
+<pre><code class="language-toml">[dependencies]
+ravif = { version = &quot;0.6.3&quot;, optional = true }
+rgb = { version = &quot;0.8.25&quot;, optional = true }
+
+[features]
+avif = [&quot;dep:ravif&quot;, &quot;dep:rgb&quot;]
+</code></pre>
+<p>In this example, the <code>avif</code> feature will enable the two listed dependencies.
+This also avoids creating the implicit <code>ravif</code> and <code>rgb</code> features, since we
+don’t want users to enable those individually as they are internal details to
+our crate.</p>
+<blockquote>
+<p><strong>Note</strong>: Another way to optionally include a dependency is to use
+<a href="specifying-dependencies.html#platform-specific-dependencies">platform-specific dependencies</a>. Instead of using features, these are
+conditional based on the target platform.</p>
+</blockquote>
+<h3 id="dependency-features"><a class="header" href="#dependency-features">Dependency features</a></h3>
+<p>Features of dependencies can be enabled within the dependency declaration. The
+<code>features</code> key indicates which features to enable:</p>
+<pre><code class="language-toml">[dependencies]
+# Enables the `derive` feature of serde.
+serde = { version = &quot;1.0.118&quot;, features = [&quot;derive&quot;] }
+</code></pre>
+<p>The <a href="#the-default-feature"><code>default</code> features</a> can be disabled using
+<code>default-features = false</code>:</p>
+<pre><code class="language-toml">[dependencies]
+flate2 = { version = &quot;1.0.3&quot;, default-features = false, features = [&quot;zlib&quot;] }
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: This may not ensure the default features are disabled. If another
+dependency includes <code>flate2</code> without specifying <code>default-features = false</code>,
+then the default features will be enabled. See <a href="#feature-unification">feature
+unification</a> below for more details.</p>
+</blockquote>
+<p>Features of dependencies can also be enabled in the <code>[features]</code> table. The
+syntax is <code>&quot;package-name/feature-name&quot;</code>. For example:</p>
+<pre><code class="language-toml">[dependencies]
+jpeg-decoder = { version = &quot;0.1.20&quot;, default-features = false }
+
+[features]
+# Enables parallel processing support by enabling the &quot;rayon&quot; feature of jpeg-decoder.
+parallel = [&quot;jpeg-decoder/rayon&quot;]
+</code></pre>
+<p>The <code>&quot;package-name/feature-name&quot;</code> syntax will also enable <code>package-name</code>
+if it is an optional dependency. Often this is not what you want.
+You can add a <code>?</code> as in <code>&quot;package-name?/feature-name&quot;</code> which will only enable
+the given feature if something else enables the optional dependency.</p>
+<blockquote>
+<p><strong>Note</strong>: The <code>?</code> syntax is only available starting with Rust 1.60.</p>
+</blockquote>
+<p>For example, let’s say we have added some serialization support to our
+library, and it requires enabling a corresponding feature in some optional
+dependencies.
+That can be done like this:</p>
+<pre><code class="language-toml">[dependencies]
+serde = { version = &quot;1.0.133&quot;, optional = true }
+rgb = { version = &quot;0.8.25&quot;, optional = true }
+
+[features]
+serde = [&quot;dep:serde&quot;, &quot;rgb?/serde&quot;]
+</code></pre>
+<p>In this example, enabling the <code>serde</code> feature will enable the serde
+dependency.
+It will also enable the <code>serde</code> feature for the <code>rgb</code> dependency, but only if
+something else has enabled the <code>rgb</code> dependency.</p>
+<h3 id="command-line-feature-options"><a class="header" href="#command-line-feature-options">Command-line feature options</a></h3>
+<p>The following command-line flags can be used to control which features are
+enabled:</p>
+<ul>
+<li>
+<p><code>--features</code> <em>FEATURES</em>: Enables the listed features. Multiple features may
+be separated with commas or spaces. If using spaces, be sure to use quotes
+around all the features if running Cargo from a shell (such as <code>--features &quot;foo bar&quot;</code>). If building multiple packages in a <a href="workspaces.html">workspace</a>, the
+<code>package-name/feature-name</code> syntax can be used to specify features for
+specific workspace members.</p>
+</li>
+<li>
+<p><code>--all-features</code>: Activates all features of all packages selected on the
+command-line.</p>
+</li>
+<li>
+<p><code>--no-default-features</code>: Does not activate the <a href="#the-default-feature"><code>default</code>
+feature</a> of the selected packages.</p>
+</li>
+</ul>
+<h3 id="feature-unification"><a class="header" href="#feature-unification">Feature unification</a></h3>
+<p>Features are unique to the package that defines them. Enabling a feature on a
+package does not enable a feature of the same name on other packages.</p>
+<p>When a dependency is used by multiple packages, Cargo will use the union of
+all features enabled on that dependency when building it. This helps ensure
+that only a single copy of the dependency is used. See the <a href="resolver.html#features">features section</a>
+of the resolver documentation for more details.</p>
+<p>For example, let’s look at the <a href="https://crates.io/crates/winapi"><code>winapi</code></a> package which uses a <a href="https://github.com/retep998/winapi-rs/blob/0.3.9/Cargo.toml#L25-L431">large
+number</a> of features. If your package depends on a package
+<code>foo</code> which enables the “fileapi” and “handleapi” features of <code>winapi</code>, and
+another dependency <code>bar</code> which enables the “std” and “winnt” features of
+<code>winapi</code>, then <code>winapi</code> will be built with all four of those features enabled.</p>
+<p><img src="../images/winapi-features.svg" alt="winapi features example" /></p>
+<p>A consequence of this is that features should be <em>additive</em>. That is, enabling
+a feature should not disable functionality, and it should usually be safe to
+enable any combination of features. A feature should not introduce a
+<a href="#semver-compatibility">SemVer-incompatible change</a>.</p>
+<p>For example, if you want to optionally support <a href="../../reference/names/preludes.html#the-no_std-attribute"><code>no_std</code></a> environments, <strong>do
+not</strong> use a <code>no_std</code> feature. Instead, use a <code>std</code> feature that <em>enables</em>
+<code>std</code>. For example:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>#![no_std]
+
+<span class="boring">fn main() {
+</span>#[cfg(feature = &quot;std&quot;)]
+extern crate std;
+
+#[cfg(feature = &quot;std&quot;)]
+pub fn function_that_requires_std() {
+    // ...
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="mutually-exclusive-features"><a class="header" href="#mutually-exclusive-features">Mutually exclusive features</a></h4>
+<p>There are rare cases where features may be mutually incompatible with one
+another. This should be avoided if at all possible, because it requires
+coordinating all uses of the package in the dependency graph to cooperate to
+avoid enabling them together. If it is not possible, consider adding a compile
+error to detect this scenario. For example:</p>
+<pre><code class="language-rust ignore">#[cfg(all(feature = &quot;foo&quot;, feature = &quot;bar&quot;))]
+compile_error!(&quot;feature \&quot;foo\&quot; and feature \&quot;bar\&quot; cannot be enabled at the same time&quot;);</code></pre>
+<p>Instead of using mutually exclusive features, consider some other options:</p>
+<ul>
+<li>Split the functionality into separate packages.</li>
+<li>When there is a conflict, <a href="features-examples.html#feature-precedence">choose one feature over
+another</a>. The <a href="https://crates.io/crates/cfg-if"><code>cfg-if</code></a> package can help with writing
+more complex <code>cfg</code> expressions.</li>
+<li>Architect the code to allow the features to be enabled concurrently, and use
+runtime options to control which is used. For example, use a config file,
+command-line argument, or environment variable to choose which behavior to
+enable.</li>
+</ul>
+<h4 id="inspecting-resolved-features"><a class="header" href="#inspecting-resolved-features">Inspecting resolved features</a></h4>
+<p>In complex dependency graphs, it can sometimes be difficult to understand how
+different features get enabled on various packages. The <a href="../commands/cargo-tree.html"><code>cargo tree</code></a> command
+offers several options to help inspect and visualize which features are
+enabled. Some options to try:</p>
+<ul>
+<li><code>cargo tree -e features</code>: This will show features in the dependency graph.
+Each feature will appear showing which package enabled it.</li>
+<li><code>cargo tree -f &quot;{p} {f}&quot;</code>: This is a more compact view that shows a
+comma-separated list of features enabled on each package.</li>
+<li><code>cargo tree -e features -i foo</code>: This will invert the tree, showing how
+features flow into the given package “foo”. This can be useful because
+viewing the entire graph can be quite large and overwhelming. Use this when
+you are trying to figure out which features are enabled on a specific
+package and why. See the example at the bottom of the <a href="../commands/cargo-tree.html"><code>cargo tree</code></a> page on
+how to read this.</li>
+</ul>
+<h3 id="feature-resolver-version-2"><a class="header" href="#feature-resolver-version-2">Feature resolver version 2</a></h3>
+<p>A different feature resolver can be specified with the <code>resolver</code> field in
+<code>Cargo.toml</code>, like this:</p>
+<pre><code class="language-toml">[package]
+name = &quot;my-package&quot;
+version = &quot;1.0.0&quot;
+resolver = &quot;2&quot;
+</code></pre>
+<p>See the <a href="resolver.html#resolver-versions">resolver versions</a> section for more detail on specifying resolver
+versions.</p>
+<p>The version <code>&quot;2&quot;</code> resolver avoids unifying features in a few situations where
+that unification can be unwanted. The exact situations are described in the
+<a href="resolver.html#feature-resolver-version-2">resolver chapter</a>, but in short, it avoids unifying in these
+situations:</p>
+<ul>
+<li>Features enabled on <a href="specifying-dependencies.html#platform-specific-dependencies">platform-specific dependencies</a> for targets not
+currently being built are ignored.</li>
+<li><a href="specifying-dependencies.html#build-dependencies">Build-dependencies</a> and proc-macros do not share features with normal
+dependencies.</li>
+<li><a href="specifying-dependencies.html#development-dependencies">Dev-dependencies</a> do not activate features unless building a target that
+needs them (like tests or examples).</li>
+</ul>
+<p>Avoiding the unification is necessary for some situations. For example, if a
+build-dependency enables a <code>std</code> feature, and the same dependency is used as a
+normal dependency for a <code>no_std</code> environment, enabling <code>std</code> would break the
+build.</p>
+<p>However, one drawback is that this can increase build times because the
+dependency is built multiple times (each with different features). When using
+the version <code>&quot;2&quot;</code> resolver, it is recommended to check for dependencies that
+are built multiple times to reduce overall build time. If it is not <em>required</em>
+to build those duplicated packages with separate features, consider adding
+features to the <code>features</code> list in the <a href="#dependency-features">dependency
+declaration</a> so that the duplicates end up with the same
+features (and thus Cargo will build it only once). You can detect these
+duplicate dependencies with the <a href="../commands/cargo-tree.html"><code>cargo tree --duplicates</code></a>
+command. It will show which packages are built multiple times; look for any
+entries listed with the same version. See <a href="#inspecting-resolved-features">Inspecting resolved
+features</a> for more on fetching information on
+the resolved features. For build dependencies, this is not necessary if you
+are cross-compiling with the <code>--target</code> flag because build dependencies are
+always built separately from normal dependencies in that scenario.</p>
+<h4 id="resolver-version-2-command-line-flags"><a class="header" href="#resolver-version-2-command-line-flags">Resolver version 2 command-line flags</a></h4>
+<p>The <code>resolver = &quot;2&quot;</code> setting also changes the behavior of the <code>--features</code> and
+<code>--no-default-features</code> <a href="#command-line-feature-options">command-line options</a>.</p>
+<p>With version <code>&quot;1&quot;</code>, you can only enable features for the package in the
+current working directory. For example, in a workspace with packages <code>foo</code> and
+<code>bar</code>, and you are in the directory for package <code>foo</code>, and ran the command
+<code>cargo build -p bar --features bar-feat</code>, this would fail because the
+<code>--features</code> flag only allowed enabling features on <code>foo</code>.</p>
+<p>With <code>resolver = &quot;2&quot;</code>, the features flags allow enabling features for any of
+the packages selected on the command-line with <code>-p</code> and <code>--workspace</code> flags.
+For example:</p>
+<pre><code class="language-sh"># This command is allowed with resolver = &quot;2&quot;, regardless of which directory
+# you are in.
+cargo build -p foo -p bar --features foo-feat,bar-feat
+
+# This explicit equivalent works with any resolver version:
+cargo build -p foo -p bar --features foo/foo-feat,bar/bar-feat
+</code></pre>
+<p>Additionally, with <code>resolver = &quot;1&quot;</code>, the <code>--no-default-features</code> flag only
+disables the default feature for the package in the current directory. With
+version “2”, it will disable the default features for all workspace members.</p>
+<h3 id="build-scripts"><a class="header" href="#build-scripts">Build scripts</a></h3>
+<p><a href="build-scripts.html">Build scripts</a> can detect which features are enabled on the package by
+inspecting the <code>CARGO_FEATURE_&lt;name&gt;</code> environment variable, where <code>&lt;name&gt;</code> is
+the feature name converted to uppercase and <code>-</code> converted to <code>_</code>.</p>
+<h3 id="required-features"><a class="header" href="#required-features">Required features</a></h3>
+<p>The <a href="cargo-targets.html#the-required-features-field"><code>required-features</code> field</a> can be used to disable specific <a href="cargo-targets.html">Cargo
+targets</a> if a feature is not enabled. See the linked documentation for more
+details.</p>
+<h3 id="semver-compatibility"><a class="header" href="#semver-compatibility">SemVer compatibility</a></h3>
+<p>Enabling a feature should not introduce a SemVer-incompatible change. For
+example, the feature shouldn’t change an existing API in a way that could
+break existing uses. More details about what changes are compatible can be
+found in the <a href="semver.html">SemVer Compatibility chapter</a>.</p>
+<p>Care should be taken when adding and removing feature definitions and optional
+dependencies, as these can sometimes be backwards-incompatible changes. More
+details can be found in the <a href="semver.html#cargo">Cargo section</a> of the SemVer
+Compatibility chapter. In short, follow these rules:</p>
+<ul>
+<li>The following is usually safe to do in a minor release:
+<ul>
+<li>Add a <a href="semver.html#cargo-feature-add">new feature</a> or <a href="semver.html#cargo-dep-add">optional dependency</a>.</li>
+<li><a href="semver.html#cargo-change-dep-feature">Change the features used on a dependency</a>.</li>
+</ul>
+</li>
+<li>The following should usually <strong>not</strong> be done in a minor release:
+<ul>
+<li><a href="semver.html#cargo-feature-remove">Remove a feature</a> or <a href="semver.html#cargo-remove-opt-dep">optional dependency</a>.</li>
+<li><a href="semver.html#item-remove">Moving existing public code behind a feature</a>.</li>
+<li><a href="semver.html#cargo-feature-remove-another">Remove a feature from a feature list</a>.</li>
+</ul>
+</li>
+</ul>
+<p>See the links for caveats and examples.</p>
+<h3 id="feature-documentation-and-discovery"><a class="header" href="#feature-documentation-and-discovery">Feature documentation and discovery</a></h3>
+<p>You are encouraged to document which features are available in your package.
+This can be done by adding <a href="../../rustdoc/how-to-write-documentation.html">doc comments</a> at the top of <code>lib.rs</code>. As an
+example, see the <a href="https://github.com/rust-lang/regex/blob/1.4.2/src/lib.rs#L488-L583">regex crate source</a>, which when rendered can be viewed on
+<a href="https://docs.rs/regex/1.4.2/regex/#crate-features">docs.rs</a>. If you have other documentation, such as a user
+guide, consider adding the documentation there (for example, see <a href="https://serde.rs/feature-flags.html">serde.rs</a>).
+If you have a binary project, consider documenting the features in the README
+or other documentation for the project (for example, see <a href="https://github.com/mozilla/sccache/blob/0.2.13/README.md#build-requirements">sccache</a>).</p>
+<p>Clearly documenting the features can set expectations about features that are
+considered “unstable” or otherwise shouldn’t be used. For example, if there is
+an optional dependency, but you don’t want users to explicitly list that
+optional dependency as a feature, exclude it from the documented list.</p>
+<p>Documentation published on <a href="https://docs.rs/">docs.rs</a> can use metadata in <code>Cargo.toml</code> to
+control which features are enabled when the documentation is built. See
+<a href="https://docs.rs/about/metadata">docs.rs metadata documentation</a> for more details.</p>
+<blockquote>
+<p><strong>Note</strong>: Rustdoc has experimental support for annotating the documentation
+to indicate which features are required to use certain APIs. See the
+<a href="../../unstable-book/language-features/doc-cfg.html"><code>doc_cfg</code></a> documentation for more details. An example is the <a href="https://docs.rs/syn/1.0.54/syn/#modules"><code>syn</code>
+documentation</a>, where you can see colored boxes which note which features
+are required to use it.</p>
+</blockquote>
+<h4 id="discovering-features"><a class="header" href="#discovering-features">Discovering features</a></h4>
+<p>When features are documented in the library API, this can make it easier for
+your users to discover which features are available and what they do. If the
+feature documentation for a package isn’t readily available, you can look at
+the <code>Cargo.toml</code> file, but sometimes it can be hard to track it down. The
+crate page on <a href="https://crates.io/">crates.io</a> has a link to the source repository if available.
+Tools like <a href="../commands/cargo-vendor.html"><code>cargo vendor</code></a> or <a href="https://crates.io/crates/cargo-clone-crate">cargo-clone-crate</a> can be used to download the
+source and inspect it.</p>
+<h3 id="feature-combinations"><a class="header" href="#feature-combinations">Feature combinations</a></h3>
+<p>Because features are a form of conditional compilation, they require an exponential number of configurations and test cases to be 100% covered. By default, tests, docs, and other tooling such as <a href="https://github.com/rust-lang/rust-clippy">Clippy</a> will only run with the default set of features.</p>
+<p>We encourage you to consider your strategy and tooling in regards to different feature combinations — Every project will have different requirements in conjunction with time, resources, and the cost-benefit of covering specific scenarios. Common configurations may be with / without default features, specific combinations of features, or all combinations of features.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/workspaces.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../reference/features-examples.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/workspaces.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../reference/features-examples.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Code generation - The Rust Reference</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/reference.css">
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../notation.html"><strong aria-hidden="true">1.</strong> Notation</a></li><li class="chapter-item expanded "><a href="../lexical-structure.html"><strong aria-hidden="true">2.</strong> Lexical structure</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../input-format.html"><strong aria-hidden="true">2.1.</strong> Input format</a></li><li class="chapter-item expanded "><a href="../keywords.html"><strong aria-hidden="true">2.2.</strong> Keywords</a></li><li class="chapter-item expanded "><a href="../identifiers.html"><strong aria-hidden="true">2.3.</strong> Identifiers</a></li><li class="chapter-item expanded "><a href="../comments.html"><strong aria-hidden="true">2.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="../whitespace.html"><strong aria-hidden="true">2.5.</strong> Whitespace</a></li><li class="chapter-item expanded "><a href="../tokens.html"><strong aria-hidden="true">2.6.</strong> Tokens</a></li></ol></li><li class="chapter-item expanded "><a href="../macros.html"><strong aria-hidden="true">3.</strong> Macros</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../macros-by-example.html"><strong aria-hidden="true">3.1.</strong> Macros By Example</a></li><li class="chapter-item expanded "><a href="../procedural-macros.html"><strong aria-hidden="true">3.2.</strong> Procedural Macros</a></li></ol></li><li class="chapter-item expanded "><a href="../crates-and-source-files.html"><strong aria-hidden="true">4.</strong> Crates and source files</a></li><li class="chapter-item expanded "><a href="../conditional-compilation.html"><strong aria-hidden="true">5.</strong> Conditional compilation</a></li><li class="chapter-item expanded "><a href="../items.html"><strong aria-hidden="true">6.</strong> Items</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../items/modules.html"><strong aria-hidden="true">6.1.</strong> Modules</a></li><li class="chapter-item expanded "><a href="../items/extern-crates.html"><strong aria-hidden="true">6.2.</strong> Extern crates</a></li><li class="chapter-item expanded "><a href="../items/use-declarations.html"><strong aria-hidden="true">6.3.</strong> Use declarations</a></li><li class="chapter-item expanded "><a href="../items/functions.html"><strong aria-hidden="true">6.4.</strong> Functions</a></li><li class="chapter-item expanded "><a href="../items/type-aliases.html"><strong aria-hidden="true">6.5.</strong> Type aliases</a></li><li class="chapter-item expanded "><a href="../items/structs.html"><strong aria-hidden="true">6.6.</strong> Structs</a></li><li class="chapter-item expanded "><a href="../items/enumerations.html"><strong aria-hidden="true">6.7.</strong> Enumerations</a></li><li class="chapter-item expanded "><a href="../items/unions.html"><strong aria-hidden="true">6.8.</strong> Unions</a></li><li class="chapter-item expanded "><a href="../items/constant-items.html"><strong aria-hidden="true">6.9.</strong> Constant items</a></li><li class="chapter-item expanded "><a href="../items/static-items.html"><strong aria-hidden="true">6.10.</strong> Static items</a></li><li class="chapter-item expanded "><a href="../items/traits.html"><strong aria-hidden="true">6.11.</strong> Traits</a></li><li class="chapter-item expanded "><a href="../items/implementations.html"><strong aria-hidden="true">6.12.</strong> Implementations</a></li><li class="chapter-item expanded "><a href="../items/external-blocks.html"><strong aria-hidden="true">6.13.</strong> External blocks</a></li><li class="chapter-item expanded "><a href="../items/generics.html"><strong aria-hidden="true">6.14.</strong> Generic parameters</a></li><li class="chapter-item expanded "><a href="../items/associated-items.html"><strong aria-hidden="true">6.15.</strong> Associated Items</a></li></ol></li><li class="chapter-item expanded "><a href="../attributes.html"><strong aria-hidden="true">7.</strong> Attributes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../attributes/testing.html"><strong aria-hidden="true">7.1.</strong> Testing</a></li><li class="chapter-item expanded "><a href="../attributes/derive.html"><strong aria-hidden="true">7.2.</strong> Derive</a></li><li class="chapter-item expanded "><a href="../attributes/diagnostics.html"><strong aria-hidden="true">7.3.</strong> Diagnostics</a></li><li class="chapter-item expanded "><a href="../attributes/codegen.html" class="active"><strong aria-hidden="true">7.4.</strong> Code generation</a></li><li class="chapter-item expanded "><a href="../attributes/limits.html"><strong aria-hidden="true">7.5.</strong> Limits</a></li><li class="chapter-item expanded "><a href="../attributes/type_system.html"><strong aria-hidden="true">7.6.</strong> Type System</a></li><li class="chapter-item expanded "><a href="../attributes/debugger.html"><strong aria-hidden="true">7.7.</strong> Debugger</a></li></ol></li><li class="chapter-item expanded "><a href="../statements-and-expressions.html"><strong aria-hidden="true">8.</strong> Statements and expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../statements.html"><strong aria-hidden="true">8.1.</strong> Statements</a></li><li class="chapter-item expanded "><a href="../expressions.html"><strong aria-hidden="true">8.2.</strong> Expressions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../expressions/literal-expr.html"><strong aria-hidden="true">8.2.1.</strong> Literal expressions</a></li><li class="chapter-item expanded "><a href="../expressions/path-expr.html"><strong aria-hidden="true">8.2.2.</strong> Path expressions</a></li><li class="chapter-item expanded "><a href="../expressions/block-expr.html"><strong aria-hidden="true">8.2.3.</strong> Block expressions</a></li><li class="chapter-item expanded "><a href="../expressions/operator-expr.html"><strong aria-hidden="true">8.2.4.</strong> Operator expressions</a></li><li class="chapter-item expanded "><a href="../expressions/grouped-expr.html"><strong aria-hidden="true">8.2.5.</strong> Grouped expressions</a></li><li class="chapter-item expanded "><a href="../expressions/array-expr.html"><strong aria-hidden="true">8.2.6.</strong> Array and index expressions</a></li><li class="chapter-item expanded "><a href="../expressions/tuple-expr.html"><strong aria-hidden="true">8.2.7.</strong> Tuple and index expressions</a></li><li class="chapter-item expanded "><a href="../expressions/struct-expr.html"><strong aria-hidden="true">8.2.8.</strong> Struct expressions</a></li><li class="chapter-item expanded "><a href="../expressions/call-expr.html"><strong aria-hidden="true">8.2.9.</strong> Call expressions</a></li><li class="chapter-item expanded "><a href="../expressions/method-call-expr.html"><strong aria-hidden="true">8.2.10.</strong> Method call expressions</a></li><li class="chapter-item expanded "><a href="../expressions/field-expr.html"><strong aria-hidden="true">8.2.11.</strong> Field access expressions</a></li><li class="chapter-item expanded "><a href="../expressions/closure-expr.html"><strong aria-hidden="true">8.2.12.</strong> Closure expressions</a></li><li class="chapter-item expanded "><a href="../expressions/loop-expr.html"><strong aria-hidden="true">8.2.13.</strong> Loop expressions</a></li><li class="chapter-item expanded "><a href="../expressions/range-expr.html"><strong aria-hidden="true">8.2.14.</strong> Range expressions</a></li><li class="chapter-item expanded "><a href="../expressions/if-expr.html"><strong aria-hidden="true">8.2.15.</strong> If and if let expressions</a></li><li class="chapter-item expanded "><a href="../expressions/match-expr.html"><strong aria-hidden="true">8.2.16.</strong> Match expressions</a></li><li class="chapter-item expanded "><a href="../expressions/return-expr.html"><strong aria-hidden="true">8.2.17.</strong> Return expressions</a></li><li class="chapter-item expanded "><a href="../expressions/await-expr.html"><strong aria-hidden="true">8.2.18.</strong> Await expressions</a></li><li class="chapter-item expanded "><a href="../expressions/underscore-expr.html"><strong aria-hidden="true">8.2.19.</strong> Underscore expressions</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../patterns.html"><strong aria-hidden="true">9.</strong> Patterns</a></li><li class="chapter-item expanded "><a href="../type-system.html"><strong aria-hidden="true">10.</strong> Type system</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../types.html"><strong aria-hidden="true">10.1.</strong> Types</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../types/boolean.html"><strong aria-hidden="true">10.1.1.</strong> Boolean type</a></li><li class="chapter-item expanded "><a href="../types/numeric.html"><strong aria-hidden="true">10.1.2.</strong> Numeric types</a></li><li class="chapter-item expanded "><a href="../types/textual.html"><strong aria-hidden="true">10.1.3.</strong> Textual types</a></li><li class="chapter-item expanded "><a href="../types/never.html"><strong aria-hidden="true">10.1.4.</strong> Never type</a></li><li class="chapter-item expanded "><a href="../types/tuple.html"><strong aria-hidden="true">10.1.5.</strong> Tuple types</a></li><li class="chapter-item expanded "><a href="../types/array.html"><strong aria-hidden="true">10.1.6.</strong> Array types</a></li><li class="chapter-item expanded "><a href="../types/slice.html"><strong aria-hidden="true">10.1.7.</strong> Slice types</a></li><li class="chapter-item expanded "><a href="../types/struct.html"><strong aria-hidden="true">10.1.8.</strong> Struct types</a></li><li class="chapter-item expanded "><a href="../types/enum.html"><strong aria-hidden="true">10.1.9.</strong> Enumerated types</a></li><li class="chapter-item expanded "><a href="../types/union.html"><strong aria-hidden="true">10.1.10.</strong> Union types</a></li><li class="chapter-item expanded "><a href="../types/function-item.html"><strong aria-hidden="true">10.1.11.</strong> Function item types</a></li><li class="chapter-item expanded "><a href="../types/closure.html"><strong aria-hidden="true">10.1.12.</strong> Closure types</a></li><li class="chapter-item expanded "><a href="../types/pointer.html"><strong aria-hidden="true">10.1.13.</strong> Pointer types</a></li><li class="chapter-item expanded "><a href="../types/function-pointer.html"><strong aria-hidden="true">10.1.14.</strong> Function pointer types</a></li><li class="chapter-item expanded "><a href="../types/trait-object.html"><strong aria-hidden="true">10.1.15.</strong> Trait object types</a></li><li class="chapter-item expanded "><a href="../types/impl-trait.html"><strong aria-hidden="true">10.1.16.</strong> Impl trait type</a></li><li class="chapter-item expanded "><a href="../types/parameters.html"><strong aria-hidden="true">10.1.17.</strong> Type parameters</a></li><li class="chapter-item expanded "><a href="../types/inferred.html"><strong aria-hidden="true">10.1.18.</strong> Inferred type</a></li></ol></li><li class="chapter-item expanded "><a href="../dynamically-sized-types.html"><strong aria-hidden="true">10.2.</strong> Dynamically Sized Types</a></li><li class="chapter-item expanded "><a href="../type-layout.html"><strong aria-hidden="true">10.3.</strong> Type layout</a></li><li class="chapter-item expanded "><a href="../interior-mutability.html"><strong aria-hidden="true">10.4.</strong> Interior mutability</a></li><li class="chapter-item expanded "><a href="../subtyping.html"><strong aria-hidden="true">10.5.</strong> Subtyping and Variance</a></li><li class="chapter-item expanded "><a href="../trait-bounds.html"><strong aria-hidden="true">10.6.</strong> Trait and lifetime bounds</a></li><li class="chapter-item expanded "><a href="../type-coercions.html"><strong aria-hidden="true">10.7.</strong> Type coercions</a></li><li class="chapter-item expanded "><a href="../destructors.html"><strong aria-hidden="true">10.8.</strong> Destructors</a></li><li class="chapter-item expanded "><a href="../lifetime-elision.html"><strong aria-hidden="true">10.9.</strong> Lifetime elision</a></li></ol></li><li class="chapter-item expanded "><a href="../special-types-and-traits.html"><strong aria-hidden="true">11.</strong> Special types and traits</a></li><li class="chapter-item expanded "><a href="../names.html"><strong aria-hidden="true">12.</strong> Names</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../names/namespaces.html"><strong aria-hidden="true">12.1.</strong> Namespaces</a></li><li class="chapter-item expanded "><a href="../names/scopes.html"><strong aria-hidden="true">12.2.</strong> Scopes</a></li><li class="chapter-item expanded "><a href="../names/preludes.html"><strong aria-hidden="true">12.3.</strong> Preludes</a></li><li class="chapter-item expanded "><a href="../paths.html"><strong aria-hidden="true">12.4.</strong> Paths</a></li><li class="chapter-item expanded "><a href="../names/name-resolution.html"><strong aria-hidden="true">12.5.</strong> Name resolution</a></li><li class="chapter-item expanded "><a href="../visibility-and-privacy.html"><strong aria-hidden="true">12.6.</strong> Visibility and privacy</a></li></ol></li><li class="chapter-item expanded "><a href="../memory-model.html"><strong aria-hidden="true">13.</strong> Memory model</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../memory-allocation-and-lifetime.html"><strong aria-hidden="true">13.1.</strong> Memory allocation and lifetime</a></li><li class="chapter-item expanded "><a href="../variables.html"><strong aria-hidden="true">13.2.</strong> Variables</a></li></ol></li><li class="chapter-item expanded "><a href="../linkage.html"><strong aria-hidden="true">14.</strong> Linkage</a></li><li class="chapter-item expanded "><a href="../inline-assembly.html"><strong aria-hidden="true">15.</strong> Inline assembly</a></li><li class="chapter-item expanded "><a href="../unsafety.html"><strong aria-hidden="true">16.</strong> Unsafety</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../unsafe-keyword.html"><strong aria-hidden="true">16.1.</strong> The unsafe keyword</a></li><li class="chapter-item expanded "><a href="../behavior-considered-undefined.html"><strong aria-hidden="true">16.2.</strong> Behavior considered undefined</a></li><li class="chapter-item expanded "><a href="../behavior-not-considered-unsafe.html"><strong aria-hidden="true">16.3.</strong> Behavior not considered unsafe</a></li></ol></li><li class="chapter-item expanded "><a href="../const_eval.html"><strong aria-hidden="true">17.</strong> Constant Evaluation</a></li><li class="chapter-item expanded "><a href="../abi.html"><strong aria-hidden="true">18.</strong> Application Binary Interface</a></li><li class="chapter-item expanded "><a href="../runtime.html"><strong aria-hidden="true">19.</strong> The Rust runtime</a></li><li class="chapter-item expanded "><a href="../appendices.html"><strong aria-hidden="true">20.</strong> Appendices</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../macro-ambiguity.html"><strong aria-hidden="true">20.1.</strong> Macro Follow-Set Ambiguity Formal Specification</a></li><li class="chapter-item expanded "><a href="../influences.html"><strong aria-hidden="true">20.2.</strong> Influences</a></li><li class="chapter-item expanded "><a href="../glossary.html"><strong aria-hidden="true">20.3.</strong> Glossary</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Reference</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/reference/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/reference/edit/master/src/attributes/codegen.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="code-generation-attributes"><a class="header" href="#code-generation-attributes">Code generation attributes</a></h1>
+<p>The following <a href="../attributes.html">attributes</a> are used for controlling code generation.</p>
+<h2 id="optimization-hints"><a class="header" href="#optimization-hints">Optimization hints</a></h2>
+<p>The <code>cold</code> and <code>inline</code> <a href="../attributes.html">attributes</a> give suggestions to generate code in a
+way that may be faster than what it would do without the hint. The attributes
+are only hints, and may be ignored.</p>
+<p>Both attributes can be used on <a href="../items/functions.html">functions</a>. When applied to a function in a
+<a href="../items/traits.html">trait</a>, they apply only to that function when used as a default function for
+a trait implementation and not to all trait implementations. The attributes
+have no effect on a trait function without a body.</p>
+<h3 id="the-inline-attribute"><a class="header" href="#the-inline-attribute">The <code>inline</code> attribute</a></h3>
+<p>The <em><code>inline</code> <a href="../attributes.html">attribute</a></em> suggests that a copy of the attributed function
+should be placed in the caller, rather than generating code to call the
+function where it is defined.</p>
+<blockquote>
+<p><em><strong>Note</strong></em>: The <code>rustc</code> compiler automatically inlines functions based on
+internal heuristics. Incorrectly inlining functions can make the program
+slower, so this attribute should be used with care.</p>
+</blockquote>
+<p>There are three ways to use the inline attribute:</p>
+<ul>
+<li><code>#[inline]</code> <em>suggests</em> performing an inline expansion.</li>
+<li><code>#[inline(always)]</code> <em>suggests</em> that an inline expansion should always be
+performed.</li>
+<li><code>#[inline(never)]</code> <em>suggests</em> that an inline expansion should never be
+performed.</li>
+</ul>
+<blockquote>
+<p><em><strong>Note</strong></em>: <code>#[inline]</code> in every form is a hint, with no <em>requirements</em>
+on the language to place a copy of the attributed function in the caller.</p>
+</blockquote>
+<h3 id="the-cold-attribute"><a class="header" href="#the-cold-attribute">The <code>cold</code> attribute</a></h3>
+<p>The <em><code>cold</code> <a href="../attributes.html">attribute</a></em> suggests that the attributed function is unlikely to
+be called.</p>
+<h2 id="the-no_builtins-attribute"><a class="header" href="#the-no_builtins-attribute">The <code>no_builtins</code> attribute</a></h2>
+<p>The <em><code>no_builtins</code> <a href="../attributes.html">attribute</a></em> may be applied at the crate level to disable
+optimizing certain code patterns to invocations of library functions that are
+assumed to exist.</p>
+<h2 id="the-target_feature-attribute"><a class="header" href="#the-target_feature-attribute">The <code>target_feature</code> attribute</a></h2>
+<p>The <em><code>target_feature</code> <a href="../attributes.html">attribute</a></em> may be applied to a function to
+enable code generation of that function for specific platform architecture
+features. It uses the <a href="../attributes.html#meta-item-attribute-syntax"><em>MetaListNameValueStr</em></a> syntax with a single key of
+<code>enable</code> whose value is a string of comma-separated feature names to enable.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">#[cfg(target_feature = &quot;avx2&quot;)]
+</span>#[target_feature(enable = &quot;avx2&quot;)]
+unsafe fn foo_avx2() {}
+<span class="boring">}</span></code></pre></pre>
+<p>Each <a href="../conditional-compilation.html#target_arch">target architecture</a> has a set of features that may be enabled. It is an
+error to specify a feature for a target architecture that the crate is not
+being compiled for.</p>
+<p>It is <a href="../behavior-considered-undefined.html">undefined behavior</a> to call a function that is compiled with a feature
+that is not supported on the current platform the code is running on, <em>except</em>
+if the platform explicitly documents this to be safe.</p>
+<p>Functions marked with <code>target_feature</code> are not inlined into a context that
+does not support the given features. The <code>#[inline(always)]</code> attribute may not
+be used with a <code>target_feature</code> attribute.</p>
+<h3 id="available-features"><a class="header" href="#available-features">Available features</a></h3>
+<p>The following is a list of the available feature names.</p>
+<h4 id="x86-or-x86_64"><a class="header" href="#x86-or-x86_64"><code>x86</code> or <code>x86_64</code></a></h4>
+<p>Executing code with unsupported features is undefined behavior on this platform.
+Hence this platform requires that <code>#[target_feature]</code> is only applied to <a href="../unsafe-keyword.html"><code>unsafe</code>
+functions</a>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Feature</th><th>Implicitly Enables</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>adx</code></td><td></td><td><a href="https://en.wikipedia.org/wiki/Intel_ADX">ADX</a> — Multi-Precision Add-Carry Instruction Extensions</td></tr>
+<tr><td><code>aes</code></td><td><code>sse2</code></td><td><a href="https://en.wikipedia.org/wiki/AES_instruction_set">AES</a> — Advanced Encryption Standard</td></tr>
+<tr><td><code>avx</code></td><td><code>sse4.2</code></td><td><a href="https://en.wikipedia.org/wiki/Advanced_Vector_Extensions">AVX</a> — Advanced Vector Extensions</td></tr>
+<tr><td><code>avx2</code></td><td><code>avx</code></td><td><a href="https://en.wikipedia.org/wiki/Advanced_Vector_Extensions#AVX2">AVX2</a> — Advanced Vector Extensions 2</td></tr>
+<tr><td><code>bmi1</code></td><td></td><td><a href="https://en.wikipedia.org/wiki/Bit_Manipulation_Instruction_Sets">BMI1</a> — Bit Manipulation Instruction Sets</td></tr>
+<tr><td><code>bmi2</code></td><td></td><td><a href="https://en.wikipedia.org/wiki/Bit_Manipulation_Instruction_Sets#BMI2">BMI2</a> — Bit Manipulation Instruction Sets 2</td></tr>
+<tr><td><code>cmpxchg16b</code></td><td></td><td><a href="https://www.felixcloutier.com/x86/cmpxchg8b:cmpxchg16b"><code>cmpxchg16b</code></a> - Compares and exchange 16 bytes (128 bits) of data atomically</td></tr>
+<tr><td><code>f16c</code></td><td><code>avx</code></td><td><a href="https://en.wikipedia.org/wiki/F16C">F16C</a> — 16-bit floating point conversion instructions</td></tr>
+<tr><td><code>fma</code></td><td><code>avx</code></td><td><a href="https://en.wikipedia.org/wiki/FMA_instruction_set">FMA3</a> — Three-operand fused multiply-add</td></tr>
+<tr><td><code>fxsr</code></td><td></td><td><a href="https://www.felixcloutier.com/x86/fxsave"><code>fxsave</code></a> and <a href="https://www.felixcloutier.com/x86/fxrstor"><code>fxrstor</code></a> — Save and restore x87 FPU, MMX Technology, and SSE State</td></tr>
+<tr><td><code>lzcnt</code></td><td></td><td><a href="https://www.felixcloutier.com/x86/lzcnt"><code>lzcnt</code></a> — Leading zeros count</td></tr>
+<tr><td><code>movbe</code></td><td></td><td><a href="https://www.felixcloutier.com/x86/movbe"><code>movbe</code></a> - Move data after swapping bytes</td></tr>
+<tr><td><code>pclmulqdq</code></td><td><code>sse2</code></td><td><a href="https://www.felixcloutier.com/x86/pclmulqdq"><code>pclmulqdq</code></a> — Packed carry-less multiplication quadword</td></tr>
+<tr><td><code>popcnt</code></td><td></td><td><a href="https://www.felixcloutier.com/x86/popcnt"><code>popcnt</code></a> — Count of bits set to 1</td></tr>
+<tr><td><code>rdrand</code></td><td></td><td><a href="https://en.wikipedia.org/wiki/RdRand"><code>rdrand</code></a> — Read random number</td></tr>
+<tr><td><code>rdseed</code></td><td></td><td><a href="https://en.wikipedia.org/wiki/RdRand"><code>rdseed</code></a> — Read random seed</td></tr>
+<tr><td><code>sha</code></td><td><code>sse2</code></td><td><a href="https://en.wikipedia.org/wiki/Intel_SHA_extensions">SHA</a> — Secure Hash Algorithm</td></tr>
+<tr><td><code>sse</code></td><td></td><td><a href="https://en.wikipedia.org/wiki/Streaming_SIMD_Extensions">SSE</a> — Streaming <abbr title="Single Instruction Multiple Data">SIMD</abbr> Extensions</td></tr>
+<tr><td><code>sse2</code></td><td><code>sse</code></td><td><a href="https://en.wikipedia.org/wiki/SSE2">SSE2</a> — Streaming SIMD Extensions 2</td></tr>
+<tr><td><code>sse3</code></td><td><code>sse2</code></td><td><a href="https://en.wikipedia.org/wiki/SSE3">SSE3</a> — Streaming SIMD Extensions 3</td></tr>
+<tr><td><code>sse4.1</code></td><td><code>ssse3</code></td><td><a href="https://en.wikipedia.org/wiki/SSE4#SSE4.1">SSE4.1</a> — Streaming SIMD Extensions 4.1</td></tr>
+<tr><td><code>sse4.2</code></td><td><code>sse4.1</code></td><td><a href="https://en.wikipedia.org/wiki/SSE4#SSE4.2">SSE4.2</a> — Streaming SIMD Extensions 4.2</td></tr>
+<tr><td><code>ssse3</code></td><td><code>sse3</code></td><td><a href="https://en.wikipedia.org/wiki/SSSE3">SSSE3</a> — Supplemental Streaming SIMD Extensions 3</td></tr>
+<tr><td><code>xsave</code></td><td></td><td><a href="https://www.felixcloutier.com/x86/xsave"><code>xsave</code></a> — Save processor extended states</td></tr>
+<tr><td><code>xsavec</code></td><td></td><td><a href="https://www.felixcloutier.com/x86/xsavec"><code>xsavec</code></a> — Save processor extended states with compaction</td></tr>
+<tr><td><code>xsaveopt</code></td><td></td><td><a href="https://www.felixcloutier.com/x86/xsaveopt"><code>xsaveopt</code></a> — Save processor extended states optimized</td></tr>
+<tr><td><code>xsaves</code></td><td></td><td><a href="https://www.felixcloutier.com/x86/xsaves"><code>xsaves</code></a> — Save processor extended states supervisor</td></tr>
+</tbody></table>
+</div><!-- Keep links near each table to make it easier to move and update. -->
+<h4 id="aarch64"><a class="header" href="#aarch64"><code>aarch64</code></a></h4>
+<p>This platform requires that <code>#[target_feature]</code> is only applied to <a href="../unsafe-keyword.html"><code>unsafe</code>
+functions</a>.</p>
+<p>Further documentation on these features can be found in the <a href="https://developer.arm.com/documentation/ddi0487/latest">ARM Architecture
+Reference Manual</a>, or elsewhere on <a href="https://developer.arm.com">developer.arm.com</a>.</p>
+<blockquote>
+<p><em><strong>Note</strong></em>: The following pairs of features should both be marked as enabled
+or disabled together if used:</p>
+<ul>
+<li><code>paca</code> and <code>pacg</code>, which LLVM currently implements as one feature.</li>
+</ul>
+</blockquote>
+<div class="table-wrapper"><table><thead><tr><th>Feature</th><th>Implicitly Enables</th><th>Feature Name</th></tr></thead><tbody>
+<tr><td><code>aes</code></td><td><code>neon</code></td><td>FEAT_AES - Advanced <abbr title="Single Instruction Multiple Data">SIMD</abbr> AES instructions</td></tr>
+<tr><td><code>bf16</code></td><td></td><td>FEAT_BF16 - BFloat16 instructions</td></tr>
+<tr><td><code>bti</code></td><td></td><td>FEAT_BTI - Branch Target Identification</td></tr>
+<tr><td><code>crc</code></td><td></td><td>FEAT_CRC - CRC32 checksum instructions</td></tr>
+<tr><td><code>dit</code></td><td></td><td>FEAT_DIT - Data Independent Timing instructions</td></tr>
+<tr><td><code>dotprod</code></td><td></td><td>FEAT_DotProd - Advanced SIMD Int8 dot product instructions</td></tr>
+<tr><td><code>dpb</code></td><td></td><td>FEAT_DPB - Data cache clean to point of persistence</td></tr>
+<tr><td><code>dpb2</code></td><td></td><td>FEAT_DPB2 - Data cache clean to point of deep persistence</td></tr>
+<tr><td><code>f32mm</code></td><td><code>sve</code></td><td>FEAT_F32MM - SVE single-precision FP matrix multiply instruction</td></tr>
+<tr><td><code>f64mm</code></td><td><code>sve</code></td><td>FEAT_F64MM - SVE double-precision FP matrix multiply instruction</td></tr>
+<tr><td><code>fcma</code></td><td><code>neon</code></td><td>FEAT_FCMA - Floating point complex number support</td></tr>
+<tr><td><code>fhm</code></td><td><code>fp16</code></td><td>FEAT_FHM - Half-precision FP FMLAL instructions</td></tr>
+<tr><td><code>flagm</code></td><td></td><td>FEAT_FlagM - Conditional flag manipulation</td></tr>
+<tr><td><code>fp16</code></td><td><code>neon</code></td><td>FEAT_FP16 - Half-precision FP data processing</td></tr>
+<tr><td><code>frintts</code></td><td></td><td>FEAT_FRINTTS - Floating-point to int helper instructions</td></tr>
+<tr><td><code>i8mm</code></td><td></td><td>FEAT_I8MM - Int8 Matrix Multiplication</td></tr>
+<tr><td><code>jsconv</code></td><td><code>neon</code></td><td>FEAT_JSCVT - JavaScript conversion instruction</td></tr>
+<tr><td><code>lse</code></td><td></td><td>FEAT_LSE - Large System Extension</td></tr>
+<tr><td><code>lor</code></td><td></td><td>FEAT_LOR - Limited Ordering Regions extension</td></tr>
+<tr><td><code>mte</code></td><td></td><td>FEAT_MTE - Memory Tagging Extension</td></tr>
+<tr><td><code>neon</code></td><td></td><td>FEAT_FP &amp; FEAT_AdvSIMD - Floating Point and Advanced SIMD extension</td></tr>
+<tr><td><code>pan</code></td><td></td><td>FEAT_PAN - Privileged Access-Never extension</td></tr>
+<tr><td><code>paca</code></td><td></td><td>FEAT_PAuth - Pointer Authentication (address authentication)</td></tr>
+<tr><td><code>pacg</code></td><td></td><td>FEAT_PAuth - Pointer Authentication (generic authentication)</td></tr>
+<tr><td><code>pmuv3</code></td><td></td><td>FEAT_PMUv3 - Performance Monitors extension (v3)</td></tr>
+<tr><td><code>rand</code></td><td></td><td>FEAT_RNG - Random Number Generator</td></tr>
+<tr><td><code>ras</code></td><td></td><td>FEAT_RAS - Reliability, Availability and Serviceability extension</td></tr>
+<tr><td><code>rcpc</code></td><td></td><td>FEAT_LRCPC - Release consistent Processor Consistent</td></tr>
+<tr><td><code>rcpc2</code></td><td><code>rcpc</code></td><td>FEAT_LRCPC2 - RcPc with immediate offsets</td></tr>
+<tr><td><code>rdm</code></td><td></td><td>FEAT_RDM - Rounding Double Multiply accumulate</td></tr>
+<tr><td><code>sb</code></td><td></td><td>FEAT_SB - Speculation Barrier</td></tr>
+<tr><td><code>sha2</code></td><td><code>neon</code></td><td>FEAT_SHA1 &amp; FEAT_SHA256 - Advanced SIMD SHA instructions</td></tr>
+<tr><td><code>sha3</code></td><td><code>sha2</code></td><td>FEAT_SHA512 &amp; FEAT_SHA3 - Advanced SIMD SHA instructions</td></tr>
+<tr><td><code>sm4</code></td><td><code>neon</code></td><td>FEAT_SM3 &amp; FEAT_SM4 - Advanced SIMD SM3/4 instructions</td></tr>
+<tr><td><code>spe</code></td><td></td><td>FEAT_SPE - Statistical Profiling Extension</td></tr>
+<tr><td><code>ssbs</code></td><td></td><td>FEAT_SSBS - Speculative Store Bypass Safe</td></tr>
+<tr><td><code>sve</code></td><td><code>fp16</code></td><td>FEAT_SVE - Scalable Vector Extension</td></tr>
+<tr><td><code>sve2</code></td><td><code>sve</code></td><td>FEAT_SVE2 - Scalable Vector Extension 2</td></tr>
+<tr><td><code>sve2-aes</code></td><td><code>sve2</code>, <code>aes</code></td><td>FEAT_SVE_AES - SVE AES instructions</td></tr>
+<tr><td><code>sve2-sm4</code></td><td><code>sve2</code>, <code>sm4</code></td><td>FEAT_SVE_SM4 - SVE SM4 instructions</td></tr>
+<tr><td><code>sve2-sha3</code></td><td><code>sve2</code>, <code>sha3</code></td><td>FEAT_SVE_SHA3 - SVE SHA3 instructions</td></tr>
+<tr><td><code>sve2-bitperm</code></td><td><code>sve2</code></td><td>FEAT_SVE_BitPerm - SVE Bit Permute</td></tr>
+<tr><td><code>tme</code></td><td></td><td>FEAT_TME - Transactional Memory Extension</td></tr>
+<tr><td><code>vh</code></td><td></td><td>FEAT_VHE - Virtualization Host Extensions</td></tr>
+</tbody></table>
+</div>
+<h4 id="wasm32-or-wasm64"><a class="header" href="#wasm32-or-wasm64"><code>wasm32</code> or <code>wasm64</code></a></h4>
+<p><code>#[target_feature]</code> may be used with both safe and
+<a href="../unsafe-keyword.html"><code>unsafe</code> functions</a> on Wasm platforms. It is impossible to
+cause undefined behavior via the <code>#[target_feature]</code> attribute because
+attempting to use instructions unsupported by the Wasm engine will fail at load
+time without the risk of being interpreted in a way different from what the
+compiler expected.</p>
+<div class="table-wrapper"><table><thead><tr><th>Feature</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>simd128</code></td><td><a href="https://github.com/webassembly/simd">WebAssembly simd proposal</a></td></tr>
+</tbody></table>
+</div>
+<h3 id="additional-information"><a class="header" href="#additional-information">Additional information</a></h3>
+<p>See the <a href="../conditional-compilation.html#target_feature"><code>target_feature</code> conditional compilation option</a> for selectively
+enabling or disabling compilation of code based on compile-time settings. Note
+that this option is not affected by the <code>target_feature</code> attribute, and is
+only driven by the features enabled for the entire crate.</p>
+<p>See the <a href="../../std/arch/macro.is_x86_feature_detected.html"><code>is_x86_feature_detected</code></a> or <a href="../../std/arch/macro.is_aarch64_feature_detected.html"><code>is_aarch64_feature_detected</code></a> macros
+in the standard library for runtime feature detection on these platforms.</p>
+<blockquote>
+<p>Note: <code>rustc</code> has a default set of features enabled for each target and CPU.
+The CPU may be chosen with the <a href="../../rustc/codegen-options/index.html#target-cpu"><code>-C target-cpu</code></a> flag. Individual features
+may be enabled or disabled for an entire crate with the
+<a href="../../rustc/codegen-options/index.html#target-feature"><code>-C target-feature</code></a> flag.</p>
+</blockquote>
+<h2 id="the-track_caller-attribute"><a class="header" href="#the-track_caller-attribute">The <code>track_caller</code> attribute</a></h2>
+<p>The <code>track_caller</code> attribute may be applied to any function with <a href="../items/external-blocks.html#abi"><code>&quot;Rust&quot;</code> ABI</a>
+with the exception of the entry point <code>fn main</code>. When applied to functions and methods in
+trait declarations, the attribute applies to all implementations. If the trait provides a
+default implementation with the attribute, then the attribute also applies to override implementations.</p>
+<p>When applied to a function in an <code>extern</code> block the attribute must also be applied to any linked
+implementations, otherwise undefined behavior results. When applied to a function which is made
+available to an <code>extern</code> block, the declaration in the <code>extern</code> block must also have the attribute,
+otherwise undefined behavior results.</p>
+<h3 id="behavior"><a class="header" href="#behavior">Behavior</a></h3>
+<p>Applying the attribute to a function <code>f</code> allows code within <code>f</code> to get a hint of the <a href="../../core/panic/struct.Location.html"><code>Location</code></a> of
+the &quot;topmost&quot; tracked call that led to <code>f</code>'s invocation. At the point of observation, an
+implementation behaves as if it walks up the stack from <code>f</code>'s frame to find the nearest frame of an
+<em>unattributed</em> function <code>outer</code>, and it returns the <a href="../../core/panic/struct.Location.html"><code>Location</code></a> of the tracked call in <code>outer</code>.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[track_caller]
+fn f() {
+    println!(&quot;{}&quot;, std::panic::Location::caller());
+}
+<span class="boring">}</span></code></pre></pre>
+<blockquote>
+<p>Note: <code>core</code> provides <a href="../../core/panic/struct.Location.html#method.caller"><code>core::panic::Location::caller</code></a> for observing caller locations. It wraps
+the <a href="../../core/intrinsics/fn.caller_location.html"><code>core::intrinsics::caller_location</code></a> intrinsic implemented by <code>rustc</code>.</p>
+</blockquote>
+<blockquote>
+<p>Note: because the resulting <code>Location</code> is a hint, an implementation may halt its walk up the stack
+early. See <a href="#limitations">Limitations</a> for important caveats.</p>
+</blockquote>
+<h4 id="examples"><a class="header" href="#examples">Examples</a></h4>
+<p>When <code>f</code> is called directly by <code>calls_f</code>, code in <code>f</code> observes its callsite within <code>calls_f</code>:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">#[track_caller]
+</span><span class="boring">fn f() {
+</span><span class="boring">    println!(&quot;{}&quot;, std::panic::Location::caller());
+</span><span class="boring">}
+</span>fn calls_f() {
+    f(); // &lt;-- f() prints this location
+}
+<span class="boring">}</span></code></pre></pre>
+<p>When <code>f</code> is called by another attributed function <code>g</code> which is in turn called by <code>calls_g</code>, code in
+both <code>f</code> and <code>g</code> observes <code>g</code>'s callsite within <code>calls_g</code>:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">#[track_caller]
+</span><span class="boring">fn f() {
+</span><span class="boring">    println!(&quot;{}&quot;, std::panic::Location::caller());
+</span><span class="boring">}
+</span>#[track_caller]
+fn g() {
+    println!(&quot;{}&quot;, std::panic::Location::caller());
+    f();
+}
+
+fn calls_g() {
+    g(); // &lt;-- g() prints this location twice, once itself and once from f()
+}
+<span class="boring">}</span></code></pre></pre>
+<p>When <code>g</code> is called by another attributed function <code>h</code> which is in turn called by <code>calls_h</code>, all code
+in <code>f</code>, <code>g</code>, and <code>h</code> observes <code>h</code>'s callsite within <code>calls_h</code>:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">#[track_caller]
+</span><span class="boring">fn f() {
+</span><span class="boring">    println!(&quot;{}&quot;, std::panic::Location::caller());
+</span><span class="boring">}
+</span><span class="boring">#[track_caller]
+</span><span class="boring">fn g() {
+</span><span class="boring">    println!(&quot;{}&quot;, std::panic::Location::caller());
+</span><span class="boring">    f();
+</span><span class="boring">}
+</span>#[track_caller]
+fn h() {
+    println!(&quot;{}&quot;, std::panic::Location::caller());
+    g();
+}
+
+fn calls_h() {
+    h(); // &lt;-- prints this location three times, once itself, once from g(), once from f()
+}
+<span class="boring">}</span></code></pre></pre>
+<p>And so on.</p>
+<h3 id="limitations"><a class="header" href="#limitations">Limitations</a></h3>
+<p>This information is a hint and implementations are not required to preserve it.</p>
+<p>In particular, coercing a function with <code>#[track_caller]</code> to a function pointer creates a shim which
+appears to observers to have been called at the attributed function's definition site, losing actual
+caller information across virtual calls. A common example of this coercion is the creation of a
+trait object whose methods are attributed.</p>
+<blockquote>
+<p>Note: The aforementioned shim for function pointers is necessary because <code>rustc</code> implements
+<code>track_caller</code> in a codegen context by appending an implicit parameter to the function ABI, but
+this would be unsound for an indirect call because the parameter is not a part of the function's
+type and a given function pointer type may or may not refer to a function with the attribute. The
+creation of a shim hides the implicit parameter from callers of the function pointer, preserving
+soundness.</p>
+</blockquote>
+<h2 id="the-instruction_set-attribute"><a class="header" href="#the-instruction_set-attribute">The <code>instruction_set</code> attribute</a></h2>
+<p>The <em><code>instruction_set</code> attribute</em> may be applied to a function to enable code generation for a specific
+instruction set supported by the target architecture. It uses the <a href="../attributes.html#meta-item-attribute-syntax"><em>MetaListPath</em></a> syntax and a path
+comprised of the architecture and instruction set to specify how to generate the code for
+architectures where a single program may utilize multiple instruction sets.</p>
+<p>The following values are available on targets for the <code>ARMv4</code> and <code>ARMv5te</code> architectures:</p>
+<ul>
+<li><code>arm::a32</code> - Uses ARM code.</li>
+<li><code>arm::t32</code> - Uses Thumb code.</li>
+</ul>
+<!-- ignore: arm-only -->
+<pre><code class="language-rust ignore">#[instruction_set(arm::a32)]
+fn foo_arm_code() {}
+
+#[instruction_set(arm::t32)]
+fn bar_thumb_code() {}</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../attributes/diagnostics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../attributes/limits.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../attributes/diagnostics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../attributes/limits.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
