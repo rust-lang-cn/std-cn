@@ -5,7 +5,7 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/rust-lang-cn/std-cn?color=gold)
 ![rustwiki.org](https://img.shields.io/website?up_message=rustwiki.org&url=https%3A%2F%2Frustwiki.org)
 
-**Rust 标准库文档中文版**是 Rust 1.58.0 版本的标准库文档的 HTML 文件，可直接使用浏览器打开，或者阅读[在线版本][std-cn]。
+**Rust 标准库文档中文版**是 Rust 标准库文档的 HTML 文件（目前已更新到 1.71.0 版），可直接使用浏览器打开，或者阅读[在线版本][std-cn]。
 
 注意，本标准库 HTML 文件使用 [Rust 标准库中文版][rust-library-i18n]生成，中文内容基于机器翻译，不确保所有翻译内容都准确，中文版的最新版本也以该源码仓库的为准。
 
