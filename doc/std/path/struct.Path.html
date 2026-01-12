@@ -217,7 +217,7 @@ path.as_mut_os_str().make_ascii_lowercase();
 <p>词干为：</p>
 <ul>
 <li><a href="../option/enum.Option.html#variant.None" title="variant std::option::Option::None"><code>None</code></a>，如果没有文件名；</li>
-<li>如果没有嵌入式 <code>.</code>，则为整个文件名; 否则为 0。</li>
+<li>如果文件名中没有 <code>.</code>，则为整个文件名；</li>
 <li>如果文件名以 <code>.</code> 开头且内部没有其他 <code>.</code>，则为整个文件名；</li>
 <li>否则，文件名中最后 <code>.</code> 之前的部分</li>
 </ul>
@@ -232,7 +232,7 @@ path.as_mut_os_str().make_ascii_lowercase();
 <p>前缀是：</p>
 <ul>
 <li><a href="../option/enum.Option.html#variant.None" title="variant std::option::Option::None"><code>None</code></a>，如果没有文件名；</li>
-<li>如果没有嵌入式 <code>.</code>，则为整个文件名; 否则为 0。</li>
+<li>如果文件名中没有 <code>.</code>，则为整个文件名；</li>
 <li>文件名中第一个非开头 <code>.</code> 之前的部分；</li>
 <li>如果文件名以 <code>.</code> 开头且内部没有其他 <code>.</code>，则为整个文件名；</li>
 <li>如果文件名以 <code>.</code> 开头，则为第二个 <code>.</code> 之前的文件名部分</li>
