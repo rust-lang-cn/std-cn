@@ -1017,10 +1017,9 @@ Rust 的标准库未提供此功能，请检查 crates.io。</p>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">assert_eq!</span>(<span class="string">&quot;1fooX&quot;</span>.trim_right_matches(|c| c == <span class="string">&#39;1&#39; </span>|| c == <span class="string">&#39;X&#39;</span>), <span class="string">&quot;1foo&quot;</span>);</code></pre><a class="test-arrow" target="_blank" href="https://play.rust-lang.org/?code=%23!%5Ballow(unused)%5D%0Afn+main()+%7B%0Aassert_eq!(%221fooX%22.trim_right_matches(%7Cc%7C+c+==+'1'+%7C%7C+c+==+'X'),+%221foo%22);%0A%7D&amp;edition=2021">Run</a></div>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.parse" class="method"><a class="srclink rightside" href="../src/core/str/mod.rs.html#2345">source</a><h4 class="code-header">pub fn <a href="#method.parse" class="fn">parse</a>&lt;F&gt;(&amp;self) -&gt; <a class="enum" href="result/enum.Result.html" title="enum std::result::Result">Result</a>&lt;F, &lt;F as <a class="trait" href="str/trait.FromStr.html" title="trait std::str::FromStr">FromStr</a>&gt;::<a class="associatedtype" href="str/trait.FromStr.html#associatedtype.Err" title="type std::str::FromStr::Err">Err</a>&gt;<span class="where fmt-newline">where
     F: <a class="trait" href="str/trait.FromStr.html" title="trait std::str::FromStr">FromStr</a>,</span></h4></section></summary><div class="docblock"><p>将此字符串切片解析为另一种类型。</p>
-<p>由于 <code>parse</code> 非常通用，因此可能导致类型推断问题。
-因此，<code>parse</code> 是少数几次您会看到被亲切地称为 ‘turbofish’: <code>::&lt;&gt;</code> 的语法之一。</p>
-<p>这可以帮助推理算法特别了解您要解析为哪种类型。</p>
-<p><code>parse</code> 可以解析为任何实现 <a href="str/trait.FromStr.html" title="trait std::str::FromStr"><code>FromStr</code></a> trait 的类型。</p>
+<p>由于 <code>parse</code> 非常通用，在类型推导的时候可能会产生问题。
+因此，<code>parse</code> 是你能看到的使用了turbofish语法<code>::&lt;&gt;</code> 的少数几个场景之一。这有助于推断算法理解你试图解析成哪种类型。</p>
+<p><code>parse</code> 可以解析任何实现了 <a href="str/trait.FromStr.html" title="trait std::str::FromStr"><code>FromStr</code></a> trait 的类型。</p>
 <h5 id="errors"><a href="#errors">Errors</a></h5>
 <p>如果无法将此字符串切片解析为所需的类型，则将返回 <a href="str/trait.FromStr.html#associatedtype.Err" title="associated type std::str::FromStr::Err"><code>Err</code></a>。</p>
 <h5 id="examples-52"><a href="#examples-52">Examples</a></h5>
